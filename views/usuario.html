@@ -1,0 +1,252 @@
+<!-- BEGIN: contenido -->       
+<table width="800" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF">
+	<tr>
+		<td >
+	        <br /> 
+            <div id="message" class="message" >{mensaje}</div>        
+                 
+			<!-- BEGIN: lista_usuario -->
+			<div id="enlaces_accion">
+				<span>[ <a class="enlaces" href="{pagina_principal}?op={opcion_sistema}&amp;accion=add">Ingresar Usuario</a> ]</span>
+				<span>[ <a class="enlaces" href="{pagina_principal}?op={opcion_sistema}&amp;accion=search">Buscar Usuario</a> ]</span>		
+			</div>              
+			<table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1">
+				<caption>Listado de Usuarios</caption>			
+
+				<thead>		
+					<tr>		
+						<th class="title header" scope="col"  width="20">&nbsp;</th>		
+						<th class="title header" scope="col"  width="20">&nbsp;</th>		
+						<th class="title header" scope="col">Usuario</th>		
+						<th class="title header" scope="col">Correo</th>		
+						<th class="title header" scope="col">Perfil</th>                        		
+					</tr>		
+				</thead>
+		
+				<tbody>
+		
+					<!-- BEGIN: lista -->
+					<tr class="{estilo_fila}">
+		
+						<td class="lista1" scope="row" align="center">
+							<a href="{pagina_principal}?op={opcion_sistema}&amp;accion=mod&amp;id={id_Usuario}" title="Ver / Modificar">
+                            	<img src="./images/lapiz.gif" border="0"/>
+                           	</a>
+						</td>
+						<td scope="row" align="center">
+							<a href="{pagina_principal}?op={opcion_sistema}&amp;accion=del&amp;id={id_Usuario}" title="Eliminar">
+                            	<img src="./images/delete.png" border="0"/>
+                            </a>
+						</td>
+						<td align="center">&nbsp;{Nombre_Cliente}</td>		
+						<td align="center">{Email}</td>
+   						<td align="center">{Perfil}</td>			
+					</tr>
+					<!-- END: lista -->
+		
+					<!-- BEGIN: no_lista -->
+		
+					<tr class="even">		
+						<td align="center" colspan="6" class="odd"><br />{sin_listado}<br />&nbsp;</td>		
+					</tr>		
+					<!-- END: no_lista -->
+		
+				</tbody>				
+				<tfoot>
+                </tfoot>
+			</table>
+                <div class="paginas">{paginacion}</div>	
+					
+			<!-- END: lista_usuario -->
+			
+			<!-- BEGIN: formulario -->
+		
+			<div id="formularios" align="center">
+		
+				<form  name="frm1" id="frm1" method="post" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es">
+		
+					<input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
+		
+					<input style="border: hidden" type="hidden" name="accion" id="idaccion" value="{tipo_accion}"/>
+
+					<!-- BEGIN: identificador -->
+		
+					<input style="border: hidden" type="hidden" name="idreferencia" id="idreferencia" value="{id_Usuario}"/>
+		
+					<!-- END: identificador -->	
+									
+		
+					<fieldset>
+		
+						<legend>Formulario de Usuario:</legend>
+		
+						<table align="center" border="0" cellpadding="2" cellspacing="0" width="80%">
+		
+							<tr><td colspan="2" class="requerido" style="text-align:right;">(*)Campos Requeridos&nbsp;</td></tr>
+		
+							<tr><td colspan="2">&nbsp;</td></tr>
+		
+							<tr>
+		
+								<td class="tag" width="230"><span class="requerido">*</span> Nombre Completo:</td>
+		
+								<td><input id="txt_name" name="txt_name" size="30" maxlength="20" type="text" value="{txt_name}"/></td>
+		
+							</tr>
+		
+							<tr><td colspan="2"></td></tr>
+							<tr>
+		
+								<td class="tag" width="230"><span class="requerido">*</span> email:</td>
+		
+								<td><input id="txt_mail" name="txt_mail" size="30" maxlength="30" type="text" value="{txt_mail}"/></td>
+		
+							</tr>
+		
+							<tr><td colspan="2"></td></tr>
+                            <tr>
+        
+                                <td class="tag" width="230"><span class="requerido">*</span> Perfil:</td>
+        
+                                <td>
+        
+                                    <select id="op_perfil" name="op_perfil" >
+        
+                                        <option value="0">Seleccione Perfil....</option>
+        
+                                        <!-- BEGIN: lista_perfiles -->
+        
+                                        <option value="{id_perfil}" {seleccion}>{nombre_perfil}</option>
+        
+                                        <!-- END: lista_perfiles -->
+        
+                                    </select>
+        
+                                </td>
+        
+                            </tr>                            
+		
+							<tr><td colspan="2"></td></tr>                                                                                        
+		
+							<tr>
+		
+								<td class="tag" width="230"><span class="requerido">*</span> Login:</td>
+		
+								<td><input id="txt_login" name="txt_login" size="30" maxlength="20" type="text" value="{txt_login}"}/></td>
+		
+							</tr>
+		
+							<tr><td colspan="2"></td></tr>
+		
+							<tr>
+		
+								<td class="tag" width="230"><span class="requerido">*</span> Contrase&ntilde;a:</td>
+		
+								<td><input id="txt_pass" name="txt_pass" size="30" maxlength="20" type="password" value="{txt_pass}"}/></td>
+		
+							</tr>
+                            <tr><td colspan="2"></td></tr>
+        
+                            <tr>
+        
+                                <td class="tag" width="230"><span class="requerido">*</span> Repetir Contrase&ntilde;a:</td>
+        
+                                <td><input id="txt_repeatpass" name="txt_repeatpass" size="30" maxlength="20" type="password" value="{txt_repeatpass}"/></td>
+        
+                            </tr>                            
+		
+							<tr><td colspan="2">&nbsp;</td></tr>
+		
+						</table>
+		
+					</fieldset>
+		
+					<div class="botones" align="center">
+		
+						<input  id="btnok" name="btnentrar" value="{tag_boton}" type="submit" class="boton"/>
+
+						&nbsp;&nbsp;&nbsp;
+		
+						<input  id="btncancel" name="btncancelar" value="Regresar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
+						
+					</div>
+					
+				</form>			 
+		
+			</div>
+		
+			<!-- END: formulario -->
+			
+	<!-- BEGIN: busqueda -->
+<table width="800" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF">
+    <tr>
+        <td>
+            <div id="main">
+
+		<br />
+
+		<form id="frm1" method="get" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es">
+
+			<input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
+			<input style="border: hidden" type="hidden" name="accion" id="idaccion" value="looking"/>
+
+			<fieldset>
+
+				<legend>Busqueda de Usuarios</legend>
+
+				<table align="center" border="0" cellpadding="2" cellspacing="0" width="100%">
+
+					<tr><td colspan="2">&nbsp;</td></tr>
+
+					<tr><td colspan="2"></td></tr>
+
+					<tr>
+
+						<td class="tag" width="200">Por  Nombre :</td>
+
+						<td><input id="nombre" name="nombre" size="30" maxlength="45" type="text" /></td>
+
+					</tr>
+
+					<tr><td colspan="2"></td></tr>
+
+					<tr>
+
+						<td class="tag">Por  Email :</td>
+
+						<td><input id="mail" name="mail" size="30" maxlength="45" type="text" /></td>
+
+					</tr>
+
+					<tr><td colspan="2">&nbsp;</td></tr>
+
+				</table>
+
+			</fieldset>
+
+			<div class="botones">
+
+				<input  id="btnok" name="btnentrar" value="Buscar" type="submit" class="boton"/>&nbsp;&nbsp;&nbsp;
+
+				<input  id="btncancel" name="btncancelar" value="Cancelar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
+
+			</div>
+
+		</form>			 
+
+            </div>  
+        </td>
+    </tr>
+</table> 	
+
+	<!-- END: busqueda -->			
+<br />	<br />	 
+		
+		</td>	
+	</tr>
+
+</table>
+     
+<!-- END: contenido -->       
+
+

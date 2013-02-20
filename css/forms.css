@@ -1,0 +1,116 @@
+@CHARSET "UTF-8";
+
+form {
+	font-family: Arial, sans-serif;
+	font-size: 8pt;
+	text-align: left;
+	text-decoration: none;
+	line-break: strict;
+	word-break: keep-all;
+	page-break-after: auto;
+	color: #333333;
+}
+
+input,textarea,select {
+	background-color: #fff;
+	border: 1px double #CCCCCC;
+	margin: 2px 1px 2px 1px;
+	color: #333333;
+}
+
+input:focus {
+	border: 1px double #ab0000;
+}
+
+textarea {
+	overflow: auto;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+textarea:focus {
+	border: 1px double #ab0000;
+}
+
+label {
+	font-size: 12px;
+	font-weight: bold;
+	color: #666;
+}
+
+fieldset {
+	margin: 4px 3px 4px 1px;
+	border: 1px solid #a0a0a0;
+}
+
+fieldset legend {
+	font-size: 14px; 
+	font-weight : bold;
+	color: #a0a0a0;
+	font-weight: bold;
+	margin-left:30px;
+}
+
+button {
+	height: 24px;
+	text-align: center;
+	width: auto;
+	font-weight: bold;
+	color: #666;
+	/* background-image: url('../images/boton.png'); */
+	padding-bottom: 2px;
+}
+
+button:hover {
+	/* background-image: url('../images/boton_over.png'); */
+}
+
+button.ok:hover {
+	color: #00ab00;
+}
+
+button.cancel:hover {
+	color: #ab0000;
+}
+
+#main #formulario_login{
+	width:500px;
+	clear:both;
+	margin:0px auto;
+}
+
+td.tag{
+	text-align:right;
+}
+
+div.message{
+	text-align:center;
+	color:#CC0000;
+	font-size:11px;
+}
+
+div.mensaje{
+	text-align:center;
+	color:#CC0000;
+	font-size:18px;
+}
+
+div.paginas{
+	text-align:center;
+	color: #333333;
+	font-size:15px;
+}
+input.boton {
+	font-size:11px;
+	font-weight: bold;
+	color: #666;
+	background-color:#DDDDDD;
+}
+
+input#btnok:hover {
+	color: #00ab00;
+}
+
+input#btncancel:hover {
+	color: #ab0000;
+}
