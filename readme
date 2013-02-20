@@ -1,0 +1,464 @@
+##
+# @file README
+# @brief Sistema de Ventas de Loteria web
+# @author Gerzahim Salas, Grupo Voila <rasce88@gmail.com>
+=====================
+LottoMax -Grupo Voila 
+=====================
+
+====================
+
+.. contents::
+..
+
+Prerequisites
+-------------
+
+
+paquetes Necesarios para Instalar
+
+INSTALL
+-------------
+
+mysql -u root -p
+mysql-server
+mysql-client 
+xammp  (apache, php, mysql) like wamp
+
+
+Paquetes Necesarios para Desarrollo
+kdevelop o zend studio (ide )
+mysql-admin (manejador base datos)
+phpmyadmin (manejador base datos)
+
+
+
+
+Command Mysql comunes
+------------------
+
+
+	mysql -u root -p
+	CREATE DATABASE testdb;
+	mysql> create database `somedb
+	mysql> use `somedb`
+	
+	USE testdb;
+	mysql> quit;
+	
+	/*******CREATE***************/
+	CREATE TABLE `lotto`.`ventas` (
+	`id_venta` INT  NOT NULL,
+	`id_vendedor` INT  NOT NULL,
+	PRIMARY KEY (`id_venta`)
+	)
+	ENGINE = InnoDB
+	COMMENT = 'tabla de ventas actuales';
+
+
+	Creating a table with auto_increment
+
+	Often you'll want to be able to automatically assign a sequential value to a column:
+
+
+	mysql> CREATE TABLE example_autoincrement (
+			id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+			data VARCHAR(100)
+		);
+	Query OK, 0 rows affected (0.01 sec)
+	
+	/*******INSERT***************/
+	mysql> INSERT INTO example_autoincrement (campo)
+		->      VALUES ('Hello world');
+	Query OK, 1 row affected (0.01 sec)
+
+	/*******SELECT***************/
+	mysql> SELECT * FROM  example_autoincrement;
+	+----+-------------+
+	| id | data        |
+	+----+-------------+
+	|  1 | Hello world |
+	+----+-------------+
+	1 row in set (0.01 sec)
+	
+	/*******UPDATE***************/	
+	UPDATE FROM lotto.tipo_usuario SET tipo_usuario='Gerente' WHERE id_tipo_usuario = 2
+
+	/*************** DUMP EXPORT **********/
+	mysqldump <database-name> -u<username> -p >> somedatabasetable.sql
+	mysqldump -u USER -p PASSWORD DATABASE > filename.sql 
+	mysqldump -u baseu01 -p h4z56s3 database01 > filename.sql
+
+	
+	/*************** DUMP IMPORT **********/
+	mysql> source somedatabasetable.sq
+	mysql -u username -p < textfile.sql 
+	mysql -u <username> -p <database> <textfile.sql>
+	mysql -u <username> -p <database> /path/to/file/textfile.sql 
+	mysql -u username -p password database_name < filename.sql 
+	
+
+
+DATOS DEL SISTEMA
+-----------------------
+las claves y usuarios del sistema estan en el archivo /config/config.php
+la base de datos hasta el momento esta ubicada en /bd/lottomax.sql
+
+
+
+PENDIENTES  LISTOS
+------------------------------
+
+- agregar icono al sistema ****
+- al seleccionar check todos marcar todas las loterias *******
+- ajustar la hora en jquery  ****
+- modificar el cambio segun el total ****
+- asignar el id de numero de taquilla ******
+- crear tablas bloqueo numeros ****
+- agregar short cut a sorteos ****
+- crear column a tabla sorteos para la seccion in_activo ****
+- Despues de cada ON Focus borrar del campo todo lo que no sea numeric  *********
+- crear variable de session que tiene la jugada **NOOOO
+- Cambiar Focus con letra   ********
+- Configurar enter como tab **********
+- keypress tecla, disparar una funcion de javascript **** 
+- crear el div de mensaje *********
+- resolver problema de checkall con name [] ***********
+- Seleccionar el tipo de juego con su tecla directa ********
+- eliminar solo terminal, solo terminal astral ***********
+- despues de jugar limpiar todos los input, Borrar los sorteos Seleccionados *********
+- si la loteria es A y B del mismo sorteo imprimir juntos y el numero abajo
+- Programar return con tecla keydown (hacia atras)
+- cierre dia, limpiar tabla de numeros bloqueados, resetear topes
+
+
+/***** VENTAS *****/
+	Modulos de Ventas
+	
+	Consideraciones
+	- Hacer funcion de Permutar ******** 15/02/2013 by Gerza
+	- modificar el query en llamados a sorteos donde where status = 1  ********** 18/02/2013 by Gerza 
+	- Agregar ticket, entonces acomodar el total ********** 18/02/2013 by Gerza
+	- acomodar permutas 7 digitos ******
+	- acomodar triples solo 3 digitos *****
+	- acomodar series que permita (*) caracter asterisco y solo 3 digitos  *****
+	- acomodar corridas que permita (-) caracter guion y solo 7 digitos, ejm. 789-852  *****
+	-  
+	- se debe agregar en la tabla de ticket el boton de eliminado 
+	- Listar Loterias disponibles segun la hora (parametrizable)
+	- Bloquear las loterias segun la hora
+	- cuando el numero este repetido en la jugada que el sistema te lo indique
+	  No duplicar numeros si lo vuelven a marcar (cambiar montos del juego o anadir nuevamente)
+	  consideraciones 
+	   restar nuevamente el cupo de los topes
+	- verificar los topes maximo de venta 
+	  Si hay tope jugar en el ticket por lo que queda , 10 Inc
+    - Listar despues del ticket los numeros incompletos y los numeros agotados
+	  imprimir los numeros agotados 125 Ago e incompletos y por el monto que falta Ago, Inc 4,5    
+  	  Al imprimir el ticket deben salir los numeros agotados, 
+  	  y en el precticket salir agotados o incompletos antes en la pantalla Inc... 10   decir (agotado) Ago. en la lista de la jugada
+
+	- verificar los cupos especiales
+	- verificar que el numero no este bloqueado
+	- descontar del tope, en cada jugada
+	- despues de jugar todos los triples presionar (A) para jugar todos los triples por terminales	
+	  debe salir un ventana que pregunta si es por el mismo monto sino cambiar el monto...
+	  poder preguntar triples por un monto y terminales por otro (triple por 100 y terminales por 50 ejemplo)
+        - no debe anadir los terminales de triples astrales 
+	- El numero que esta agotado deberia igual marcar el terminal
+
+	
+	Modulo RE-Imprimir Ticket
+	
+	- Este modulo es en caso de que la impresora se tranque y no salga el ticket
+	  entonces se manda a imprimir de nuevo, 
+	  esta funcionalidad consiste en buscar en la tabla semanal el ultimo ticket e imprimir de nuevo
+	  el ticket debe decir REIMPRESION en la parte del encabezado
+	  y debe registrar en la tabla si fue reimpreso.
+	  
+	Modulo Anular Ticket
+	
+	- Este modulo consiste en eliminar un ticket ya registrado
+	  considerar 
+	  tiempo en parametros generales para poder cancelar un ticket
+	  
+	- Anular tickets con Numero de ticket y clave
+	
+	  
+	Modulo Copiar Ticket
+	
+	- Este modulo consiste en re-imprimir ticket registrado en la tabla semanal
+	  considerar
+	  repetir ticket solo con copiar numero de ticket
+	  es posible que al momento de solicitar la copia del ticket ya no existan sorteos disponibles segun la hora
+	  verificar los topes y numeros bloqueados
+	  imprimir numeros incompletos y Agotados
+	  
+	Modulo Pagar Ganador
+	
+	- Este modulo consiste en buscar si el ticket que te den en la taquilla, esta premiado 
+	  de ser asi el ticket se registra como pagado (cambiar campo en tabla semana pagado=1)
+	  consideraciones
+	  
+	  - al cancelar ticket o premio, decir con que numero, loteria y monto gano! 
+	  
+	  verificar si el ticket ya no esta vencido (Los Premios se vencen a los 3 dias (parametrizables parametros generales) )
+	  se busca si hay una jugada en concidencia con las jugadas premiadas
+	  tambien se paga aproximaciones (opcion de habilitar y deshabilitar, es promocional por temporadas)
+	  las aproximaciones son solo para terminales 
+	  Caso 1:
+	  Arriba Abajo: si el cliente juega el terminal 47 y salio 348 o 346, esto se paga por aproximacion, porque el terminal esta arriba o abajo
+	  Caso 2:
+	  Segundo Alante: el cliente juega el terminal 47 y salio 475, esto se paga por aproximacion, porque el terminal esta por delante (primero dos digitos) 
+  
+/***** LOTERIA *****/  
+	Modulo Configurar Loterias   ********** 20/02/2013 by Gerza
+	
+	- Este modulo consiste en administrar las Loterias agregar, modificar, Eliminar
+	  bastante parecido a modulos de usuario
+	  la tabla ya existe y se llama "loterias", 
+	  los campos son 	id_loteria 	nombre_loteria estatus
+	  
+	Modulo Configurar Sorteos   ********** 20/02/2013 by Gerza
+	
+	- Este modulo consiste en administrar las Loterias agregar, modificar, Eliminar
+	  bastante parecido a modulos de usuario
+	  la tabla ya existe y se llama "sorteos", 
+	  los campos son 	id_sorteo 	nombre_sorteo	hora_sorteo	zodiacal	estatus	 id_loteria 
+	  
+	Modulo Cupos Numeros
+	
+	- Este Modulo consiste en administrar los numeros (bloqueados y los cupos especiales de numeros)
+	  consiste en crear un espacio que permita listar los numeros Bloqueados, agregar y eliminar un bloqueo
+	  por otra parte crear un cupo especial para determinados numeros 
+	  Consideraciones
+	  se debe crear varias tablas relacionadas, que permitan registrar los topes o cupos
+	  una tabla cupo (id_cupo, nombre_cupo, monto_cupo)
+	                   01       cupo_triple   50
+	                   02       cupo_terminal 200
+	                   03       cupo_astral   30
+	                   04       cupo_terminal_astral  50                                                         
+	                   
+	  tabla relacion_cupo_loteria  (id_cupo, id_loteria, es_triple)
+	  									01      01           1
+	  									
+	  tabla cupo_especial  (id_cupo_especial, monto, numero)
+	  
+	  tabla jugadas_del_dia(id_jugada, id_numero, id_loteria, monto, es_bloqueado) 
+	  // registra cada numero jugado y el monto que queda segun la ultima jugada y si repite el numero
+	     el monto se va restando a medida que lo sigan jugando hasta que se bloquee
+	 
+	  Modulo Bloquear Numeros
+	  
+	  En el caso de bloquear un numero se debe trabajar en una opcion de un formulario 
+	  para escribir el numero y listar todos los sorteos con un checkboxes,
+	  selecciona a que loterias deseas marcar o chequear todas de una vez.
+	  
+	  el proceso de programacion consiste en registrar ese numero en la tabla jugadas_del_dia
+	  en el ultimo campo "es_bloqueado" se coloca 1 para determinar que esta bloqueado, 
+	  asi con cada numero y su sorteo seleccionado
+	  
+/***** REPORTES *****/  
+	  
+	  Modulo Reporte Diario Taquilla o Estacion
+	  
+	  En este modulo consiste el listar todos los ticket del dia vendido por la estacion
+	  ticket , Numero Ticket, Monto 
+	  ademas
+	  TOTAL en dinero recaudado en ventas del dia 
+	  
+	  Modulo Reporte Diario Agencia
+	  
+	  En este modulo consiste el listar todos los ticket del dia vendido por cada estacion
+	  ticket , Numero Ticket, Monto 
+	  ademas
+	  TOTAL en dinero recaudado en ventas por estacion 
+	  
+	  Listar informacion por cada Estacion 
+	  TOTAL en dinero recaudado entre todas las taquillas
+	  
+	
+	
+	  Modulo Cargar Resultados
+	  
+	  Consiste en un formulario que lista todo los sorteos y un campo de texto para escribir el numero ganador
+	  
+	  se creara una tabla que guarda por dia todo los numeros ganadores relacionados con cada sorteo.
+	  
+	  Modulo Ver Resultados
+	  
+	  Consiste en un formulario que lista todo los sorteos y el numero ganador del dia
+	  
+	  Modulo Tickes Ganadores
+	  
+	  Consiste en un formulario que lista todo los sorteos y el numero ganador del dia    
+		Ordenar tickets premiados por numero de tickets
+		las fechas con select 
+		
+				2013/01/18
+				2013/01/19
+				2013/01/20	     
+	     
+	  Modulo Ventas por Periodo
+	  
+	  Consiste en listar todas las ventas de tickets entre 2 fechas seleccionadas
+
+
+      Modulo Tickets Eliminados
+      
+      Consiste en listar todos los tickets Eliminados del dia			
+
+	  Modulo Tickets Pagados	
+	  
+	  Consiste en listar todos los tickets Pagados del dia			
+	  
+	  Modulo Premios Frios
+	  
+	  Consiste en listar todos los tickets que no has sido Pagados y ya se vencieron 
+	  es decir que ya pasaron los dias de vencimientos
+					
+	  Modulo Usuarios
+	
+		Lista todos los usuarios (agregar modificar y eliminar)
+	
+	  Modulo Parametros Generales
+	
+	  - tiempo para cancelar ticket (5 minutos despues del ticket)
+	  - tiempo para cerrar loterias (10 minutos antes del sorteo)
+	  - vencimiento de tickets premiado (3 dias)
+	  - tope general de numeros (20 Bs)
+	  - razon a pagar triple (600)  es decir por cada 1 bolivar te ganas 600 bs 
+	  - razon a pagar terminal  (60 ) es decir por cada 1 bolivar te ganas 60 bs
+	  - razon a pagar Astral (1200) 
+	  - razon a pagar terminal astral (60)
+	  - razon a pagar aproximaciones (30)
+	  - monto de cupo_triple (50)
+	  - monto de cupo_terminal (200)
+	  - monto de cupo_astral (30)
+	  - monto de cupo_terminal_astral (50)
+
+
+Modulo Webservices
+
+- acomodar version para cuando falle bd (buscar coincidencia Error utilizar WebServices)
+
+
+
+Modulo Tradicionales
+
+- Tradicionales (Configurar)
+    Combo 1 (Zulia, Chance, Tachira, Caracas) A y B 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Miscelaneos 
+						
+
+DELETE FROM `lottomax`.`ticket_transaccional` WHERE `ticket_transaccional`.`id_ticket_transaccional` = 1;
+
+LEYENDA
+------------------------------
+T- Triple
+P- Permuta
+Z- Signo
+A- Terminales
+D- Duplicar Ticket (recuerda que por lo general no estan todos los sorteos disponibles)
+R- Repetir Jugadas
+E- Eliminar Jugadas
+L- Loterias
+K- Consultar ticket
+
+- Triple 
+CHANCE A 4 PM
+482 x 5 
+
+- Permuta (482)  65874
+CHANCE A 4 PM
+482 x 5
+428 x 5 
+248 x 5 
+284 x 5  
+842 x 5
+824 x 5
+
+
+- Serie *78 (178,278,378 ...)
+Serie *82 
+CHANCE A 4 PM
+082 x 5
+182 x 5
+282 x 5
+382 x 5
+482 x 5
+582 x 5
+682 x 5
+782 x 5
+882 x 5
+982 x 5
+
+Corrida Triple  120-135
+CHANCE A 4 PM
+120 x 5
+121 x 5
+122 x 5
+123 x 5
+124 x 5
+125 x 5
+126 x 5
+127 x 5
+128 x 5
+129 x 5
+130 x 5
+131 x 5
+132 x 5
+133 x 5
+134 x 5
+135 x 5
+
+Corrida Terminal
+CHANCE A 4 PM 20-25
+20 x 5
+21 x 5
+22 x 5
+23 x 5
+24 x 5
+25 x 5
+
+
+Tipo de Ticket
+------------------------------
+$_SESSION[$i]['numero'];
+$_SESSION[$i]['id_sorteo'];
+$_SESSION[$i]['id_zodiacal'];
+$_SESSION[$i]['monto'];
+
+serial	fecha_hora	taquilla	total_ticket	id_usuario	pagado
+
+	 numero				 
+	 id_sorteo				
+	 hora_sorteo	????????? 		
+	 id_zodiacal			
+	 monto
+	 
+	 
+//////////////////
+
+
+x_grabargameganahi(); // funcion que llama para imprimir con pdf 	 
+
