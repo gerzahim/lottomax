@@ -31,9 +31,6 @@ kdevelop o zend studio (ide )
 mysql-admin (manejador base datos)
 phpmyadmin (manejador base datos)
 
-
-
-
 Command Mysql comunes
 ------------------
 
@@ -130,6 +127,7 @@ PENDIENTES  LISTOS
 - si la loteria es A y B del mismo sorteo imprimir juntos y el numero abajo
 - Programar return con tecla keydown (hacia atras)
 - cierre dia, limpiar tabla de numeros bloqueados, resetear topes
+- cambios en la bd, acomodar indice y claves primarias
 
 
 /***** VENTAS *****/
@@ -348,21 +346,6 @@ Modulo Tradicionales
 
 - Tradicionales (Configurar)
     Combo 1 (Zulia, Chance, Tachira, Caracas) A y B 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
