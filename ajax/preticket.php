@@ -108,6 +108,14 @@ if($txt_numero == 0 ){
 				// Verifica si el sorteo es Zodiacal
 				if($obj_modelo->GetTrueZodiacal($sorteo)){
 					foreach ($zodiacales as $zodiacal){
+						
+						//revisar tabla de numeros jugados
+						//revisar tabla de cupo_especial
+						//revisar tabla de cupo_general
+						
+						// guardar registro en tabla de numeros jugados
+						
+						
 						// Agregar ticket a tabla transaccional
 						if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$txt_monto) ){
 																		

@@ -19,8 +19,21 @@ if( $result= $obj_modelo->GetSorteos() ){
 	$i=1;
 	while($row= $obj_conexion->GetArrayInfo($result)){
 		$obj_xtpl->assign($obj_generico->CleanTextDb($row));
+		
+		$hora_sorteo=$row['hora_sorteo'];
+		$hora_sorteo= strtotime($hora_sorteo);
+		
+		//Valor que debe venir de la base de datos
+		//$minutos_bloqueo= $obj_modelo->MinutosBloqueo();
+		$minutos_bloqueo= 5;
+		
+		//Valor que debe venir de la base de datos
+		$hora_actualMas= strtotime("+$minutos_bloqueo minutes");
+		
+		if ($hora_actualMas < $hora_sorteo){
+			$obj_xtpl->parse('main.contenido.lista_sorteos');
+		}
 		$obj_xtpl->assign('cant_sorteos', $i);
-		$obj_xtpl->parse('main.contenido.lista_sorteos');
 		$i++;
 	}
 }	

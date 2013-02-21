@@ -14,6 +14,9 @@ LottoMax -Grupo Voila
 Prerequisites
 -------------
 
+configurar en php.ini el timezone
+date.timezone = America/Caracas 
+
 
 paquetes Necesarios para Instalar
 
