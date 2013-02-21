@@ -102,7 +102,22 @@ switch(OPCION){
 	case 'sorteos':
 		
 		include($obj_config->GetVar('ruta_controlador').'cSorteos.php');
-		break;		
+		break;
+
+        case 'relacion_pagos':
+
+		include($obj_config->GetVar('ruta_controlador').'cRelacion_Pagos.php');
+		break;
+
+        case 'cupos_generales':
+
+		include($obj_config->GetVar('ruta_controlador').'cCupos_Generales.php');
+		break;
+
+        case 'cupos_especiales':
+
+		include($obj_config->GetVar('ruta_controlador').'cCupos_Especiales.php');
+		break;
 
 	case 'ventas':
 		

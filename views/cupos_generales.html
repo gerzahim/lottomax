@@ -1,0 +1,136 @@
+<!-- BEGIN: contenido -->       
+<table width="800" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF">
+	<tr>
+		<td >
+	        <br /> 
+            <div id="message" class="message" >{mensaje}</div>        
+                 
+			<!-- BEGIN: lista_cupos_generales -->
+			              
+			<table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1">
+				<caption>Lista de Cupos Generales de Numeros</caption>
+
+				<thead>		
+					<tr>		
+						<th class="title header" scope="col"  width="20">&nbsp;</th>		
+						<th class="title header" scope="col">Tipo de Jugada</th>
+                                                <th class="title header" scope="col">Monto (Bs. F.)</th>                       		
+					</tr>		
+				</thead>
+		
+				<tbody>
+		
+					<!-- BEGIN: lista -->
+					<tr class="{estilo_fila}">
+		
+						<td class="lista1" scope="row" align="center">
+							<a href="{pagina_principal}?op={opcion_sistema}&amp;accion=mod&amp;id={id_cupo_general}" title="Ver / Modificar">
+                            	<img src="./images/lapiz.gif" border="0"/>
+                           	</a>
+						</td>
+						
+						<td align="left">&nbsp;{Nombre_tipo_jugada}</td>
+                                                <td align="left">&nbsp;{monto}</td>				
+					</tr>
+					<!-- END: lista -->
+		
+					<!-- BEGIN: no_lista -->
+		
+					<tr class="even">		
+						<td align="center" colspan="6" class="odd"><br />{sin_listado}<br />&nbsp;</td>		
+					</tr>		
+					<!-- END: no_lista -->
+		
+				</tbody>				
+				<tfoot>
+                </tfoot>
+			</table>
+                <div class="paginas">{paginacion}</div>	
+					
+			<!-- END: lista_cupos_generales -->
+			
+			<!-- BEGIN: formulario -->
+		
+			<div id="formularios" align="center">
+		
+				<form  name="frm1" id="frm1" method="post" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es">
+		
+					<input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
+		
+					<input style="border: hidden" type="hidden" name="accion" id="idaccion" value="{tipo_accion}"/>
+
+					<!-- BEGIN: identificador -->
+		
+					<input style="border: hidden" type="hidden" name="idreferencia" id="idreferencia" value="{id_cupo_general}"/>
+		
+					<!-- END: identificador -->	
+									
+		
+					<fieldset>
+		
+						<legend>Formulario de Cupos Generales de Numeros:</legend>
+		
+						<table align="center" border="0" cellpadding="2" cellspacing="0" width="80%">
+		
+							<tr><td colspan="2" class="requerido" style="text-align:right;">(*)Campos Requeridos&nbsp;</td></tr>
+		
+							<tr><td colspan="2">&nbsp;</td></tr>
+		
+							<tr>
+		
+								<td class="tag" width="230"><span class="requerido">*</span> Tipo de Jugada:</td>
+		
+								<td>
+                                                                    <select id="op_tipo_jugadas" name="op_tipo_jugada" >
+                                                                        <!-- BEGIN: lista_tipo_jugadas -->
+                                                                        <option value="{id_tipo_jugada}" disabled {selecciono}>{nombre_tipo_jugada}</option>
+                                                                        <!-- END: lista_tipo_jugadas -->
+                                                                    </select>
+                                                                </td>
+							</tr>
+		
+							<tr><td colspan="2"></td></tr>
+
+                                                        <tr>
+
+								<td class="tag" width="230"><span class="requerido">*</span> Monto:</td>
+
+								<td>
+                                                                    <input id="txt_numero" name="txt_monto" size="12" type="text" value="{txt_monto}"/> Bs. F. 
+                                                                </td>
+
+							</tr>
+
+							<tr><td colspan="2"></td></tr>                                               
+		
+							<tr><td colspan="2"></td></tr>                                                                                        	
+						</table>
+		
+					</fieldset>
+		
+					<div class="botones" align="center">
+		
+						<input  id="btnok" name="btnentrar" value="{tag_boton}" type="submit" class="boton"/>
+
+						&nbsp;&nbsp;&nbsp;
+		
+						<input  id="btncancel" name="btncancelar" value="Regresar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
+						
+					</div>
+					
+				</form>			 
+		
+			</div>
+		
+			<!-- END: formulario -->
+	
+<br />	<br />	 
+		
+		</td>	
+	</tr>
+
+</table>
+     
+<!-- END: contenido -->       
+
+
