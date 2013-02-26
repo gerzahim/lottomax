@@ -25,6 +25,7 @@ if( $result= $obj_modelo->GetSorteos() ){
 		
 		//Valor que debe venir de la base de datos
 		//$minutos_bloqueo= $obj_modelo->MinutosBloqueo();
+		/************* CABLEADO **********************/
 		$minutos_bloqueo= 5;
 		
 		//Valor que debe venir de la base de datos

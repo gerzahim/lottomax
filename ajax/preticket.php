@@ -16,7 +16,43 @@ require('.'.$obj_config->GetVar('ruta_libreria').'Bd.php');
 $obj_conexion= new Bd();
 if( !$obj_conexion->ConnectDataBase($obj_config->GetVar('host'), $obj_config->GetVar('data_base'), $obj_config->GetVar('usuario_db'), $obj_config->GetVar('clave_db')) ){
 	echo "sin_conexion_bd";
-}	
+}
+
+
+//Funciones
+/*    $matriz2=CalculaIncompletoYnuevoMonto(); 
+    echo $matriz2[0]; // nuevomontodisponible o faltante
+    echo $matriz2[1]; // incompleto
+    
+    */
+function CalculaIncompletoYnuevoMonto($txt_monto, $num_jug){
+	
+	//calculando el faltante entre el numero ya jugado y el nuevo por jugar
+	$montodiferencia= ($num_jug-$txt_monto);	
+	
+	//si no completa el monto solicitado
+	if ($montodiferencia < 0){
+		//Mensaje de ERROR -- NUMERO INCOMPLETO PARA ESTE SORTEO
+		
+		//el nuevo disponible es el faltante del incompleto
+		$num_jug_nuevodisponible = (-1)*$montodiferencia;
+		$incompleto=1;
+			
+	}else{
+		//el nuevo disponible es el restante para numeros_jugados
+		$num_jug_nuevodisponible = $montodiferencia;
+		$incompleto=0;
+	}
+	
+	 $matriz=array();
+	  
+     $matriz[0]=$num_jug_nuevodisponible; 
+     $matriz[1]=$incompleto; 	 
+     
+	return $matriz;
+	
+}
+
 
 // Modelo asignado
 require('.'.$obj_config->GetVar('ruta_modelo').'Ventas.php');
@@ -25,6 +61,11 @@ $obj_modelo= new Ventas($obj_conexion);
 //Verificando que escriban el numero y el monto 
 if(isset($_POST['txt_numero'])){
 	$txt_numero=$_POST['txt_numero'];
+	$tamano_numero = strlen($txt_numero);
+	if ($tamano_numero < 2){
+		$txt_numero=1;		
+	}
+	
 }else{
 	$txt_numero=0;
 }
@@ -79,6 +120,10 @@ if(!empty($_POST['ss'])) {
 if($txt_numero == 0 ){
 	$_SESSION['mensaje']= $mensajes['no_numero'];
 	echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";	
+}elseif ($txt_numero == 1 ){	
+	$_SESSION['mensaje']= $mensajes['no_numero_completo'];
+	echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";
+	
 }elseif ($txt_monto == 0 ){	
 	$_SESSION['mensaje']= $mensajes['no_monto'];
 	echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";
@@ -105,17 +150,22 @@ if($txt_numero == 0 ){
 			
 			//recorriendo el array de los sorteos seleccionados	
 			foreach ( $sorteos as $sorteo) {
+				
 				// Verifica si el sorteo es Zodiacal
 				if($obj_modelo->GetTrueZodiacal($sorteo)){
+					
 					foreach ($zodiacales as $zodiacal){
 						
+						$eszodiacal=1; 
+						
 						//revisar tabla de numeros jugados
+						
 						//revisar tabla de cupo_especial
 						//revisar tabla de cupo_general
 						
 						// guardar registro en tabla de numeros jugados
-						
-						
+
+					
 						// Agregar ticket a tabla transaccional
 						if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$txt_monto) ){
 																		
@@ -127,17 +177,185 @@ if($txt_numero == 0 ){
 					}
 				// El sorteo no es Zodiacal
 				}else{
-					// Agregar ticket a tabla transaccional
-					if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,0,$txt_monto) ){
-																	
-					}
-					else{
-						$_SESSION['mensaje']= $mensajes['fallo_agregar'];
-						echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";
-					}	
+					
+					//CREAR FUNCION Proceso_Cupo()
+					
+					$eszodiacal=0; 
+					$zodiacal=0;
+					
+					//revisar tabla de numeros_jugados
+					$numero_jugado= $obj_modelo->GetNumerosJugados($txt_numero,$sorteo);
+					
+					if( $numero_jugado['total_registros']>0 ){
+						//significa que ya existe y debemos ver el monto que queda
+						$num_jug = $numero_jugado['monto_restante'];
+						//si queda por un monto mayor que 0
+						if ($num_jug >0){
+														
+	 						$matriz2= CalculaIncompletoYnuevoMonto($txt_monto, $num_jug);
+	 						 
+	 						$num_jug_nuevodisponible = $matriz2[0];
+	 						$incompleto= $matriz2[1];
+
+							
+							//registrar $num_jug_nuevodisponible, $incompleto 
+							
+							// Guardar ticket a tabla transaccional
+							if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$txt_monto,$num_jug_nuevodisponible,$incompleto) ){
+																			
+							}
+							else{
+								$_SESSION['mensaje']= $mensajes['fallo_agregar_ticket'];
+								echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";
+							}							
+							
+							
+							
+						}else{
+							//Mensaje de ERROR -- NUMERO AGOTADO PARA ESTE SORTEO
+							
+						}
+						
+					}else{
+						//No existe aun
+						//revisar tabla de cupo_especial
+						$cupo_especial= $obj_modelo->GetCuposEspeciales($txt_numero,$sorteo);
+						
+						if( $cupo_especial['total_registros']>0 ){
+							while($row= $obj_conexion->GetArrayInfo($cupo_especial['result'])){
+								
+								//recortando el formato 2013-02-26 00:00:00 a 2013-02-26	
+								$fecha_desde = substr($row["fecha_desde"], 0, 10);
+								$fecha_hasta = substr($row["fecha_hasta"], 0, 10);
+								
+								//funcion para saber si hoy esta entre dos fechas dadas
+								// regresa 1 si esta entre las fechas; 0 de lo contrario
+								$fecha_efectiva= $obj_modelo->entreFechasYhoy($fecha_desde,$fecha_hasta);
+								
+								//si esta entre las fechas del bloqueo
+								if ($fecha_efectiva == 1){
+									
+									//significa que ya existe y debemos ver el monto que queda									
+									$monto_cupoespecial= $row["monto_cupo"];
+
+									//si queda por un monto mayor que 0
+									if ($monto_cupoespecial >0){
+										
+										//calculando el faltante entre el numero ya jugado y el nuevo por jugar
+										$montodiferencia= ($monto_cupoespecial-$txt_monto);
+										
+										//si no completa el monto solicitado
+										if ($montodiferencia < 0){
+											//Mensaje de ERROR -- NUMERO INCOMPLETO PARA ESTE SORTEO
+											
+											//el nuevo disponible es el faltante del incompleto
+											$num_jug_nuevodisponible = (-1)*$montodiferencia;
+											$incompleto=1;
+												
+										}else{
+											//el nuevo disponible es el restante para numeros_jugados
+											$num_jug_nuevodisponible = $montodiferencia;
+											$incompleto=0;
+										}
+										
+										//registrar $num_jug_nuevodisponible, $incompleto 
+										
+										// Guardar ticket a tabla transaccional
+										if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,0,$txt_monto,$num_jug_nuevodisponible,$incompleto) ){
+																						
+										}
+										else{
+											$_SESSION['mensaje']= $mensajes['fallo_agregar_ticket'];
+											echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";
+										}							
+										
+										
+										
+									}else{
+										//Mensaje de ERROR -- NUMERO BLOQUEADO PARA ESTE SORTEO
+									}									
+										
+								}else{
+									//No posee cupo especial, ni esta en tabla numeros_jugados
+									//revisar tabla de cupo_general							
+									//procesa A
+															
+									$tamano_numero = strlen($txt_numero);
+									if ($tamano_numero == 3){
+										$estriple=1;	
+									}
+									
+									if ($tamano_numero == 2){
+										$estriple=0;	
+									}
+																		
+									$id_tipo_jugada= $obj_modelo->GetTipoJugada($eszodiacal,$estriple);
+
+																		
+									//determinando monto_cupo segun id tipo de jugada									
+									$cupo_general= $obj_modelo->GetCuposGenerales($id_tipo_jugada);
+								
+									//calculando el faltante entre el numero ya jugado y el nuevo por jugar
+									$montodiferencia= ($cupo_general-$txt_monto);
+									
+									//si no completa el monto solicitado
+									if ($montodiferencia < 0){
+										//Mensaje de ERROR -- NUMERO INCOMPLETO PARA ESTE SORTEO
+										
+										//el nuevo disponible es el faltante del incompleto
+										$num_jug_nuevodisponible = (-1)*$montodiferencia;
+										$incompleto=1;
+											
+									}else{
+										//el nuevo disponible es el restante para numeros_jugados
+										$num_jug_nuevodisponible = $montodiferencia;
+										$incompleto=0;
+									}									
+									
+									// Calculando $num_jug_nuevodisponible,$incompleto
+									
+									// Guardar ticket a tabla transaccional
+									if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,0,$txt_monto,$num_jug_nuevodisponible,$incompleto) ){
+																					
+									}
+									else{
+										$_SESSION['mensaje']= $mensajes['fallo_agregar_ticket'];
+										echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";
+									}									
+									
+									
+								}
+								
+								
+							}							
+							
+						}else{
+							//No posee cupo especial, ni esta en tabla numeros_jugados
+							//revisar tabla de cupo_general							
+							//procesa A
+						
+						}
+						
+						
+						
+					} 
+					
+					//revisar tabla de cupo_especial
+					//revisar tabla de cupo_general
+
+					
+
+
+					
+					
+					
+					
+					
+					
+					
 				}		
 			}
-			
+			/*
 			// Listado de Sorteos
 			if( $result= $obj_modelo->GetDatosTicketTransaccional() ){
 				echo "<br><table class='table_ticket' align='center' border='1' width='90%'>";
@@ -148,7 +366,9 @@ if($txt_numero == 0 ){
 				}		
 				echo "</table>";	
 			}			
-								
+			*/
+
+			
 	     break;
 		 
 		case 2:  

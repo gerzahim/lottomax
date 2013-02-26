@@ -448,3 +448,9 @@ serial	fecha_hora	taquilla	total_ticket	id_usuario	pagado
 
 x_grabargameganahi(); // funcion que llama para imprimir con pdf 	 
 
+// svn commit
+Verificacion en el modulo de ventas para que verifique si esta registrado el numero y monto en la tabla de numeros_jugados
+
+cambios en la base de datos en la tabla ticket_transaccional se agregaron  nuevos campos (monto_restante ; incompleto)
+cambios en la base de datos en la tabla tipo_jugadas se agregaron  nuevos campos  (zodiacal ; triple )
+se creo la base de datos en la tabla incompletos_agotados 

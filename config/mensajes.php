@@ -65,6 +65,7 @@ $mensajes['no_beneficiario']= "No Selecciono Beneficiario Correspondiente, por f
 
 
 $mensajes['fallo_agregar']= "No se logro ingresar en la base de datos la informacion suministrados!!!";
+$mensajes['fallo_agregar_ticket']= "Error No se logro ingresar la jugada al ticket!!!";
 $mensajes['fallo_agregar_subtotal']= "No se logro ingresar en la base de datos los subtotales!!!";
 
 $mensajes['fallo_modificar']= "No se logro modificar en la base de datos la informacion suministrados!!!";
@@ -115,6 +116,7 @@ $mensajes['no_detalle_egresos']= "Debe Ingresar Completar Detalles de Egresos!!!
 $mensajes['no_subtotal_egresos']= "Debe Completar Monto Subtotales de Egresos!!!!";
 
 $mensajes['no_numero']= "Debe ingresar un NUMERO para jugar !!!";
+$mensajes['no_numero_completo']= "Debe ingresar un NUMERO mayor a 2 digitos para jugar !!!";
 $mensajes['no_monto']= "Debe ingresar un MONTO Bs para jugar !!!";
 $mensajes['no_sorteo']= "Debe seleccionar un SORTEO para jugar !!!";
 $mensajes['no_zodiacal']= "Debe seleccionar SIGNO ZODIACAL para jugar !!!";
