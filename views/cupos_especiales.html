@@ -11,7 +11,7 @@
 				<span>[ <a class="enlaces" href="{pagina_principal}?op={opcion_sistema}&amp;accion=search">Buscar Cupo Especial</a> ]</span>
 			</div>
 			              
-			<table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1">
+                        <table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1" style="font-size:9.5px;">
 				<caption>Lista de Cupos Especiales de Numeros</caption>
 
 				<thead>		
@@ -80,52 +80,106 @@
 
 					<!-- BEGIN: identificador -->
 		
-					<input style="border: hidden" type="hidden" name="idreferencia" id="idreferencia" value="{id_cupo_general}"/>
+					<input style="border: hidden" type="hidden" name="idreferencia" id="idreferencia" value="{id_cupo_especial}"/>
 		
 					<!-- END: identificador -->	
 									
 		
 					<fieldset>
 		
-						<legend>Formulario de Cupos Generales de Numeros:</legend>
+						<legend>Formulario de Cupos Especiales de Numeros:</legend>
 		
 						<table align="center" border="0" cellpadding="2" cellspacing="0" width="80%">
 		
-							<tr><td colspan="2" class="requerido" style="text-align:right;">(*)Campos Requeridos&nbsp;</td></tr>
+							<tr><td colspan="3" class="requerido" style="text-align:right;">(*)Campos Requeridos&nbsp;</td></tr>
 		
-							<tr><td colspan="2">&nbsp;</td></tr>
+							<tr><td colspan="3">&nbsp;</td></tr>
 		
 							<tr>
-		
-								<td class="tag" width="230"><span class="requerido">*</span> Tipo de Jugada:</td>
-		
-								<td>
-                                                                    <select id="op_tipo_jugadas" name="op_tipo_jugada" >
-                                                                        <!-- BEGIN: lista_tipo_jugadas -->
-                                                                        <option value="{id_tipo_jugada}" disabled {selecciono}>{nombre_tipo_jugada}</option>
-                                                                        <!-- END: lista_tipo_jugadas -->
-                                                                    </select>
-                                                                </td>
-							</tr>
-		
-							<tr><td colspan="2"></td></tr>
+                                                            <td colspan="3">
+                                                                 <fieldset><legend>Datos:</legend>
+                                                                    <table border="0"  cellpadding="0" cellspacing="0">
+                                                                        <tr>
+                                                                            <td class="tag" style="text-align:left;"><span class="requerido">*</span> Numero: <input id="txt_monto" name="txt_numero" size="12" type="text" value="{txt_numero}"/></td>
 
+                                                                            <td class="tag" style="text-align:left;"><span class="requerido">*</span> Monto Cupo (Bs. F.): <input id="txt_monto" name="txt_monto" size="12" type="text" value="{txt_monto}"/></td>
+                                                                            <td class="tag" style="text-align:left;"><span class="requerido">*</span> Fecha Desde: <input type="text" id="fechadesde" name="txt_fechadesde"  value="{txt_fechadesde}"></td>
+                                                                            <td class="tag" style="text-align:left;"><span class="requerido">*</span> Fecha Hasta: <input type="text" id="fechahasta" name="txt_fechahasta"  value="{txt_fechahasta}"/></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                 </fieldset>
+                                                            </td>                                                
+                                                             
+                                                               <script type="text/javascript">                                                                
+                                                                 $(function() {
+                                                                     $("#fechadesde,#fechahasta").datepicker({
+                                                                        changeMonth: true,
+                                                                        changeYear: true,
+                                                                        showOn: 'both',
+                                                                        buttonText: 'Calendario',
+                                                                        buttonImage: "./images/calendar.jpg",
+                                                                        buttonImageOnly: true
+                                                                }).addClass("embed").attr('readonly','readonly');
+                                                                    $( "#datepicker" ).datepicker();
+                                                                  });
+                                                                </script>
+							</tr>
+                                                        <tr><td colspan="3">&nbsp;</td></tr>
+                                                       
                                                         <tr>
+                                                                 <td rowspan="3">
+                                                                            <input id="cant_tipo_jugada" name="cant_tipo_jugada" size="10" maxlength="6" type="hidden" value="{cant_tipo_jugada}"/>
+                                                                            <div><span class="requerido">*</span> Tipos de Jugadas</div><br />
+                                                                            <div  id="checkboxesorteos" style=" width:200px; height:500px; overflow:auto;">
+                                                                                <table width="150" border="0">
+                                                                                &nbsp;&nbsp;&nbsp;&nbsp;Todos   Si / No&nbsp;(Z)&nbsp;&nbsp;&nbsp;<input type="checkbox" id="t0" name="t0" value="0" onclick="checkAllTipoJugada(document.getElementsByName('tj[]'));" {disabled}>
+                                                                                <!-- BEGIN: lista_tipo_jugada -->
+                                                                                          <tr class="eveni">
+                                                                                            <td><input type="checkbox" name="tj[]" value="{id_tipo_jugada}" {checked}/>&nbsp;{nombre_jugada}</td>
+                                                                                          </tr>
+                                                                                <!-- END: lista_tipo_jugada -->
+                                                                                </table>
+                                                                            </div>
+                                                                    </td>
+                                                                <td>
+                                                                        <input id="cant_sorteos" name="cant_sorteos" size="10" maxlength="6" type="hidden" value="{cant_sorteos}"/>                                                                  
+                                                                        <div><span class="requerido">*</span> Sorteos</div><br />
+                                                                        <div  id="checkboxesorteos" style=" width:200px; height:500px; overflow:auto;">
 
-								<td class="tag" width="230"><span class="requerido">*</span> Monto:</td>
+                                                                                    <table width="170" border="0">
 
-								<td>
-                                                                    <input id="txt_numero" name="txt_monto" size="12" type="text" value="{txt_monto}"/> Bs. F. 
-                                                                </td>
+                                                                                        &nbsp;&nbsp;&nbsp;&nbsp;Todos   Si / No&nbsp;(L)&nbsp;&nbsp;&nbsp;<input type="checkbox" id="s0" name="s0" value="0" onclick="checkAllsorteos(document.getElementsByName('ss[]'));" {disabled} >
+                                                                                      <!-- BEGIN: lista_sorteos -->
+                                                                                      <tr class="eveni">
+                                                                                        <td><input type="checkbox" name="ss[]" value="{id_sorteo}" {checked}/>&nbsp;{nombre_sorteo}</td>
+                                                                                      </tr>
+                                                                                      <!-- END: lista_sorteos -->
 
+                                                                                    </table>
+                                                                        </div>
+
+                                                                    </td>
+
+                                                                    <td>
+                                                                            <input id="cant_zodiacal" name="cant_zodiacal" size="10" maxlength="6" type="hidden" value="{cant_zodiacal}"/>
+                                                                            <div>Signos Zodiacales</div><br />
+                                                                            <div  id="checkboxesorteos" style=" width:200px; height:500px; overflow:auto;">
+                                                                                <table width="150" border="0">
+                                                                                &nbsp;&nbsp;&nbsp;&nbsp;Todos   Si / No&nbsp;(Z)&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="z0" value="0" onclick="checkAllZodiacales(document.getElementsByName('zz[]'));" {disabled} >
+                                                                                <!-- BEGIN: lista_zodiacal -->
+                                                                                          <tr class="eveni">
+                                                                                            <td><input type="checkbox" name="zz[]" value="{Id_zodiacal}" {checked}/>&nbsp;{nombre_zodiacal}</td>
+                                                                                          </tr>
+                                                                                <!-- END: lista_zodiacal -->
+                                                                                </table>
+                                                                            </div>
+                                                                    </td>
+                                                                   
 							</tr>
-
-							<tr><td colspan="2"></td></tr>                                               
-		
-							<tr><td colspan="2"></td></tr>                                                                                        	
-						</table>
-		
-					</fieldset>
+                                            </table>
+                                        </fieldset>
+					
+	
 		
 					<div class="botones" align="center">
 		
@@ -142,6 +196,108 @@
 			</div>
 		
 			<!-- END: formulario -->
+
+                        <!-- BEGIN: busqueda -->
+                        <table width="800" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF">
+                            <tr>
+                                <td>
+                                    <div id="main">
+
+                                        <br />
+
+                                        <form id="frm1" method="get" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es">
+
+                                                <input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
+                                                <input style="border: hidden" type="hidden" name="accion" id="idaccion" value="looking"/>
+
+                                                <fieldset>
+
+                                                        <legend>Busqueda de Cupos Especiales</legend>
+
+                                                        <table align="center" border="0" cellpadding="2" cellspacing="0" width="100%">
+
+                                                                <tr><td colspan="2">&nbsp;</td></tr>
+
+                                                                <tr><td colspan="2"></td></tr>
+
+                                                                <tr>
+
+                                                                        <td class="tag" width="200">Por  Numero :</td>
+
+                                                                        <td><input id="txt_monto" name="numero" size="30" maxlength="45" type="text" /></td>
+
+                                                                </tr>
+
+                                                                <tr><td colspan="2"></td></tr>
+
+                                                                <tr>
+
+                                                                        <td class="tag">Por  Monto :</td>
+
+                                                                        <td><input id="txt_monto" name="monto" size="30" maxlength="45" type="text" /></td>
+
+                                                                </tr>
+
+                                                                <tr><td colspan="2">&nbsp;</td></tr>
+                                                               <tr>
+                                                                        <td class="tag" width="230">Por tipo de Jugada:</td>
+
+                                                                        <td>
+                                                                            <select id="op_tipo_jugadas" name="tipo_jugada" >
+                                                                                <option value="0" >Seleccione...</option>
+                                                                                <!-- BEGIN: lista_tipo_jugadas -->
+                                                                                <option value="{id_tipo_jugada}" >{nombre_tipo_jugada}</option>
+                                                                                <!-- END: lista_tipo_jugadas -->
+                                                                            </select>
+                                                                        </td>
+                                                                </tr>
+                                                                <tr><td colspan="2">&nbsp;</td></tr>
+                                                                <tr>
+                                                                        <td class="tag" width="230">Por tipo Sorteo:</td>
+
+                                                                        <td>
+                                                                            <select id="op_sorteo" name="sorteo" >
+                                                                                <option value="0" >Seleccione...</option>
+                                                                                <!-- BEGIN: lista_sorteo -->
+                                                                                <option value="{id_sorteo}" >{nombre_sorteo}</option>
+                                                                                <!-- END: lista_sorteo -->
+                                                                            </select>
+                                                                        </td>
+                                                                </tr>
+                                                                <tr><td colspan="2">&nbsp;</td></tr>
+                                                                <tr>
+                                                                        <td class="tag" width="230">Por Zodiacal</td>
+
+                                                                        <td>
+                                                                            <select id="op_zodiacal" name="zodiacal" >
+                                                                                <option value="0" >Seleccione...</option>
+                                                                                <!-- BEGIN: lista_zodiacal -->
+                                                                                <option value="{Id_zodiacal}" >{nombre_zodiacal}</option>
+                                                                                <!-- END: lista_zodiacal -->
+                                                                            </select>
+                                                                        </td>
+                                                                </tr>
+                                                                <tr><td colspan="2">&nbsp;</td></tr>
+                                                        </table>
+
+                                                </fieldset>
+
+                                                <div class="botones">
+
+                                                        <input  id="btnok" name="btnentrar" value="Buscar" type="submit" class="boton"/>&nbsp;&nbsp;&nbsp;
+
+                                                        <input  id="btncancel" name="btncancelar" value="Cancelar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
+
+                                                </div>
+
+                                        </form>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- END: busqueda -->
 	
 <br />	<br />	 
 		

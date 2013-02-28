@@ -564,3 +564,25 @@ function checkAllZodiacales(chk){
 		flags=1;
 	}	
 }
+
+var flags_1 = 1;
+function checkAllTipoJugada(chk){
+
+	for (i = 0; i < chk.length; i++)
+		if (flags_1 == 1)
+		{
+			//alert('A');
+			chk[i].checked = true ;
+
+		}
+		else
+		{
+			//alert('B');
+			chk[i].checked = false;
+		}
+	if (flags_1 == 1){
+		flags_1=0;
+	}else{
+		flags_1=1;
+	}
+}
