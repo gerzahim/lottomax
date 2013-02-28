@@ -1,4 +1,145 @@
 <?php
+
+			/*
+			// Listado de Sorteos
+			if( $result= $obj_modelo->GetDatosTicketTransaccional() ){
+				echo "<br><table class='table_ticket' align='center' border='1' width='90%'>";
+				while($row= $obj_conexion->GetArrayInfo($result)){
+					//print_r($row);
+					echo "<tr class='eveno'><td align='center'>SORTEO: ".$obj_modelo->GetNombreSorteo($row['id_sorteo'])."</td></tr>";
+					echo "<tr class='eveni'><td align='left'>".$row['numero']." x ".$row['monto']."</td></tr>";	
+				}		
+				echo "</table>";	
+			}			
+			*/
+
+
+
+
+/*
+ * 
+ * 			<option value="2">Permuta</option>
+			<option value="3">Series</option>
+			<option value="4">Corridas</option>
+			<option value="5">Astral</option>
+op=ventas&accion=add&
+txt_numero=&
+txt_monto=&
+op_juego=1&
+cant_sorteos=3&
+s1=on&s2=on&s3=on&
+z00=on&z01=on&z02=on&z03=on&z04=on&z05=on&z06=on&z07=on&z08=on&z09=on&z10=on&z11=on&z12=on&
+efectivo=150&cambio=30&total=120.00
+
+$codigo=$_REQUEST['txt_numero'];
+echo $codigo;
+*/
+
+
+/*
+foreach ( $_POST as $key => $value) {
+
+  echo "<p>".$key."</p>";
+  echo "<p>".$value."</p>";
+  echo "<hr />";
+
+}
+
+echo "
+<table class='table_ticket' align='center' border='0' width='90%'>
+	<tr>
+		<td align='center'><strong>Sorteo<strong></td>
+		<td align='center'><strong>Numero<strong></td>
+		<td align='center'><strong>Monto<strong></td>		
+	</tr>
+	<tr>
+		<td align='center'>Chance A 8 PM</td>
+		<td align='center'>124</td>
+		<td align='center'>20</td>
+	</tr>																																			
+</table>    
+";
+
+
+*/
+
+
+/*
+ * lo primero es validar que txt_numero=&
+txt_monto=& no esten vacios, de lo contrario enviar mensaje de error
+
+luego validamos que op_juego para llevar la variable a un switch
+crear variable de sesion
+dos for uno para sorteos 
+ y (if es zodiacal) dentro de este los zodiacales
+
+ * 
+ * */
+
+
+
+// Parseo  final del  documento
+//$obj_xtpl->parse('contenido1');
+//$obj_xtpl->out('contenido1');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
 op=ventas&accion=add&
 txt_numero=&

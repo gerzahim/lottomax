@@ -83,11 +83,12 @@ class Ventas{
 	 * @param string $monto 
 	 * @return boolean, array
 	 */
-	public function GuardarTicketTransaccional($numero,$id_sorteo,$id_zodiacal,$num_jug_nuevodisponible,$incompleto,$monto){
+	public function GuardarTicketTransaccional($numero,$id_sorteo,$id_zodiacal,$id_tipo_jugada,$montofaltante,$incompleto,$monto){
 		
 		//Preparacion del query
-		$sql = "INSERT INTO `ticket_transaccional` (`numero` , `id_sorteo` , `id_zodiacal` , `monto_restante` , `incompleto`, `monto`) VALUES ('".$numero."', '".$id_sorteo."', '".$id_zodiacal."', '".$num_jug_nuevodisponible."', '".$incompleto."', '".$monto."')";
+		$sql = "INSERT INTO `ticket_transaccional` (`numero` , `id_sorteo` , `id_zodiacal`, `id_tipo_jugada` , `monto_faltante` , `incompleto`, `monto`) VALUES ('".$numero."', '".$id_sorteo."', '".$id_zodiacal."', '".$id_tipo_jugada."', '".$num_jug_nuevodisponible."', '".$incompleto."', '".$monto."')";
 		return $this->vConexion->ExecuteQuery($sql);
+		
 		
 	}	
 
@@ -119,6 +120,22 @@ class Ventas{
 		return $roww["nombre_sorteo"];
 		
 	}
+	
+	/**
+	 * Obtiene el pre del Zodiacal Segun ID
+	 *
+	 * @param string $id
+	 * @return boolean, array
+	 */
+	public function GetPreZodiacal($id){
+		
+		//Preparacion del query
+		$sql = "SELECT pre_zodiacal FROM zodiacal WHERE Id_zodiacal  = ".$id."";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["pre_zodiacal"];
+		
+	}	
 
 	/**
 	 * Listar Preticket
@@ -148,10 +165,35 @@ class Ventas{
 	 * @param string $sorteo
 	 * @return boolean, array
 	 */
-	public function GetNumerosJugados($numero, $sorteo){
+	public function GetTicketTransaccional($numero, $sorteo, $id_zodiacal){
 			
 		//Preparacion del query
-		$sql = "SELECT monto_restante FROM numeros_jugados WHERE numero = ".$numero." AND id_sorteo  = ".$sorteo."";
+		$sql = "SELECT monto_restante, monto FROM ticket_transaccional WHERE numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal."";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		
+		//numeros_jugados
+		//id_numero_jugados	fecha	numero	id_sorteo	id_tipo_jugada	id_zodiacal	monto_restante
+
+		// Datos para la paginacion
+		$total_registros= $this->vConexion->GetNumberRows($result);
+		
+		$roww= $this->vConexion->GetArrayInfo($result);
+		
+		return array('total_registros'=>$total_registros,'monto_restante'=>$roww["monto_restante"], 'monto'=>$roww["monto"]);
+		
+	}
+	
+	/**
+	 * Busqueda en tabla de Numeros_Jugados
+	 *
+	 * @param string $numero
+	 * @param string $sorteo
+	 * @return boolean, array
+	 */
+	public function GetNumerosJugados($numero, $sorteo, $id_zodiacal){
+			
+		//Preparacion del query
+		$sql = "SELECT monto_restante FROM numeros_jugados WHERE numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal."";
 		$result= $this->vConexion->ExecuteQuery($sql);
 		
 		//numeros_jugados
@@ -177,14 +219,13 @@ class Ventas{
 	 */
 	
 	
-	public function GetCuposEspeciales($numero, $sorteo){
+	public function GetCuposEspeciales($numero, $sorteo, $id_zodiacal){
+		
+		
 			
 		//Preparacion del query
-		$sql = "SELECT * FROM cupo_especial WHERE numero = ".$numero." AND id_sorteo  = ".$sorteo."";
+		$sql = "SELECT * FROM cupo_especial WHERE numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal."";
 		$result= $this->vConexion->ExecuteQuery($sql);
-		
-		//  cupo_especial
-		// id_cupo_especial	numero	id_sorteo  monto_cupo  id_tipo_jugada  id_zodiacal  fecha_desde  fecha_hasta
 
 		// Datos para la paginacion
 		$total_registros= $this->vConexion->GetNumberRows($result);
@@ -202,10 +243,21 @@ class Ventas{
 	 */
 	
 	
-	public function GetTipoJugada($eszodiacal,$estriple){
+	public function GetTipoJugada($eszodiacal,$txt_numero){
+
+		$tamano_numero = strlen($txt_numero);
+		
+		if ($tamano_numero == 3){
+			$estriple=1;	
+		}
+		
+		if ($tamano_numero == 2){
+			$estriple=0;	
+		}		
 			
 		//Preparacion del query
 		$sql = "SELECT id_tipo_jugada FROM tipo_jugadas WHERE zodiacal = ".$eszodiacal." AND triple  = ".$estriple."";
+
 		$result= $this->vConexion->ExecuteQuery($sql);
 		$roww= $this->vConexion->GetArrayInfo($result);
 		return $roww["id_tipo_jugada"];
@@ -290,7 +342,7 @@ class Ventas{
 	    return $respuestas;
 	  } 
 	 
-	}	
+	}		
 	
 	
 }		

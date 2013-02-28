@@ -120,5 +120,7 @@ $mensajes['no_numero_completo']= "Debe ingresar un NUMERO mayor a 2 digitos para
 $mensajes['no_monto']= "Debe ingresar un MONTO Bs para jugar !!!";
 $mensajes['no_sorteo']= "Debe seleccionar un SORTEO para jugar !!!";
 $mensajes['no_zodiacal']= "Debe seleccionar SIGNO ZODIACAL para jugar !!!";
+$mensajes['numero_incompleto']= "NUMERO Incompleto para sorteo ";
+$mensajes['numero_agotado']= "NUMERO Agotado para sorteo ";
 
 ?>
