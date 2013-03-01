@@ -102,7 +102,7 @@
                                                                         <tr>
                                                                             <td class="tag" style="text-align:left;"><span class="requerido">*</span> Numero: <input id="txt_monto" name="txt_numero" size="12" type="text" value="{txt_numero}"/></td>
 
-                                                                            <td class="tag" style="text-align:left;"><span class="requerido">*</span> Monto Cupo (Bs. F.): <input id="txt_monto" name="txt_monto" size="12" type="text" value="{txt_monto}"/></td>
+                                                                            <td class="tag" style="text-align:left;"><span class="requerido">*</span> Monto Cupo (Bs. F.): <input id="txt_numero" name="txt_monto" size="12" type="text" value="{txt_monto}"/></td>
                                                                             <td class="tag" style="text-align:left;"><span class="requerido">*</span> Fecha Desde: <input type="text" id="fechadesde" name="txt_fechadesde"  value="{txt_fechadesde}"></td>
                                                                             <td class="tag" style="text-align:left;"><span class="requerido">*</span> Fecha Hasta: <input type="text" id="fechahasta" name="txt_fechahasta"  value="{txt_fechahasta}"/></td>
                                                                         </tr>
@@ -113,34 +113,43 @@
                                                                <script type="text/javascript">                                                                
                                                                  $(function() {
                                                                      $("#fechadesde,#fechahasta").datepicker({
+                                                                        beforeShow: RangoDefault,
                                                                         changeMonth: true,
                                                                         changeYear: true,
                                                                         showOn: 'both',
                                                                         buttonText: 'Calendario',
                                                                         buttonImage: "./images/calendar.jpg",
                                                                         buttonImageOnly: true
-                                                                }).addClass("embed").attr('readonly','readonly');
-                                                                    $( "#datepicker" ).datepicker();
+                                                                        }).addClass("embed").attr('readonly','readonly');
+                                                                    
+                                                                    // Para validar las fechas
+                                                                    function RangoDefault(input){ 
+                                                                            return {
+                                                                                    minDate: ( (input.id == "fechahasta" && $("#fechadesde").val()) ? $("#fechadesde").datepicker("getDate") : new Date('{fecha_marcar}')),
+                                                                                    maxDate: (input.id == "fechadesde" ? $("#fechahasta").datepicker("getDate") : null)
+                                                                            }; 
+                                                                    }
+
                                                                   });
                                                                 </script>
 							</tr>
-                                                        <tr><td colspan="3">&nbsp;</td></tr>
+                                                        <tr><td colspan="2">&nbsp;</td></tr>
                                                        
                                                         <tr>
-                                                                 <td rowspan="3">
+                                                                 <!-- <td rowspan="3">
                                                                             <input id="cant_tipo_jugada" name="cant_tipo_jugada" size="10" maxlength="6" type="hidden" value="{cant_tipo_jugada}"/>
                                                                             <div><span class="requerido">*</span> Tipos de Jugadas</div><br />
                                                                             <div  id="checkboxesorteos" style=" width:200px; height:500px; overflow:auto;">
                                                                                 <table width="150" border="0">
                                                                                 &nbsp;&nbsp;&nbsp;&nbsp;Todos   Si / No&nbsp;(Z)&nbsp;&nbsp;&nbsp;<input type="checkbox" id="t0" name="t0" value="0" onclick="checkAllTipoJugada(document.getElementsByName('tj[]'));" {disabled}>
                                                                                 <!-- BEGIN: lista_tipo_jugada -->
-                                                                                          <tr class="eveni">
+                                                                                         <!-- <tr class="eveni">
                                                                                             <td><input type="checkbox" name="tj[]" value="{id_tipo_jugada}" {checked}/>&nbsp;{nombre_jugada}</td>
-                                                                                          </tr>
+                                                                                          </tr>-->
                                                                                 <!-- END: lista_tipo_jugada -->
-                                                                                </table>
+                                                                               <!-- </table>
                                                                             </div>
-                                                                    </td>
+                                                                    </td>-->
                                                                 <td>
                                                                         <input id="cant_sorteos" name="cant_sorteos" size="10" maxlength="6" type="hidden" value="{cant_sorteos}"/>                                                                  
                                                                         <div><span class="requerido">*</span> Sorteos</div><br />

@@ -1,0 +1,173 @@
+<!-- BEGIN: contenido -->       
+<table width="800" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF">
+	<tr>
+		<td >
+	        <br /> 
+            <div id="message" class="message" >{mensaje}</div>        
+                 
+			<!-- BEGIN: lista_parametros -->
+			              
+			<table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1">
+				<caption>Parametros Generales</caption>
+
+				<thead>		
+					<tr>		
+						<th class="title header" scope="col"  width="20">&nbsp;</th>		
+						<th class="title header" scope="col">Agencia</th>
+                                                <th class="title header" scope="col">Taquilla</th>
+						<th class="title header" scope="col">Tiempo de Cierre Sorteos</th>
+                                                <th class="title header" scope="col">Tiempo de Anulacion Ticket</th>
+                                                <th class="title header" scope="col">Tiempo de Vigencia Ticket</th>
+					</tr>		
+				</thead>
+		
+				<tbody>
+		
+					<!-- BEGIN: lista -->
+					<tr class="{estilo_fila}">
+		
+						<td class="lista1" scope="row" align="center">
+							<a href="{pagina_principal}?op={opcion_sistema}&amp;accion=mod&amp;id={id_parametros}" title="Ver / Modificar">
+                            	<img src="./images/lapiz.gif" border="0"/>
+                           	</a>
+						</td>
+						
+						<td align="left">&nbsp;{nombre_agencia}</td>
+                                                <td align="left">&nbsp;{taquilla}</td>
+   						<td align="center">{tiempo_cierre_sorteos} min.</td>
+                                                <td align="center">{tiempo_anulacion_ticket} min.</td>
+                                                <td align="center">{tiempo_vigencia_ticket} dias</td>
+					</tr>
+					<!-- END: lista -->
+		
+					<!-- BEGIN: no_lista -->
+		
+					<tr class="even">		
+						<td align="center" colspan="6" class="odd"><br />{sin_listado}<br />&nbsp;</td>		
+					</tr>		
+					<!-- END: no_lista -->
+		
+				</tbody>				
+				<tfoot>
+                </tfoot>
+			</table>
+                <div class="paginas">{paginacion}</div>	
+					
+			<!-- END: lista_parametros -->
+			
+			<!-- BEGIN: formulario -->
+		
+			<div id="formularios" align="center">
+		
+				<form  name="frm1" id="frm1" method="post" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es">
+		
+					<input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
+		
+					<input style="border: hidden" type="hidden" name="accion" id="idaccion" value="{tipo_accion}"/>
+
+					<!-- BEGIN: identificador -->
+		
+					<input style="border: hidden" type="hidden" name="idreferencia" id="idreferencia" value="{id_parametros}"/>
+		
+					<!-- END: identificador -->	
+									
+		
+					<fieldset>
+		
+						<legend>Formulario de Parametros:</legend>
+		
+						<table align="center" border="0" cellpadding="2" cellspacing="0" width="80%">
+		
+							<tr><td colspan="2" class="requerido" style="text-align:right;">(*)Campos Requeridos&nbsp;</td></tr>
+		
+							<tr><td colspan="2">&nbsp;</td></tr>
+		
+							<tr>
+		
+								<td class="tag" width="230"><span class="requerido">*</span> Agencia:</td>
+
+								<td>
+                                                                    <input id="txt_text" name="txt_agencia" size="20" type="text" value="{nombre_agencia}"/>
+                                                                </td>
+							</tr>
+		
+							<tr><td colspan="2"></td></tr>
+
+                                                        <tr>
+
+								<td class="tag" width="230"><span class="requerido">*</span> Taquilla:</td>
+
+								<td>
+                                                                    <input id="txt_numero" name="txt_taquilla" size="12" type="text" value="{taquilla}"/>
+                                                                </td>
+
+							</tr>
+
+							<tr><td colspan="2"></td></tr>
+
+                                                         <tr>
+
+								<td class="tag" width="230"><span class="requerido">*</span> Tiempo de cierre de Sorteos</td>
+
+								<td>
+                                                                    <input id="txt_monto" name="txt_tiempo_cierre_sorteos" size="12" type="text" value="{tiempo_cierre_sorteos}"/> Minutos
+                                                                </td>
+
+							</tr>
+
+							<tr><td colspan="2"></td></tr>
+
+                                                        <tr>
+
+								<td class="tag" width="230"><span class="requerido">*</span> Tiempo de Anulacion de Ticket</td>
+
+								<td>
+                                                                    <input id="txt_numero" name="txt_tiempo_anulacion_ticket" size="12" type="text" value="{tiempo_anulacion_ticket}"/> Minutos
+                                                                </td>
+
+							</tr>
+
+							<tr><td colspan="2"></td></tr>
+
+                                                        <tr>
+
+								<td class="tag" width="230"><span class="requerido">*</span> Tiempo de Vigencia Ticket</td>
+
+								<td>
+                                                                    <input id="txt_monto" name="txt_tiempo_vigencia_ticket" size="12" type="text" value="{tiempo_vigencia_ticket}"/> Dias
+                                                                </td>
+
+							</tr>
+
+							<tr><td colspan="2"></td></tr>
+                                                                                                                                                   	
+						</table>
+		
+					</fieldset>
+		
+					<div class="botones" align="center">
+		
+						<input  id="btnok" name="btnentrar" value="{tag_boton}" type="submit" class="boton"/>
+
+						&nbsp;&nbsp;&nbsp;
+		
+						<input  id="btncancel" name="btncancelar" value="Regresar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
+						
+					</div>
+					
+				</form>			 
+		
+			</div>
+		
+			<!-- END: formulario -->
+	
+<br />	<br />	 
+		
+		</td>	
+	</tr>
+
+</table>
+     
+<!-- END: contenido -->       
+
+

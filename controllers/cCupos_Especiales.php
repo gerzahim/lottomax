@@ -31,6 +31,8 @@ switch (ACCION){
                     $obj_xtpl->assign('tipo_accion', 'save');
                     $obj_xtpl->assign('tag_boton', 'Guardar');
 
+                    $obj_xtpl->assign('fecha_marcar', $obj_date->FechaHoy());
+
                     // Listado de Sorteos
                     if( $result= $obj_modelo->GetSorteos() ){
                             $i=1;
@@ -54,15 +56,15 @@ switch (ACCION){
                     }
 
                     // Listado de Tipo de Jugada
-                    if( $result= $obj_modelo->GetTipoJugadas() ){
-                            $i=1;
-                            while($row= $obj_conexion->GetArrayInfo($result)){
-                                    $obj_xtpl->assign($obj_generico->CleanTextDb($row));
-                                    $obj_xtpl->assign('cant_tipo_jugada', $i);
-                                    $obj_xtpl->parse('main.contenido.formulario.lista_tipo_jugada');
-                                    $i++;
-                            }
-                    }
+//                    if( $result= $obj_modelo->GetTipoJugadas() ){
+//                            $i=1;
+//                            while($row= $obj_conexion->GetArrayInfo($result)){
+//                                    $obj_xtpl->assign($obj_generico->CleanTextDb($row));
+//                                    $obj_xtpl->assign('cant_tipo_jugada', $i);
+//                                    $obj_xtpl->parse('main.contenido.formulario.lista_tipo_jugada');
+//                                    $i++;
+//                            }
+//                    }
                     // Parseo del bloque
                     $obj_xtpl->parse('main.contenido.formulario');
                     break;
@@ -80,14 +82,14 @@ switch (ACCION){
                 $fecha_hasta= $obj_generico->CleanText($_POST['txt_fechahasta']);
                 // Verifica que los datos requeridos no este vacios
      		if(!$obj_generico->IsEmpty($numero) && !$obj_generico->IsEmpty($monto_cupo) && !$obj_generico->IsEmpty($fecha_desde) &&
-                    !$obj_generico->IsEmpty($fecha_hasta) && !empty($_POST['ss']) && !empty($_POST['tj'])){
-                        if(!empty($_POST['tj'])) {
-                            
-                                // Asigno todos los tipos de jugadas a una variable en array()
-                                $tipos_jugadas =$_POST['tj'];
-
-                                //recorriendo el array de tipo de jugadas
-                                foreach ( $tipos_jugadas as $id_tipo_jugada) {
+                    !$obj_generico->IsEmpty($fecha_hasta) && !empty($_POST['ss'])){
+//                        if(!empty($_POST['tj'])) {
+//
+//                                // Asigno todos los tipos de jugadas a una variable en array()
+//                                $tipos_jugadas =$_POST['tj'];
+//
+//                                //recorriendo el array de tipo de jugadas
+//                                foreach ( $tipos_jugadas as $id_tipo_jugada) {
                                     
                                     // Asigno todos los sorteos una variable en array()
                                     $sorteos =$_POST['ss'];
@@ -97,6 +99,10 @@ switch (ACCION){
 
                                             // Verifica si el sorteo es Zodiacal
                                             if($obj_modelo->GetTrueZodiacal($id_sorteo)){
+
+                                                    // Obtengo el tipo de jugada
+                                                    $id_tipo_jugada = $obj_modelo->GetTipoJugada_2('1',$numero);
+
                                                     //Verificando si marco al menos un signo ari, sag, etc...
                                                     if(!empty($_POST['zz'])) {
                                                            // Si Marco al menos un signo...
@@ -122,7 +128,11 @@ switch (ACCION){
                                                              header('location:'.$_SESSION['Ruta_Form']);
                                                         }
                                             }else{
-                                             // Se guardan los datos del cupo especial
+
+                                                // Obtengo el tipo de jugada
+                                                $id_tipo_jugada = $obj_modelo->GetTipoJugada_2('0',$numero);
+                                                
+                                                // Se guardan los datos del cupo especial
                                                 if( $obj_modelo->GuardarDatosCupoEspecial($numero, $monto_cupo, $id_sorteo, $id_tipo_jugada, '0' , $fecha_desde, $fecha_hasta)){
                                                             $_SESSION['mensaje']= $mensajes['info_agregada'];
                                                             header('location:'.$_SESSION['Ruta_Lista']);
@@ -133,12 +143,12 @@ switch (ACCION){
                                                     }
                                             }
                                     }	
-                                }   
-
-                        }else{
-                                $_SESSION['mensaje']= $mensajes['info_requerida'];
-                                header('location:'.$_SESSION['Ruta_Form']);
-                        }
+//                                }
+//
+//                        }else{
+//                                $_SESSION['mensaje']= $mensajes['info_requerida'];
+//                                header('location:'.$_SESSION['Ruta_Form']);
+//                        }
                 }else{
                             $_SESSION['mensaje']= $mensajes['info_requerida'];
                             header('location:'.$_SESSION['Ruta_Form']);

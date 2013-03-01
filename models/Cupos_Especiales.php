@@ -63,8 +63,38 @@ class Cupo_Especial{
 	public function GetTipoJugadas(){
 
 		//Preparacion del query
-		$sql = "SELECT * FROM tipo_jugadas WHERE status = 1 ORDER BY id_tipo_jugada ASC ";
+		$sql = "SELECT * FROM tipo_jugadas WHERE status = 1 AND nombre_jugada <> 'Aproximacion' ORDER BY id_tipo_jugada ASC ";
 		return $this->vConexion->ExecuteQuery($sql);
+	}
+
+        /**
+	 * Busqueda en id de tipos de jugadas segun parametros
+	 *
+	 * @param string $eszodiacal
+	 * @param string $estriple
+	 * @return boolean, array
+	 */
+
+
+	public function GetTipoJugada_2($eszodiacal,$txt_numero){
+
+		$tamano_numero = strlen($txt_numero);
+
+		if ($tamano_numero == 3){
+			$estriple=1;
+		}
+
+		if ($tamano_numero == 2){
+			$estriple=0;
+		}
+
+		//Preparacion del query
+		$sql = "SELECT id_tipo_jugada FROM tipo_jugadas WHERE zodiacal = ".$eszodiacal." AND triple  = ".$estriple."";
+
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["id_tipo_jugada"];
+
 	}
 
 	/**

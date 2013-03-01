@@ -127,8 +127,13 @@ switch(OPCION){
 	case 'usuario':
 		
 		include($obj_config->GetVar('ruta_controlador').'cUsuario.php');
-		break;		
-	
+		break;
+
+        case 'parametros':
+
+                include($obj_config->GetVar('ruta_controlador').'cParametros.php');
+		break;
+            
 	case 'close':
 		include($obj_config->GetVar('ruta_controlador').'cLogoff.php');
 		break;
