@@ -86,7 +86,8 @@ class Ventas{
 	public function GuardarTicketTransaccional($numero,$id_sorteo,$id_zodiacal,$id_tipo_jugada,$montofaltante,$incompleto,$monto){
 		
 		//Preparacion del query
-		$sql = "INSERT INTO `ticket_transaccional` (`numero` , `id_sorteo` , `id_zodiacal`, `id_tipo_jugada` , `monto_faltante` , `incompleto`, `monto`) VALUES ('".$numero."', '".$id_sorteo."', '".$id_zodiacal."', '".$id_tipo_jugada."', '".$num_jug_nuevodisponible."', '".$incompleto."', '".$monto."')";
+		$sql = "INSERT INTO `ticket_transaccional` (`numero` , `id_sorteo` , `id_zodiacal`, `id_tipo_jugada` , `monto_faltante` , `incompleto`, `monto`) VALUES ('".$numero."', '".$id_sorteo."', '".$id_zodiacal."', '".$id_tipo_jugada."', '".$montofaltante."', '".$incompleto."', '".$monto."')";
+
 		return $this->vConexion->ExecuteQuery($sql);
 		
 		
@@ -184,20 +185,19 @@ class Ventas{
 	public function GetTicketTransaccional($numero, $sorteo, $id_zodiacal){
 			
 		//Preparacion del query
-		$sql = "SELECT monto_restante, monto FROM ticket_transaccional WHERE numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal."";
+		$sql = "SELECT * FROM ticket_transaccional WHERE numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal."";
+
 		$result= $this->vConexion->ExecuteQuery($sql);
-		
-		//numeros_jugados
-		//id_numero_jugados	fecha	numero	id_sorteo	id_tipo_jugada	id_zodiacal	monto_restante
 
 		// Datos para la paginacion
 		$total_registros= $this->vConexion->GetNumberRows($result);
 		
 		$roww= $this->vConexion->GetArrayInfo($result);
 		
-		return array('total_registros'=>$total_registros,'monto_restante'=>$roww["monto_restante"], 'monto'=>$roww["monto"]);
+		return array('total_registros'=>$total_registros,'monto_faltante'=>$roww["monto_faltante"], 'monto'=>$roww["monto"], 'incompleto'=>$roww["incompleto"]);
 		
 	}
+	
 	
 	/**
 	 * Busqueda en tabla de Numeros_Jugados
@@ -303,7 +303,7 @@ class Ventas{
 		
 		$roww= $this->vConexion->GetArrayInfo($result);
 		
-		return array('total_registros'=>$total_registros,'monto_cupo'=>$roww["monto_cupo"]);
+		return $roww["monto_cupo"];
 		
 	}	
 
@@ -334,7 +334,7 @@ class Ventas{
 	  $diasPrimeraJuliano = gregoriantojd($mesPrimera, $diaPrimera, $anyoPrimera);  
 	  $diasSegundaJuliano = gregoriantojd($mesSegunda, $diaSegunda, $anyoSegunda);
 	
-	  echo $diasPrimeraJuliano, " ",$diasSegundaJuliano, "<br>";
+	  //echo $diasPrimeraJuliano, " ",$diasSegundaJuliano, "<br>";
 	 
 	  if(!checkdate($mesPrimera, $diaPrimera, $anyoPrimera)){
 	    echo "La fecha ".$primera." no es v&aacute;lida";

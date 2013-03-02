@@ -340,7 +340,7 @@ function agregar_ticket(){
 		    	$("#z0").focus();
 		    }
 		    
-		    //si regresa este mensaje apunta al campo de texto numero
+		    //si regresa este mensaje refresca la pagina para que actualize los sorteos cerrados
 		    if(return_data == "Selecciono un SORTEO ya cerrado !!!"){
 		    	alert(return_data);
 		    	location.reload();
