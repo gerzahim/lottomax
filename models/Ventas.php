@@ -122,6 +122,22 @@ class Ventas{
 	}
 	
 	/**
+	 * Obtiene el hora del Sorteo Segun ID
+	 *
+	 * @param string $id
+	 * @return boolean, array
+	 */
+	public function GetHoraSorteo($id){
+		
+		//Preparacion del query
+		$sql = "SELECT hora_sorteo FROM sorteos WHERE status = 1 AND id_sorteo  = ".$id."";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["hora_sorteo"];
+		
+	}	
+	
+	/**
 	 * Obtiene el pre del Zodiacal Segun ID
 	 *
 	 * @param string $id
@@ -342,7 +358,25 @@ class Ventas{
 	    return $respuestas;
 	  } 
 	 
-	}		
+	}	
+
+	
+	/**
+	 * Busqueda de minutos antes de bloquear un sorteo
+	 *
+	 */
+	
+	
+	public function MinutosBloqueo(){
+
+		//Preparacion del query
+		$sql = "SELECT tiempo_cierre_sorteos FROM parametros";
+
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["tiempo_cierre_sorteos"];
+		
+	}	
 	
 	
 }		

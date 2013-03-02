@@ -277,6 +277,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
 					// Calculando $num_jug_nuevodisponible,$incompleto
 					
 					// Guardar ticket a tabla transaccional
+					
 					if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$num_jug_nuevodisponible,$incompleto,$txt_monto) ){
 																	
 					}
@@ -331,16 +332,14 @@ if(!empty($_POST['ss'])) {
 	
 	//recorriendo el array de los sorteos
 	foreach ( $sorteos as $sorteo) {
-		/************* CABLEADO *********************
+
 		//Verificando que todos los sorteos esten entre las horas disponibles
 		if ($sorteo){
 			$row= $obj_modelo->GetHoraSorteo($sorteo);
 			$hora_sorteo=$row['hora_sorteo'];
 			
 			//Valor que debe venir de la base de datos tiempo_cierre_sorteos
-			//$minutos_bloqueo= $obj_modelo->MinutosBloqueo();
-			/************* CABLEADO **********************
-			$minutos_bloqueo= 5;
+			$minutos_bloqueo= $obj_modelo->MinutosBloqueo();
 						
 			//Valor que debe venir de la base de datos
 			$hora_actualMas= strtotime("+$minutos_bloqueo minutes");
@@ -348,12 +347,15 @@ if(!empty($_POST['ss'])) {
 			if ($hora_actualMas > $hora_sorteo){
 				
 				//redirect 
-				// MENSAJE DE ERROR SELECCION DE SORTEO FUERA DE HORARIO 
-				 
+				//echo "MENSAJE DE ERROR SELECCION DE SORTEO FUERA DE HORARIO";
+				
+				/************* CABLEADO **********************/
+				$_SESSION['mensaje']= $mensajes['no_sorteo_hora'];
+				//echo $_SESSION['mensaje'];
+				//exit();
 			}			
 			
 		}
-		*/
 		
 		// Verifica si el sorteo es Zodiacal
 		if($obj_modelo->GetTrueZodiacal($sorteo)){

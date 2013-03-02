@@ -324,21 +324,28 @@ function agregar_ticket(){
 		    	//alert(return_data);
 		    	$("#txt_numero").focus();
 		    }
-		    //si regresa este mensaje apunta al campo de texto numero
+		    //si regresa este mensaje apunta al campo de texto monto
 		    if(return_data == "<div id='mensaje' class='mensaje' >Debe ingresar un MONTO Bs para jugar !!!</div>"){
 		    	//alert(return_data);
 		    	$("#txt_monto").focus();
 		    }
-		    //si regresa este mensaje apunta al campo de texto numero
+		    //si regresa este mensaje apunta al campo de sorteos
 		    if(return_data == "<div id='mensaje' class='mensaje' >Debe seleccionar un SORTEO para jugar !!!</div>"){
 		    	//alert(return_data);
 		    	$("#s0").focus();
 		    }
-		    //si regresa este mensaje apunta al campo de texto numero
+		    //si regresa este mensaje apunta al campo de signos
 		    if(return_data == "<div id='mensaje' class='mensaje' >Debe seleccionar SIGNO ZODIACAL para jugar !!!</div>"){
 		    	//alert(return_data);
 		    	$("#z0").focus();
 		    }
+		    
+		    //si regresa este mensaje apunta al campo de texto numero
+		    if(return_data == "Selecciono un SORTEO ya cerrado !!!"){
+		    	alert(return_data);
+		    	location.reload();
+		    }		    
+		    
 		    //mensaje que muestra para el ticket de la derecha
 			document.getElementById("ticket").innerHTML = return_data;
 	    }

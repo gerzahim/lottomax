@@ -122,5 +122,6 @@ $mensajes['no_sorteo']= "Debe seleccionar un SORTEO para jugar !!!";
 $mensajes['no_zodiacal']= "Debe seleccionar SIGNO ZODIACAL para jugar !!!";
 $mensajes['numero_incompleto']= "NUMERO Incompleto para sorteo ";
 $mensajes['numero_agotado']= "NUMERO Agotado para sorteo ";
+$mensajes['no_sorteo_hora']= "Selecciono un SORTEO ya cerrado !!!";
 
 ?>

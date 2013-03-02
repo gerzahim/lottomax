@@ -24,10 +24,8 @@ if( $result= $obj_modelo->GetSorteos() ){
 		$hora_sorteo= strtotime($hora_sorteo);
 		
 		//Valor que debe venir de la base de datos
-		//$minutos_bloqueo= $obj_modelo->MinutosBloqueo();
-		/************* CABLEADO **********************/
-		$minutos_bloqueo= 5;
-		
+		$minutos_bloqueo= $obj_modelo->MinutosBloqueo();
+			
 		//Valor que debe venir de la base de datos
 		$hora_actualMas= strtotime("+$minutos_bloqueo minutes");
 		
@@ -35,6 +33,7 @@ if( $result= $obj_modelo->GetSorteos() ){
 			//$obj_xtpl->parse('main.contenido.lista_sorteos');
 		}
 		
+		/************* CABLEADO **********************/
 		$obj_xtpl->parse('main.contenido.lista_sorteos');
 		
 		$obj_xtpl->assign('cant_sorteos', $i);
