@@ -71,7 +71,6 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
 	$id_tipo_jugada= $obj_modelo->GetTipoJugada($esZodiacal,$txt_numero); 
 	
 	//revisar tabla de ticket_transaccional
-	
 	$numero_jugadoticket= $obj_modelo->GetTicketTransaccional($txt_numero,$sorteo,$zodiacal);
 	
 	if ( $numero_jugadoticket['total_registros']>0 ){
@@ -110,13 +109,13 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
 
 	//revisar tabla de numeros_jugados
 	$numero_jugado= $obj_modelo->GetNumerosJugados($txt_numero,$sorteo,$zodiacal);
-							
-	if( $numero_jugado['total_registros']>0 ){
+
+        //significa que ya existe y debemos ver el monto que queda
+	$num_jug = $numero_jugado['monto_restante'];
+
+        if( $numero_jugado['total_registros']>0 ){
 		
 		//print_r($numero_jugado);
-		
-		//significa que ya existe y debemos ver el monto que queda
-		$num_jug = $numero_jugado['monto_restante'];
 		
 		//si queda por un monto mayor que 0
 		if ($num_jug >0){
