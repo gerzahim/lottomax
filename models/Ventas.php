@@ -87,7 +87,7 @@ class Ventas{
 		
 		//Preparacion del query
 		$sql = "INSERT INTO `ticket_transaccional` (`numero` , `id_sorteo` , `id_zodiacal`, `id_tipo_jugada` , `monto_faltante` , `incompleto`, `monto`) VALUES ('".$numero."', '".$id_sorteo."', '".$id_zodiacal."', '".$id_tipo_jugada."', '".$montofaltante."', '".$incompleto."', '".$monto."')";
-
+               
 		return $this->vConexion->ExecuteQuery($sql);
 		
 		
@@ -102,7 +102,7 @@ class Ventas{
 	public function GetDatosTicketTransaccional(){
 		
 		//Preparacion del query
-		$sql = "SELECT * FROM ticket_transaccional ORDER BY id_ticket_transaccional DESC";
+		$sql = "SELECT * FROM ticket_transaccional WHERE incompleto<> 2 ORDER BY id_ticket_transaccional DESC";
 		return $this->vConexion->ExecuteQuery($sql);
 	}
 

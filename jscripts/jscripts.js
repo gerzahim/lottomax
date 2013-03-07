@@ -318,7 +318,7 @@ function agregar_ticket(){
     hr.onreadystatechange = function() {
 	    if(hr.readyState == 4 && hr.status == 200) {
 		    var return_data = hr.responseText;
-		    
+
 		    //si regresa este mensaje apunta al campo de texto numero
 		    if(return_data == "<div id='mensaje' class='mensaje' >Debe ingresar un NUMERO para jugar !!!</div>"){
 		    	//alert(return_data);
@@ -339,13 +339,13 @@ function agregar_ticket(){
 		    	//alert(return_data);
 		    	$("#z0").focus();
 		    }
-		    
+
 		    //si regresa este mensaje refresca la pagina para que actualize los sorteos cerrados
 		    if(return_data == "Selecciono un SORTEO ya cerrado !!!"){
 		    	alert(return_data);
 		    	location.reload();
-		    }		    
-		    
+		    }
+
 		    //mensaje que muestra para el ticket de la derecha
 			document.getElementById("ticket").innerHTML = return_data;
 	    }
@@ -353,7 +353,7 @@ function agregar_ticket(){
     // taken all the inputs and answer for a one variable
 	var vars = $("#frm1").serialize("ajax/preticket.php");
 	//alert(vars);
-	
+
     // Send the data to PHP now... and wait for response to update the status div
     hr.send(vars); // Actually execute the request
     document.getElementById("ticket").innerHTML = "processing...";	
