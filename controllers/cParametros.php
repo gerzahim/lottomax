@@ -43,6 +43,7 @@ switch (ACCION){
 
 
                         $obj_xtpl->assign('id_parametros', $obj_generico->CleanTextDb($row_datos["id_parametros"]));
+                        $obj_xtpl->assign('id_agencia', $obj_generico->CleanTextDb($row_datos["id_agencia"]));
                         $obj_xtpl->assign('nombre_agencia', $obj_generico->CleanTextDb($row_datos["nombre_agencia"]));
                         $obj_xtpl->assign('taquilla', $obj_generico->CleanTextDb($row_datos["taquilla"]));
                         $obj_xtpl->assign('tiempo_cierre_sorteos', $obj_generico->CleanTextDb($row_datos["tiempo_cierre_sorteos"]));
@@ -67,6 +68,10 @@ switch (ACCION){
 
 	case 'upd':
 
+                if (!empty ($_POST['id_agencia'])){
+                    $id_agencia= $obj_generico->CleanText($_POST['id_agencia']);
+                }
+                		
                 if (!empty ($_POST['txt_agencia'])){
                     $nombre_agencia= $obj_generico->CleanText($_POST['txt_agencia']);
                 }
@@ -94,7 +99,7 @@ switch (ACCION){
 				
 
 			// Modifica datos
-			if( $obj_modelo->ActualizaDatosParametros($id_parametros, $nombre_agencia, $taquilla, $tiempo_cierre_sorteos, $tiempo_anulacion_ticket, $tiempo_vigencia_ticket) ){
+			if( $obj_modelo->ActualizaDatosParametros($id_parametros, $id_agencia, $nombre_agencia, $taquilla, $tiempo_cierre_sorteos, $tiempo_anulacion_ticket, $tiempo_vigencia_ticket) ){
 				
 				$_SESSION['mensaje']= $mensajes['info_modificada'];
 				header('location:'.$_SESSION['Ruta_Lista']);					
@@ -142,6 +147,7 @@ switch (ACCION){
 				// Asignacion de los datos
 				$obj_xtpl->assign('id_parametros', $obj_generico->CleanTextDb($row["id_parametros"]));
 				$obj_xtpl->assign('nombre_agencia', $obj_generico->CleanTextDb($row["nombre_agencia"]));
+				$obj_xtpl->assign('id_agencia', $obj_generico->CleanTextDb($row["id_agencia"]));
                                 $obj_xtpl->assign('taquilla', $obj_generico->CleanTextDb($row["taquilla"]));
                                 $obj_xtpl->assign('tiempo_cierre_sorteos', $obj_generico->CleanTextDb($row["tiempo_cierre_sorteos"]));
                                 $obj_xtpl->assign('tiempo_anulacion_ticket', $obj_generico->CleanTextDb($row["tiempo_anulacion_ticket"]));

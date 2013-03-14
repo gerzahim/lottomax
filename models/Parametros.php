@@ -95,10 +95,10 @@ class Parametros{
          * @param string $tiempo_vigencia_ticket
 	 * @return boolean, array
 	 */
-	public function ActualizaDatosParametros($id_parametros,$nombre_agencia,$taquilla,$tiempo_cierre_sorteos,$tiempo_anulacion_ticket,$tiempo_vigencia_ticket){
+	public function ActualizaDatosParametros($id_parametros,$id_agencia,$nombre_agencia,$taquilla,$tiempo_cierre_sorteos,$tiempo_anulacion_ticket,$tiempo_vigencia_ticket){
 		
 		//Preparacion del query
-		$sql = "UPDATE `parametros` SET `nombre_agencia`='".$nombre_agencia."',`taquilla`='".$taquilla."',`tiempo_cierre_sorteos`='".$tiempo_cierre_sorteos."',`tiempo_anulacion_ticket`='".$tiempo_anulacion_ticket."',`tiempo_vigencia_ticket`='".$tiempo_vigencia_ticket."'
+		$sql = "UPDATE `parametros` SET `id_agencia`='".$id_agencia."', `nombre_agencia`='".$nombre_agencia."',`taquilla`='".$taquilla."',`tiempo_cierre_sorteos`='".$tiempo_cierre_sorteos."',`tiempo_anulacion_ticket`='".$tiempo_anulacion_ticket."',`tiempo_vigencia_ticket`='".$tiempo_vigencia_ticket."'
                         WHERE id_parametros='".$id_parametros."'";
 		return $this->vConexion->ExecuteQuery($sql);
 		
