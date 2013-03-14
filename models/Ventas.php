@@ -106,6 +106,20 @@ class Ventas{
 		return $this->vConexion->ExecuteQuery($sql);
 	}
 
+        /**
+	 * Busqueda de datos ticket transaccional, incluyendo los registrados como agotados(2)
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetDatosAllTicketTransaccional(){
+
+		//Preparacion del query
+		$sql = "SELECT * FROM ticket_transaccional ORDER BY id_ticket_transaccional DESC";
+		return $this->vConexion->ExecuteQuery($sql);
+	}
+
+
 	/**
 	 * Obtiene el nombre del Sorteo Segun ID
 	 *
@@ -378,6 +392,222 @@ class Ventas{
 		
 	}	
 	
-	
-}		
+	/**
+	 * Genera un ID para los tickets
+	 *
+	 */
+	public function GeneraIDTicket(){
+                        
+		// Obtenemos el ultimo id del ticket correlativo
+                $sql1 = "SELECT MAX(id_ticket) as id FROM ticket WHERE fecha_hora LIKE '%".date('Y-m-d')."%' ";
+		$result= $this->vConexion->ExecuteQuery($sql1);
+                if ($this->vConexion->GetNumberRows($result)>0){
+                    $roww= $this->vConexion->GetArrayInfo($result);
+                    $id=$roww["id"];
+                    $id_ticket= substr($id,10,4)+1;
+                    $len =0;
+                    $len =strlen($id_ticket);
+
+                    switch(strlen($len)){
+                        case '1':
+                            $id_tic = "000".$id_ticket;
+                            break;
+                        case '2':
+                            $id_tic = "00".$id_ticket;
+                            break;
+                        case '3':
+                            $id_tic = "0".$id_ticket;
+                            break;
+                    }
+                }else{
+                    $id_tic="0001";
+                }
+		
+
+                //Generamos el prefijo año+mes+dia+id_agencia+id_taquilla
+                $fecha= date('Ymd');
+
+                // Obtenemos el id de la agencia y taquilla
+                $sql = "SELECT id_agencia,taquilla FROM parametros";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		$id_agencia=$roww["id_agencia"];
+                $taquilla=$roww["taquilla"];
+
+
+                $prefijo=$fecha.$id_agencia.$taquilla;
+                return $prefijo.$id_tic;
+                
+;
+                
+	}
+
+
+        /**
+	 * Genera un ID para los tickets
+	 *
+	 */
+	public function GeneraSerialTicket(){
+            $longitud = 10;
+
+		// Caracteres a utilizar para generar el identificador numerico
+		$caracteres = str_shuffle('0123456789');
+
+		// Concatena los caracteres al azar
+		$cadena= '';
+		for($i = 0; $i < $longitud; $i++){
+			$key = rand(0,strlen($caracteres)-1);
+			$cadena .= substr($caracteres,$key,1);
+		}
+
+		return $cadena;
+
+	}
+
+        /**
+	 * Busca el serial de un ticket
+	 *
+	 * @param string $id_ticket
+	 * @param string $serial
+	 * @return boolean, array
+	 */
+	public function GetExisteSerialTicket($serial){
+
+		//Preparacion del query
+		$sql = "SELECT id_ticket FROM ticket WHERE serial = ".$serial."";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		
+		if ($this->vConexion->GetNumberRows($result)>0){
+                    return true;
+                }else{
+			return false;
+		}
+	}
+
+        /**
+	 * Guardar Datos de Ticket
+	 *
+         * @param string $id_ticket
+         * @param string $serial
+         * @param string $fecha_hora
+         * @param string $taquilla
+         * @param string $total_ticket
+         * @param string $id_usuario
+	 * @return boolean, array
+	 */
+	public function GuardarTicket($id_ticket, $serial,$fecha_hora,$taquilla,$total_ticket,$id_usuario){
+
+		//Preparacion del query
+		$sql = "INSERT INTO `ticket` (`id_ticket`, `serial` , `fecha_hora` , `taquilla`, `total_ticket` , `id_usuario` , `premiado`, `pagado`)
+                    VALUES ('".$id_ticket."', '".$serial."', '".$fecha_hora."', '".$taquilla."', '".$total_ticket."', '".$id_usuario."', '0', '0')";
+
+                return $this->vConexion->ExecuteQuery($sql);
+         }
+
+        /**
+	 * Guardar Datos de Detalle Ticket
+	 *
+         * @param string $id_ticket
+         * @param string $numero
+         * @param string $id_sorteo
+         * @param string $hora_sorteo
+         * @param string $id_zodiacal
+         * @param string $id_tipo_jugada
+         * @param string $monto
+	 * @return boolean, array
+	 */
+	public function GuardarDetalleTicket($id_ticket,$numero,$id_sorteo,$hora_sorteo,$id_zodiacal,$id_tipo_jugada,$monto){
+
+		//Preparacion del query
+		$sql = "INSERT INTO `detalle_ticket` (`id_ticket`, `numero` , `id_sorteo` , `hora_sorteo`, `id_zodiacal` , `id_tipo_jugada` , `monto`)
+                    VALUES ('".$id_ticket."', '".$numero."', '".$id_sorteo."', '".$hora_sorteo."', '".$id_zodiacal."', '".$id_tipo_jugada."', '".$monto."')";
+
+                return $this->vConexion->ExecuteQuery($sql);
+	}
+
+        /**
+	 * Guardar Datos de numeros incompletos y agotaados del Ticket
+	 *
+         * @param string $fecha
+         * @param string $numero
+         * @param string $id_sorteo
+         * @param string $id_tipo_jugada
+         * @param string $id_zodiacal
+         * @param string $monto_restante
+         * @param string $incompleto
+	 * @return boolean, array
+	 */
+	public function GuardarIncompletosAgotados($fecha,$numero,$id_sorteo,$id_tipo_jugada,$id_zodiacal,$monto_restante,$incompleto){
+
+		//Preparacion del query
+		$sql = "INSERT INTO `incompletos_agotados` (`fecha`, `numero` , `id_sorteo` , `id_tipo_jugada` , `id_zodiacal`, `monto_restante`, `incompleto` )
+                    VALUES ('".$fecha."', '".$numero."', '".$id_sorteo."', '".$id_tipo_jugada."', '".$id_zodiacal."', '".$monto_restante."', '".$incompleto."')";
+
+                return $this->vConexion->ExecuteQuery($sql);
+		
+	}
+
+         /**
+	 * Verificar si un numero existe dentro de la tabla de numeros jugados
+	 *
+	 * @param string $numero
+	 * @return boolean, array
+	 */
+	public function GetExisteNumeroJugados($numero, $id_sorteo, $id_tipo_jugada, $id_zodiacal){
+
+		//Preparacion del query
+		$sql = "SELECT id_numero_jugados, monto_restante FROM numeros_jugados WHERE numero = ".$numero." AND id_sorteo  = ".$id_sorteo." AND id_tipo_jugada  = ".$id_tipo_jugada." AND id_zodiacal = ".$id_zodiacal."";
+		$result= $this->vConexion->ExecuteQuery($sql);
+
+                return $result;
+	}
+
+        /**
+	 * Actualiza Datos de Numeros Jugados
+	 * @param string $id_numero_jugados
+         * @param string $monto_restante
+	 * @return boolean, array
+	 */
+	public function ActualizaNumeroJugados($id_numero_jugados,$monto_restante){
+
+		//Preparacion del query
+		$sql = "UPDATE `numeros_jugados` SET `monto_restante`='".$monto_restante."' WHERE id_numero_jugados='".$id_numero_jugados."'";
+		return $this->vConexion->ExecuteQuery($sql);
+
+	}
+
+        /**
+	 * Guardar Datos de numeros jugados
+	 *
+         * @param string $fecha
+         * @param string $numero
+         * @param string $id_sorteo
+         * @param string $id_tipo_jugada
+         * @param string $id_zodiacal
+         * @param string $monto_restante
+	 * @return boolean, array
+	 */
+	public function GuardarNumerosJugados($fecha,$numero,$id_sorteo,$id_tipo_jugada,$id_zodiacal,$monto_restante){
+
+		//Preparacion del query
+		$sql = "INSERT INTO `numeros_jugados` (`fecha`, `numero` , `id_sorteo` , `id_tipo_jugada` , `id_zodiacal`, `monto_restante` )
+                    VALUES ('".$fecha."', '".$numero."', '".$id_sorteo."', '".$id_tipo_jugada."', '".$id_zodiacal."', '".$monto_restante."')";
+
+                return $this->vConexion->ExecuteQuery($sql);
+
+	}
+
+        /**
+	 * Eliminar registros de Ticket transaccional
+	 *
+	 * @param string $id_ticket_transaccional
+	 * @return boolean, array
+	 */
+	public function EliminarTicketTransaccional($id_ticket_transaccional){
+		//Preparacion del query
+		$sql = "DELETE FROM `ticket_transaccional` WHERE id_ticket_transaccional='".$id_ticket_transaccional."'";
+		return $this->vConexion->ExecuteQuery($sql);
+
+	}
+}	
 ?>

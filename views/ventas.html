@@ -35,8 +35,8 @@
 		Numeros :&nbsp;(N)<br> 
         <input id="txt_numero" name="txt_numero" size="7" maxlength="7" type="text" value=""/><br><br>
 		Montos Bs : (M)<br>
-		<input id="txt_monto" name="txt_monto" size="10" " maxlength="10" type="text" value=""/><br><br>
-        <img src="./images/add1.png" onClick='agregar_ticket();'/>
+		<input id="txt_monto" name="txt_monto" size="10"  maxlength="10" type="text" value=""/><br><br>
+        <img src="./images/add1.png" onClick='agregar_ticket();CargarReset1();calcula_total();'/>
         <br>AGREGAR AL TICKET&nbsp;(+)<br><br>
         <p align="center">&nbsp;Estaci&oacute;n: &nbsp;<input id="taquilla" name="taquilla" size="3" type="text" disabled="disabled" value="{taquilla}"/></p></td>
    		 
@@ -187,7 +187,7 @@
     		<table align="center" border="0">
 			    <tr align="center">
 			      <td><img src="./images/refresh.png"  /><br><span>[ <a class="enlaces" href="#">RESTAURAR </a> ]</span></td>
-			      <td><img src="./images/printer.png"  /><br> <span>[ <a class="enlaces" href="#">IMPRIMIR</a> ]</span></td>
+                              <td><img src="./images/printer.png" onclick="procesarticket();CargarReset1();" /><br> <span>[ <a class="enlaces" href="#" onclick="procesarticket();CargarReset1();">IMPRIMIR</a> ]</span></td>
 			    </tr>    	
 		    </table>
 		</div>     

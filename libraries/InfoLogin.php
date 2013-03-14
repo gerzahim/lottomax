@@ -9,7 +9,7 @@ class InfoLogin{
 	 * @var string $vUsuario
 	 */
 	private $vUsuario="";
-	
+
 	/**
 	 * Perfil del usuario logeado.
 	 *
@@ -64,6 +64,6 @@ class InfoLogin{
 	public function GetPerfil(){
 		return $this->vPerfilUsuario;
 	}
-		
+
 }
 ?>

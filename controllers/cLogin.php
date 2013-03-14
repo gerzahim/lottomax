@@ -50,7 +50,7 @@ if( !empty($_POST['txtuser']) && !empty($_POST['txtpass']) ){
 			//Lo nuevo agregado
 						
 			$_SESSION['InfoLogin']= new InfoLogin($info['nombre_usuario'], $info['id_perfil'], $ip);
-			
+			$_SESSION['id_usuario']=$info['id_usuario'];
 			$nueva_url= $obj_config->GetVar('index_page');
 			
 		}

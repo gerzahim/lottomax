@@ -78,7 +78,7 @@ function auditoria(){
 					url: 'ajax/Ajax.php',
 					data: 'opcion=auditoria&cargo='+cargo,
 					dataType: 'xml',
-					success: function(xml){ procesaXml(xml); }
+					success: function(xml){procesaXml(xml);}
 				});
 			$('#selectPersona').focus();
 		}
@@ -143,12 +143,12 @@ function ValiDate(){
 		var mes2= fecha2[1];
 		var anyo2= fecha2[2];
 		
-		if(anyo1 < anyo2){ var x=true; }
+		if(anyo1 < anyo2){var x=true;}
 		else{
-			if(mes1 > mes2){ var x=false; }
+			if(mes1 > mes2){var x=false;}
 			else{
-				if((mes1 == mes2) && (dia1 > dia2)){ var x=false; }
-				else{ var x=true; }
+				if((mes1 == mes2) && (dia1 > dia2)){var x=false;}
+				else{var x=true;}
 			}
 		}
 		
@@ -383,6 +383,35 @@ function calcula_cambio()
 	}
 }
 
+// Funcion para procesar el ticket al imprimir
+function procesarticket()
+{
+    var TicketGenerado = "";
+
+    if (confirm("Esta seguro que desea generar el ticket?")){
+        
+        $.get('ajax/ProcesarTicket.php', function(str) {
+		 //TicketGenerado.val(str);
+                 if (str== 'CeroTicketTransaccional'){
+                     alert("Debe hacer por lo menos una apuesta para generar un ticket!");
+                 }else{
+                     if (str== 'Ok'){
+                         //Imprimir el ticket
+                         alert("Imprimir el ticket");
+                         $("#txt_numero").val('');
+                         $("#txt_monto").val(''); 
+                     }else if (str== 'NotOk'){
+                        alert("Se presento un error al generar el ticket, por favor intente mas tarde!");
+                     }
+                   
+                 } 
+	});
+    }
+    
+
+}
+
+
 // ESTA Funcion es para poder hacer tab like enter
 //<![CDATA[
 
@@ -452,6 +481,10 @@ $(document).keyup(function(tecla){
     }else if(tecla.keyCode == 113) {
     	// tecla F2
     	CargarReset(); //Limpiar Todos los campos
+    }else if(tecla.keyCode == 73){
+        // Tecla I
+        procesarticket(); //para procesar y generar el ticket
+	CargarReset();
     }
 	
 });
