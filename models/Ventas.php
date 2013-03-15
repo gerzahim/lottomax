@@ -408,17 +408,19 @@ class Ventas{
                     $len =0;
                     $len =strlen($id_ticket);
 
-                    switch(strlen($len)){
-                        case '1':
+
+                    switch($len){
+                        case 1:
                             $id_tic = "000".$id_ticket;
                             break;
-                        case '2':
+                        case 2:
                             $id_tic = "00".$id_ticket;
                             break;
-                        case '3':
+                        case 3:
                             $id_tic = "0".$id_ticket;
                             break;
                     }
+                    
                 }else{
                     $id_tic="0001";
                 }

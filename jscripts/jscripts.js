@@ -404,7 +404,8 @@ function procesarticket()
                         alert("Se presento un error al generar el ticket, por favor intente mas tarde!");
                      }
                    
-                 } 
+                 }
+                 //alert(str);
 	});
     }
     

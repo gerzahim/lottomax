@@ -113,8 +113,9 @@ function Permutar($txt_numero){
 
 
 
-$txt_numeros = 'aab';
+$txt_numeros = '123';
 
+echo 'Permuta '.$txt_numeros;
 $verga = Permutar($txt_numeros);
 echo "<pre>";
 print_r($verga);
