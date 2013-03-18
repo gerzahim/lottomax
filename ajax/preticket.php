@@ -306,7 +306,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
 	}
 }
 
-
+// Funcion que permuta los numeros 
 function Permutar($txt_numero){
 
 	// Esta funcion de permuta, funciona con y sin numeros repetidos
@@ -411,6 +411,64 @@ function Permutar($txt_numero){
 
 
 	return $letra15;
+}
+
+// Funcion que genera la serie de un numero
+function Serializar($txt_numero){
+         $serie= array();
+	 $longitud = 10;
+
+		// Concatena los caracteres de la serie
+		$cadena= '';
+		for($i = 0; $i < $longitud; $i++){
+			$cadena = $i.$txt_numero;
+                        $serie[] = $cadena;
+		}
+
+		return $serie;
+
+}
+
+// Funcion que genera la corrida entre dos numeros
+function Corrida($txt_numero){
+         $corrida= array();
+
+         if (strlen(strchr($txt_numero, '-'))>0){
+                 $numeros=explode('-',$txt_numero);
+                 $numero1= $numeros[0];
+                 $numero2= $numeros[1];
+                 $diferencia=$numero1-$numero2;
+                 if ($numero1 >0 && $numero2>0){
+                        $cadena= '';
+                        $flag= false;
+
+                        if ($diferencia<0){
+                            $diferencia = $diferencia * (-1);
+                            $flag=true;
+                        }
+
+                        for($i = 0; $i <= $diferencia; $i++){
+                                if ($flag){
+                                    $cadena = $numero1 + $i;
+                                    $corrida[] = $cadena;
+                                }else{
+                                    $cadena = $numero2 + $i;
+                                    $corrida[] = $cadena;
+                                }
+
+
+                        }
+                        return $corrida;
+                  }else{
+                        return $txt_numero;
+                    }
+             }else{
+                 return $txt_numero;
+             }
+
+
+
+
 }
 
 //Verificando que escriban el numero y el monto 
@@ -612,12 +670,99 @@ if($txt_numero == 0 ){
 		 
 		case 3:  
 			// Juega Series
+                        $result= $obj_modelo->GetIdTaquilla();
 
+			//recorriendo el array de los sorteos seleccionados
+			foreach ( $sorteos as $sorteo) {
+
+				// Verifica si el sorteo es Zodiacal
+				if($obj_modelo->GetTrueZodiacal($sorteo)){
+					//El sorteo si es zodiacal !
+					//recorrer el sorteo
+					$eszodiacal=1;
+
+					foreach ($zodiacales as $zodiacal){
+
+						// Realizamos la permuta
+                                                $numeros_serie = Serializar($txt_numero);
+
+                                                foreach ( $numeros_serie as $numero_serie) {
+                                                    //Proceso_Cupo() funcion para determinar los cupos
+                                                    $result = ProcesoCupos($numero_serie, $txt_monto, $sorteo, $zodiacal, $eszodiacal);
+                                                }
+					}
+
+
+
+					}else{
+
+
+                                            //El sorteo no es zodiacal !
+                                            $eszodiacal=0;
+                                            $zodiacal=0;
+
+                                            // Realizamos la permuta
+                                            $numeros_serie = Serializar($txt_numero);
+
+                                            foreach ( $numeros_serie as $numero_serie) {
+                                                //Proceso_Cupo() funcion para determinar los cupos
+                                                $result = ProcesoCupos($numero_serie, $txt_monto, $sorteo, $zodiacal, $eszodiacal);
+                                            }
+
+				}
+			}
 	     break;
 	     
 		case 4:  
 			// Juega Corridas
-	     break;	 
+                	$result= $obj_modelo->GetIdTaquilla();
+
+			//recorriendo el array de los sorteos seleccionados
+			foreach ( $sorteos as $sorteo) {
+
+				// Verifica si el sorteo es Zodiacal
+				if($obj_modelo->GetTrueZodiacal($sorteo)){
+					//El sorteo si es zodiacal !
+					//recorrer el sorteo
+					$eszodiacal=1;
+
+					foreach ($zodiacales as $zodiacal){
+
+						// Realizamos la permuta
+                                                $numeros_corrida = Corrida($txt_numero);
+                                                if ($numeros_corrida == $txt_numero){
+                                                    echo "<div id='mensaje' class='mensaje' >Debe ingresar dos numeros de la forma: 'numero1-numero2' para generar la corrida !!!</div>";
+                                                }else{
+                                                    foreach ( $numeros_corrida as $numero_corrida) {
+                                                        //Proceso_Cupo() funcion para determinar los cupos
+                                                        $result = ProcesoCupos($numero_corrida, $txt_monto, $sorteo, $zodiacal, $eszodiacal);
+                                                    }
+                                                }
+
+					}
+
+
+
+				}else{
+
+
+                                            //El sorteo no es zodiacal !
+                                            $eszodiacal=0;
+                                            $zodiacal=0;
+
+                                            // Realizamos la permuta
+                                            $numeros_corrida = Corrida($txt_numero);
+                                               if ($numeros_corrida == $txt_numero){
+                                                    echo "<div id='mensaje' class='mensaje' >Debe ingresar dos numeros de la forma: 'numero1-numero2' para generar la corrida !!!</div>";
+                                                }else{
+                                                    foreach ( $numeros_corrida as $numero_corrida) {
+                                                        //Proceso_Cupo() funcion para determinar los cupos
+                                                        $result = ProcesoCupos($numero_corrida, $txt_monto, $sorteo, $zodiacal, $eszodiacal);
+                                                    }
+                                                }
+				}
+			}
+                        break;
         
 	}	
 	
