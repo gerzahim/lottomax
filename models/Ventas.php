@@ -119,6 +119,31 @@ class Ventas{
 		return $this->vConexion->ExecuteQuery($sql);
 	}
 
+        /**
+	 * Busqueda de triples en ticket transaccional
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetTriplesTicketTransaccional(){
+
+		//Preparacion del query
+		$sql = "SELECT * FROM ticket_transaccional WHERE id_tipo_jugada='1' ORDER BY id_ticket_transaccional DESC";
+		return $this->vConexion->ExecuteQuery($sql);
+	}
+
+        /**
+	 * Busqueda de la ultima jugada en ticket transaccional
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetLastTicketTransaccional(){
+
+		//Preparacion del query
+		$sql = "SELECT MAX(id_ticket_transaccional) as id_ticket_transaccional FROM ticket_transaccional";
+		return $this->vConexion->ExecuteQuery($sql);
+	}
 
 	/**
 	 * Obtiene el nombre del Sorteo Segun ID
@@ -600,7 +625,7 @@ class Ventas{
 	}
 
         /**
-	 * Eliminar registros de Ticket transaccional
+	 * Eliminar registros de Ticket transaccional segun un Id
 	 *
 	 * @param string $id_ticket_transaccional
 	 * @return boolean, array
@@ -608,6 +633,18 @@ class Ventas{
 	public function EliminarTicketTransaccional($id_ticket_transaccional){
 		//Preparacion del query
 		$sql = "DELETE FROM `ticket_transaccional` WHERE id_ticket_transaccional='".$id_ticket_transaccional."'";
+		return $this->vConexion->ExecuteQuery($sql);
+
+	}
+
+        /**
+	 * Eliminar registros de Ticket transaccional
+	 *
+	 * @return boolean, array
+	 */
+	public function EliminarAllTicketTransaccional(){
+		//Preparacion del query
+		$sql = "DELETE FROM `ticket_transaccional`";
 		return $this->vConexion->ExecuteQuery($sql);
 
 	}

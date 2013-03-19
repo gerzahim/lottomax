@@ -412,7 +412,51 @@ function procesarticket()
 
 }
 
+// Funcion para agregar los terminales automaticamente
+function agregarTerminales(){
+    $.get('ajax/ValidarTerminales.php', function(str) {
+        if (str == "Ok"){
+            var monto = prompt("Digite el monto de apuesta para los terminales:", "");
+             if (monto != null && monto != 0){
+                agregarMontoTerminales(monto);
+             }else{
+                 alert("Debe ingresar un monto de apuesta para los terminales!");
+             }
+        }else if (str == "NotOk"){
+            alert("Debe hacer por lo menos una apuesta de triple para generar los terminales en el ticket!");
+        }
+         
+     });
+}
 
+function agregarMontoTerminales(monto)
+{
+    $.get('ajax/AgregarTerminales.php?monto=' + monto, function(str) {
+       document.getElementById("ticket").innerHTML = str;
+            $("#txt_numero").focus();
+    });
+ }
+
+
+function BorrarUltimaJugada()
+{
+    $.get('ajax/BorrarUltimaJugada.php', function(str) {
+        document.getElementById("ticket").innerHTML = str;
+    });
+ }
+
+function BorrarPreTicket(){
+    if (confirm("Esta seguro que desea BORRAR el PreTicket?")){
+         $.get('ajax/BorrarPreTicket.php', function(str) {
+            if (str == "Ok"){
+                document.getElementById("ticket").innerHTML ="";
+                // Eliminada el Preticket
+            }else if (str == "NotOk"){
+                alert("No existe ninguna apuesta en el ticket!");
+            }
+        });
+    }
+}
 // ESTA Funcion es para poder hacer tab like enter
 //<![CDATA[
 
@@ -486,6 +530,18 @@ $(document).keyup(function(tecla){
         // Tecla I
         procesarticket(); //para procesar y generar el ticket
 	CargarReset();
+    }else if(tecla.keyCode == 65){
+        // Tecla A
+        //Preguntamos monto de los terminales
+        agregarTerminales();
+    }else if(tecla.keyCode == 81){
+        // Tecla Q
+        //Quitar la ultima jugada
+        BorrarUltimaJugada();
+    }else if(tecla.keyCode == 115){
+        // Tecla F4
+        //Borrar PreTicket
+        BorrarPreTicket();
     }
 	
 });

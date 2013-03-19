@@ -637,12 +637,17 @@ if($txt_numero == 0 ){
 					foreach ($zodiacales as $zodiacal){
 
 						// Realizamos la permuta
-                                                $numeros_permuta = Permutar($txt_numero);
+                                                if (strlen($txt_numero)<3){
+                                                   echo "<div id='mensaje' class='mensaje' >Debe ingresar un numero de mínimo tres cifras para generar la permuta !!!</div>";
+                                                }else{
+                                                    $numeros_permuta = Permutar($txt_numero);
 
-                                                foreach ( $numeros_permuta as $numero_permuta) {
-                                                    //Proceso_Cupo() funcion para determinar los cupos
-                                                    $result = ProcesoCupos($numero_permuta, $txt_monto, $sorteo, $zodiacal, $eszodiacal);
+                                                    foreach ( $numeros_permuta as $numero_permuta) {
+                                                        //Proceso_Cupo() funcion para determinar los cupos
+                                                        $result = ProcesoCupos($numero_permuta, $txt_monto, $sorteo, $zodiacal, $eszodiacal);
+                                                    }
                                                 }
+
 					}
 
 
@@ -655,11 +660,15 @@ if($txt_numero == 0 ){
                                             $zodiacal=0;
                                             
                                             // Realizamos la permuta
-                                            $numeros_permuta = Permutar($txt_numero);
+                                            if (strlen($txt_numero)<3){
+                                               echo "<div id='mensaje' class='mensaje' >Debe ingresar un numero de mínimo tres cifras para generar la permuta !!!</div>";
+                                            }else{
+                                                $numeros_permuta = Permutar($txt_numero);
 
-                                            foreach ( $numeros_permuta as $numero_permuta) {
-                                                //Proceso_Cupo() funcion para determinar los cupos
-                                                $result = ProcesoCupos($numero_permuta, $txt_monto, $sorteo, $zodiacal, $eszodiacal);
+                                                foreach ( $numeros_permuta as $numero_permuta) {
+                                                    //Proceso_Cupo() funcion para determinar los cupos
+                                                    $result = ProcesoCupos($numero_permuta, $txt_monto, $sorteo, $zodiacal, $eszodiacal);
+                                                }
                                             }
 
 				}
@@ -683,12 +692,16 @@ if($txt_numero == 0 ){
 
 					foreach ($zodiacales as $zodiacal){
 
-						// Realizamos la permuta
-                                                $numeros_serie = Serializar($txt_numero);
+						// Realizamos la serie
+                                                if (strlen($txt_numero)>2){
+                                                   echo "<div id='mensaje' class='mensaje' >Debe ingresar un numero de dos cifras para generar la serie !!!</div>";
+                                                }else{
+                                                    $numeros_serie = Serializar($txt_numero);
 
-                                                foreach ( $numeros_serie as $numero_serie) {
-                                                    //Proceso_Cupo() funcion para determinar los cupos
-                                                    $result = ProcesoCupos($numero_serie, $txt_monto, $sorteo, $zodiacal, $eszodiacal);
+                                                    foreach ( $numeros_serie as $numero_serie) {
+                                                        //Proceso_Cupo() funcion para determinar los cupos
+                                                        $result = ProcesoCupos($numero_serie, $txt_monto, $sorteo, $zodiacal, $eszodiacal);
+                                                    }
                                                 }
 					}
 
@@ -701,13 +714,17 @@ if($txt_numero == 0 ){
                                             $eszodiacal=0;
                                             $zodiacal=0;
 
-                                            // Realizamos la permuta
-                                            $numeros_serie = Serializar($txt_numero);
+                                            // Realizamos la serie
+                                             if (strlen($txt_numero)>2){
+                                               echo "<div id='mensaje' class='mensaje' >Debe ingresar un numero de dos cifras para generar la serie !!!</div>";
+                                             }else{
+                                                $numeros_serie = Serializar($txt_numero);
 
-                                            foreach ( $numeros_serie as $numero_serie) {
-                                                //Proceso_Cupo() funcion para determinar los cupos
-                                                $result = ProcesoCupos($numero_serie, $txt_monto, $sorteo, $zodiacal, $eszodiacal);
-                                            }
+                                                foreach ( $numeros_serie as $numero_serie) {
+                                                    //Proceso_Cupo() funcion para determinar los cupos
+                                                    $result = ProcesoCupos($numero_serie, $txt_monto, $sorteo, $zodiacal, $eszodiacal);
+                                                }
+                                           }
 
 				}
 			}
