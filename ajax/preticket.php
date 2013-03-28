@@ -102,9 +102,8 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
                             // en caso de que el confirm se positivo, tomar el valor y crear metodo para modificar el nuevo valor en ticket_transaccional
 
                             echo "Numero ya registrado, falta crear javascript CONFIRM";
+                            echo "RRR-Numero ya registrado, falta crear javascript*numero*monto*";
                             //$texto = '<div id="mensaje" class="mensaje">&nbsp;<script language="javascript" type="text/javascript">alert("Hola");</script></div>';
-                            
-                              
 
                         }
 		}
