@@ -47,6 +47,36 @@ class Ventas{
 		$roww= $this->vConexion->GetArrayInfo($result);
 		return $roww["taquilla"];
 	}
+	
+	/**
+	 * Busqueda de Id de Taquilla.
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetNombreAgencia(){
+		
+		//Preparacion del query
+		$sql = "SELECT nombre_agencia FROM parametros";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["nombre_agencia"];
+	}	
+	
+	/**
+	 * Busqueda de Id de Taquilla.
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetPreNombreSigno($id){
+		
+		//Preparacion del query
+		$sql = "SELECT pre_zodiacal FROM zodiacal WHERE Id_zodiacal = ".$id."";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["pre_zodiacal"];
+	}	
 
 	/**
 	 * Obtiene el nombre del Perfil Segun ID
@@ -105,6 +135,23 @@ class Ventas{
 		$sql = "SELECT * FROM ticket_transaccional WHERE incompleto<> 2 ORDER BY id_ticket_transaccional DESC";
 		return $this->vConexion->ExecuteQuery($sql);
 	}
+	
+	
+	/**
+	 * Busqueda de datos ticket transaccional
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetDetalleTicketByIdticket($id_ticket){
+		
+		//Preparacion del query
+		$sql = "SELECT * FROM detalle_ticket WHERE id_ticket = ".$id_ticket." ";
+		$sql.= "ORDER BY id_sorteo, id_zodiacal, numero ASC";
+		//echo $sql;
+		
+		return $this->vConexion->ExecuteQuery($sql);
+	}	
 
         /**
 	 * Busqueda de datos ticket transaccional, incluyendo los registrados como agotados(2)
@@ -133,6 +180,21 @@ class Ventas{
 	}
 
         /**
+	 * Busqueda de la ultima jugada en ticket
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetLastTicket($id_taquilla){
+
+		//Preparacion del query
+		$sql = "SELECT MAX(id_ticket) as id_ticket, serial, fecha_hora, total_ticket, id_usuario FROM ticket WHERE taquilla  = ".$id_taquilla."";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww;		
+	}
+	
+        /**
 	 * Busqueda de la ultima jugada en ticket transaccional
 	 *
 	 * @access public
@@ -143,7 +205,7 @@ class Ventas{
 		//Preparacion del query
 		$sql = "SELECT MAX(id_ticket_transaccional) as id_ticket_transaccional FROM ticket_transaccional";
 		return $this->vConexion->ExecuteQuery($sql);
-	}
+	}	
 
 	/**
 	 * Obtiene el nombre del Sorteo Segun ID
@@ -160,6 +222,23 @@ class Ventas{
 		return $roww["nombre_sorteo"];
 		
 	}
+	
+	/**
+	 * Obtiene el nombre del Usuario Segun ID
+	 *
+	 * @param string $usuario
+	 * @param string $clave
+	 * @return boolean, array
+	 */
+	public function GetNombreUsuarioById($id){
+		
+		//Preparacion del query
+		$sql = "SELECT nombre_usuario FROM usuario WHERE id_usuario = ".$id."";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["nombre_usuario"];
+		
+	}	
 	
 	/**
 	 * Obtiene el hora del Sorteo Segun ID
