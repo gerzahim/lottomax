@@ -54,13 +54,13 @@ class Ventas{
 	 * @access public
 	 * @return boolean
 	 */
-	public function GetNombreAgencia(){
+	public function GetDatosParametros(){
 		
 		//Preparacion del query
-		$sql = "SELECT nombre_agencia FROM parametros";
+		$sql = "SELECT * FROM parametros";
 		$result= $this->vConexion->ExecuteQuery($sql);
 		$roww= $this->vConexion->GetArrayInfo($result);
-		return $roww["nombre_agencia"];
+		return $roww;
 	}	
 	
 	/**
@@ -138,7 +138,7 @@ class Ventas{
 	
 	
 	/**
-	 * Busqueda de datos ticket transaccional
+	 * Busqueda de datos detalle ticket 
 	 *
 	 * @access public
 	 * @return boolean
@@ -152,8 +152,42 @@ class Ventas{
 		
 		return $this->vConexion->ExecuteQuery($sql);
 	}	
+	
 
-        /**
+	/**
+	 * Busqueda de datos detalle ticket 
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetDetalleTicketByIdticket2($id_ticket){
+		
+		//Preparacion del query
+		$sql = "SELECT * FROM detalle_ticket WHERE id_ticket = ".$id_ticket." ";
+		$sql.= "ORDER BY numero, id_sorteo, id_zodiacal ASC";
+		//echo $sql;
+		
+		return $this->vConexion->ExecuteQuery($sql);
+	}	
+
+	
+	/**
+	 * Busqueda de datos Numeros Incompletos 
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetNumerosIncompletobyIdticket($id_ticket){
+		
+		//Preparacion del query
+		$sql = "SELECT * FROM incompletos_agotados WHERE id_ticket = ".$id_ticket." ";
+		$sql.= "ORDER BY incompleto, numero, id_sorteo ASC";
+		//echo $sql;
+		
+		return $this->vConexion->ExecuteQuery($sql);
+	}	
+		
+     /**
 	 * Busqueda de datos ticket transaccional, incluyendo los registrados como agotados(2)
 	 *
 	 * @access public
@@ -188,9 +222,14 @@ class Ventas{
 	public function GetLastTicket($id_taquilla){
 
 		//Preparacion del query
-		$sql = "SELECT MAX(id_ticket) as id_ticket, serial, fecha_hora, total_ticket, id_usuario FROM ticket WHERE taquilla  = ".$id_taquilla."";
+		$sql = "SELECT MAX(id_ticket) as id_ticket FROM ticket WHERE taquilla  = ".$id_taquilla."";
 		$result= $this->vConexion->ExecuteQuery($sql);
 		$roww= $this->vConexion->GetArrayInfo($result);
+		$id_ticket=$roww["id_ticket"];
+		//echo "<pre>".print_r($roww)."</pre>";
+		$sql = "SELECT id_ticket, serial, fecha_hora, total_ticket, id_usuario FROM ticket WHERE id_ticket  = ".$id_ticket."";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);		
 		return $roww;		
 	}
 	
@@ -643,11 +682,11 @@ class Ventas{
          * @param string $incompleto
 	 * @return boolean, array
 	 */
-	public function GuardarIncompletosAgotados($fecha,$numero,$id_sorteo,$id_tipo_jugada,$id_zodiacal,$monto_restante,$incompleto){
+	public function GuardarIncompletosAgotados($id_ticket,$fecha,$numero,$id_sorteo,$id_tipo_jugada,$id_zodiacal,$monto_restante,$incompleto){
 
 		//Preparacion del query
-		$sql = "INSERT INTO `incompletos_agotados` (`fecha`, `numero` , `id_sorteo` , `id_tipo_jugada` , `id_zodiacal`, `monto_restante`, `incompleto` )
-                    VALUES ('".$fecha."', '".$numero."', '".$id_sorteo."', '".$id_tipo_jugada."', '".$id_zodiacal."', '".$monto_restante."', '".$incompleto."')";
+		$sql = "INSERT INTO `incompletos_agotados` (`id_ticket`, `fecha`, `numero` , `id_sorteo` , `id_tipo_jugada` , `id_zodiacal`, `monto_restante`, `incompleto` )
+                    VALUES ('".$id_ticket."', '".$fecha."', '".$numero."', '".$id_sorteo."', '".$id_tipo_jugada."', '".$id_zodiacal."', '".$monto_restante."', '".$incompleto."')";
 
                 return $this->vConexion->ExecuteQuery($sql);
 		

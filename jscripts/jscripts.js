@@ -383,6 +383,16 @@ function calcula_cambio()
 	}
 }
 
+//calcula el total del ticket
+function imprimirticket(){
+	
+	$.get('ajax/ImprimirTicket.php', function(str) {
+		  //$('#total').val(str);
+		  alert(str);
+		});	
+	
+}
+
 // Funcion para procesar el ticket al imprimir
 function procesarticket()
 {
@@ -397,7 +407,8 @@ function procesarticket()
                  }else{
                      if (str== 'Ok'){
                          //Imprimir el ticket
-                         alert("Imprimir el ticket");
+                         //alert("Imprimir el ticket");
+                         imprimirticket();
                          $("#txt_numero").val('');
                          $("#txt_monto").val(''); 
                      }else if (str== 'NotOk'){

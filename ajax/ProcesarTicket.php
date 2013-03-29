@@ -65,7 +65,7 @@ If ($obj_conexion->GetNumberRows($resultTT)>0){
                         //Verificamos los numeros incompletos  y guardamos en tabla
                         if ($row['incompleto']=='1'){
                             $incompleto=1;
-                            $obj_modelo->GuardarIncompletosAgotados($fecha_hora, $row['numero'], $row['id_sorteo'], $row['id_tipo_jugada'], $row['id_zodiacal'], $row['monto_faltante'], $incompleto);
+                            $obj_modelo->GuardarIncompletosAgotados($id_ticket, $fecha_hora, $row['numero'], $row['id_sorteo'], $row['id_tipo_jugada'], $row['id_zodiacal'], $row['monto_faltante'], $incompleto);
                         }
 
                         //Actualizamos en tabla numeros jugados
@@ -102,7 +102,7 @@ If ($obj_conexion->GetNumberRows($resultTT)>0){
                     }
                 }else{//Verificamos los numeros agotados y guardamos en tabla
                      $incompleto=2;
-                     $obj_modelo->GuardarIncompletosAgotados($fecha_hora, $row['numero'], $row['id_sorteo'], $row['id_tipo_jugada'], $row['id_zodiacal'], $row['monto_faltante'], $incompleto);
+                     $obj_modelo->GuardarIncompletosAgotados($id_ticket, $fecha_hora, $row['numero'], $row['id_sorteo'], $row['id_tipo_jugada'], $row['id_zodiacal'], $row['monto_faltante'], $incompleto);
                 }
 
                 // Despues de guardado en detalle_ticket, borramos el registro de ticket transaccional...
