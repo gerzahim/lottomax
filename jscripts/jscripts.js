@@ -11,7 +11,9 @@ $(document).ready(function(){
 	//BorderFooter();
 	//auditoria();
 	//segDate();
-	//document.forms[0].reset()
+	//document.forms[0].reset
+	
+	useDefaultPrinter();	
 	
 	ValidateFormSell();
 	 

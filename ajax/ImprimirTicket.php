@@ -1,3 +1,14 @@
+<html>
+   <head><title>jZebra Demo</title>
+   <script language="javascript" type="text/javascript" src="../jscripts/jquery-latest.js"></script>
+   <script language="javascript" type="text/javascript" src="../jscripts/jscripts.js"></script>
+   <script language="javascript" type="text/javascript" src="../jscripts/PluginPrint.js"></script>        
+   </head>
+   <body id="content" bgcolor="#FFF380">
+   
+   <applet name="jzebra" code="jzebra.PrintApplet.class" archive="../jscripts/jzebra.jar" width="50px" height="50px">
+	  <param name="printer" value="zebra">
+   </applet>
 <?php
 
 // Archivo de variables de configuracion
@@ -25,6 +36,8 @@ $obj_modelo= new Ventas($obj_conexion);
 session_start();
 
 $id_taquilla=2;
+
+
 /************* CABLEADO **********************/
 //id_ticket debe venir de una variable de sesion
 
@@ -67,8 +80,21 @@ $data.="VENDEDOR: ".$nombre;
 $data.="<br>";
 $data.="________________________________";
 
+
+
+
 $data1="SISTEMA LOTTOMAX";
+
+$data2="AGENCIA: ".$nombre_agencia;
+
 $data1.="\n";
+
+echo "<script type='text/javascript'>";
+echo "alert('".$data1."')";
+echo "</script>";
+exit();
+
+
 $data1.="AGENCIA: ".$nombre_agencia;
 $data1.="\n";
 $data1.="TICKET: ".$id_ticket;
@@ -82,6 +108,8 @@ $data1.="\n";
 $data1.="VENDEDOR: ".$nombre;
 $data1.="\n";
 $data1.="________________________________";
+
+
 
 if( $result= $obj_modelo->GetDetalleTicketByIdticket($id_ticket) ){
 		
@@ -247,5 +275,39 @@ if( $result2= $obj_modelo->GetNumerosIncompletobyIdticket($id_ticket) ){
 }
 
 echo $data1;
-
+/*
+echo "<script type='text/javascript'>";
+echo "print('".$data1."')";
+echo "</script>";
+*/
 ?>
+
+<?php 
+//echo "<script type='text/javascript'>";
+//echo "print('".$data1."')";
+//echo "alert('".$data1."')";
+//echo "</script>";
+?>
+
+<?php
+/* 
+$commands="VERGA DURA"; 
+echo "<script type='text/javascript'>";
+echo "print('".$commands."')";
+echo "</script>";
+*/
+?>
+
+<?php
+/*
+$commands="VERGA DURA"; 
+echo "<script type='text/javascript'>";
+echo "alert('".$data1."')";
+echo "</script>";
+*/
+?>
+
+   </body>
+
+   
+</html>
