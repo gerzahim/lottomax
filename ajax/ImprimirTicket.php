@@ -1,8 +1,8 @@
 <html>
    <head><title>jZebra Demo</title>
    <script language="javascript" type="text/javascript" src="../jscripts/jquery-latest.js"></script>
-   <script language="javascript" type="text/javascript" src="../jscripts/jscripts.js"></script>
    <script language="javascript" type="text/javascript" src="../jscripts/PluginPrint.js"></script>        
+   <script language="javascript" type="text/javascript" src="../jscripts/DefaultPrinter.js"></script>    
    </head>
    <body id="content" bgcolor="#FFF380">
    
@@ -83,30 +83,22 @@ $data.="________________________________";
 
 
 
-$data1="SISTEMA LOTTOMAX";
-
-$data2="AGENCIA: ".$nombre_agencia;
-
-$data1.="\n";
-
-echo "<script type='text/javascript'>";
-echo "alert('".$data1."')";
-echo "</script>";
-exit();
-
+$data1="SISTEMA LOTTOMAX ";
+$data1.="\\n";
+//$data1="\x0A";
 
 $data1.="AGENCIA: ".$nombre_agencia;
-$data1.="\n";
+$data1.="\\n";
 $data1.="TICKET: ".$id_ticket;
-$data1.="\n";
+$data1.="\\n";
 $data1.="SERIAL: ".$serial;
-$data1.="\n";
+$data1.="\\n";
 $data1.="FECHA: ".$fecha_hora;
-$data1.="\n";
+$data1.="\\n";
 $data1.="TAQUILLA: ".$id_taquilla;
-$data1.="\n";
+$data1.="\\n";
 $data1.="VENDEDOR: ".$nombre;
-$data1.="\n";
+$data1.="\\n";
 $data1.="________________________________";
 
 
@@ -127,7 +119,7 @@ if( $result= $obj_modelo->GetDetalleTicketByIdticket($id_ticket) ){
 			$data.="<br>"; //para cada nombre de sorteo aparte			
 			$data.=$nombre_sorteo;
 			
-			$data1.="\n";
+			$data1.="\\n";
 			$data1.=$nombre_sorteo;
 		}
 		
@@ -138,13 +130,13 @@ if( $result= $obj_modelo->GetDetalleTicketByIdticket($id_ticket) ){
 			if($contador % 2){
 				$data.=$row['numero']." x ".$row['monto']."&nbsp;&nbsp;&nbsp;";
 				
-				$data1.=$row['numero']." x ".$row['monto']."\t";
+				$data1.=$row['numero']." x ".$row['monto']."  ";
 			}else{
 				$data.="<br>";	
 				$data.=$row['numero']." x ".$row['monto']."&nbsp;&nbsp;&nbsp;";
 				
-				$data1.="\n";
-				$data1.=$row['numero']." x ".$row['monto']."\t";
+				$data1.="\\n";
+				$data1.=$row['numero']." x ".$row['monto']."  ";
 			}
 		}
 		$contador++;	
@@ -168,7 +160,7 @@ if( $result1= $obj_modelo->GetDetalleTicketByIdticket2($id_ticket) ){
 			$data.="<br>"; //para cada nombre de sorteo aparte			
 			$data.=$nombre_sorteo;
 			
-			$data1.="\n";
+			$data1.="\\n";
 			$data1.=$nombre_sorteo;						
 		}
 				
@@ -178,14 +170,14 @@ if( $result1= $obj_modelo->GetDetalleTicketByIdticket2($id_ticket) ){
 				$nombre_signo=$obj_modelo->GetPreNombreSigno($row['id_zodiacal']);
 				$data.=$row['numero']." ".$nombre_signo." x ".$row['monto']."&nbsp;&nbsp;&nbsp;";
 				
-				$data1.=$row['numero']." ".$nombre_signo." x ".$row['monto']."\t";				
+				$data1.=$row['numero']." ".$nombre_signo." x ".$row['monto']."  ";				
 			}else{
 				$data.="<br>";	
 				$nombre_signo=$obj_modelo->GetPreNombreSigno($row['id_zodiacal']);
 				$data.=$row['numero']." ".$nombre_signo." x ".$row['monto']."&nbsp;&nbsp;&nbsp;";
 				
-				$data1.="\n";
-				$data1.=$row['numero']." ".$nombre_signo." x ".$row['monto']."\t";					
+				$data1.="\\n";
+				$data1.=$row['numero']." ".$nombre_signo." x ".$row['monto']."  ";					
 			}
 			
 		}
@@ -208,13 +200,13 @@ $data.="TOTAL: ".$total_ticket;
 $data.="<br>";
 $data.="Caduca en ".$tiempo_anulacion_ticket." dias";
 
-$data1.="\n";
+$data1.="\\n";
 $data1.="________________________________";
-$data1.="\n";
+$data1.="\\n";
 $data1.="NUMEROS JUGADOS: ".$numero_jugadas;
-$data1.="\n";
+$data1.="\\n";
 $data1.="TOTAL: ".$total_ticket;
-$data1.="\n";
+$data1.="\\n";
 $data1.="Caduca en ".$tiempo_anulacion_ticket." dias";
 
 
@@ -248,7 +240,7 @@ if( $result2= $obj_modelo->GetNumerosIncompletobyIdticket($id_ticket) ){
 		$data.="<br>"; //para cada nombre de sorteo aparte			
 		$data.=$nombre_sorteo;
 
-		$data1.="\n";
+		$data1.="\\n";
 		$data1.=$nombre_sorteo;		
 		
 		//comprobando si es zodiacal o no
@@ -256,14 +248,14 @@ if( $result2= $obj_modelo->GetNumerosIncompletobyIdticket($id_ticket) ){
 			$data.="<br>";	
 			$data.=$row['numero']." FALTA ".$row['monto_restante']."&nbsp;&nbsp;&nbsp;";
 			
-			$data1.="\n";
+			$data1.="\\n";
 			$data1.=$row['numero']." FALTA ".$row['monto_restante']."\t";
 		}else{
 			$nombre_signo=$obj_modelo->GetPreNombreSigno($row['id_zodiacal']);
 			$data.="<br>";
 			$data.=$row['numero']." ".$nombre_signo." FALTA ".$row['monto_restante']."&nbsp;&nbsp;&nbsp;";
 
-			$data1.="\n";
+			$data1.="\\n";
 			$data1.=$row['numero']." FALTA ".$row['monto_restante']."\t";
 		}		
 			
@@ -275,36 +267,13 @@ if( $result2= $obj_modelo->GetNumerosIncompletobyIdticket($id_ticket) ){
 }
 
 echo $data1;
-/*
+
 echo "<script type='text/javascript'>";
+//echo "alert('".$data1."')";
 echo "print('".$data1."')";
 echo "</script>";
-*/
-?>
 
-<?php 
-//echo "<script type='text/javascript'>";
-//echo "print('".$data1."')";
-//echo "alert('".$data1."')";
-//echo "</script>";
-?>
 
-<?php
-/* 
-$commands="VERGA DURA"; 
-echo "<script type='text/javascript'>";
-echo "print('".$commands."')";
-echo "</script>";
-*/
-?>
-
-<?php
-/*
-$commands="VERGA DURA"; 
-echo "<script type='text/javascript'>";
-echo "alert('".$data1."')";
-echo "</script>";
-*/
 ?>
 
    </body>
