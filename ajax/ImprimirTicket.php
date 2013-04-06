@@ -63,6 +63,8 @@ $info_agencia= $obj_modelo->GetDatosParametros();
 $nombre_agencia=$info_agencia["nombre_agencia"];
 $tiempo_anulacion_ticket=$info_agencia["tiempo_anulacion_ticket"];
 
+
+
 // ENCABEZADO DEL TICKET
 $data="SISTEMA LOTTOMAX";
 $data.="<br>";
@@ -78,28 +80,31 @@ $data.="TAQUILLA: ".$id_taquilla;
 $data.="<br>";
 $data.="VENDEDOR: ".$nombre;
 $data.="<br>";
-$data.="________________________________";
+$data.="-----------------------------";
 
 
 
+//Cambio de tamano fuenta a 10 cpi
+$data1="\\x1B\\x50";
 
-$data1="SISTEMA LOTTOMAX ";
-$data1.="\\n";
-//$data1="\x0A";
-
+$data1.="SISTEMA LOTTOMAX ";
+//salto de linea
+$data1.="\\x1B\\x0A";
 $data1.="AGENCIA: ".$nombre_agencia;
-$data1.="\\n";
+$data1.="\\x1B\\x0A";
 $data1.="TICKET: ".$id_ticket;
-$data1.="\\n";
+$data1.="\\x1B\\x0A";
 $data1.="SERIAL: ".$serial;
-$data1.="\\n";
+$data1.="\\x1B\\x0A";
 $data1.="FECHA: ".$fecha_hora;
-$data1.="\\n";
+$data1.="\\x1B\\x0A";
 $data1.="TAQUILLA: ".$id_taquilla;
-$data1.="\\n";
+$data1.="\\x1B\\x0A";
 $data1.="VENDEDOR: ".$nombre;
-$data1.="\\n";
-$data1.="________________________________";
+$data1.="\\x1B\\x0A";
+$data1.="-----------------------------";
+//Cambio de tamano fuenta a 12 cpi
+$data1.="\\x1B\\x4D";
 
 
 
@@ -119,7 +124,7 @@ if( $result= $obj_modelo->GetDetalleTicketByIdticket($id_ticket) ){
 			$data.="<br>"; //para cada nombre de sorteo aparte			
 			$data.=$nombre_sorteo;
 			
-			$data1.="\\n";
+			$data1.="\\x1B\\x0A";
 			$data1.=$nombre_sorteo;
 		}
 		
@@ -135,7 +140,7 @@ if( $result= $obj_modelo->GetDetalleTicketByIdticket($id_ticket) ){
 				$data.="<br>";	
 				$data.=$row['numero']." x ".$row['monto']."&nbsp;&nbsp;&nbsp;";
 				
-				$data1.="\\n";
+				$data1.="\\x1B\\x0A";
 				$data1.=$row['numero']." x ".$row['monto']."  ";
 			}
 		}
@@ -160,25 +165,35 @@ if( $result1= $obj_modelo->GetDetalleTicketByIdticket2($id_ticket) ){
 			$data.="<br>"; //para cada nombre de sorteo aparte			
 			$data.=$nombre_sorteo;
 			
-			$data1.="\\n";
+			$data1.="\\x1B\\x0A";
 			$data1.=$nombre_sorteo;						
 		}
 				
 		//comprobando si es zodiacal o no
 		if($row['id_zodiacal'] != 0){
+			
 			if($contador % 2){
 				$nombre_signo=$obj_modelo->GetPreNombreSigno($row['id_zodiacal']);
-				$data.=$row['numero']." ".$nombre_signo." x ".$row['monto']."&nbsp;&nbsp;&nbsp;";
+				$data.=$row['numero']." ".$nombre_signo." x".$row['monto']."&nbsp;&nbsp;&nbsp;";
 				
-				$data1.=$row['numero']." ".$nombre_signo." x ".$row['monto']."  ";				
+				$data1.=$row['numero']." ".$nombre_signo." x".$row['monto']." ";				
 			}else{
 				$data.="<br>";	
 				$nombre_signo=$obj_modelo->GetPreNombreSigno($row['id_zodiacal']);
-				$data.=$row['numero']." ".$nombre_signo." x ".$row['monto']."&nbsp;&nbsp;&nbsp;";
+				$data.=$row['numero']." ".$nombre_signo." x".$row['monto']."&nbsp;&nbsp;&nbsp;";
 				
-				$data1.="\\n";
-				$data1.=$row['numero']." ".$nombre_signo." x ".$row['monto']."  ";					
+				$data1.="\\x1B\\x0A";
+				$data1.=$row['numero']." ".$nombre_signo." x".$row['monto']." ";					
 			}
+			
+			/*
+			$data.="<br>";	
+			$nombre_signo=$obj_modelo->GetPreNombreSigno($row['id_zodiacal']);
+			$data.=$row['numero']." ".$nombre_signo." x ".$row['monto']."&nbsp;&nbsp;&nbsp;";
+			
+			$data1.="\\x1B\\x0A";
+			$data1.=$row['numero']." ".$nombre_signo." x ".$row['monto']."  ";	
+			*/
 			
 		}
 		$contador++;
@@ -192,7 +207,7 @@ if( $result1= $obj_modelo->GetDetalleTicketByIdticket2($id_ticket) ){
 
 // FOOTER
 $data.="<br>";
-$data.="________________________________";
+$data.="-----------------------------";
 $data.="<br>";
 $data.="NUMEROS JUGADOS: ".$numero_jugadas;
 $data.="<br>";
@@ -200,15 +215,14 @@ $data.="TOTAL: ".$total_ticket;
 $data.="<br>";
 $data.="Caduca en ".$tiempo_anulacion_ticket." dias";
 
-$data1.="\\n";
-$data1.="________________________________";
-$data1.="\\n";
+$data1.="\\x1B\\x0A";
+$data1.="-----------------------------";
+$data1.="\\x1B\\x0A";
 $data1.="NUMEROS JUGADOS: ".$numero_jugadas;
-$data1.="\\n";
+$data1.="\\x1B\\x0A";
 $data1.="TOTAL: ".$total_ticket;
-$data1.="\\n";
+$data1.="\\x1B\\x0A";
 $data1.="Caduca en ".$tiempo_anulacion_ticket." dias";
-
 
 
 //INCOMPLETOS Y AGOTADOS
@@ -223,7 +237,9 @@ if( $result2= $obj_modelo->GetNumerosIncompletobyIdticket($id_ticket) ){
 				$data.="<br><br><br>";
 				$data.="INCOMPLETOS";
 
-				$data1.="\n\n\n";
+				$data1.="\\x1B\\x0A";
+				$data1.="\\x1B\\x0A";
+				$data1.="\\x1B\\x0A";				
 				$data1.="INCOMPLETOS";
 						
 			}
@@ -231,7 +247,8 @@ if( $result2= $obj_modelo->GetNumerosIncompletobyIdticket($id_ticket) ){
 				$data.="<br><br>";
 				$data.="AGOTADOS";
 
-				$data1.="\n\n";
+				$data1.="\\x1B\\x0A";
+				$data1.="\\x1B\\x0A";
 				$data1.="AGOTADOS";				
 			}				
 		}
@@ -240,7 +257,7 @@ if( $result2= $obj_modelo->GetNumerosIncompletobyIdticket($id_ticket) ){
 		$data.="<br>"; //para cada nombre de sorteo aparte			
 		$data.=$nombre_sorteo;
 
-		$data1.="\\n";
+		$data1.="\\x1B\\x0A";
 		$data1.=$nombre_sorteo;		
 		
 		//comprobando si es zodiacal o no
@@ -248,15 +265,15 @@ if( $result2= $obj_modelo->GetNumerosIncompletobyIdticket($id_ticket) ){
 			$data.="<br>";	
 			$data.=$row['numero']." FALTA ".$row['monto_restante']."&nbsp;&nbsp;&nbsp;";
 			
-			$data1.="\\n";
-			$data1.=$row['numero']." FALTA ".$row['monto_restante']."\t";
+			$data1.="\\x1B\\x0A";
+			$data1.=$row['numero']." FALTA ".$row['monto_restante']."  ";
 		}else{
 			$nombre_signo=$obj_modelo->GetPreNombreSigno($row['id_zodiacal']);
 			$data.="<br>";
 			$data.=$row['numero']." ".$nombre_signo." FALTA ".$row['monto_restante']."&nbsp;&nbsp;&nbsp;";
 
-			$data1.="\\n";
-			$data1.=$row['numero']." FALTA ".$row['monto_restante']."\t";
+			$data1.="\\x1B\\x0A";
+			$data1.=$row['numero']." FALTA ".$row['monto_restante']."  ";
 		}		
 			
 	
@@ -266,10 +283,21 @@ if( $result2= $obj_modelo->GetNumerosIncompletobyIdticket($id_ticket) ){
 		
 }
 
+//Saltos de linea para hacer FEED
+$data1.="\\x1B\\x0A";
+$data1.="\\x1B\\x0A";
+$data1.="\\x1B\\x0A";
+$data1.="\\x1B\\x0A";
+$data1.="\\x1B\\x0A";
+$data1.="\\x1B\\x0A";
+$data1.="\\x1B\\x0A";
+
+/************* CABLEADO **********************/
+//los feed deben venir de la base de datos una variable de parametros
+
 echo $data1;
 
 echo "<script type='text/javascript'>";
-//echo "alert('".$data1."')";
 echo "print('".$data1."')";
 echo "</script>";
 

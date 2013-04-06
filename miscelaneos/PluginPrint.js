@@ -7,20 +7,54 @@
  */
  
  function print(titulo) {
+
+	
          var applet = document.jzebra;
          if (applet != null) {
 			 
-			//alert("Titulo: "+titulo);
-
+//			alert("Titulo: "+titulo);
             // Send characters/raw commands to applet using "append"
             // Hint:  Carriage Return = \r, New Line = \n, Escape Double Quotes= \"
             //applet.append("\r wwwwwwwwwwwe");
-            applet.append(titulo);			
-			//alert("P1oooooooo\n "+titulo);
-			applet.append("\n.\n");			
-			//applet.append("P1oooooooo\nP2oooooooo\nP3oooooooo\n");
+            //applet.append(titulo);			
+			//alert("P1oooooooo\nP2oooooooo\nP3oooooooo\n"+titulo);
+			//applet.append("\n.\n");
            // applet.append(hola+"\n");			
 			//document.jzebra.append(chr(27) + "\x70" + "\x30" + chr(25) + chr(25) + "\r");
+			
+
+			
+			//applet.append("\x1B\x0A"); // SALTO DE LINEA
+			
+			applet.append("\x1B\x40"); // Inicio de Impresora
+			applet.append("\x1B\x45"); // Inicio negrita
+			applet.append(" International \r\n");
+			applet.append(" Company \r\n");
+			applet.append("\x1B\x46"); //fin negrita
+			//applet.append(" ************************************************** \r\n");
+			//applet.append("\x1B\x21\x00"); // italic
+			applet.append("\x1B\x50");	//10 cpi		
+			applet.append("Info: 42972 tte\r\n");
+			applet.append("Info: Kommm 344 \r\n");
+			applet.append("Datum: 14:00 01/02\r\n");
+			applet.append("TACHIRA B 1PM\r\n");
+			applet.append("147 x 100.00 666 x 100.00\r\n");
+			applet.append("\x1B\x4D");	// 12 cpi
+			applet.append("TACHIRA B 7PM\r\n");			
+			applet.append("147 x 100.00  666 x 100.00\r\n");			
+			applet.append("147 x 100.00 666 x 100.00\r\n");
+			applet.append("TACHIRA B 7PM\r\n");			
+			applet.append("147 x 100.00  666 x 100.00\r\n");			
+			applet.append("147 x 100.00 666 x 100.00\r\n");				
+			applet.append("-----------------------------\r\n"); // linea de separacion a 12 cpi
+			applet.append(" \r\n");
+			applet.append(" \r\n");
+			applet.append("\x1D\x56\x41"); // 4
+			applet.append("\x1B\x40"); // 5		
+			
+			//applet.append("\x1B\x0A"); // SALTO DE LINEA				
+			//applet.append("\x1B\x0A"); // SALTO DE LINEA				
+			//applet.append("\x1B\x0A"); // SALTO DE LINEA							
             
             // Send characters/raw commands to printer
             applet.print();
