@@ -26,6 +26,19 @@
                                     <td  class="tag">Contrase&ntilde;a:</td>
                                     <td><input id="txtpass" name="txtpass" size="20" maxlength="25" type="password"/></td>
                                 </tr>
+                                <tr>
+
+                                    <td class="tag" width="230">Taquilla:</td>
+
+                                    <td>
+                                        <select id="op_taquilla" name="op_taquilla" >
+                                            <option value="">Seleccione...</option>
+                                            <!-- BEGIN: lista_taquillas -->
+                                            <option value="{numero_taquilla}">{numero_taquilla}</option>
+                                            <!-- END: lista_taquillas -->
+                                        </select>
+                                    </td>
+                               </tr>
                                 <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                                 <tr>
                                     <td  align="center"colspan="2"><input  id="btnentrar" name="btnentrar" value="Entrar" type="submit"/></td>

@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Archivo del modelo para modulo Parametros
- * @package Parametros.php
+ * Archivo modelo para modulo de Taquillas
+ * @package Taquilla.php
  * @author Brenda Batista B. - <Brebatista@gmail.com>
  * @copyright Grupo de empresas Voila
  * @license BSD License
- * @version v 1.0 Marzo - 2013
+ * @version v 1.0 Abril - 2013
  */
 
-class Parametros{
+class Taquilla{
 
 	/**
 	 * Objeto de la conexion.
@@ -29,10 +29,8 @@ class Parametros{
 	}
 
 	/**
-	 * Busqueda de Parametros
+	 * Busqueda de Taquillas.
 	 *
-	 * @param string $cantidad
-	 * @param string $pagina
 	 * @return boolean, array
 	 */
 	public function GetListado($cantidad, $pagina){
@@ -41,7 +39,7 @@ class Parametros{
 		$inicial= ($pagina-1) * $cantidad;
 		
 		//Preparacion del query
-		$sql = "SELECT * FROM parametros";
+		$sql = "SELECT * FROM taquillas";
 		$result= $this->vConexion->ExecuteQuery($sql);
 		
 		
@@ -62,18 +60,34 @@ class Parametros{
 		
 	}
 	
+
+	/**
+	 * Guardar Datos de Taquilla
+	 *
+	 * @param string $numero
+	 * @return boolean, array
+	 */
+	public function GuardarDatosTaquilla($numero){
+		
+		// id_loteria 	nombre_loteria	status
+		//Preparacion del query
+		$sql = "INSERT INTO `taquillas` (`numero_taquilla` , `status`) VALUES ('".$numero."', 1)";
+		return $this->vConexion->ExecuteQuery($sql);
+		
+	}	
+
 	
 	/**
-	 * Busca los datos de parametros
+	 * Busca los datos de la Taquilla
 	 *
 	 * @access public
 	 * @param integer $id_referencia
 	 * @return boolean or array
 	 */
-	public function GetDatosParametros($id_referencia){
+	public function GetDatosTaquilla($id_referencia){
 		
 		//Preparacion del query
-		$sql = "SELECT * FROM parametros WHERE id_parametros= '".$id_referencia."'";
+		$sql = "SELECT * FROM taquillas WHERE id_taquilla = '".$id_referencia."'";
 		
 		if( $result= $this->vConexion->ExecuteQuery($sql) ){
 			return $this->vConexion->GetArrayInfo($result);
@@ -84,24 +98,32 @@ class Parametros{
 
 	}
 
-       
 	/**
-	 * Actualiza Datos de Parametros
-	 * @param string $Id_parametros
-         * @param string $nombre_agencia
-         * @param string $tiempo_cierre_sorteos
-         * @param string $tiempo_anulacion_ticket
-         * @param string $tiempo_vigencia_ticket
+	 * Actualiza Datos de Taquilla
+	 * @param string $numero
 	 * @return boolean, array
 	 */
-	public function ActualizaDatosParametros($id_parametros,$id_agencia,$nombre_agencia,$tiempo_cierre_sorteos,$tiempo_anulacion_ticket,$tiempo_vigencia_ticket){
+	public function ActualizaDatosTaquilla($id_taquilla,$numero,$status){
 		
 		//Preparacion del query
-		$sql = "UPDATE `parametros` SET `id_agencia`='".$id_agencia."', `nombre_agencia`='".$nombre_agencia."',`tiempo_cierre_sorteos`='".$tiempo_cierre_sorteos."',`tiempo_anulacion_ticket`='".$tiempo_anulacion_ticket."',`tiempo_vigencia_ticket`='".$tiempo_vigencia_ticket."'
-                        WHERE id_parametros='".$id_parametros."'";
+		$sql = "UPDATE `taquillas` SET `numero_taquilla`='".$numero."', `status`='".$status."' WHERE id_taquilla='".$id_taquilla."'";
 		return $this->vConexion->ExecuteQuery($sql);
 		
 	}
+
+	/**
+	 * Desactivar Taquilla
+	 *
+	 * @param string $id_taquilla
+	 * @return boolean, array
+	 */
+	public function EliminarDatosTaquilla($id_taquilla){
+		//Preparacion del query
+		$sql = "UPDATE `taquillas` SET `status`= 0 WHERE id_taquilla='".$id_taquilla."'";
+		return $this->vConexion->ExecuteQuery($sql);
+		
+	}		
+
 	
 }		
 ?>

@@ -50,7 +50,7 @@ If ($obj_conexion->GetNumberRows($resultTT)>0){
             }
     }
 
-    $fecha_hora= date('Y-m-d h:m');
+    $fecha_hora= date('Y-m-d h:m:s');
     $id_usuario= $_SESSION['id_usuario'];
 
     // Guardamos el Ticket

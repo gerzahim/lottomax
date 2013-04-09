@@ -42,10 +42,12 @@ class Ventas{
 	public function GetIdTaquilla(){
 		
 		//Preparacion del query
-		$sql = "SELECT * FROM parametros";
-		$result= $this->vConexion->ExecuteQuery($sql);
-		$roww= $this->vConexion->GetArrayInfo($result);
-		return $roww["taquilla"];
+//		$sql = "SELECT * FROM parametros";
+//		$result= $this->vConexion->ExecuteQuery($sql);
+//		$roww= $this->vConexion->GetArrayInfo($result);
+//		return $roww["taquilla"];
+            $taquilla = $_SESSION['InfoLogin']->GetTaquilla();
+            return $taquilla;
 	}
 	
 	/**

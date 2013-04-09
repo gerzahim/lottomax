@@ -129,6 +129,10 @@ switch(OPCION){
 		include($obj_config->GetVar('ruta_controlador').'cUsuario.php');
 		break;
 
+        case 'taquillas':
+
+		include($obj_config->GetVar('ruta_controlador').'cTaquillas.php');
+		break;
         case 'parametros':
 
                 include($obj_config->GetVar('ruta_controlador').'cParametros.php');

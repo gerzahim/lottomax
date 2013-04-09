@@ -45,7 +45,6 @@ switch (ACCION){
                         $obj_xtpl->assign('id_parametros', $obj_generico->CleanTextDb($row_datos["id_parametros"]));
                         $obj_xtpl->assign('id_agencia', $obj_generico->CleanTextDb($row_datos["id_agencia"]));
                         $obj_xtpl->assign('nombre_agencia', $obj_generico->CleanTextDb($row_datos["nombre_agencia"]));
-                        $obj_xtpl->assign('taquilla', $obj_generico->CleanTextDb($row_datos["taquilla"]));
                         $obj_xtpl->assign('tiempo_cierre_sorteos', $obj_generico->CleanTextDb($row_datos["tiempo_cierre_sorteos"]));
                         $obj_xtpl->assign('tiempo_anulacion_ticket', $obj_generico->CleanTextDb($row_datos["tiempo_anulacion_ticket"]));
                         $obj_xtpl->assign('tiempo_vigencia_ticket', $obj_generico->CleanTextDb($row_datos["tiempo_vigencia_ticket"]));
@@ -76,10 +75,7 @@ switch (ACCION){
                     $nombre_agencia= $obj_generico->CleanText($_POST['txt_agencia']);
                 }
 
-                if ($obj_generico->IsNumerico($_POST['txt_taquilla'])){
-                    $taquilla= $obj_generico->CleanText($_POST['txt_taquilla']);
-                }
-
+             
                 if ($obj_generico->IsNumerico($_POST['txt_tiempo_cierre_sorteos'])){
                     $tiempo_cierre_sorteos= $obj_generico->CleanText($_POST['txt_tiempo_cierre_sorteos']);
                 }
@@ -95,11 +91,11 @@ switch (ACCION){
 		$id_parametros= $_REQUEST['idreferencia'];
 
 		// Verifica que los datos requeridos no este vacios
-		if(!$obj_generico->IsEmpty($nombre_agencia) && !$obj_generico->IsEmpty($taquilla) && !$obj_generico->IsEmpty($id_parametros)){
+		if(!$obj_generico->IsEmpty($nombre_agencia) && !$obj_generico->IsEmpty($id_parametros)){
 				
 
 			// Modifica datos
-			if( $obj_modelo->ActualizaDatosParametros($id_parametros, $id_agencia, $nombre_agencia, $taquilla, $tiempo_cierre_sorteos, $tiempo_anulacion_ticket, $tiempo_vigencia_ticket) ){
+			if( $obj_modelo->ActualizaDatosParametros($id_parametros, $id_agencia, $nombre_agencia, $tiempo_cierre_sorteos, $tiempo_anulacion_ticket, $tiempo_vigencia_ticket) ){
 				
 				$_SESSION['mensaje']= $mensajes['info_modificada'];
 				header('location:'.$_SESSION['Ruta_Lista']);					
@@ -148,7 +144,6 @@ switch (ACCION){
 				$obj_xtpl->assign('id_parametros', $obj_generico->CleanTextDb($row["id_parametros"]));
 				$obj_xtpl->assign('nombre_agencia', $obj_generico->CleanTextDb($row["nombre_agencia"]));
 				$obj_xtpl->assign('id_agencia', $obj_generico->CleanTextDb($row["id_agencia"]));
-                                $obj_xtpl->assign('taquilla', $obj_generico->CleanTextDb($row["taquilla"]));
                                 $obj_xtpl->assign('tiempo_cierre_sorteos', $obj_generico->CleanTextDb($row["tiempo_cierre_sorteos"]));
                                 $obj_xtpl->assign('tiempo_anulacion_ticket', $obj_generico->CleanTextDb($row["tiempo_anulacion_ticket"]));
 				$obj_xtpl->assign('tiempo_vigencia_ticket', $obj_generico->CleanTextDb($row["tiempo_vigencia_ticket"]));

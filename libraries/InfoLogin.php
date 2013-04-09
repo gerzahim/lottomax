@@ -23,7 +23,14 @@ class InfoLogin{
 	 * @var string
 	 */
 	private  $vIP;
-	
+
+        /**
+	 *Taquilla seleccionada
+	 *
+	 * @var string
+	 */
+	private  $vTaquilla;
+
 	/**
 	 * Constructor de la clase. Instancia.
 	 *
@@ -31,10 +38,11 @@ class InfoLogin{
 	 * @param integer $perfil
 	 * @param string $ip
 	 */
-	public function __construct($usuario,$perfil, $ip){
+	public function __construct($usuario,$perfil, $ip, $taquilla){
 		$this->vUsuario= $usuario;
 		$this->vPerfilUsuario= $perfil;
 		$this->vIP= $ip;
+                $this->vTaquilla= $taquilla;
 	}
 	
 	
@@ -63,6 +71,15 @@ class InfoLogin{
 	 */
 	public function GetPerfil(){
 		return $this->vPerfilUsuario;
+	}
+
+        /**
+	 * Retorna la Taquilla usada por el usuario.
+	 *
+	 * @return integer $vTaquilla
+	 */
+	public function GetTaquilla(){
+		return $this->vTaquilla;
 	}
 
 }

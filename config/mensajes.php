@@ -8,6 +8,8 @@ $mensajes['acceso_invalido']= "Alguno de los datos ingresados son incorrectos !!
 
 $mensajes['acceso_conectado']= "Usted intenta ingresar a una sesion ya abierta !!! o, Probablemente en su ultimo acceso olvido cerrar la sesion del sistema, Por favor, Espere 5 Minutos e Intente de Nuevo !.";
 
+$mensajes['taquilla_en_uso']= "Esta taquilla ya esta siendo usada por otro usuario";
+
 $mensajes['acceso_bloqueado']= "
 	Se le ha negado el acceso al sistema!!!<br/> Usted tiene la cuenta bloqueada en estos momentos...<br/>
 	Por favor, contacte al administrador del sistema.

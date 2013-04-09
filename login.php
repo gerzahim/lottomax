@@ -61,6 +61,11 @@ if( !isset($_POST['btnentrar']) ){
 			$obj_xtpl->assign('msj_uno','block');
 			$obj_xtpl->assign('mensaje', $mensajes['acceso_conectado']);
 			break;
+
+                case 328:
+			$obj_xtpl->assign('msj_uno','block');
+			$obj_xtpl->assign('mensaje', $mensajes['taquilla_en_uso']);
+			break;
 			
 		case 404:
 			$obj_xtpl->assign('msj_uno','block');

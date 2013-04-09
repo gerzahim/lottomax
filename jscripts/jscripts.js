@@ -344,7 +344,19 @@ function agregar_ticket(){
 
 		    //si regresa este mensaje refresca la pagina para que actualize los sorteos cerrados
 		    if(return_data == "Selecciono un SORTEO ya cerrado !!!"){
-		    	alert(return_data);
+		    	//alert(return_data);
+		    	location.reload();
+		    }
+
+                    
+                   var n=return_data.search("CONFIRMAPUESTA");
+                   if(  n>0 ){
+                       if (confirm("Ya este numero se encuentra registrado, desea aumentar la apuesta?")){
+                            var monto = prompt("Ingrese el monto de la apuesta", "");
+                            var numero = document.getElementById("txt_numero");
+                            alert(numero.value);
+                            
+                        }
 		    	location.reload();
 		    }
 
@@ -360,6 +372,15 @@ function agregar_ticket(){
     hr.send(vars); // Actually execute the request
     document.getElementById("ticket").innerHTML = "processing...";	
 
+}
+
+// Funcion que carga el preticket
+function cargarPreticket(){
+    $.get('ajax/CargarTicket.php', function(str) {
+	document.getElementById("ticket").innerHTML = str;
+    });
+    $("#txt_numero").focus();
+    calcula_total();
 }
 
 //calcula el total del ticket
@@ -496,58 +517,70 @@ function simulateSubmitting(event)
 //]]>
 
 
+var Atl_down = false;  //Declaramos que la tecla Atl no ha sido presionada
+var Atl_key = 18;  // Id de la tecla Alt
+
+
+$(document).keydown(function(e) {
+    if (e.keyCode == Atl_key) Atl_down = true;
+}).keyup(function(e) {
+    if (e.keyCode == Atl_key) Atl_down = false;
+});
+
 // Abrevituras de teclado
-$(document).keyup(function(tecla){
-    
-	if (tecla.keyCode == 107) {
-    	// tecla A
+$(document).keydown(function(tecla){
+
+  
+   
+    if (Atl_down && (tecla.keyCode == 107)) {
+    	// tecla +
 		agregar_ticket(); //para agregar al ticket
 		CargarReset1(); //Limpiar el campo numero 
 		calcula_total();
 		//$("#txt_numero").focus(); // para focalizar el numero	
         //$('.a').css({ 'background-color' : 'red' });
-    }else if(tecla.keyCode == 74){
+    }else if(Atl_down && (tecla.keyCode == 74)){
     	// tecla J    	
     	$("#op_juego").focus(); // hace focus en el campo de tipo de juego
-    }else if(tecla.keyCode == 84){
+    }else if(Atl_down && (tecla.keyCode == 84)){
     	// tecla T
     	$('#op_juego').val('1');// hace focus en el campo de tipo de juego y selecciona Triple
-    }else if(tecla.keyCode == 80){
+    }else if(Atl_down && (tecla.keyCode == 80)){
     	// tecla P
     	$('#op_juego').val('2');// hace focus en el campo de tipo de juego y selecciona Permuta
-    }else if(tecla.keyCode == 78){
+    }else if(Atl_down && (tecla.keyCode == 78)){
     	// tecla N    	
     	$("#txt_numero").focus(); // hace focus en el campo de numeros
-    }else if(tecla.keyCode == 77){
+    }else if(Atl_down && (tecla.keyCode == 77)){
     	// tecla M    	
     	$("#txt_monto").focus(); // hace focus en el campo de monto Bs
-    }else if(tecla.keyCode == 90){
+    }else if(Atl_down && (tecla.keyCode == 90)){
     	// tecla Z
-    	$("#z0").focus(); // hace focus en el campo de checkboxes Zodiacales
-    }else if(tecla.keyCode == 83) {
+    	$("#z0").focus(); // hace focus         en el campo de checkboxes Zodiacales
+    }else if(Atl_down && (tecla.keyCode == 83)) {
     	// tecla S
     	$('#op_juego').val('3');// hace focus en el campo de tipo de juego y selecciona Permuta
-    }else if(tecla.keyCode == 67) {
+    }else if(Atl_down && (tecla.keyCode == 67)) {
     	// tecla C
     	$('#op_juego').val('4');// hace focus en el campo de tipo de juego y selecciona Permuta
-    }else if(tecla.keyCode == 76) {
+    }else if(Atl_down && (tecla.keyCode == 76)) {
     	// tecla L 
     	$("#s0").focus(); // hace focus en el campo de checkboxes Sorteos
-    }else if(tecla.keyCode == 69) {
+    }else if(Atl_down && (tecla.keyCode == 69)) {
     	// tecla E
     	$("#recibido").focus(); // hace focus en el campo de vuelto o cambio 
     }else if(tecla.keyCode == 113) {
     	// tecla F2
     	CargarReset(); //Limpiar Todos los campos
-    }else if(tecla.keyCode == 73){
+    }else if(Atl_down && (tecla.keyCode == 73)){
         // Tecla I
         procesarticket(); //para procesar y generar el ticket
 	CargarReset();
-    }else if(tecla.keyCode == 65){
+    }else if(Atl_down && (tecla.keyCode == 65)){
         // Tecla A
         //Preguntamos monto de los terminales
         agregarTerminales();
-    }else if(tecla.keyCode == 81){
+    }else if(Atl_down && (tecla.keyCode == 81)){
         // Tecla Q
         //Quitar la ultima jugada
         BorrarUltimaJugada();

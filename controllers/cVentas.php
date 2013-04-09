@@ -30,11 +30,11 @@ if( $result= $obj_modelo->GetSorteos() ){
 		$hora_actualMas= strtotime("+$minutos_bloqueo minutes");
 		
 		if ($hora_actualMas < $hora_sorteo){
-			$obj_xtpl->parse('main.contenido.lista_sorteos');
+			//$obj_xtpl->parse('main.contenido.lista_sorteos');
 		}
 		
 		/************* CABLEADO **********************/
-		//$obj_xtpl->parse('main.contenido.lista_sorteos');
+		$obj_xtpl->parse('main.contenido.lista_sorteos');
 		
 		$obj_xtpl->assign('cant_sorteos', $i);
 		$i++;
@@ -45,10 +45,8 @@ if( $result= $obj_modelo->GetSorteos() ){
 // Objeto de no entiendo porque me cambia el font
 //$obj_modelo->GetL();
 
-
 // Busca el listado de la informacion.
 $obj_xtpl->assign('taquilla', $obj_modelo->GetIdTaquilla());
-
 
 $obj_xtpl->parse('main.contenido');
 
