@@ -127,4 +127,6 @@ $mensajes['numero_agotado']= "NUMERO Agotado para sorteo ";
 $mensajes['no_sorteo_hora']= "Selecciono un SORTEO ya cerrado !!!";
 $mensajes['numero_repetido_eincompleto']= "El numero ya esta jugado y tiene su cupo completo !!!";
 
+$mensajes['serial_no_coincide']= "El serial ingresado no pertenece al ticket seleccionado !!!";
+$mensajes['sorteo_cerrado']= "No se puede eliminar el ticket, al menos uno de los sorteos en el ticket ya ha sido cerrado !!!";
 ?>

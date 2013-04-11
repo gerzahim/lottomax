@@ -26,7 +26,7 @@ require('.'.$obj_config->GetVar('ruta_modelo').'Ventas.php');
 $obj_modelo= new Ventas($obj_conexion);
 
 
- 
+session_start();
 //Funciones
 
 function CalculaIncompletoYnuevoMonto($txt_monto, $num_jug){
@@ -578,8 +578,8 @@ if($txt_numero == 0 ){
 	
 		case 1:  
 			// Juega solo triple
-			$result= $obj_modelo->GetIdTaquilla();
-			
+                        $result= $obj_modelo->GetIdTaquilla();
+			                    
 			//recorriendo el array de los sorteos seleccionados	
 			foreach ( $sorteos as $sorteo) {
 				

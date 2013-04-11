@@ -57,6 +57,7 @@ if( !empty($_POST['txtuser']) && !empty($_POST['txtpass']) && !empty($_POST['op_
                             // Guadarmos en la base de datos la asosiacion del usuario y la taquilla
                             $obj_modelo->GuardarUsuarioTaquilla($info['id_usuario'], $_POST['op_taquilla']);
 
+                            $_SESSION['taquilla']=$_POST['op_taquilla'];
                             $_SESSION['id_usuario']=$info['id_usuario'];
                             $nueva_url= $obj_config->GetVar('index_page');
 

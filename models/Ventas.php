@@ -40,14 +40,14 @@ class Ventas{
 	 * @return boolean
 	 */
 	public function GetIdTaquilla(){
-		
+            
 		//Preparacion del query
 //		$sql = "SELECT * FROM parametros";
 //		$result= $this->vConexion->ExecuteQuery($sql);
 //		$roww= $this->vConexion->GetArrayInfo($result);
 //		return $roww["taquilla"];
-            $taquilla = $_SESSION['InfoLogin']->GetTaquilla();
-            return $taquilla;
+       
+            return $_SESSION['taquilla'];
 	}
 	
 	/**
@@ -575,11 +575,11 @@ class Ventas{
                 $fecha= date('Ymd');
 
                 // Obtenemos el id de la agencia y taquilla
-                $sql = "SELECT id_agencia,taquilla FROM parametros";
+                $sql = "SELECT id_agencia FROM parametros";
 		$result= $this->vConexion->ExecuteQuery($sql);
 		$roww= $this->vConexion->GetArrayInfo($result);
 		$id_agencia=$roww["id_agencia"];
-                $taquilla=$roww["taquilla"];
+                $taquilla=$_SESSION["taquilla"];
 
 
                 $prefijo=$fecha.$id_agencia.$taquilla;
