@@ -7,13 +7,30 @@ var update = function () {
     datetime.html(date.format('hh:mm:ss A'));
 };
 
+//funcion para detectar si es cierre de pagina o presionar un link
+//si es cierre con el boton x envia un confirm para cerrar la pagina
+// soluciona el problema en caso de que el usuario haga link 
+$(window).bind('click', function(event) {
+	if(event.target.href) $(window).unbind('beforeunload');
+});
+$(window).bind('submit', function(event) {
+	$(window).unbind('beforeunload');
+});
+$(window).bind('beforeunload', function(event) {
+	//Aqui llamo a la funcion que cierra sesion
+    $.get('index.php?op=close', function(str){
+    	
+    });	
+	return '';
+});
+
 $(document).ready(function(){
 	//BorderFooter();
 	//auditoria();
 	//segDate();
 	//document.forms[0].reset
 	
-	useDefaultPrinter();	
+	//useDefaultPrinter();	
 	
 	ValidateFormSell();
 	 
@@ -509,7 +526,7 @@ function simulateSubmitting(event)
 
 	if (confirm("Simulating that the form has been submitted.\n\nWould you like to reload the page?"))
 	{
-		location.reload();
+		//location.reload();
 	}
 
 	return false;

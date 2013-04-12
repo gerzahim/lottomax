@@ -30,7 +30,7 @@ if( $result= $obj_modelo->GetSorteos() ){
 		$hora_actualMas= strtotime("+$minutos_bloqueo minutes");
 		
 		if ($hora_actualMas < $hora_sorteo){
-			//$obj_xtpl->parse('main.contenido.lista_sorteos');
+		//$obj_xtpl->parse('main.contenido.lista_sorteos');
 		}
 		
 		/************* CABLEADO **********************/

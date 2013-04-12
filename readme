@@ -451,6 +451,16 @@ x_grabargameganahi(); // funcion que llama para imprimir con pdf
 // svn commit
 se creo el campo id_ticket en la base de datos en la tabla incompletos_agotados
 modificar el metodo GuardarIncompletosAgotados() para que tambien registre el id_ticket
+
+
+//pendientes urgentes
+Modulo Para Imprimir
+CONFIRM
+problema de la sesion con las taquillas  (al cerrar confirmar que desea abandonar la pagina) 
+repetir apuesta (en curso de ticket transaccional)
+	s. repetir por sorteo
+	u. repetir por ultima jugada
+
  
 
  
