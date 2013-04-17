@@ -129,6 +129,11 @@ switch(OPCION){
 		include($obj_config->GetVar('ruta_controlador').'cAnularTicket.php');
 		break;
 
+        case 'copiar_ticket':
+
+		include($obj_config->GetVar('ruta_controlador').'cCopiarTicket.php');
+		break;
+
 	case 'listado_ventas':
 
 		include($obj_config->GetVar('ruta_controlador').'cListado_Ventas.php');

@@ -1,0 +1,118 @@
+<!-- BEGIN: contenido -->       
+<table width="800" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF">
+	<tr>
+		<td >
+	        <br /> 
+            <div id="message" class="message" >{mensaje}</div>        
+                 
+			<!-- BEGIN: lista_copiar_ticket -->
+			<div id="enlaces_accion">
+				<span>[ <a class="enlaces" href="{pagina_principal}?op={opcion_sistema}&amp;accion=search">Buscar Ticket</a> ]</span>
+			</div>              
+			<table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1">
+				<caption>Listado de Tickets</caption>
+
+				<thead>		
+					<tr>				
+						<th class="title header" scope="col"  width="20">&nbsp;</th>		
+						<th class="title header" scope="col">Id Ticket</th>
+						<th class="title header" scope="col">Fecha</th>
+						<th class="title header" scope="col">Total Ticket</th>
+					</tr>		
+				</thead>
+		
+				<tbody>
+		
+					<!-- BEGIN: lista -->
+					<tr class="{estilo_fila}">
+		
+						<td scope="row" align="center">
+							<a href="{pagina_principal}?op={opcion_sistema}&amp;accion=copy&amp;id={id_ticket}" title="Copiar">
+                            	<img src="./images/copy.jpg" border="0"/>
+                            </a>
+						</td>
+						<td align="center">&nbsp;{id_ticket}</td>
+						<td align="center">{fecha_hora}</td>
+   						<td align="center">{total_ticket}</td>
+					</tr>
+					<!-- END: lista -->
+		
+					<!-- BEGIN: no_lista -->
+		
+					<tr class="even">		
+						<td align="center" colspan="6" class="odd"><br />{sin_listado}<br />&nbsp;</td>		
+					</tr>		
+					<!-- END: no_lista -->
+		
+				</tbody>				
+				<tfoot>
+                </tfoot>
+			</table>
+                <div class="paginas">{paginacion}</div>	
+					
+			<!-- END: lista_copiar_ticket -->
+
+	<!-- BEGIN: busqueda -->
+<table width="800" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF">
+    <tr>
+        <td>
+            <div id="main">
+
+		<br />
+
+		<form id="frm1" method="get" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es">
+
+			<input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
+			<input style="border: hidden" type="hidden" name="accion" id="idaccion" value="looking"/>
+
+			<fieldset>
+
+				<legend>Busqueda de Tickets</legend>
+
+				<table align="center" border="0" cellpadding="2" cellspacing="0" width="100%">
+
+					<tr><td colspan="2">&nbsp;</td></tr>
+
+					<tr><td colspan="2"></td></tr>
+
+					<tr>
+
+						<td class="tag" width="200">Por Id Ticket:</td>
+
+						<td><input id="" name="id_ticket" size="30" maxlength="45" type="text" /></td>
+
+					</tr>
+
+					<tr><td colspan="2"></td></tr>
+
+
+				</table>
+
+			</fieldset>
+
+			<div class="botones">
+
+				<input  id="btnok" name="btnentrar" value="Buscar" type="submit" class="boton"/>&nbsp;&nbsp;&nbsp;
+
+				<input  id="btncancel" name="btncancelar" value="Cancelar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
+
+			</div>
+
+		</form>			 
+
+            </div>  
+        </td>
+    </tr>
+</table> 	
+
+	<!-- END: busqueda -->			
+<br />	<br />	 
+		
+		</td>	
+	</tr>
+
+</table>
+     
+<!-- END: contenido -->       
+
+
