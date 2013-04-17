@@ -321,7 +321,25 @@ class CopiarTicket{
 
 		return $roww["monto_cupo"];
 
-	}	
+	}
+
+        /**
+	 * Busqueda de minutos antes de bloquear un sorteo
+	 *
+	 */
+
+
+	public function MinutosBloqueo(){
+
+		//Preparacion del query
+		$sql = "SELECT tiempo_cierre_sorteos FROM parametros";
+
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["tiempo_cierre_sorteos"];
+
+	}
+	
 	
 }		
 ?>

@@ -98,30 +98,42 @@ switch (ACCION){
 
                             //Proceso de copiar el ticket
 
-                            // Verifica si el sorteo es Zodiacal
-                            if($obj_modelo->GetTrueZodiacal($row['id_sorteo'])){
+                            // Verificamos que el sorteo este activo
+                                $hora_sorteo=$row['hora_sorteo'];
+                                $hora_sorteo= strtotime($hora_sorteo);
 
-                                    //El sorteo si es zodiacal !
-                                    $eszodiacal=1;
+                                //Valor que debe venir de la base de datos
+                                $minutos_bloqueo= $obj_modelo->MinutosBloqueo();
 
-                                    //Proceso_Cupo() funcion para determinar los cupos
-                                    //echo $row['numero'], $row['monto'], $row['id_sorteo'], $row['id_zodiacal'];
+                                //Valor que debe venir de la base de datos
+                                $hora_actualMas= strtotime("+$minutos_bloqueo minutes");
 
-                                    $result = ProcesoCupos($row['numero'], $row['monto'], $row['id_sorteo'], $row['id_zodiacal'], $eszodiacal);
+                                if ($hora_actualMas < $hora_sorteo){
+                                    // Verifica si el sorteo es Zodiacal
+                                    if($obj_modelo->GetTrueZodiacal($row['id_sorteo'])){
 
-                             }else{
+                                            //El sorteo si es zodiacal !
+                                            $eszodiacal=1;
 
-                                    //El sorteo no es zodiacal !
-                                    $eszodiacal=0;
-                                    $zodiacal=0;
+                                            //Proceso_Cupo() funcion para determinar los cupos
+                                            //echo $row['numero'], $row['monto'], $row['id_sorteo'], $row['id_zodiacal'];
 
-                                    //Proceso_Cupo() funcion para determinar los cupos
-                                    
-                                    $result = ProcesoCupos($row['numero'], $row['monto'], $row['id_sorteo'], $row['id_zodiacal'], $eszodiacal);
+                                            $result = ProcesoCupos($row['numero'], $row['monto'], $row['id_sorteo'], $row['id_zodiacal'], $eszodiacal);
 
-                            }
+                                     }else{
 
+                                            //El sorteo no es zodiacal !
+                                            $eszodiacal=0;
+                                            $zodiacal=0;
 
+                                            //Proceso_Cupo() funcion para determinar los cupos
+
+                                            $result = ProcesoCupos($row['numero'], $row['monto'], $row['id_sorteo'], $row['id_zodiacal'], $eszodiacal);
+
+                                    }
+
+                                }
+                            
                         }
                         header('location:index.php?op=ventas');
                 }
