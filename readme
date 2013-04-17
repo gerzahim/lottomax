@@ -452,6 +452,15 @@ x_grabargameganahi(); // funcion que llama para imprimir con pdf
 se creo el campo id_ticket en la base de datos en la tabla incompletos_agotados
 modificar el metodo GuardarIncompletosAgotados() para que tambien registre el id_ticket
 
+// cron jobs
+
+You need to use a command like:
+
+php /home/USER/public_html/cron.php
+
+Or if including the query string is necessary, use cURL instead (if it's installed):
+
+curl http://www.wetube.org/cron.php?id=01001
 
 //pendientes urgentes
 Master Para Imprimir
@@ -460,11 +469,13 @@ problema de la sesion con las taquillas  (al cerrar confirmar que desea abandona
 repetir apuesta (en curso de ticket transaccional)
 	s. repetir por sorteo
 	u. repetir por ultima jugada
+	
 “RE-IMPRESION” en el ticket en parametros de Impresion	
 	
 Capture user response when using window.onbeforeunload
 How to know the user response in window.onbeforeunload
 WINDOW.ONBEFOREUNLOAD - KNOW WHAT THE USER CLICKED
+
 
 
 	

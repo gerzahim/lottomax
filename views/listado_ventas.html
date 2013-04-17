@@ -11,46 +11,35 @@
 				<span>[ <a class="enlaces" href="{pagina_principal}?op={opcion_sistema}&amp;accion=search">Buscar Cupo Especial</a> ]</span>
 			</div>
 			              
-                        <table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1" style="font-size:9.5px;">
-				<caption>Listado de Ventas</caption>
-
-				<thead>		
-					<tr>		
-						<th class="title header" scope="col"  width="20">&nbsp;</th>
-                        <th class="title header" scope="col"  width="20">No</th>
-                        <th class="title header" scope="col">Numero</th>
-                        <th class="title header" scope="col">Sorteo</th>
-                        <th class="title header" scope="col">Monto (Bs. F.)</th>
-						<th class="title header" scope="col">Tipo de Jugada</th>
-		                <th class="title header" scope="col">Zodiacal</th>
-		                <th class="title header" scope="col">Fecha Desde</th>
-		                <th class="title header" scope="col">Fecha Hasta</th>
-					</tr>		
-				</thead>
-		
+              <table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1" style="font-size:9.5px;">
+				<caption>Listado de Ventas por Caja</caption>
+	
 				<tbody>
 		
 					<!-- BEGIN: lista -->
-
-					<tr class="{estilo_fila}">
-		
-						<td class="lista1" scope="row" align="center">
-							<a href="{pagina_principal}?op={opcion_sistema}&amp;accion=mod&amp;id={id_cupo_especial}" title="Ver / Modificar">
-                            	<img src="./images/lapiz.gif" border="0"/>
-                           	</a>
-						</td>
-						<td scope="row" align="center">
-							<a href="{pagina_principal}?op={opcion_sistema}&amp;accion=del&amp;id={id_cupo_especial}" title="Eliminar">
-                            	<img src="./images/delete.png" border="0"/>
-                                                        </td>
-						<td align="left">&nbsp;{numero}</td>
-                                                <td align="left">&nbsp;{Nombre_sorteo}</td>
-                                                <td align="left">&nbsp;{monto}</td>
-                                                <td align="left">&nbsp;{Nombre_tipo_jugada}</td>
-                                                <td align="left">&nbsp;{Nombre_zodiacal}</td>
-                                                <td align="left">&nbsp;{fecha_desde}</td>
-                                                <td align="left">&nbsp;{fecha_hasta}</td>
+					<table class='table_report' border="0" cellspacing="0" cellpadding="0" align="center" >	
+					<tr class="odd">		
+						<td align="left">&nbsp;Caja:</td><td align="left">&nbsp;<bold>1{montao}</bold></td>  
 					</tr>
+					<tr class="even">
+						<td align="left">&nbsp;Venta:</td><td align="left">&nbsp;1.229,200{montoa}</td>                                                
+					</tr>
+					<tr class="odd">		
+						<td align="left">&nbsp;Premio:</td><td align="left">&nbsp;1{montoa}</td>  
+					</tr>
+					<tr class="even">
+						<td align="left">&nbsp;Diferencia:</td><td align="left">&nbsp;1.229,200{montao}</td>                                                
+					</tr>
+					<tr class="even">	
+						<td align="left"></td><td align="left"></td>  
+					</tr>
+					<tr class="odd">	
+						<td align="left">&nbsp;Premios Pagados:</td><td align="left">&nbsp;1.229,200{monato}</td>                                                
+					</tr>
+					<tr class="even">			
+						<td align="left">&nbsp;Premios No Pagados:</td><td align="left">&nbsp;1{monato}</td>  
+					</tr>
+					</table>									
 					<!-- END: lista -->
 		
 					<!-- BEGIN: no_lista -->
