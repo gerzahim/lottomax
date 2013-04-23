@@ -36,10 +36,8 @@ $obj_modelo= new Ventas($obj_conexion);
 session_start();
 
 $id_taquilla=2;
-
-
 /************* CABLEADO **********************/
-//id_ticket debe venir de una variable de sesion
+//id_taquilla debe venir de una variable de sesion
 
 $info_ticket= $obj_modelo->GetLastTicket($id_taquilla);
 //echo "<pre>".print_r($info_ticket)."</pre>";
@@ -291,6 +289,7 @@ $data1.="\\x1B\\x0A";
 $data1.="\\x1B\\x0A";
 $data1.="\\x1B\\x0A";
 $data1.="\\x1B\\x0A";
+
 
 /************* CABLEADO **********************/
 //los feed deben venir de la base de datos una variable de parametros

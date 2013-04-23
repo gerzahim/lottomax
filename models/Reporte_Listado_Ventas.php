@@ -28,6 +28,107 @@ class Listado_Ventas{
 		$this->vConexion= $conexion;
 	}
 
+	
+	/**
+	 * Obtiene todos los datos de las ventas de las cajas
+	 *
+	 * @param string $cantidad
+	 * @param string $pagina
+	 * @return boolean, array
+	 */
+	public function GetListadoVentasCajas($cantidad, $pagina){
+		
+		// Datos para la paginacion
+		$inicial= ($pagina-1) * $cantidad;
+		
+		//Preparacion del query
+		$sql = "SELECT * FROM taquillas WHERE status = 1";
+		//8echo $sql;
+		$result= $this->vConexion->ExecuteQuery($sql);
+
+		while($roww= $this->vConexion->GetArrayInfo($result)){
+			$id_taquilla = $roww['id_taquilla'];
+			echo $id_taquilla;
+			
+			//Preparacion del query
+			$sql = "SELECT * FROM ticket WHERE taquilla = ".$id_taquilla."";
+			$resulta= $this->vConexion->ExecuteQuery($sql);
+			$total_ticket = 0;
+			while($row= $this->vConexion->GetArrayInfo($resulta)){
+				$total_ticket+= $row['total_ticket'];
+				
+				
+				echo "<pre>";
+				print_r($row);
+				echo "</pre>";
+				
+			}
+			
+			echo $total_ticket;
+		}
+
+		
+		
+		
+				/*
+		//Preparacion del query
+		$sql = "SELECT CE.*, TJ.nombre_jugada, S.nombre_sorteo, Z.nombre_zodiacal
+                        FROM cupo_especial CE
+                            INNER JOIN tipo_jugadas TJ ON CE.id_tipo_jugada=TJ.id_tipo_jugada
+                            INNER JOIN sorteos S ON CE.id_sorteo=S.id_sorteo
+                            INNER JOIN zodiacal Z ON CE.id_zodiacal=Z.id_zodiacal";
+		
+		$result= $this->vConexion->ExecuteQuery($sql);
+		
+		
+		*/
+		
+		// Datos para la paginacion
+		$total_registros= $this->vConexion->GetNumberRows($result);
+		if($cantidad!=0){
+			$total_paginas= ceil($total_registros / $cantidad);
+		}
+		else{
+			$total_paginas= 0;
+		}
+		
+		// Nuevo SQL
+		$sql.=" LIMIT ".$cantidad." OFFSET ".$inicial."";
+		$result=  $this->vConexion->ExecuteQuery($sql);
+		
+		return array('pagina'=>$pagina,'total_paginas'=>$total_paginas,'total_registros'=>$total_registros,'result'=>$result);
+		
+	}	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
          /**
 	 * Busqueda de todos los Sorteos
 	 *

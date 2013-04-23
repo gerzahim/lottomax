@@ -12,7 +12,7 @@
 $obj_xtpl->assign_file('contenido', $obj_config->GetVar('ruta_vista').'listado_ventas'.$obj_config->GetVar('ext_vista'));
 
 // Modelo asignado
-require($obj_config->GetVar('ruta_modelo').'Listado_Ventas.php');
+require($obj_config->GetVar('ruta_modelo').'Reporte_Listado_Ventas.php');
 
 $obj_modelo= new Listado_Ventas($obj_conexion);
 
@@ -460,7 +460,8 @@ switch (ACCION){
 		}
 		
 		// Busca el listado de la informacion.
-		$lista= $obj_modelo->GetListado($obj_config->GetVar('num_registros'),$pag);
+		$lista= $obj_modelo->GetListadoVentasCajas($obj_config->GetVar('num_registros'),$pag);
+		
 		if( $lista['total_registros']>0 ){
 			$i=1;
 			while($row= $obj_conexion->GetArrayInfo($lista['result'])){

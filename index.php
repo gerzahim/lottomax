@@ -104,17 +104,17 @@ switch(OPCION){
 		include($obj_config->GetVar('ruta_controlador').'cSorteos.php');
 		break;
 
-        case 'relacion_pagos':
+    case 'relacion_pagos':
 
 		include($obj_config->GetVar('ruta_controlador').'cRelacion_Pagos.php');
 		break;
 
-        case 'cupos_generales':
+    case 'cupos_generales':
 
 		include($obj_config->GetVar('ruta_controlador').'cCupos_Generales.php');
 		break;
 
-        case 'cupos_especiales':
+   	case 'cupos_especiales':
 
 		include($obj_config->GetVar('ruta_controlador').'cCupos_Especiales.php');
 		break;
@@ -129,14 +129,14 @@ switch(OPCION){
 		include($obj_config->GetVar('ruta_controlador').'cAnularTicket.php');
 		break;
 
-        case 'copiar_ticket':
+    case 'copiar_ticket':
 
 		include($obj_config->GetVar('ruta_controlador').'cCopiarTicket.php');
 		break;
 
 	case 'listado_ventas':
 
-		include($obj_config->GetVar('ruta_controlador').'cListado_Ventas.php');
+		include($obj_config->GetVar('ruta_controlador').'cReporte_Listado_Ventas.php');
 		break;
 		
 	case 'usuario':
@@ -144,13 +144,19 @@ switch(OPCION){
 		include($obj_config->GetVar('ruta_controlador').'cUsuario.php');
 		break;
 
-        case 'taquillas':
+    case 'taquillas':
 
 		include($obj_config->GetVar('ruta_controlador').'cTaquillas.php');
 		break;
-        case 'parametros':
+		
+    case 'impresora':
 
-                include($obj_config->GetVar('ruta_controlador').'cParametros.php');
+        include($obj_config->GetVar('ruta_controlador').'cImpresora.php');
+		break;		
+		
+    case 'parametros':
+
+        include($obj_config->GetVar('ruta_controlador').'cParametros.php');
 		break;
             
 	case 'close':

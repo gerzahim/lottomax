@@ -13,34 +13,29 @@
 			              
               <table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1" style="font-size:9.5px;">
 				<caption>Listado de Ventas por Caja</caption>
+				<thead>		
+					<tr>		
+						<th class="title header" scope="col">Caja:</th>		
+						<th class="title header" scope="col">Venta:</th>      
+						<th class="title header" scope="col">Premio:</th>		
+						<th class="title header" scope="col">Diferencia:</th>  
+						<th class="title header" scope="col">Premios Pagados:</th>		
+						<th class="title header" scope="col">Premios No Pagados:</th>  												                  		
+					</tr>		
+				</thead>				
 	
 				<tbody>
-		
+						
 					<!-- BEGIN: lista -->
-					<table class='table_report' border="0" cellspacing="0" cellpadding="0" align="center" >	
-					<tr class="odd">		
-						<td align="left">&nbsp;Caja:</td><td align="left">&nbsp;<bold>1{montao}</bold></td>  
+					<tr class="{estilo_fila}">
+						<td align="left">&nbsp;{Nombre_Loteria}</td>		
+   						<td align="center">{status}</td>	
+						<td align="left">&nbsp;{Nombre_Loteria}</td>		
+   						<td align="center">{status}</td>
+						<td align="left">&nbsp;{Nombre_Loteria}</td>		
+   						<td align="center">{status}</td>				
 					</tr>
-					<tr class="even">
-						<td align="left">&nbsp;Venta:</td><td align="left">&nbsp;1.229,200{montoa}</td>                                                
-					</tr>
-					<tr class="odd">		
-						<td align="left">&nbsp;Premio:</td><td align="left">&nbsp;1{montoa}</td>  
-					</tr>
-					<tr class="even">
-						<td align="left">&nbsp;Diferencia:</td><td align="left">&nbsp;1.229,200{montao}</td>                                                
-					</tr>
-					<tr class="even">	
-						<td align="left"></td><td align="left"></td>  
-					</tr>
-					<tr class="odd">	
-						<td align="left">&nbsp;Premios Pagados:</td><td align="left">&nbsp;1.229,200{monato}</td>                                                
-					</tr>
-					<tr class="even">			
-						<td align="left">&nbsp;Premios No Pagados:</td><td align="left">&nbsp;1{monato}</td>  
-					</tr>
-					</table>									
-					<!-- END: lista -->
+					<!-- END: lista -->					
 		
 					<!-- BEGIN: no_lista -->
 		
