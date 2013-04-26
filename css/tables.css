@@ -69,7 +69,17 @@ tr.even td	{
 	
 tr.odd .column1	{
 	background:#f4f9fe;
-	}	
+	}
+
+tr.evenred td	{
+        font-weight: bold;
+	color: #f03b58;
+	border-bottom:1px solid #e5eff8;
+	border-left:1px solid #e5eff8 ;
+	padding:.3em 1em;
+	text-align:center;
+	}
+
 .column1	{
 	background:#f9fcfe;
 	}

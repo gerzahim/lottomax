@@ -1,0 +1,146 @@
+<!-- BEGIN: contenido -->       
+<table width="800" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF">
+	<tr>
+		<td >
+	        <br /> 
+            <div id="message" class="message" >{mensaje}</div>        
+                 
+                        <!-- BEGIN: buscar_resultados -->
+
+                        <table width="800" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF">
+                            <tr>
+                                <td>
+                                    <div id="main">
+
+                                        <br />
+
+                                        <form id="frm1" method="get" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es">
+                                            <input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
+                                            <input style="border: hidden" type="hidden" name="accion" id="idaccion" value="cargar_resultados"/>
+                                             <fieldset>
+                                                   <table align="center" border="0" cellpadding="2" cellspacing="0" width="80%">
+                                                        <tr>
+                                                            <td><span class="requerido">*</span> Fecha:</td>
+                                                            <td><input type="text" id="fecha" name="txt_fecha"></td>
+
+                                                            <script type="text/javascript">
+                                                             $(function() {
+                                                                 $("#fecha").datepicker({
+                                                                    changeMonth: true,
+                                                                    changeYear: true,
+                                                                    showOn: 'both',
+                                                                    buttonText: 'Calendario',
+                                                                    buttonImage: "./images/calendar.jpg",
+                                                                    buttonImageOnly: true,
+                                                                    maxDate: '+0d'
+                                                                    }).addClass("embed").attr('readonly','readonly');
+                                                              });
+                                                            </script>
+
+
+                                                            <td><input type="radio" id="radio_periodo"  name="radio_periodo" value="1">Mañana
+                                                                <input type="radio" id="radio_periodo"  name="radio_periodo" value="2">Tarde
+                                                                <input type="radio" id="radio_periodo"  name="radio_periodo" value="3">Noche
+                                                                <input type="radio" id="radio_periodo"  name="radio_periodo" value="*" checked>Todos</td>
+                                                        </tr>
+                                                    </table>
+                                                </fieldset>
+
+                                            <div class="botones">
+
+                                                    <input  id="btnok" name="btnentrar" value="Cargar" type="submit" class="boton"/>&nbsp;&nbsp;&nbsp;
+
+                                                    <input  id="btncancel" name="btncancelar" value="Cancelar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
+
+                                            </div>
+                                        </form>
+                                       </div>
+                                </td>
+                            </tr>
+                        </table>
+                      
+                        <!-- END: buscar_resultados -->
+
+                        <!-- BEGIN: lista_cargar_resultados -->
+                        <form id="frm2" method="get" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es">
+
+                             <input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
+                             <input style="border: hidden" type="hidden" name="accion" id="idaccion" value="save"/>
+                             <input style="border: hidden" type="hidden" name="fecha" id="fecha" value="{fecha}"/>
+
+                             <fieldset>
+                             <legend>Resultados a la Fecha: {fecha}</legend>
+                             
+                            <table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1" style="font-size:9.5px;">
+                                    <thead>
+                                            <tr>
+                                                    <th class="title header" scope="col">Sorteos</th>
+                                                    <th class="title header" scope="col">Triple</th>
+                                                    <th class="title header" scope="col">Terminal</th>
+                                                    <th class="title header" scope="col">Signo</th>
+                                                    <th class="title header" scope="col">Aproximación por Arriba</th>
+                                                    <th class="title header" scope="col">Aproximación por Abajo</th>
+                                            </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                            <!-- BEGIN: lista -->
+
+                                            <tr class="{estilo_fila}">
+
+                                                    <td align="left">&nbsp;{sorteo}</td>
+                                                    <td align="left">&nbsp;{numero}</td>
+                                                    <td align="left">&nbsp;{terminal}</td>
+                                                    <td align="left">&nbsp;
+                                                        <!-- BEGIN: lista_zodiacal -->
+                                                        <select id="op_zodiacal" name="zodiacal-{id_sorteo}" >
+                                                            <option value="" >Seleccione...</option>
+                                                            <!-- BEGIN: op_zodiacal -->
+                                                            <option value="{Id_zodiacal}"{selected} >{nombre_zodiacal}</option>
+                                                            <!-- END: op_zodiacal -->
+                                                        </select>
+                                                        <!-- END: lista_zodiacal -->
+                                                    </td>
+                                                    <td align="left">&nbsp;{aprox_arriba}</td>
+                                                    <td align="left">&nbsp;{aprox_abajo}</td>
+                                            </tr>
+                                            <!-- END: lista -->
+
+                                            <!-- BEGIN: no_lista -->
+
+                                            <tr class="even">
+                                                    <td align="center" colspan="6" class="odd"><br />{sin_listado}<br />&nbsp;</td>
+                                            </tr>
+                                            <!-- END: no_lista -->
+
+                                    </tbody>
+                                    <tfoot>
+                                </tfoot>
+                            </table>
+                             </fieldset>
+                            <div class="paginas">{paginacion}</div>
+
+
+                            <div class="paginas">{faltantes}</div>
+                            
+                            <div class="botones">
+                                    <input  id="btnok" name="btnentrar" value="Guardar" type="submit" class="boton"/>&nbsp;&nbsp;&nbsp;
+                                    <input  id="btncancel" name="btncancelar" value="Cancelar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
+
+                            </div>
+                    </form>
+			<!-- END: lista_cargar_resultados -->
+			
+			
+	
+                        <br />	<br />
+		
+		</td>	
+	</tr>
+
+    </table>
+     
+<!-- END: contenido -->       
+
+
