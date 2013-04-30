@@ -12,7 +12,7 @@
 $obj_xtpl->assign_file('contenido', $obj_config->GetVar('ruta_vista').'cargar_resultados'.$obj_config->GetVar('ext_vista'));
 
 // Modelo asignado
-require($obj_config->GetVar('ruta_modelo').'Cargar_Resultados.php');
+require($obj_config->GetVar('ruta_modelo').'Cargar_resultados.php');
 
 $obj_modelo= new Cargar_Resultados($obj_conexion);
 
