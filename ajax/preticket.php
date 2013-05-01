@@ -288,7 +288,8 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
 
                         }
                         else{
-                                $_SESSION['mensaje']= $mensajes['fallo_agregar_ticket'];
+                                //$_SESSION['mensaje']= $mensajes['fallo_agregar_ticket'];
+                                $_SESSION['mensaje']= "Error No se logro ingresar la jugada al ticket!!!";
                                 echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";
                         }
 			

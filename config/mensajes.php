@@ -129,4 +129,6 @@ $mensajes['numero_repetido_eincompleto']= "El numero ya esta jugado y tiene su c
 
 $mensajes['serial_no_coincide']= "El serial ingresado no pertenece al ticket seleccionado !!!";
 $mensajes['sorteo_cerrado']= "No se puede eliminar el ticket, al menos uno de los sorteos en el ticket ya ha sido cerrado !!!";
+$mensajes['ticket_vencido']= "El ticket seleccionado se encuentra vencido para pagar.";
+$mensajes['no_ticket']= "No se encontro información de este ticket!";
 ?>

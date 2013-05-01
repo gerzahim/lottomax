@@ -114,25 +114,30 @@ switch(OPCION){
 		include($obj_config->GetVar('ruta_controlador').'cCupos_Generales.php');
 		break;
 
-   	case 'cupos_especiales':
+    case 'cupos_especiales':
 
-		include($obj_config->GetVar('ruta_controlador').'cCupos_Especiales.php');
-		break;
+            include($obj_config->GetVar('ruta_controlador').'cCupos_Especiales.php');
+            break;
 
-	case 'ventas':
-		
-		include($obj_config->GetVar('ruta_controlador').'cVentas.php');
-		break;
+    case 'ventas':
 
-	case 'anular_ticket':
+            include($obj_config->GetVar('ruta_controlador').'cVentas.php');
+            break;
 
-		include($obj_config->GetVar('ruta_controlador').'cAnularTicket.php');
-		break;
+    case 'anular_ticket':
+
+            include($obj_config->GetVar('ruta_controlador').'cAnularTicket.php');
+            break;
 
     case 'copiar_ticket':
 
 		include($obj_config->GetVar('ruta_controlador').'cCopiarTicket.php');
 		break;
+
+    case 'pagar_ganador':
+
+        include($obj_config->GetVar('ruta_controlador').'cPagar_Ganador.php');
+        break;
 
 	case 'listado_ventas':
 

@@ -19,7 +19,7 @@ class ConfigVars{
 	 *
 	 * @var string $vCantidadRegistros
 	 */
-	private $vCantidadRegistros= 25;
+	private $vCantidadRegistros= 10;
 	
 	/**
 	 * Directorio de los modelos.
