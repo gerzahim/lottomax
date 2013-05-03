@@ -27,8 +27,12 @@ $obj_modelo= new Ventas($obj_conexion);
 
 
 session_start();
-//Funciones
 
+// Obtenemos los datos de la taquilla
+$taquilla= $obj_modelo->GetIdTaquilla();
+
+
+//Funciones
 function CalculaIncompletoYnuevoMonto($txt_monto, $num_jug){
 
 	$matriz=array();
@@ -65,7 +69,8 @@ function CalculaIncompletoYnuevoMonto($txt_monto, $num_jug){
 }
 
 function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
-	
+    
+	global $taquilla;
 	global $obj_modelo;
 	global $obj_conexion;
 	
@@ -132,7 +137,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
  			$txt_monto= $matriz2[2];
 			
 			// Guardar ticket a tabla transaccional
-			if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$num_jug_nuevodisponible,$incompleto,$txt_monto) ){
+			if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$num_jug_nuevodisponible,$incompleto,$txt_monto,$taquilla) ){
 																		
 			}else{
 				
@@ -145,7 +150,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
 			//Mensaje de ERROR -- NUMERO AGOTADO PARA ESTE SORTEO
 			
                         //Se registra el numero como agotado
-                        $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$txt_monto,2,0);
+                        $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$txt_monto,2,0,$taquilla);
 			$_SESSION['mensaje']= $txt_numero." AGOTADO para sorteo ".$obj_modelo->GetNombreSorteo($sorteo)."  ".$obj_modelo->GetPreZodiacal($zodiacal);		
 			echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";			
 						
@@ -196,7 +201,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
 			 			$txt_monto= $matriz2[2];						
 						                                             
 						// Guardar ticket a tabla transaccional
-						if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$num_jug_nuevodisponible,$incompleto,$txt_monto) ){
+						if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$num_jug_nuevodisponible,$incompleto,$txt_monto,$taquilla) ){
 																		
 						}
 						else{
@@ -208,7 +213,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
 						//Mensaje de ERROR -- NUMERO BLOQUEADO PARA ESTE SORTEO
 
                                                 //Se registra el numero como agotado
-                                                $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$txt_monto,2,0);
+                                                $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$txt_monto,2,0,$taquilla);
                                                 
 						$_SESSION['mensaje']= $txt_numero." AGOTADO para sorteo ".$obj_modelo->GetNombreSorteo($sorteo)."  ".$obj_modelo->GetPreZodiacal($zodiacal);		
 						echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";							
@@ -240,7 +245,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
 		 			$txt_monto= $matriz2[2];						
                                         
 					// Guardar ticket a tabla transaccional
-					if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$num_jug_nuevodisponible,$incompleto,$txt_monto) ){
+					if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$num_jug_nuevodisponible,$incompleto,$txt_monto,$taquilla) ){
 																	
 					}
 					else{
@@ -284,7 +289,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
 
 
                         // Guardar ticket a tabla transaccional
-                        if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$num_jug_nuevodisponible,$incompleto,$txt_monto) ){
+                        if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$num_jug_nuevodisponible,$incompleto,$txt_monto,$taquilla) ){
 
                         }
                         else{

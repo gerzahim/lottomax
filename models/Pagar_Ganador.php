@@ -89,7 +89,7 @@ class Pagar_Ganador{
 		$inicial= ($pagina-1) * $cantidad;
 		
 		//Preparacion del query
-                 $sql = "SELECT S.id_sorteo, S.nombre_sorteo, DT.hora_sorteo, DT.numero, DT.id_tipo_jugada, TJ.nombre_jugada, DT.id_zodiacal, Z.nombre_zodiacal, DT.monto
+                 $sql = "SELECT S.id_sorteo, S.nombre_sorteo, DT.id_detalle_ticket, DT.hora_sorteo, DT.numero, DT.id_tipo_jugada, TJ.nombre_jugada, DT.id_zodiacal, Z.nombre_zodiacal, DT.monto
                         FROM detalle_ticket DT
                             INNER JOIN sorteos S ON DT.id_sorteo=S.id_sorteo
                             INNER JOIN zodiacal Z ON DT.id_zodiacal=Z.Id_zodiacal
@@ -115,20 +115,20 @@ class Pagar_Ganador{
 
 	}
 
-        /**
-	 * Busqueda de Resultados en una fecha
-	 *
-	 * @param string $fecha
-	 */
-	public function GetResultados($fecha){
-
-		//Preparacion del query
-                 $sql = "SELECT * FROM resultados WHERE fecha LIKE '%".$fecha."%'";
-
-		$result= $this->vConexion->ExecuteQuery($sql);
-		return  $result;
-
-	}
+//        /**
+//	 * Busqueda de Resultados en una fecha
+//	 *
+//	 * @param string $fecha
+//	 */
+//	public function GetResultados($fecha){
+//
+//		//Preparacion del query
+//                 $sql = "SELECT * FROM resultados WHERE fecha LIKE '%".$fecha."%'";
+//
+//		$result= $this->vConexion->ExecuteQuery($sql);
+//		return  $result;
+//
+//	}
 
         /**
 	 * Busqueda de una apuesta ganadora
@@ -138,10 +138,15 @@ class Pagar_Ganador{
          * @param string $numero
          * @param string $fecha_hora
 	 */
-	public function GetGanador($id_sorteo, $zodiacal, $numero, $fecha_hora){
+	public function GetGanador($id_sorteo, $zodiacal, $numero, $fecha_hora, $id_tipo_jugada){
 
 		//Preparacion del query
-                 $sql = "SELECT id_resultados FROM resultados WHERE id_sorteo='".$id_sorteo."' AND zodiacal='".$zodiacal."' AND numero='".$numero."' AND fecha_hora LIKE '%".$fecha_hora."%'";
+                if ($id_tipo_jugada == 2 || $id_tipo_jugada == 4){ // Si las jugadas son terminales
+                    $sql = "SELECT id_resultados FROM resultados WHERE id_sorteo='".$id_sorteo."' AND zodiacal='".$zodiacal."' AND SUBSTR(numero,2,3)='".$numero."' AND fecha_hora LIKE '%".$fecha_hora."%'";
+                }else{
+                    $sql = "SELECT id_resultados FROM resultados WHERE id_sorteo='".$id_sorteo."' AND zodiacal='".$zodiacal."' AND numero='".$numero."' AND fecha_hora LIKE '%".$fecha_hora."%'";
+                }
+                 //echo $sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
 
                 if ($this->vConexion->GetNumberRows($result)>0){
@@ -152,6 +157,34 @@ class Pagar_Ganador{
                 }
 
 
+	}
+
+        /**
+	 * Busqueda de una aproximacion por abajo o por arriba ganadora
+	 *
+	 * @param string $id_sorteo
+         * @param string $zodiacal
+         * @param string $numero
+         * @param string $fecha_hora
+         * @param string $tipo_aproximacion
+	 */
+	public function GetAproximacion($id_sorteo, $zodiacal, $numero, $fecha_hora, $tipo_aproximacion){
+
+		//Preparacion del query
+                if ($tipo_aproximacion == 'abajo'){
+                    $sql = "SELECT id_resultados FROM resultados WHERE id_sorteo='".$id_sorteo."' AND zodiacal='".$zodiacal."' AND SUBSTR(numero,2,3)-1='".$numero."' AND fecha_hora LIKE '%".$fecha_hora."%'";
+                }else if ($tipo_aproximacion == 'arriba'){
+                    $sql = "SELECT id_resultados FROM resultados WHERE id_sorteo='".$id_sorteo."' AND zodiacal='".$zodiacal."' AND SUBSTR(numero,2,3)+1='".$numero."' AND fecha_hora LIKE '%".$fecha_hora."%'";
+                }
+
+		$result= $this->vConexion->ExecuteQuery($sql);
+
+                if ($this->vConexion->GetNumberRows($result)>0){
+                    $roww= $this->vConexion->GetArrayInfo($result);
+                    return true;
+                }else{
+                    return false;
+                }
 	}
 
         /**
@@ -170,6 +203,92 @@ class Pagar_Ganador{
 
 	}
 
+        /**
+	 * Actualiza Datos del ticket en premiadoo 1, pagado 1 y el monto total del premio
+	 * @param string $id_ticket
+         * @param string $total_premiado
+	 */
+	public function PagarTicket($id_ticket, $total_premiado){
+
+		//Preparacion del query
+		$sql = "UPDATE `ticket` SET `premiado`='1', `pagado`='1', `total_premiado`='".$total_premiado."' WHERE id_ticket='".$id_ticket."'";
+                
+		return $this->vConexion->ExecuteQuery($sql);
+
+	}
+
+        /**
+	 * Actualiza Datos del ticket en detalle ticket  a premiadoo 1.
+	 * @param string $id_detalle_ticket
+	 */
+	public function PagarDetalleTicket($id_detalle_ticket){
+
+		//Preparacion del query
+
+		$sql = "UPDATE `detalle_ticket` SET `premiado`='1' WHERE id_detalle_ticket='".$id_detalle_ticket."'";
+		return $this->vConexion->ExecuteQuery($sql);
+
+	}
+
+
+        /**
+	 * Obtencion de valor configurado de aproximacion por abajo
+	 *
+	 *
+	 */
+	public function GetAprox_abajo(){
+
+		//Preparacion del query
+                $sql = "SELECT aprox_abajo FROM parametros";
+
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		if ($roww["aprox_abajo"]==1){
+                    return true;
+                }else{
+                    return false;
+                }
+
+
+	}
+
+         /**
+	 * Obtencion de valor configurado de aproximacion por arriba
+	 *
+	 *
+	 */
+	public function GetAprox_arriba(){
+
+		//Preparacion del query
+                $sql = "SELECT aprox_arriba FROM parametros";
+
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		if ($roww["aprox_arriba"]==1){
+                    return true;
+                }else{
+                    return false;
+                }
+
+
+	}
         
+        /**
+	 * Busqueda de detalle de Tickets Segun id_ticket
+	 *
+	 * @param string $id_ticket
+	 */
+	public function GetAllDetalleTciket($id_ticket){
+
+		//Preparacion del query
+                 $sql = "SELECT *
+                        FROM detalle_ticket DT
+                        WHERE id_ticket='".$id_ticket."'";
+                        
+		$result= $this->vConexion->ExecuteQuery($sql);
+
+                return $result;
+
+	}
 }		
 ?>

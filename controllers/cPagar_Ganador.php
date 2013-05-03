@@ -16,6 +16,7 @@ require($obj_config->GetVar('ruta_modelo').'Pagar_Ganador.php');
 
 $obj_modelo= new Pagar_Ganador($obj_conexion);
 
+$id_detalle_ticket[]="";
 
 switch (ACCION){
 
@@ -24,7 +25,8 @@ switch (ACCION){
 
 		// Ruta regreso
 		$obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Lista']);
-
+                $_SESSION['Ruta_ticket']= $obj_generico->RutaRegreso();
+                
                 // Para la paginacion
 		if(empty($_GET['pg'])){
 			$pag= 1;
@@ -34,7 +36,8 @@ switch (ACCION){
 		}
 
 		$id_ticket= $obj_generico->CleanText($_GET['id_ticket']);
-                
+                $obj_xtpl->assign('id_ticket', $id_ticket);
+
                 $where = "";
 		if(!$obj_generico->IsEmpty($id_ticket)){
                     $where = $where. " id_ticket='".$id_ticket."' " ;
@@ -55,7 +58,6 @@ switch (ACCION){
                                 // Verificamos que el ticket no este vencido...
                                 if ($fecha_vencido_ticket >= $fecha_actual) {
                                     $resultDT = $obj_modelo->GetDetalleTciket($row['id_ticket'],$obj_config->GetVar('num_registros'),$pag);
-                                    $resultR = $obj_modelo->GetResultados($fecha_ticket);
 
                                     $i=1; $j=0; $monto_total=0;
                                     while($rowDT= $obj_conexion->GetArrayInfo($resultDT['result'])){
@@ -75,17 +77,39 @@ switch (ACCION){
                                         $obj_xtpl->assign('monto', $obj_generico->CleanTextDb($rowDT["monto"]));
 
                                         // Verificamos si hay alguna apuesta ganadora...
-                                        //while($rowR = $obj_conexion->GetArrayInfo($resultR)){
-                                            if ($obj_modelo->GetGanador($rowDT['id_sorteo'], $rowDT['id_zodiacal'], $rowDT['numero'], substr($fecha_ticket,0,10))){
-                                                $j++;
-                                                $monto_pago = $obj_modelo->GetRelacionPagos($rowDT['id_tipo_jugada']);
-                                                $monto_total = $monto_total + ($monto_pago*$rowDT['monto']);
-                                                $obj_xtpl->assign('monto_ganado', $monto_pago*$rowDT['monto']);
-                                            }else{
-                                                $obj_xtpl->assign('monto_ganado', "NO Ganador");
-                                            }
+                                        if ($obj_modelo->GetGanador($rowDT['id_sorteo'], $rowDT['id_zodiacal'], $rowDT['numero'], substr($fecha_ticket,0,10), $rowDT['id_tipo_jugada'])){
+                                            $j++; $id_detalle_ticket[$j]=$rowDT['id_detalle_ticket'];
+                                            $monto_pago = $obj_modelo->GetRelacionPagos($rowDT['id_tipo_jugada']);
+                                            $monto_total = $monto_total + ($monto_pago*$rowDT['monto']);
+                                            $obj_xtpl->assign('monto_ganado', $monto_pago*$rowDT['monto']);
+                                        }else{
+                                            $obj_xtpl->assign('monto_ganado', "NO Ganador");
+                                        }
 
-                                        //}
+                                        // Verificamos las aproximaciones por arriba y por abajo...
+                                        if ($obj_modelo->GetAprox_abajo()){ // Si esta activa la aproximacion por abajo...
+                                            if ($rowDT['id_tipo_jugada']==2){ // Si el tipo de jugada es Terminal
+                                                // Verificamos si hay aproximaciones por abajo
+                                                 if ($obj_modelo->GetAproximacion($rowDT['id_sorteo'], $rowDT['id_zodiacal'], $rowDT['numero'], substr($fecha_ticket,0,10), 'abajo')){
+                                                     $j++; $id_detalle_ticket[$j]=$rowDT['id_detalle_ticket'];
+                                                     $monto_pago = $obj_modelo->GetRelacionPagos('5'); // Tipo Jugada Aproximacion
+                                                     $monto_total = $monto_total + ($monto_pago*$rowDT['monto']);
+                                                     $obj_xtpl->assign('aprox_abajo', $monto_pago*$rowDT['monto']);
+                                                 }
+                                            }
+                                        }
+
+                                        if ($obj_modelo->GetAprox_arriba()){ // Si esta activa la aproximacion por arriba...
+                                            if ($rowDT['id_tipo_jugada']==2){ // Si el tipo de jugada es Terminal
+                                                // Verificamos si hay aproximaciones por abajo
+                                                 if ($obj_modelo->GetAproximacion($rowDT['id_sorteo'], $rowDT['id_zodiacal'], $rowDT['numero'], substr($fecha_ticket,0,10), 'arriba')){
+                                                     $j++; $id_detalle_ticket[$j]=$rowDT['id_detalle_ticket'];
+                                                     $monto_pago = $obj_modelo->GetRelacionPagos('5'); // Tipo Jugada Aproximacion
+                                                     $monto_total = $monto_total + ($monto_pago*$rowDT['monto']);
+                                                     $obj_xtpl->assign('aprox_arriba', $monto_pago*$rowDT['monto']);
+                                                 }
+                                            }
+                                        }
 
                                         // Parseo del bloque de la fila
                                         $obj_xtpl->parse('main.contenido.detalle_ticket.lista');
@@ -94,6 +118,9 @@ switch (ACCION){
 
                                     if ($j>0){
                                         $_SESSION['mensaje']= "Total a pagar: ".$monto_total." de ".$j." apuestas.";
+                                        $obj_xtpl->assign('total_premiado', $monto_total);
+                                        $_SESSION['id_detalle_ticket']=$id_detalle_ticket;
+                                        $obj_xtpl->parse('main.contenido.detalle_ticket.boton_pagar');
                                     }else{
                                         $_SESSION['mensaje']= "Este ticket no tiene apuestas ganadoras!";
                                     }
@@ -117,7 +144,58 @@ switch (ACCION){
 
 		break;
 
+        case 'looking_serial':
+                 // Ruta actual
+		$obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_ticket']);
+                $_SESSION['Ruta_serial']= $obj_generico->RutaRegreso();
+                $obj_xtpl->assign('total_premiado', $_GET['total_premiado']);
 		
+		// Parseo del bloque
+		$obj_xtpl->parse('main.contenido.busqueda_serial');
+                break;
+        case 'pagar_ticket':
+	// Ruta regreso
+
+		$id_ticket= $obj_generico->CleanText($_GET['id_ticket']);
+                $fecha_ticket= $obj_modelo->GetFechaTicket($id_ticket);
+		$serial= $obj_generico->CleanText($_GET['serial']);
+                $total_premiado = $obj_generico->CleanText($_GET['total_premiado']);
+                $id_detalle_ticket_2[] = $_SESSION['id_detalle_ticket'];
+                $id_detalle= $id_detalle_ticket_2[0];
+                
+                if(!$obj_generico->IsEmpty($serial)){
+                     $where = "serial='".$serial."' ";
+                     // Busca el listado de la informacion.
+                        $lista= $obj_modelo->GetListadosegunVariable($where);
+                        $total_registros= $obj_conexion->GetNumberRows($lista);
+                        if( $total_registros >0 ){
+                            $row= $obj_conexion->GetArrayInfo($lista);
+                                 // Actualizamos el ticket a premiado y pagado
+                                if( $obj_modelo->PagarTicket($row['id_ticket'], $total_premiado)){
+                                    // Actualizamos el estado premiado en cada una de las apuestas del ticket
+                                    for ($i = 0; $i < count($id_detalle); $i++){
+                                              if( $obj_modelo->PagarDetalleTicket($id_detalle[$i])){}
+                                    }                                      
+                                    $_SESSION['mensaje']= $mensajes['info_modificada'];
+                                     header('location:'.$_SESSION['Ruta_Lista']);
+                                }
+                                else{
+                                        $_SESSION['mensaje']= $mensajes['fallo_modificar'];
+                                        header('location:'.$_SESSION['Ruta_ticket']);
+                                }
+                            }else{
+                                 $_SESSION['mensaje']= $mensajes['serial_no_coincide'];
+                                 header('location:'.$_SESSION['Ruta_serial']);
+                            }
+                }
+                else{
+                    // Mensaje
+                     $_SESSION['mensaje']= $mensajes['serial_no_coincide'];
+                      header('location:'.$_SESSION['Ruta_serial']);
+
+                }
+		break;
+                
 	default:
 		
 		// Ruta actual

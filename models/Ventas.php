@@ -112,13 +112,15 @@ class Ventas{
 	 * @param string $numero
 	 * @param string $id_sorteo
 	 * @param string $id_zodiacal
-	 * @param string $monto 
+	 * @param string $monto
+         * @param string $id_taquilla
 	 * @return boolean, array
 	 */
-	public function GuardarTicketTransaccional($numero,$id_sorteo,$id_zodiacal,$id_tipo_jugada,$montofaltante,$incompleto,$monto){
+	public function GuardarTicketTransaccional($numero,$id_sorteo,$id_zodiacal,$id_tipo_jugada,$montofaltante,$incompleto,$monto, $id_taquilla){
 		
 		//Preparacion del query
-		$sql = "INSERT INTO `ticket_transaccional` (`numero` , `id_sorteo` , `id_zodiacal`, `id_tipo_jugada` , `monto_faltante` , `incompleto`, `monto`) VALUES ('".$numero."', '".$id_sorteo."', '".$id_zodiacal."', '".$id_tipo_jugada."', '".$montofaltante."', '".$incompleto."', '".$monto."')";
+		$sql = "INSERT INTO `ticket_transaccional` (`numero` , `id_sorteo` , `id_zodiacal`, `id_tipo_jugada` , `monto_faltante` , `incompleto`, `monto`, `id_taquilla`)
+                    VALUES ('".$numero."', '".$id_sorteo."', '".$id_zodiacal."', '".$id_tipo_jugada."', '".$montofaltante."', '".$incompleto."', '".$monto."', '".$id_taquilla."')";
                
 		return $this->vConexion->ExecuteQuery($sql);
 		

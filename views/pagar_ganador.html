@@ -10,7 +10,7 @@
                             <tr>
                                 <td>
                                     <div id="main">
-
+                                        
                                         <br />
 
                                         <form id="frm1" method="get" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es">
@@ -54,12 +54,18 @@
                                 </td>
                             </tr>
                         </table>
-
+                        
                         <!-- END: busqueda_ticket -->
 			
                         <!-- BEGIN: detalle_ticket -->
-
-                        <table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1" style="font-size:9.5px;">
+                        <form id="frm1" method="get" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es">
+                            <input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
+                            <input style="border: hidden" type="hidden" name="accion" id="idaccion" value="looking_serial"/>
+                            <input style="border: hidden" type="hidden" name="id_ticket" id="id_ticket" value="{id_ticket}"/>
+                            <input style="border: hidden" type="hidden" name="total_premiado" id="total_premiado" value="{total_premiado}"/>
+                            
+                        <table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1" style="font-size:9.0px;">
+                                    <caption>Detalle Ticket {id_ticket}</caption>
                                     <thead>
                                             <tr>
                                                     <th class="title header" scope="col">Sorteo</th>
@@ -69,6 +75,8 @@
                                                     <th class="title header" scope="col">Signo</th>
                                                     <th class="title header" scope="col">Apuesta Bs. F.</th>
                                                     <th class="title header" scope="col">Valor Ganado Bs. F.</th>
+                                                    <th class="title header" scope="col">Aprox. x Arriba</th>
+                                                    <th class="title header" scope="col">Aprox. x Abajo</th>
                                             </tr>
                                     </thead>
 
@@ -85,6 +93,8 @@
                                                     <td align="left">&nbsp;{zodiacal}</td>
                                                     <td align="left">&nbsp;{monto}</td>
                                                     <td align="left">&nbsp;{monto_ganado}</td>
+                                                    <td align="left">&nbsp;{aprox_arriba}</td>
+                                                    <td align="left">&nbsp;{aprox_abajo}</td>
                                             </tr>
                                             <!-- END: lista -->
 
@@ -93,8 +103,71 @@
                                     <tfoot>
                                 </tfoot>
                             </table>
-                        <div class="paginas">{paginacion}</div>	
+                        <div class="paginas">{paginacion}</div>
+
+                        <div class="botones">
+                                <!-- BEGIN: boton_pagar -->
+                                <input  id="btnok" name="btnentrar" value="Pagar" type="submit" class="boton"/>&nbsp;&nbsp;&nbsp;
+                                <!-- END: boton_pagar -->
+                                <input  id="btncancel" name="btncancelar" value="Regresar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
+
+                        </div>
+                        </form>
                         <!-- END: detalle_ticket -->
+
+                        <!-- BEGIN: busqueda_serial -->
+                        <table width="800" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF">
+                            <tr>
+                                <td>
+                                    <div id="main">
+
+                                        <br />
+
+                                        <form id="frm1" method="get" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es">
+
+                                                <input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
+                                                <input style="border: hidden" type="hidden" name="accion" id="idaccion" value="pagar_ticket"/>
+                                                <input style="border: hidden" type="hidden" name="id_ticket" id="id_ticket" value="{id_ticket}"/>
+                                                <input style="border: hidden" type="hidden" name="total_premiado" id="total_premiado" value="{total_premiado}"/>
+
+                                                <fieldset>
+
+                                                        <legend>Ingrese el Serial del Ticket a Pagar</legend>
+
+                                                        <table align="center" border="0" cellpadding="2" cellspacing="0" width="100%">
+
+                                                                <tr><td colspan="2">&nbsp;</td></tr>
+
+                                                                <tr><td colspan="2"></td></tr>
+
+                                                                <tr>
+                                                                        <td class="tag">Serial :</td>
+
+                                                                        <td><input id="" name="serial" size="30" maxlength="45" type="text" /></td>
+                                                                </tr>
+
+                                                                <tr><td colspan="2">&nbsp;</td></tr>
+
+                                                        </table>
+
+                                                </fieldset>
+
+                                                <div class="botones">
+
+                                                        <input  id="btnok" name="btnentrar" value="Pagar" type="submit" class="boton"/>&nbsp;&nbsp;&nbsp;
+
+                                                        <input  id="btncancel" name="btncancelar" value="Cancelar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
+
+                                                </div>
+
+                                        </form>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- END: busqueda_serial -->
 <br />	<br />	 
 		
 		</td>	
