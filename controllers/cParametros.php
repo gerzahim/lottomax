@@ -49,7 +49,18 @@ switch (ACCION){
                         $obj_xtpl->assign('tiempo_anulacion_ticket', $obj_generico->CleanTextDb($row_datos["tiempo_anulacion_ticket"]));
                         $obj_xtpl->assign('tiempo_vigencia_ticket', $obj_generico->CleanTextDb($row_datos["tiempo_vigencia_ticket"]));
 
-      				
+                        if ($row_datos["aprox_arriba"]==true){
+                            $obj_xtpl->assign('checked_arriba', 'checked');
+                        }else{
+                            $obj_xtpl->assign('checked_arriba', '');
+                        }
+
+                        if ($row_datos["aprox_abajo"]==true){
+                            $obj_xtpl->assign('checked_abajo', 'checked');
+                        }else{
+                            $obj_xtpl->assign('checked_abajo', '');
+                        }
+
 			// Asigno el id de relacion de pagos
 			$obj_xtpl->assign('id_parametros', $_GET['id']);
 			// ID en el hidden
@@ -88,6 +99,19 @@ switch (ACCION){
                     $tiempo_vigencia_ticket= $obj_generico->CleanText($_POST['txt_tiempo_vigencia_ticket']);
                 }
 
+                if ($_POST['aprox_arriba'] == true){
+                    $aprox_arriba = '1';
+                }else{
+                    $aprox_arriba = '0';
+                }
+
+                if ($_POST['aprox_abajo'] == true){
+                    $aprox_abajo = '1';
+                }else{
+                    $aprox_abajo = '0';
+                }
+                
+
 		$id_parametros= $_REQUEST['idreferencia'];
 
 		// Verifica que los datos requeridos no este vacios
@@ -95,7 +119,7 @@ switch (ACCION){
 				
 
 			// Modifica datos
-			if( $obj_modelo->ActualizaDatosParametros($id_parametros, $id_agencia, $nombre_agencia, $tiempo_cierre_sorteos, $tiempo_anulacion_ticket, $tiempo_vigencia_ticket) ){
+			if( $obj_modelo->ActualizaDatosParametros($id_parametros, $id_agencia, $nombre_agencia, $tiempo_cierre_sorteos, $tiempo_anulacion_ticket, $tiempo_vigencia_ticket, $aprox_arriba, $aprox_abajo) ){
 				
 				$_SESSION['mensaje']= $mensajes['info_modificada'];
 				header('location:'.$_SESSION['Ruta_Lista']);					
@@ -147,7 +171,17 @@ switch (ACCION){
                                 $obj_xtpl->assign('tiempo_cierre_sorteos', $obj_generico->CleanTextDb($row["tiempo_cierre_sorteos"]));
                                 $obj_xtpl->assign('tiempo_anulacion_ticket', $obj_generico->CleanTextDb($row["tiempo_anulacion_ticket"]));
 				$obj_xtpl->assign('tiempo_vigencia_ticket', $obj_generico->CleanTextDb($row["tiempo_vigencia_ticket"]));
+                                if ($row["aprox_arriba"]==true){
+                                    $obj_xtpl->assign('aprox_arriba', 'Activo');
+                                }else{
+                                    $obj_xtpl->assign('aprox_arriba', 'Inactivo');
+                                }
 
+                                if ($row["aprox_abajo"]=='1'){
+                                    $obj_xtpl->assign('aprox_abajo', 'Activo');
+                                }else{
+                                    $obj_xtpl->assign('aprox_abajo', 'Inactivo');
+                                }
 							
 				
 				// Parseo del bloque de la fila  

@@ -92,12 +92,14 @@ class Parametros{
          * @param string $tiempo_cierre_sorteos
          * @param string $tiempo_anulacion_ticket
          * @param string $tiempo_vigencia_ticket
+         * @param string $aprox_arriba
+         * @param string $aprox_abajo
 	 * @return boolean, array
 	 */
-	public function ActualizaDatosParametros($id_parametros,$id_agencia,$nombre_agencia,$tiempo_cierre_sorteos,$tiempo_anulacion_ticket,$tiempo_vigencia_ticket){
+	public function ActualizaDatosParametros($id_parametros,$id_agencia,$nombre_agencia,$tiempo_cierre_sorteos,$tiempo_anulacion_ticket,$tiempo_vigencia_ticket, $aprox_arriba, $aprox_abajo){
 		
 		//Preparacion del query
-		$sql = "UPDATE `parametros` SET `id_agencia`='".$id_agencia."', `nombre_agencia`='".$nombre_agencia."',`tiempo_cierre_sorteos`='".$tiempo_cierre_sorteos."',`tiempo_anulacion_ticket`='".$tiempo_anulacion_ticket."',`tiempo_vigencia_ticket`='".$tiempo_vigencia_ticket."'
+		$sql = "UPDATE `parametros` SET `id_agencia`='".$id_agencia."', `nombre_agencia`='".$nombre_agencia."',`tiempo_cierre_sorteos`='".$tiempo_cierre_sorteos."',`tiempo_anulacion_ticket`='".$tiempo_anulacion_ticket."',`tiempo_vigencia_ticket`='".$tiempo_vigencia_ticket."', `aprox_arriba`='".$aprox_arriba."', `aprox_abajo`='".$aprox_abajo."' 
                         WHERE id_parametros='".$id_parametros."'";
 		return $this->vConexion->ExecuteQuery($sql);
 		

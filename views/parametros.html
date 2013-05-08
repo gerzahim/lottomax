@@ -18,6 +18,8 @@
 						<th class="title header" scope="col">Tiempo de Cierre Sorteos</th>
                                                 <th class="title header" scope="col">Tiempo de Anulacion Ticket</th>
                                                 <th class="title header" scope="col">Tiempo de Vigencia Ticket</th>
+                                                <th class="title header" scope="col">Aproximacion por Arriba</th>
+                                                <th class="title header" scope="col">Aproximacion por Abajo</th>
 					</tr>		
 				</thead>
 		
@@ -36,6 +38,9 @@
    						<td align="center">{tiempo_cierre_sorteos} min.</td>
                                                 <td align="center">{tiempo_anulacion_ticket} min.</td>
                                                 <td align="center">{tiempo_vigencia_ticket} dias</td>
+                                                <td align="center">{aprox_arriba}</td>
+                                                <td align="center">{aprox_abajo}</td>
+
 					</tr>
 					<!-- END: lista -->
 		
@@ -138,6 +143,28 @@
 							</tr>
 
 							<tr><td colspan="2"></td></tr>
+
+                                                        <tr>
+
+								<td class="tag" width="230"><span class="requerido">*</span>Aproximacion por Arriba:</td>
+
+								<td>
+                                                                    <input id="" name="aprox_arriba" size="12" type="checkbox" {checked_arriba}/>
+                                                                </td>
+
+							</tr>
+                                                        
+                                                        <tr><td colspan="2"></td></tr>
+
+                                                        <tr>
+
+								<td class="tag" width="230"><span class="requerido">*</span>Aproximacion por Abajo:</td>
+
+								<td>
+                                                                    <input id="" name="aprox_abajo" size="12" type="checkbox" {checked_abajo}/>
+                                                                </td>
+
+							</tr>
                                                                                                                                                    	
 						</table>
 		
