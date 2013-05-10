@@ -22,6 +22,7 @@ if( !$obj_conexion->ConnectDataBase($obj_config->GetVar('host'), $obj_config->Ge
 require('.'.$obj_config->GetVar('ruta_modelo').'Ventas.php');
 $obj_modelo= new Ventas($obj_conexion);
 
+session_start();
 
 // Listado de Jugadas Agregadas
 if( $result= $obj_modelo->GetDatosTicketTransaccional() ){

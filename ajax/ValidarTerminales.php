@@ -22,6 +22,8 @@ if( !$obj_conexion->ConnectDataBase($obj_config->GetVar('host'), $obj_config->Ge
 require('.'.$obj_config->GetVar('ruta_modelo').'Ventas.php');
 $obj_modelo= new Ventas($obj_conexion);
 
+session_start();
+
 $resultTT= $obj_modelo->GetTriplesTicketTransaccional();
 If ($obj_conexion->GetNumberRows($resultTT)>0){
       echo "Ok";

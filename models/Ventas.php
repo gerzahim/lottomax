@@ -136,7 +136,7 @@ class Ventas{
 	public function GetDatosTicketTransaccional(){
 		
 		//Preparacion del query
-		$sql = "SELECT * FROM ticket_transaccional WHERE incompleto<> 2 ORDER BY id_ticket_transaccional DESC";
+		$sql = "SELECT * FROM ticket_transaccional WHERE incompleto<> 2 AND id_taquilla='".$_SESSION["taquilla"]."' ORDER BY id_ticket_transaccional DESC";
 		return $this->vConexion->ExecuteQuery($sql);
 	}
 	
@@ -200,7 +200,7 @@ class Ventas{
 	public function GetDatosAllTicketTransaccional(){
 
 		//Preparacion del query
-		$sql = "SELECT * FROM ticket_transaccional ORDER BY id_ticket_transaccional DESC";
+		$sql = "SELECT * FROM ticket_transaccional WHERE id_taquilla='".$_SESSION["taquilla"]."' ORDER BY id_ticket_transaccional DESC";
 		return $this->vConexion->ExecuteQuery($sql);
 	}
 
@@ -213,7 +213,7 @@ class Ventas{
 	public function GetTriplesTicketTransaccional(){
 
 		//Preparacion del query
-		$sql = "SELECT * FROM ticket_transaccional WHERE id_tipo_jugada='1' ORDER BY id_ticket_transaccional DESC";
+		$sql = "SELECT * FROM ticket_transaccional WHERE id_tipo_jugada='1' AND id_taquilla='".$_SESSION["taquilla"]."' ORDER BY id_ticket_transaccional DESC";
 		return $this->vConexion->ExecuteQuery($sql);
 	}
 
@@ -246,7 +246,7 @@ class Ventas{
 	public function GetLastTicketTransaccional(){
 
 		//Preparacion del query
-		$sql = "SELECT MAX(id_ticket_transaccional) as id_ticket_transaccional FROM ticket_transaccional";
+		$sql = "SELECT MAX(id_ticket_transaccional) as id_ticket_transaccional FROM ticket_transaccional WHERE id_taquilla='".$_SESSION["taquilla"]."'";
 		return $this->vConexion->ExecuteQuery($sql);
 	}	
 
@@ -346,7 +346,7 @@ class Ventas{
 	public function GetTicketTransaccional($numero, $sorteo, $id_zodiacal){
 			
 		//Preparacion del query
-		$sql = "SELECT * FROM ticket_transaccional WHERE numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal."";
+		$sql = "SELECT * FROM ticket_transaccional WHERE id_taquilla='".$_SESSION["taquilla"]."' AND numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal."";
 
 		$result= $this->vConexion->ExecuteQuery($sql);
 
@@ -766,7 +766,7 @@ class Ventas{
 	 */
 	public function EliminarAllTicketTransaccional(){
 		//Preparacion del query
-		$sql = "DELETE FROM `ticket_transaccional`";
+		$sql = "DELETE FROM `ticket_transaccional` WHERE id_taquilla='".$_SESSION["taquilla"]."'";
 		return $this->vConexion->ExecuteQuery($sql);
 
 	}

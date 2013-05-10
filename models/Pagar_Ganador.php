@@ -40,7 +40,7 @@ class Pagar_Ganador{
 
 		//Preparacion del query
                  $sql = "SELECT * FROM ticket WHERE premiado=0 AND pagado=0 AND ".$parametro_where;
-                 
+                 //echo $sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
 		return  $result;
 
@@ -232,6 +232,20 @@ class Pagar_Ganador{
 
 
         /**
+	 * Actualiza Datos del ticket en premiadoo 1 y el monto total del premio
+	 * @param string $id_ticket
+         * @param string $total_premiado
+	 */
+	public function PremiarTicket($id_ticket, $total_premiado){
+
+		//Preparacion del query
+		$sql = "UPDATE `ticket` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_ticket='".$id_ticket."'";
+
+		return $this->vConexion->ExecuteQuery($sql);
+
+	}
+
+        /**
 	 * Obtencion de valor configurado de aproximacion por abajo
 	 *
 	 *
@@ -284,7 +298,7 @@ class Pagar_Ganador{
                  $sql = "SELECT *
                         FROM detalle_ticket DT
                         WHERE id_ticket='".$id_ticket."'";
-                        
+                
 		$result= $this->vConexion->ExecuteQuery($sql);
 
                 return $result;

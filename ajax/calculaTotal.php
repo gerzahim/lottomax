@@ -23,6 +23,7 @@ require('.'.$obj_config->GetVar('ruta_modelo').'Ventas.php');
 $obj_modelo= new Ventas($obj_conexion);
 
 
+session_start();
 
 // Listado de Jugadas...
 if( $result= $obj_modelo->GetDatosTicketTransaccional() ){
