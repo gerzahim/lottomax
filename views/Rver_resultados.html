@@ -1,0 +1,72 @@
+<!-- BEGIN: contenido -->       
+<table width="800" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF">
+	<tr>
+		<td >
+	        <br /> 
+            <div id="message" class="message" >{mensaje}</div>        
+                 
+                        <!-- BEGIN: buscar_resultados -->
+
+                        <table width="800" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF">
+                            <tr>
+                                <td>
+                                    <div id="main">
+
+                                        <br />
+
+                                        <form id="frm1" method="get" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es">
+                                            <input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
+                                            <input style="border: hidden" type="hidden" name="accion" id="idaccion" value="ver_resultados"/>
+                                             <fieldset>
+                                                   <table align="center" border="0" cellpadding="2" cellspacing="0" width="80%">
+                                                        <tr>
+                                                            <td><span class="requerido">*</span> Fecha:</td>
+                                                            <td><input type="text" id="fecha" name="txt_fecha" value="{fecha}"></td>
+
+                                                            <script type="text/javascript">
+                                                             $(function() {
+                                                                 $("#fecha").datepicker({
+                                                                    changeMonth: true,
+                                                                    changeYear: true,
+                                                                    showOn: 'both',
+                                                                    buttonText: 'Calendario',
+                                                                    buttonImage: "./images/calendar.jpg",
+                                                                    buttonImageOnly: true,
+                                                                    maxDate: '+0d'
+                                                                    }).addClass("embed").attr('readonly','readonly');
+                                                              });
+                                                            </script>
+
+                                                        </tr>
+                                                    </table>
+                                                </fieldset>
+
+                                            <div class="botones">
+
+                                                    <input  id="btnok" name="btnentrar" value="Ver"  type="submit" class="boton"/>&nbsp;&nbsp;&nbsp;
+
+                                                    <input  id="btncancel" name="btncancelar" value="Cancelar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
+
+                                            </div>
+                                        </form>
+                                       </div>
+                                </td>
+                            </tr>
+                        </table>
+                      
+                        <!-- END: buscar_resultados -->
+
+                        
+			
+			
+	
+                        <br />	<br />
+		
+		</td>	
+	</tr>
+
+    </table>
+     
+<!-- END: contenido -->       
+
+

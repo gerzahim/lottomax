@@ -144,11 +144,21 @@ switch(OPCION){
 		include($obj_config->GetVar('ruta_controlador').'cReporte_Listado_Ventas.php');
 		break;
 
+        case 'RNumeros_agotados':
+
+            include($obj_config->GetVar('ruta_controlador').'cRNumeros_agotados.php');
+            break;
+
         case 'cargar_resultados':
 
                 include($obj_config->GetVar('ruta_controlador').'cCargar_Resultados.php');
 		break;
-		
+
+        case 'Rver_resultados':
+
+                include($obj_config->GetVar('ruta_controlador').'cRVer_Resultados.php');
+		break;
+
 	case 'usuario':
 		
 		include($obj_config->GetVar('ruta_controlador').'cUsuario.php');
