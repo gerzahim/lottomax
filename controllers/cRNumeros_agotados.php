@@ -20,6 +20,50 @@ require('/fpdf/fpdf.php');
 
 switch (ACCION){
 
+    case 'listar_resultados':
+        $fecha = $_GET['txt_fecha'];
+        $obj_xtpl->assign('fecha', $fecha);
+        
+        // Ruta actual
+        $_SESSION['Ruta_Lista']= $obj_generico->RutaRegreso();
+
+        // Ruta regreso
+        $obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Form']);
+
+        if( $result= $obj_modelo->GetNumeros($fecha) ){
+            if ($obj_conexion->GetNumberRows($result)>0 ){
+                $i=0;
+                while($row= $obj_conexion->GetArrayInfo($result)){
+                    if( ($i % 2) >0){
+                            $obj_xtpl->assign('estilo_fila', 'even');
+                    }
+                    else{
+                            $obj_xtpl->assign('estilo_fila', 'odd');
+                    }
+
+                    $obj_xtpl->assign('nombre_sorteo', $row['nombre_sorteo']);
+                    $obj_xtpl->assign('hora_sorteo', $row['hora_sorteo']);
+                    $obj_xtpl->assign('nombre_zodiacal', $row['nombre_zodiacal']);
+                    $obj_xtpl->assign('numero', $row['numero']);
+
+                    // Parseo del bloque de la fila
+                    $obj_xtpl->parse('main.contenido.lista_resultados.lista');
+                    $i++;
+                }
+
+            }else{
+                        // Mensaje
+                        $obj_xtpl->assign('sin_listado',$mensajes['sin_lista']);
+
+                        // Parseo del bloque de la fila
+                        $obj_xtpl->parse('main.contenido.lista_resultados.no_lista');
+                }
+
+            // Parseo del bloque de la fila
+                $obj_xtpl->parse('main.contenido.lista_resultados');
+        }
+
+        break;
     case 'ver_numeros':
 
         // Creamos el PDF
@@ -34,7 +78,7 @@ switch (ACCION){
         //Primera página
         $pdf->AddPage();
 
-        $fecha = $_GET['txt_fecha'];
+        $fecha = $_GET['fecha'];
 
 
         // Imagen  de encabezado
@@ -91,7 +135,7 @@ switch (ACCION){
     default:
 
             // Ruta actual
-            $_SESSION['Ruta_Lista']= $obj_generico->RutaRegreso();
+            $_SESSION['Ruta_Form']= $obj_generico->RutaRegreso();
 
             $obj_xtpl->assign('fecha', date('Y-m-d'));
             // Parseo del bloque

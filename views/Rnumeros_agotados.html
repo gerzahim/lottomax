@@ -16,7 +16,7 @@
 
                                         <form id="frm1" method="get" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es">
                                             <input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
-                                            <input style="border: hidden" type="hidden" name="accion" id="idaccion" value="ver_numeros"/>
+                                            <input style="border: hidden" type="hidden" name="accion" id="idaccion" value="listar_resultados"/>
                                              <fieldset>
                                                    <table align="center" border="0" cellpadding="2" cellspacing="0" width="80%">
                                                         <tr>
@@ -56,7 +56,54 @@
                       
                         <!-- END: buscar_numeros -->
 
-                        
+                        <!-- BEGIN: lista_resultados -->
+			<form id="frm1" method="get" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es" target="_blank">
+                        <input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
+                        <input style="border: hidden" type="hidden" name="accion" id="idaccion" value="ver_numeros"/>
+                        <input style="border: hidden" type="hidden" name="fecha" id="idaccion" value="{fecha}"/>
+			<table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1">
+				<caption>Resultados a la fecha {fecha}</caption>
+
+				<thead>
+					<tr>
+						<th class="title header" scope="col">Sorteo</th>
+						<th class="title header" scope="col">Hora Sorteo</th>
+						<th class="title header" scope="col">Signo</th>
+						<th class="title header" scope="col">Numero</th>
+					</tr>
+				</thead>
+
+				<tbody>
+
+					<!-- BEGIN: lista -->
+					<tr class="{estilo_fila}">
+						<td align="center">&nbsp;{nombre_sorteo}</td>
+						<td align="center">{hora_sorteo}</td>
+   						<td align="center">{nombre_zodiacal}</td>
+                                                <td align="center">{numero}</td>
+					</tr>
+					<!-- END: lista -->
+
+					<!-- BEGIN: no_lista -->
+
+					<tr class="even">
+						<td align="center" colspan="6" class="odd"><br />{sin_listado}<br />&nbsp;</td>
+					</tr>
+					<!-- END: no_lista -->
+
+				</tbody>
+				<tfoot>
+                                    </tfoot>
+			</table>
+                            <div class="paginas">{paginacion}</div>
+                            <div class="botones">
+
+                                <input  id="btnok" name="btnentrar" value="Descargar en PDF"  type="submit" class="boton" target="_blank">&nbsp;&nbsp;&nbsp;
+
+                                <input  id="btncancel" name="btncancelar" value="Cancelar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
+
+                        </div>
+			<!-- END: lista_resultados -->
 			
 			
 	

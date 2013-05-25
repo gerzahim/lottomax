@@ -51,6 +51,29 @@ class RVer_Resultados{
 	}
 
 
+        /**
+	 * Devuelve la cantidad de sorteos existentes
+	 *
+	 * @return boolean, array
+	 */
+	public function GetNumSoteos(){
+
+		//Preparacion del query
+		$sql = "SELECT COUNT(id_sorteo) as  N FROM  sorteos";
+                
+		$result= $this->vConexion->ExecuteQuery($sql);
+                if ($this->vConexion->GetNumberRows($result) >0){
+                    $row = $this->vConexion->GetArrayInfo($result);
+
+                    return $row ['N'];
+                }else{
+                    return 0;
+                }
+
+
+	}
+
+
 	
 }		
 ?>
