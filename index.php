@@ -159,6 +159,18 @@ switch(OPCION){
                 include($obj_config->GetVar('ruta_controlador').'cRVer_Resultados.php');
 		break;
 
+        case 'Rtickets_ganadores':
+                include($obj_config->GetVar('ruta_controlador').'cRTickets_ganadores.php');
+		break;
+
+        case 'Rtickets_pagados':
+                include($obj_config->GetVar('ruta_controlador').'cRTickets_pagados.php');
+		break;
+
+        case 'Rpremios_frios':
+                include($obj_config->GetVar('ruta_controlador').'cRPremios_frios.php');
+		break;
+
 	case 'usuario':
 		
 		include($obj_config->GetVar('ruta_controlador').'cUsuario.php');
