@@ -226,12 +226,12 @@ class Ventas{
 	public function GetLastTicket($id_taquilla){
 
 		//Preparacion del query
-		$sql = "SELECT MAX(id_ticket) as id_ticket FROM ticket WHERE taquilla  = ".$id_taquilla."";
+		$sql = "SELECT MAX(id_ticket) as id_ticket FROM ticket WHERE status='1' AND taquilla  = ".$id_taquilla."";
 		$result= $this->vConexion->ExecuteQuery($sql);
 		$roww= $this->vConexion->GetArrayInfo($result);
 		$id_ticket=$roww["id_ticket"];
 		//echo "<pre>".print_r($roww)."</pre>";
-		$sql = "SELECT id_ticket, serial, fecha_hora, total_ticket, id_usuario FROM ticket WHERE id_ticket  = ".$id_ticket."";
+		$sql = "SELECT id_ticket, serial, fecha_hora, total_ticket, id_usuario FROM ticket WHERE status='1' AND id_ticket  = ".$id_ticket."";
 		$result= $this->vConexion->ExecuteQuery($sql);
 		$roww= $this->vConexion->GetArrayInfo($result);		
 		return $roww;		
@@ -546,7 +546,7 @@ class Ventas{
 	public function GeneraIDTicket(){
                         
 		// Obtenemos el ultimo id del ticket correlativo
-                $sql1 = "SELECT MAX(id_ticket) as id FROM ticket WHERE fecha_hora LIKE '%".date('Y-m-d')."%' ";
+                $sql1 = "SELECT MAX(id_ticket) as id FROM ticket WHERE status='1' AND fecha_hora LIKE '%".date('Y-m-d')."%' ";
 		$result= $this->vConexion->ExecuteQuery($sql1);
                 if ($this->vConexion->GetNumberRows($result)>0){
                     $roww= $this->vConexion->GetArrayInfo($result);
@@ -623,7 +623,7 @@ class Ventas{
 	public function GetExisteSerialTicket($serial){
 
 		//Preparacion del query
-		$sql = "SELECT id_ticket FROM ticket WHERE serial = ".$serial."";
+		$sql = "SELECT id_ticket FROM ticket WHERE status='1' AND serial = ".$serial."";
 		$result= $this->vConexion->ExecuteQuery($sql);
 		
 		if ($this->vConexion->GetNumberRows($result)>0){

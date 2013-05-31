@@ -42,7 +42,7 @@ class CopiarTicket{
 		$inicial= ($pagina-1) * $cantidad;
 		
 		//Preparacion del query
-		$sql = "SELECT * FROM ticket ORDER BY fecha_hora";
+		$sql = "SELECT * FROM ticket WHERE status='1' ORDER BY fecha_hora";
 		$result= $this->vConexion->ExecuteQuery($sql);
 		
 		
@@ -74,7 +74,7 @@ class CopiarTicket{
 	public function GetListadosegunVariable($parametro_where){
 
 		//Preparacion del query
-                 $sql = "SELECT * FROM ticket WHERE ".$parametro_where;
+                 $sql = "SELECT * FROM ticket WHERE status='1' AND ".$parametro_where;
                  
 		$result= $this->vConexion->ExecuteQuery($sql);
 		return  $result;

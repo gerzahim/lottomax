@@ -39,7 +39,7 @@ class Pagar_Ganador{
 	public function GetListadosegunVariable($parametro_where){
 
 		//Preparacion del query
-                 $sql = "SELECT * FROM ticket WHERE premiado=0 AND pagado=0 AND ".$parametro_where;
+                 $sql = "SELECT * FROM ticket WHERE status='1' AND premiado=0 AND pagado=0 AND ".$parametro_where;
                  //echo $sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
 		return  $result;
@@ -70,7 +70,7 @@ class Pagar_Ganador{
 	public function GetFechaTicket($id_ticket){
 
 		//Preparacion del query
-                 $sql = "SELECT fecha_hora FROM ticket WHERE id_ticket='".$id_ticket."'";
+                 $sql = "SELECT fecha_hora FROM ticket WHERE status='1' AND id_ticket='".$id_ticket."'";
 
 		$result= $this->vConexion->ExecuteQuery($sql);
 		$roww= $this->vConexion->GetArrayInfo($result);

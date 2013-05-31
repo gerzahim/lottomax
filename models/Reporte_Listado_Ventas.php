@@ -51,7 +51,7 @@ class Listado_Ventas{
 			echo $id_taquilla;
 			
 			//Preparacion del query
-			$sql = "SELECT * FROM ticket WHERE taquilla = ".$id_taquilla."";
+			$sql = "SELECT * FROM ticket WHERE status='1' AND taquilla = ".$id_taquilla."";
 			$resulta= $this->vConexion->ExecuteQuery($sql);
 			$total_ticket = 0;
 			while($row= $this->vConexion->GetArrayInfo($resulta)){

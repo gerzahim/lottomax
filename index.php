@@ -163,6 +163,10 @@ switch(OPCION){
                 include($obj_config->GetVar('ruta_controlador').'cRTickets_ganadores.php');
 		break;
 
+        case 'Rtickets_anulados':
+                include($obj_config->GetVar('ruta_controlador').'cRTickets_anulados.php');
+		break;
+
         case 'Rtickets_pagados':
                 include($obj_config->GetVar('ruta_controlador').'cRTickets_pagados.php');
 		break;

@@ -42,7 +42,7 @@ class AnularTicket{
 		$inicial= ($pagina-1) * $cantidad;
 		
 		//Preparacion del query
-		$sql = "SELECT * FROM ticket WHERE taquilla='".$_SESSION['InfoLogin']->GetTaquilla()."' AND premiado=0 AND pagado=0";
+		$sql = "SELECT * FROM ticket WHERE status='1' AND taquilla='".$_SESSION['InfoLogin']->GetTaquilla()."' AND premiado=0 AND pagado=0";
 		$result= $this->vConexion->ExecuteQuery($sql);
 		
 		
@@ -72,7 +72,9 @@ class AnularTicket{
 	 */
 	public function EliminarTicket($id_ticket){
 		//Preparacion del query
-		$sql = "DELETE FROM `ticket` WHERE id_ticket='".$id_ticket."'";
+		//$sql = "DELETE FROM `ticket` WHERE id_ticket='".$id_ticket."'";
+                $sql = "UPDATE ticket SET status='0', fecha_hora_anulacion='".Date('Y-m-d H:i:s')."', taquilla_anulacion='".$_SESSION['taquilla']."' WHERE id_ticket='".$id_ticket."'";
+            
 		return $this->vConexion->ExecuteQuery($sql);
 
 	}
@@ -89,7 +91,7 @@ class AnularTicket{
 	public function GetListadosegunVariable($parametro_where){
 
 		//Preparacion del query
-                 $sql = "SELECT * FROM ticket WHERE taquilla='".$_SESSION['InfoLogin']->GetTaquilla()."' AND premiado=0 AND pagado=0 AND ".$parametro_where;
+                 $sql = "SELECT * FROM ticket WHERE status='1' AND taquilla='".$_SESSION['taquilla']."' AND premiado=0 AND pagado=0 AND ".$parametro_where;
                  
 		$result= $this->vConexion->ExecuteQuery($sql);
 		return  $result;
@@ -120,7 +122,7 @@ class AnularTicket{
 	public function GetFechaTicket($id_ticket){
 
 		//Preparacion del query
-                 $sql = "SELECT fecha_hora FROM ticket WHERE id_ticket='".$id_ticket."'";
+                 $sql = "SELECT fecha_hora FROM ticket WHERE status='1' AND id_ticket='".$id_ticket."'";
 
 		$result= $this->vConexion->ExecuteQuery($sql);
 		$roww= $this->vConexion->GetArrayInfo($result);
@@ -138,7 +140,7 @@ class AnularTicket{
 
 		//Preparacion del query
                  $sql = "SELECT hora_sorteo FROM detalle_ticket WHERE id_ticket='".$id_ticket."'";
-
+                 
 		$result= $this->vConexion->ExecuteQuery($sql);
                 $total_registros= $this->vConexion->GetNumberRows($result);
                 $flag=false;

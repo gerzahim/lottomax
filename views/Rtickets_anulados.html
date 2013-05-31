@@ -1,0 +1,124 @@
+<!-- BEGIN: contenido -->       
+<table width="800" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF">
+	<tr>
+		<td >
+	        <br /> 
+            <div id="message" class="message" >{mensaje}</div>        
+                 
+                        <!-- BEGIN: buscar_tickets -->
+
+                        <table width="800" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF">
+                            <tr>
+                                <td>
+                                    <div id="main">
+
+                                        <br />
+
+                                        <form id="frm1" method="get" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es">
+                                            <input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
+                                            <input style="border: hidden" type="hidden" name="accion" id="idaccion" value="listar_resultados"/>
+                                             <fieldset>
+                                                   <table align="center" border="0" cellpadding="2" cellspacing="0" width="80%">
+                                                        <tr>
+                                                            <td><span class="requerido">*</span> Fecha:</td>
+                                                            <td><input type="text" id="fecha" name="txt_fecha" value="{fecha}"></td>
+
+                                                            <script type="text/javascript">
+                                                             $(function() {
+                                                                 $("#fecha").datepicker({
+                                                                    changeMonth: true,
+                                                                    changeYear: true,
+                                                                    showOn: 'both',
+                                                                    buttonText: 'Calendario',
+                                                                    buttonImage: "./images/calendar.jpg",
+                                                                    buttonImageOnly: true,
+                                                                    maxDate: '+0d'
+                                                                    }).addClass("embed").attr('readonly','readonly');
+                                                              });
+                                                            </script>
+
+                                                        </tr>
+                                                    </table>
+                                                </fieldset>
+
+                                            <div class="botones">
+
+                                                    <input  id="btnok" name="btnentrar" value="Ver"  type="submit" class="boton"/>&nbsp;&nbsp;&nbsp;
+
+                                                    <input  id="btncancel" name="btncancelar" value="Cancelar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
+
+                                            </div>
+                                        </form>
+                                       </div>
+                                </td>
+                            </tr>
+                        </table>
+                      
+                        <!-- END: buscar_tickets -->
+
+                        <!-- BEGIN: lista_resultados -->
+			<form id="frm1" method="get" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es" target="_blank">
+                        <input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
+                        <input style="border: hidden" type="hidden" name="accion" id="idaccion" value="ver_resultados"/>
+                        <input style="border: hidden" type="hidden" name="fecha" id="idaccion" value="{fecha}"/>
+			<table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1">
+				<caption>Tickets Anulados a la fecha {fecha}</caption>
+
+				<thead>
+					<tr>
+						<th class="title header" scope="col">Fecha Hora de Anulacion</th>
+                                                <th class="title header" scope="col">Numero Ticket</th>
+                                                <th class="title header" scope="col">Taquilla de Anulacion</th>
+						<th class="title header" scope="col">Monto</th>
+                                                <th class="title header" scope="col">Detalle Ticket</th>
+					</tr>
+				</thead>
+
+				<tbody>
+
+					<!-- BEGIN: lista -->
+					<tr class="{estilo_fila}">
+						<td align="center">&nbsp;{fecha_hora_anulacion}</td>
+						<td align="center">{id_ticket}</td>
+                                                <td align="center">{taquilla_anulacion}</td>
+   						<td align="center">{total}</td>                                         
+                                                <td align="center"><a href="{link_detalle}" target="_blank">Ver Detalle</a></td>
+					</tr>
+					<!-- END: lista -->
+
+					<!-- BEGIN: no_lista -->
+
+					<tr class="even">
+						<td align="center" colspan="6" class="odd"><br />{sin_listado}<br />&nbsp;</td>
+					</tr>
+					<!-- END: no_lista -->
+
+				</tbody>
+				<tfoot>
+                                    </tfoot>
+			</table>
+                            <div class="paginas">{paginacion}</div>
+
+                            
+                           
+                            <div class="botones">
+
+                                <input  id="btnok" name="btnentrar" value="Descargar en PDF"  type="submit" class="boton" target="_blank">&nbsp;&nbsp;&nbsp;
+
+                                <input  id="btncancel" name="btncancelar" value="Cancelar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
+
+                        </div>
+			<!-- END: lista_resultados -->
+			 <div class="paginas">{no_info}</div>
+			
+	
+                        <br />	<br />
+		
+		</td>	
+	</tr>
+
+    </table>
+     
+<!-- END: contenido -->       
+
+
