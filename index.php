@@ -139,9 +139,14 @@ switch(OPCION){
         include($obj_config->GetVar('ruta_controlador').'cPagar_Ganador.php');
         break;
 
-	case 'listado_ventas':
+//	case 'listado_ventas':
+//
+//		include($obj_config->GetVar('ruta_controlador').'cReporte_Listado_Ventas.php');
+//		break;
 
-		include($obj_config->GetVar('ruta_controlador').'cReporte_Listado_Ventas.php');
+        case 'Rventas_periodo':
+
+		include($obj_config->GetVar('ruta_controlador').'cRVentas_periodo.php');
 		break;
 
         case 'RNumeros_agotados':
