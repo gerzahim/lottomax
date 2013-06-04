@@ -7,7 +7,7 @@
                  
 			<!-- BEGIN: lista_parametros -->
 			              
-			<table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1">
+			<table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1" style="font-size:9.5px;">
 				<caption>Parametros Generales</caption>
 
 				<thead>		
@@ -18,8 +18,9 @@
 						<th class="title header" scope="col">Tiempo de Cierre Sorteos</th>
                                                 <th class="title header" scope="col">Tiempo de Anulacion Ticket</th>
                                                 <th class="title header" scope="col">Tiempo de Vigencia Ticket</th>
-                                                <th class="title header" scope="col">Aproximacion por Arriba</th>
-                                                <th class="title header" scope="col">Aproximacion por Abajo</th>
+                                                <th class="title header" scope="col">Aprox. por Arriba</th>
+                                                <th class="title header" scope="col">Aprox. por Abajo</th>
+                                                <th class="title header" scope="col">Comision Agencia</th>
 					</tr>		
 				</thead>
 		
@@ -40,6 +41,7 @@
                                                 <td align="center">{tiempo_vigencia_ticket} dias</td>
                                                 <td align="center">{aprox_arriba}</td>
                                                 <td align="center">{aprox_abajo}</td>
+                                                <td align="center">{comision_agencia}</td>
 
 					</tr>
 					<!-- END: lista -->
@@ -162,6 +164,18 @@
 
 								<td>
                                                                     <input id="" name="aprox_abajo" size="12" type="checkbox" {checked_abajo}/>
+                                                                </td>
+
+							</tr>
+
+                                                        <tr><td colspan="2"></td></tr>
+
+                                                        <tr>
+
+								<td class="tag" width="230"><span class="requerido">*</span>Comision de Agencia:</td>
+
+								<td>
+                                                                    <input id="txt_monto" name="txt_comision_agencia" size="12" type="text" value="{comision_agencia}"/> %
                                                                 </td>
 
 							</tr>

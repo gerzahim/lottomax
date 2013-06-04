@@ -48,6 +48,7 @@ switch (ACCION){
                         $obj_xtpl->assign('tiempo_cierre_sorteos', $obj_generico->CleanTextDb($row_datos["tiempo_cierre_sorteos"]));
                         $obj_xtpl->assign('tiempo_anulacion_ticket', $obj_generico->CleanTextDb($row_datos["tiempo_anulacion_ticket"]));
                         $obj_xtpl->assign('tiempo_vigencia_ticket', $obj_generico->CleanTextDb($row_datos["tiempo_vigencia_ticket"]));
+                        $obj_xtpl->assign('comision_agencia', $obj_generico->CleanTextDb($row_datos["comision_agencia"]));
 
                         if ($row_datos["aprox_arriba"]==true){
                             $obj_xtpl->assign('checked_arriba', 'checked');
@@ -99,6 +100,10 @@ switch (ACCION){
                     $tiempo_vigencia_ticket= $obj_generico->CleanText($_POST['txt_tiempo_vigencia_ticket']);
                 }
 
+                if ($obj_generico->IsNumerico($_POST['txt_comision_agencia'])){
+                    $comision_agencia= $obj_generico->CleanText($_POST['txt_comision_agencia']);
+                }
+                
                 if ($_POST['aprox_arriba'] == true){
                     $aprox_arriba = '1';
                 }else{
@@ -119,7 +124,7 @@ switch (ACCION){
 				
 
 			// Modifica datos
-			if( $obj_modelo->ActualizaDatosParametros($id_parametros, $id_agencia, $nombre_agencia, $tiempo_cierre_sorteos, $tiempo_anulacion_ticket, $tiempo_vigencia_ticket, $aprox_arriba, $aprox_abajo) ){
+			if( $obj_modelo->ActualizaDatosParametros($id_parametros, $id_agencia, $nombre_agencia, $tiempo_cierre_sorteos, $tiempo_anulacion_ticket, $tiempo_vigencia_ticket, $aprox_arriba, $aprox_abajo, $comision_agencia) ){
 				
 				$_SESSION['mensaje']= $mensajes['info_modificada'];
 				header('location:'.$_SESSION['Ruta_Lista']);					
@@ -171,6 +176,7 @@ switch (ACCION){
                                 $obj_xtpl->assign('tiempo_cierre_sorteos', $obj_generico->CleanTextDb($row["tiempo_cierre_sorteos"]));
                                 $obj_xtpl->assign('tiempo_anulacion_ticket', $obj_generico->CleanTextDb($row["tiempo_anulacion_ticket"]));
 				$obj_xtpl->assign('tiempo_vigencia_ticket', $obj_generico->CleanTextDb($row["tiempo_vigencia_ticket"]));
+                                $obj_xtpl->assign('comision_agencia', $obj_generico->CleanTextDb($row["comision_agencia"]));
                                 if ($row["aprox_arriba"]==true){
                                     $obj_xtpl->assign('aprox_arriba', 'Activo');
                                 }else{
