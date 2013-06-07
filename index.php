@@ -149,6 +149,11 @@ switch(OPCION){
 		include($obj_config->GetVar('ruta_controlador').'cRVentas_periodo.php');
 		break;
 
+        case 'RCuadre_banca':
+
+		include($obj_config->GetVar('ruta_controlador').'cRCuadre_banca.php');
+		break;
+
         case 'RNumeros_agotados':
 
             include($obj_config->GetVar('ruta_controlador').'cRNumeros_agotados.php');
