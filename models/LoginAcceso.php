@@ -82,5 +82,47 @@ class LoginAcceso{
 
 	}
 
+
+        /**
+	 * Actualiza el time ping del usuario
+	 *
+	 * @access public
+	 * @param integer $id_usuario
+	 * @return boolean or array
+	 */
+	public function UpdateTimePing($id_usuario){
+
+		//Preparacion del query
+		$sql = "UPDATE `usuarios_taquillas` SET `time_ping`='".date('H:i:s')."' WHERE id_usuario='".$id_usuario."'";
+                return $this->vConexion->ExecuteQuery($sql);
+	}
+
+        /**
+	 * Verifica que el time ping de los usuarios no sea superior a 2 minutos
+	 *
+	 * @access public
+	 
+	 */
+	public function CheckTimePing(){
+
+		//Preparacion del query
+		$sql = "SELECT `time_ping`,`id_usuario`  FROM `usuarios_taquillas`";
+                $result =  $this->vConexion->ExecuteQuery($sql);
+		return $result;
+	}
+
+        /**
+	 * Eliminar asosiacion de usuario en taquilla
+	 *
+	 * @param string $id_usuario
+	 * @param string $clave
+	 * @return boolean, array
+	 */
+	public function EliminarUsuarioTimePing($id_usuario){
+		//Preparacion del query
+		$sql = "DELETE FROM `usuarios_taquillas` WHERE id_usuario='".$id_usuario."'";
+		return $this->vConexion->ExecuteQuery($sql);
+
+	}
 }		
 ?>

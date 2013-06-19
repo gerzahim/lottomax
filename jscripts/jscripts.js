@@ -24,10 +24,19 @@ $(document).ready(function(){
 	//$("#s1").focus();
 	//$("#op_juego").focus();	
 	$("#txtuser").focus();
-	
+
+        // Bloque para el control de logueo de usuarios
+        setInterval(aunEstoyVivo, 60000);
 });
 
 
+function aunEstoyVivo(){
+
+	$.get('scripts/Updatestatus.php', function(str) {
+               // alert(str);
+		});
+
+}
 function BorderFooter(){
 	$("#container #footer").corner("6px");
 }
