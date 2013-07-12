@@ -793,13 +793,23 @@ if( $result= $obj_modelo->GetDatosTicketTransaccional() ){
 	echo "<br><table class='table_ticket' align='center' border='1' width='90%'>";
 	while($row= $obj_conexion->GetArrayInfo($result)){
 		$inc = "";
+                $span1="";
+                $span2="";
 		//determinando si es un numero inc.. 
 		if($row['incompleto'] == 1){
-			$inc = "Inc ...";	
-		} 
+			$inc = "Inc ...";
+                        $span1="<span class='requerido'>";
+                        $span2="</span>";
+		}
+
+                $zodiacal="";
+                // determinando el signo zodiacal... si lo hay...
+                if($row['id_zodiacal'] <> 0){
+			$zodiacal = $obj_modelo->GetPreZodiacal($row['id_zodiacal']);	
+		}
 		//print_r($row);
-		echo "<tr class='eveno'><td align='center'>SORTEO: ".$obj_modelo->GetNombreSorteo($row['id_sorteo'])."</td></tr>";
-		echo "<tr class='eveni'><td align='left'>".$row['numero']." x ".$row['monto']." ".$inc."</td></tr>";	
+		echo "<tr class='eveno'><td align='center'>".$span1."SORTEO: ".$obj_modelo->GetNombreSorteo($row['id_sorteo']).$span2."</td></tr>";
+		echo "<tr class='eveni'><td align='left'>".$span1.$row['numero']." x ".$row['monto']." ".$zodiacal." ".$inc.$span2."</td></tr>";
 	}		
 	echo "</table>";	
 }		

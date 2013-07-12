@@ -543,7 +543,7 @@ class Ventas{
 	 * Genera un ID para los tickets
 	 *
 	 */
-	public function GeneraIDTicket(){
+	/*public function GeneraIDTicket(){
                         
 		// Obtenemos el ultimo id del ticket correlativo
                 $sql1 = "SELECT MAX(id_ticket) as id FROM ticket WHERE status='1' AND fecha_hora LIKE '%".date('Y-m-d')."%' ";
@@ -589,8 +589,26 @@ class Ventas{
                 
 ;
                 
-	}
+	}*/
 
+        public function GeneraIDTicket(){
+
+            //Generamos el prefijo año+mes+dia+hora+minutos+segudos+id_agencia+id_taquilla
+            $fecha= date('ymdhis');
+            // Obtenemos el id de la agencia y taquilla
+            $sql = "SELECT id_agencia FROM parametros";
+            $result= $this->vConexion->ExecuteQuery($sql);
+            $roww= $this->vConexion->GetArrayInfo($result);
+            $id_agencia=$roww["id_agencia"];
+            $taquilla=$_SESSION["taquilla"];
+
+
+            $prefijo=$fecha.$id_agencia.$taquilla;
+            return $prefijo;
+
+            ;
+
+        }
 
         /**
 	 * Genera un ID para los tickets

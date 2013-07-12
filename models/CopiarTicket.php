@@ -42,7 +42,7 @@ class CopiarTicket{
 		$inicial= ($pagina-1) * $cantidad;
 		
 		//Preparacion del query
-		$sql = "SELECT * FROM ticket WHERE status='1' ORDER BY fecha_hora";
+		$sql = "SELECT * FROM ticket WHERE status='1' ORDER BY fecha_hora DESC";
 		$result= $this->vConexion->ExecuteQuery($sql);
 		
 		

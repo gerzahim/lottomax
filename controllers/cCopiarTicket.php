@@ -16,7 +16,7 @@ require($obj_config->GetVar('ruta_modelo').'CopiarTicket.php');
 
 $obj_modelo= new CopiarTicket($obj_conexion);
 
-session_start();
+//session_start();
 $id_taquilla= $_SESSION['taquilla'];
 
 switch (ACCION){
@@ -367,7 +367,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
                                                 $num_jug= $txt_monto;
 
                                                 // Calculamos el valor de incompleto
-                                                if ($txt_monto < $monto_cupoespecial) {
+                                                if ($txt_monto <= $monto_cupoespecial) {
                                                     $incompleto= 0;
                                                 }else{
                                                     $incompleto= 1;
@@ -412,7 +412,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
                                         $num_jug= $txt_monto;
 
                                        // Calculamos el valor de incompleto
-                                        if ($txt_monto < $cupo_general) {
+                                        if ($txt_monto <= $cupo_general) {
                                             $incompleto= 0;
                                         }else{
                                             $incompleto= 1;
@@ -453,7 +453,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
                         $num_jug= $txt_monto;
 
                          // Calculamos el valor de incompleto
-                        if ($txt_monto < $cupo_general) {
+                        if ($txt_monto <= $cupo_general) {
                             $incompleto= 0;
                         }else{
                             $incompleto= 1;

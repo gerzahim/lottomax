@@ -111,7 +111,7 @@ switch (ACCION){
 
                         // Eliminamos el ticket
                         if( $obj_modelo->EliminarTicket($id_ticket)){
-                                $_SESSION['mensaje']= $mensajes['info_eliminada'];
+                                $_SESSION['mensaje']= $mensajes['ticket_anulado'];
                         }
                         else{
                                 $_SESSION['mensaje']= $mensajes['fallo_eliminar'];

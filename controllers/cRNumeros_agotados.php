@@ -61,7 +61,11 @@ switch (ACCION){
 
             // Parseo del bloque de la fila
                 $obj_xtpl->parse('main.contenido.lista_resultados');
-        }
+        }else{
+                // Mensaje
+                $obj_xtpl->assign('no_info',$mensajes['sin_lista']);
+
+              }
 
         break;
     case 'ver_numeros':

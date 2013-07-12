@@ -78,12 +78,12 @@ class RVentas_periodo{
                 }
 
                 if(!Empty($fecha_desde) && !Empty($fecha_hasta)){
-                    $where = $where." fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."' AND ";
+                    $where = $where." fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta." 23:59:59' AND ";
                 }
 
                 $where = substr($where, 0,strlen($where) - 5);
 
-		$sql = "SELECT * FROM  ticket WHERE ".$where;
+		$sql = "SELECT * FROM  ticket WHERE ".$where. " ORDER BY fecha_hora DESC";
                 
 		$result= $this->vConexion->ExecuteQuery($sql);
                 return $result;

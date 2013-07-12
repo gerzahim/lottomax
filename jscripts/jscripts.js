@@ -289,6 +289,8 @@ function CargarSubmit()
 function CargarReset()
 {
   document.forms[0].reset();
+  calcula_total();
+  calcula_cambio();
   $("#txt_numero").focus();
 }
 
@@ -417,7 +419,9 @@ function imprimirticket(){
 	
 	$.get('ajax/ImprimirTicket.php', function(str) {
 		  //$('#total').val(str);
-		  alert(str);
+                  alert(str);
+                  document.getElementById("ticket").innerHTML ="";
+                  CargarReset();
 		});	
 	
 }
@@ -482,6 +486,7 @@ function BorrarUltimaJugada()
 {
     $.get('ajax/BorrarUltimaJugada.php', function(str) {
         document.getElementById("ticket").innerHTML = str;
+        calcula_total();
     });
  }
 
@@ -491,12 +496,18 @@ function BorrarPreTicket(){
             if (str == "Ok"){
                 document.getElementById("ticket").innerHTML ="";
                 // Eliminada el Preticket
+                CargarReset();
             }else if (str == "NotOk"){
                 alert("No existe ninguna apuesta en el ticket!");
             }
         });
     }
 }
+
+function RepetirTicket()
+{
+    window.location='index.php?op=copiar_ticket&accion=search';
+ }
 // ESTA Funcion es para poder hacer tab like enter
 //<![CDATA[
 
@@ -534,11 +545,11 @@ $(document).keydown(function(e) {
 });
 
 // Abrevituras de teclado
-$(document).keydown(function(tecla){
+$(document).keyup(function(tecla){
 
   
    
-    if (Atl_down && (tecla.keyCode == 107)) {
+    if (tecla.keyCode == 107) {
     	// tecla +
 		agregar_ticket(); //para agregar al ticket
 		CargarReset1(); //Limpiar el campo numero 
@@ -590,6 +601,10 @@ $(document).keydown(function(tecla){
         // Tecla Q
         //Quitar la ultima jugada
         BorrarUltimaJugada();
+    }else if(Atl_down && (tecla.keyCode == 82)){
+        // Tecla R
+        //Repetir Ticket
+        RepetirTicket();
     }else if(tecla.keyCode == 115){
         // Tecla F4
         //Borrar PreTicket

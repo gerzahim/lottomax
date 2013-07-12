@@ -42,7 +42,7 @@ class AnularTicket{
 		$inicial= ($pagina-1) * $cantidad;
 		
 		//Preparacion del query
-		$sql = "SELECT * FROM ticket WHERE status='1' AND taquilla='".$_SESSION['InfoLogin']->GetTaquilla()."' AND premiado=0 AND pagado=0";
+		$sql = "SELECT * FROM ticket WHERE status='1' AND taquilla='".$_SESSION['InfoLogin']->GetTaquilla()."' AND premiado=0 AND pagado=0 AND fecha_hora LIKE '%".Date('Y-m-d')."%' ORDER BY fecha_hora DESC";
 		$result= $this->vConexion->ExecuteQuery($sql);
 		
 		

@@ -181,7 +181,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
                                                 $num_jug= $txt_monto;
 
                                                 // Calculamos el valor de incompleto
-                                                if ($txt_monto < $monto_cupoespecial) {
+                                                if ($txt_monto <= $monto_cupoespecial) {
                                                     $incompleto= 0;
                                                 }else{
                                                     $incompleto= 1;
@@ -226,7 +226,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
                                         $num_jug= $txt_monto;
 
                                        // Calculamos el valor de incompleto
-                                        if ($txt_monto < $cupo_general) {
+                                        if ($txt_monto <= $cupo_general) {
                                             $incompleto= 0;
                                         }else{
                                             $incompleto= 1;
@@ -267,7 +267,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
                         $num_jug= $txt_monto;
 
                          // Calculamos el valor de incompleto
-                        if ($txt_monto < $cupo_general) {
+                        if ($txt_monto <= $cupo_general) {
                             $incompleto= 0;
                         }else{
                             $incompleto= 1;
@@ -307,11 +307,19 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
 
 $resultTT= $obj_modelo->GetTriplesTicketTransaccional();
 If ($obj_conexion->GetNumberRows($resultTT)>0){
+    $terminales = array();$i=0;
       while($row= $obj_conexion->GetArrayInfo($resultTT)){
           $txt_terminal = substr($row['numero'],1,2);
+          $terminales[$i]=$txt_terminal;
+          $i++;
           $txt_monto = $_GET['monto'];
-          $result= ProcesoCupos($txt_terminal, $txt_monto, $row['id_sorteo'], 0, 0);
+
+          if (array_search($txt_terminal, $terminales)==false){
+             $result= ProcesoCupos($txt_terminal, $txt_monto, $row['id_sorteo'], 0, 0);
+          }
+
       }
+      
 }
 
 
@@ -320,13 +328,25 @@ if( $result= $obj_modelo->GetDatosTicketTransaccional() ){
     echo "<br><table class='table_ticket' align='center' border='1' width='90%'>";
     while($row= $obj_conexion->GetArrayInfo($result)){
             $inc = "";
+            $span1="";
+            $span2="";
+
             //determinando si es un numero inc..
             if($row['incompleto'] == 1){
                     $inc = "Inc ...";
+                    $span1="<span class='requerido'>";
+                    $span2="</span>";
             }
+
+            $zodiacal="";
+            // determinando el signo zodiacal... si lo hay...
+            if($row['id_zodiacal'] <> 0){
+                    $zodiacal = $obj_modelo->GetPreZodiacal($row['id_zodiacal']);
+            }
+
             //print_r($row);
-            echo "<tr class='eveno'><td align='center'>SORTEO: ".$obj_modelo->GetNombreSorteo($row['id_sorteo'])."</td></tr>";
-            echo "<tr class='eveni'><td align='left'>".$row['numero']." x ".$row['monto']." ".$inc."</td></tr>";
+            echo "<tr class='eveno'><td align='center'>".$span1."SORTEO: ".$obj_modelo->GetNombreSorteo($row['id_sorteo']).$span2."</td></tr>";
+            echo "<tr class='eveni'><td align='left'>".$span1.$row['numero']." x ".$row['monto']." ".$zodiacal." ".$inc.$span2."</td></tr>";
     }
     echo "</table>";
 }
