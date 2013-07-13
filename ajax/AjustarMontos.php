@@ -305,21 +305,26 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
 	}
 }
 
-$resultTT= $obj_modelo->GetTriplesTicketTransaccional();
+// Inicio del proceso
+$resultTT= $obj_modelo->GetDatosTicketTransaccional();
 If ($obj_conexion->GetNumberRows($resultTT)>0){
-    $terminales = array();$i=0;
-      while($row= $obj_conexion->GetArrayInfo($resultTT)){
-          if ($row['incompleto']<>2){
-              $txt_terminal = substr($row['numero'],1,2);
-              $txt_monto = $_GET['monto'];
-              if (!array_search($txt_terminal, $terminales)){
-                $result= ProcesoCupos($txt_terminal, $txt_monto, $row['id_sorteo'], 0, 0);
-              }              
-              $terminales[$i]=$txt_terminal;
-              $i++;
-          }
-      }
+    $catidad_apuestas = $obj_conexion->GetNumberRows($resultTT);
+    $txt_monto = $_GET['monto'];
+
+    $monto_prorrateado= round($txt_monto/$catidad_apuestas, 2,PHP_ROUND_HALF_EVEN);
+    
+    while($row= $obj_conexion->GetArrayInfo($resultTT)){
+       $txt_numero = $row['numero'];
+       $sorteo = $row['id_sorteo'];
+       $id_zodiacal=$row['id_zodiacal'];
+       $id_ticket_transaccional = $row['id_ticket_transaccional'];
+       if ($obj_modelo->EliminarTicketTransaccional($id_ticket_transaccional)){
+        $result= ProcesoCupos($txt_numero, $monto_prorrateado, $sorteo, $id_zodiacal, 0);
+       }
+    }
+
 }
+
 
 
 // Listado de Jugadas Agregadas

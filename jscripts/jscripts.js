@@ -504,10 +504,39 @@ function BorrarPreTicket(){
     }
 }
 
+// Funcion para llamar al formulario de buscar ticket para copiarlo
 function RepetirTicket()
 {
     window.location='index.php?op=copiar_ticket&accion=search';
  }
+
+// Funcion para ajustar todos los montos de las apuestas a un prorrateado entre un monto total
+function AjustarMontos(){
+    $.get('ajax/ValidarAjustarMontos.php', function(str) {
+        if (str == "Ok"){
+            var monto = prompt("Digite el monto a ajustar entre todas las apuestas existentes: ", "");
+             if (monto != null && monto != 0){
+                ajustarMontoApuestas(monto);
+             }else{
+                 alert("Debe ingresar un monto para reajustar!");
+             }
+        }else if (str == "NotOk"){
+            alert("Debe haber por lo menos una apuesta en el ticket!");
+        }
+
+     });
+}
+
+function ajustarMontoApuestas(monto)
+{
+    $.get('ajax/AjustarMontos.php?monto=' + monto, function(str) {
+       document.getElementById("ticket").innerHTML = str;
+            calcula_total();
+            calcula_cambio();
+            $("#txt_numero").focus();
+    });
+ }
+
 // ESTA Funcion es para poder hacer tab like enter
 //<![CDATA[
 
@@ -545,7 +574,7 @@ $(document).keydown(function(e) {
 });
 
 // Abrevituras de teclado
-$(document).keyup(function(tecla){
+$(document).keydown(function(tecla){
 
   
    
@@ -589,6 +618,9 @@ $(document).keyup(function(tecla){
     }else if(tecla.keyCode == 113) {
     	// tecla F2
     	CargarReset(); //Limpiar Todos los campos
+    }else if(tecla.keyCode == 114) {
+    	// tecla F3
+    	AjustarMontos(); //Ajustar los montos de todas las apuestas a un prorrateado del total
     }else if(Atl_down && (tecla.keyCode == 73)){
         // Tecla I
         procesarticket(); //para procesar y generar el ticket
