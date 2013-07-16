@@ -357,16 +357,20 @@ function agregar_ticket(){
 		    }
 
                     
-                   var n=return_data.search("CONFIRMAPUESTA");
+                   var n=return_data.search("--");
                    if(  n>0 ){
-                       if (confirm("Ya este numero se encuentra registrado, desea aumentar la apuesta?")){
+                       var numero = document.getElementById("txt_monto");
+                        alert("Ya este numero se encuentra registrado en el ticket! El monto de la apuesta va ser cambiado a: Bs. F. " + numero.value);
+                       /*if (confirm("Ya este numero se encuentra registrado, desea cambiar el valor de la apuesta?")){
                             var monto = prompt("Ingrese el monto de la apuesta", "");
-                            var numero = document.getElementById("txt_numero");
+                            var numero = document.getElementById("txt_monto");
                             alert(numero.value);
                             
-                        }
-		    	location.reload();
+                        }*/
+                        //location.reload();
+                        
 		    }
+
 
 		    //mensaje que muestra para el ticket de la derecha
 			document.getElementById("ticket").innerHTML = return_data;

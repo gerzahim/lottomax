@@ -175,6 +175,6 @@ class Cargar_Resultados{
 		return $this->vConexion->ExecuteQuery($sql);
 		
 	}
-	
+
 }		
 ?>

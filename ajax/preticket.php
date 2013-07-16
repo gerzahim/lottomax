@@ -101,15 +101,16 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
 		}else{
                         if ($num_ticket_inc == '0'){
                             /************* CABLEADO **********************/
-                            //no esta incompleto y todavia le queda cupo disponible
+                            //Proceso CONFIRM: Elimina la apuesta existente en ticket transaccional, y para que no esté repetida, la registra
+                            // con el nuevo monto ingresado.
 
-                            // hacer javascript confirm,  para que modifique el monto y simplemente cancele porque fue un error de tipeo
-                            // en caso de que el confirm se positivo, tomar el valor y crear metodo para modificar el nuevo valor en ticket_transaccional
+                            $id_ticket_transaccional= $obj_modelo->GetIDTicketTransaccional($txt_numero,$sorteo,$zodiacal);
                            
-                            echo "CONFIRMAPUESTA-".$txt_numero; //" falta crear javascript CONFIRM-".$num_ticket_monto;
-                            //echo "RRR-Numero ya registrado, falta crear javascript*numero*monto*";
-                            //$texto = "<script language='javascript' type='text/javascript'>alert('Hola');</script>";
-                            //echo $texto;
+                            echo "--";
+                            //echo "<input id='txt_id_ticket_transaccional' name='txt_id_ticket_transaccional' type='text' value='".$id_ticket_transaccional."'/>";
+                            $obj_modelo->EliminarTicketTransaccional($id_ticket_transaccional);
+                            $result = ProcesoCupos($txt_numero, $txt_monto, $sorteo, $zodiacal, $esZodiacal);
+                            
                         }
 		}
 		

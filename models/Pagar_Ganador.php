@@ -39,7 +39,7 @@ class Pagar_Ganador{
 	public function GetListadosegunVariable($parametro_where){
 
 		//Preparacion del query
-                 $sql = "SELECT * FROM ticket WHERE status='1' AND premiado=0 AND pagado=0 AND ".$parametro_where;
+                 $sql = "SELECT * FROM ticket WHERE status='1' AND pagado=0 AND ".$parametro_where;
                  //echo $sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
 		return  $result;
@@ -240,7 +240,7 @@ class Pagar_Ganador{
 
 		//Preparacion del query
 		$sql = "UPDATE `ticket` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_ticket='".$id_ticket."'";
-
+                
 		return $this->vConexion->ExecuteQuery($sql);
 
 	}

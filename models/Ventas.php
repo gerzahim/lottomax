@@ -359,7 +359,24 @@ class Ventas{
 		
 	}
 	
-	
+	/**
+	 * Obtiene el ID de un ticket transaccional
+	 *
+	 * @param string $numero
+	 * @param string $sorteo
+	 * @return boolean, string
+	 */
+	public function GetIDTicketTransaccional($numero, $sorteo, $id_zodiacal){
+
+		//Preparacion del query
+		$sql = "SELECT id_ticket_transaccional FROM ticket_transaccional WHERE id_taquilla='".$_SESSION["taquilla"]."' AND numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal."";
+
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww['id_ticket_transaccional'];
+
+	}
+
 	/**
 	 * Busqueda en tabla de Numeros_Jugados
 	 *

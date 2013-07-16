@@ -40,10 +40,11 @@ If ($obj_conexion->GetNumberRows($result)>0){
             
             // Verificamos si hay alguna apuesta ganadora...
             if ($obj_modelo->GetGanador($rowDT['id_sorteo'], $rowDT['id_zodiacal'], $rowDT['numero'], substr($fecha_ticket,0,10), $rowDT['id_tipo_jugada'])){
-               $id_detalle_ticket[$j]=$rowDT['id_detalle_ticket']; $id_tickets[$j]=$id_ticket;
+               $id_detalle_ticket[$j]=$rowDT['id_detalle_ticket'];
+              
                 $monto_pago = $obj_modelo->GetRelacionPagos($rowDT['id_tipo_jugada']);
                 $monto_total = $monto_total + ($monto_pago*$rowDT['monto']);
-                 $j++;
+                
             }
 
             // Verificamos las aproximaciones por arriba y por abajo...
@@ -51,10 +52,11 @@ If ($obj_conexion->GetNumberRows($result)>0){
                 if ($rowDT['id_tipo_jugada']==2){ // Si el tipo de jugada es Terminal
                     // Verificamos si hay aproximaciones por abajo
                      if ($obj_modelo->GetAproximacion($rowDT['id_sorteo'], $rowDT['id_zodiacal'], $rowDT['numero'], substr($fecha_ticket,0,10), 'abajo')){
-                         $id_detalle_ticket[$j]=$rowDT['id_detalle_ticket'];$id_tickets[$j]=$id_ticket;
+                         $id_detalle_ticket[$j]=$rowDT['id_detalle_ticket'];
+                                                 
                          $monto_pago = $obj_modelo->GetRelacionPagos('5'); // Tipo Jugada Aproximacion
                          $monto_total = $monto_total + ($monto_pago*$rowDT['monto']);
-                         $j++;
+                        
                      }
                 }
             }
@@ -63,31 +65,33 @@ If ($obj_conexion->GetNumberRows($result)>0){
                 if ($rowDT['id_tipo_jugada']==2){ // Si el tipo de jugada es Terminal
                     // Verificamos si hay aproximaciones por abajo
                      if ($obj_modelo->GetAproximacion($rowDT['id_sorteo'], $rowDT['id_zodiacal'], $rowDT['numero'], substr($fecha_ticket,0,10), 'arriba')){
-                         $id_detalle_ticket[$j]=$rowDT['id_detalle_ticket'];$id_tickets[$j]=$id_ticket;
+                         $id_detalle_ticket[$j]=$rowDT['id_detalle_ticket'];
+                                                 
                          $monto_pago = $obj_modelo->GetRelacionPagos('5'); // Tipo Jugada Aproximacion
                          $monto_total = $monto_total + ($monto_pago*$rowDT['monto']);
-                         $j++; 
+                        
                      }
                 }
             }
 
        }
+         $id_tickets[$j]=$id_ticket;$j++;
          $totales[$i]=$monto_total; $i++;
+    
     }
     
-    
-//    print_r($id_tickets);
-//    print_r($id_detalle_ticket);
-//    print_r($totales);
-
     // Premiamos los tickets
     for ($i = 0; $i < count($id_tickets); $i++){
          if( $obj_modelo->PremiarTicket($id_tickets[$i],$totales[$i])){
 
          }
     }
-    for ($i = 0; $i < count($id_detalle_ticket); $i++){
-         if( $obj_modelo->PagarDetalleTicket($id_detalle_ticket[$i])){}
+
+    if (count($id_detalle_ticket)>0){
+        for ($i = 0; $i < count($id_detalle_ticket); $i++){
+             if( $obj_modelo->PagarDetalleTicket($id_detalle_ticket[$i])){}
+        }
     }
 }
 ?>
+
