@@ -19,7 +19,7 @@ if( !empty($_POST['txtuser']) && !empty($_POST['txtpass']) && !empty($_POST['op_
 		if( $info= $obj_modelo->VerificarUsuario($_POST['txtuser'],$_POST['txtpass'])){
 
                         // Verificamos que la taquilla no esta siendo usada por otro usuario...
-                        If (!$obj_modelo->VerificarUsuarioTaquilla($_POST['op_taquilla'])){
+                        if (!$obj_modelo->VerificarUsuarioTaquilla($_POST['op_taquilla'])){
                             
                             // Destruccion de las variables de sesion
                             session_unset();

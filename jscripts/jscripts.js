@@ -420,15 +420,45 @@ function calcula_cambio()
 
 //calcula el total del ticket
 function imprimirticket(){
-	
+/*
+    $.ajax({
+        type: "POST",
+        url: "ajax/ImprimirTicket.php",
+		success: function( respuesta ){
+			//alert(respuesta);
+		}
+        });
+		*/
+		document.getElementById("ticket").innerHTML ="";
+        CargarReset();		
+		window.open("ajax/ImprimirTicket.php", "nuevo", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=400, height=400");
+		//ventana_secundaria = window.open("ajax/ImprimirTicket.php", "nuevo", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=400, height=400");
+		//sleep(5000); ayuda para salir el mensaje 
+		//ventana_secundaria.close();
+
+}
+/*
+function llamadaAjax(){
+
 	$.get('ajax/ImprimirTicket.php', function(str) {
 		  //$('#total').val(str);
-                  alert(str);
+                  //alert(str);
                   document.getElementById("ticket").innerHTML ="";
                   CargarReset();
 		});	
-	
-}
+		
+    $.ajax({
+        type: "POST",
+        url: "ajax/ImprimirTicket.php"
+        });
+		sleep(1000);
+		ventana_secundaria = window.open("ajax/ImprimirTicket.php", "nuevo", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=400, height=400");
+		//ventana_secundaria.close();
+
+	  document.getElementById("ticket").innerHTML ="";
+	  CargarReset();
+	  
+}*/
 
 // Funcion para procesar el ticket al imprimir
 function procesarticket()
@@ -578,10 +608,9 @@ $(document).keydown(function(e) {
 });
 
 // Abrevituras de teclado
-$(document).keydown(function(tecla){
+//$(document).keydown(function(tecla){
+$(document).keyup(function(tecla){
 
-  
-   
     if (tecla.keyCode == 107) {
     	// tecla +
 		agregar_ticket(); //para agregar al ticket
@@ -629,8 +658,12 @@ $(document).keydown(function(tecla){
         // Tecla I
         procesarticket(); //para procesar y generar el ticket
 	CargarReset();
-    }else if(Atl_down && (tecla.keyCode == 65)){
-        // Tecla A
+    }else if(Atl_down && (tecla.keyCode == 87)){
+        // Tecla W
+        //Preguntamos monto de los terminales
+        ReImprimirTicket();
+    }else if(Atl_down && (tecla.keyCode == 88)){
+        // Tecla X
         //Preguntamos monto de los terminales
         agregarTerminales();
     }else if(Atl_down && (tecla.keyCode == 81)){

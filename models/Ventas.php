@@ -556,6 +556,25 @@ class Ventas{
 		
 	}	
 	
+	public function GetIdTaquillabyNumero($num_taquilla){
+            
+		//Preparacion del query
+		$sql = "SELECT id_taquilla FROM taquillas WHERE numero_taquilla = ".$num_taquilla."";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["id_taquilla"];
+	}	
+	
+	public function lineas_saltar_despues($id_taquilla){
+
+		//Preparacion del query
+		$sql = "SELECT lineas_saltar_despues FROM impresora_taquillas WHERE id_taquilla = ".$id_taquilla."";
+		$result= $this->vConexion->ExecuteQuery($sql);		
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["lineas_saltar_despues"];
+		
+	}	
+	
 	/**
 	 * Genera un ID para los tickets
 	 *

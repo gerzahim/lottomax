@@ -9,6 +9,7 @@
    <applet name="jzebra" code="jzebra.PrintApplet.class" archive="../jscripts/jzebra.jar" width="50px" height="50px">
 	  <param name="printer" value="zebra">
    </applet>
+  
 <?php
 
 // Archivo de variables de configuracion
@@ -35,7 +36,10 @@ $obj_modelo= new Ventas($obj_conexion);
 
 session_start();
 
-$id_taquilla=2;
+//$id_taquilla=2;
+// Obtenemos los datos de la taquilla
+$id_taquilla= $obj_modelo->GetIdTaquilla();
+
 /************* CABLEADO **********************/
 //id_taquilla debe venir de una variable de sesion
 
@@ -280,21 +284,34 @@ if( $result2= $obj_modelo->GetNumerosIncompletobyIdticket($id_ticket) ){
 	}	
 		
 }
+//Valor que debe venir de la base de datos
+//Saltos de linea para hacer FEED
+/*
+$data1.="\\x1B\\x0A";
+$data1.="\\x1B\\x0A";
+$data1.="\\x1B\\x0A";
+$data1.="\\x1B\\x0A";
+$data1.="\\x1B\\x0A";
+$data1.="\\x1B\\x0A";
+$data1.="\\x1B\\x0A";*/
+
+
+// Obtenemos los datos de la taquilla
+$ida_taquilla= $obj_modelo->GetIdTaquillabyNumero($id_taquilla);
+$lineas_saltar_despues= $obj_modelo->lineas_saltar_despues($ida_taquilla);
+
 
 //Saltos de linea para hacer FEED
-$data1.="\\x1B\\x0A";
-$data1.="\\x1B\\x0A";
-$data1.="\\x1B\\x0A";
-$data1.="\\x1B\\x0A";
-$data1.="\\x1B\\x0A";
-$data1.="\\x1B\\x0A";
-$data1.="\\x1B\\x0A";
+for($i=1;$i<=$lineas_saltar_despues;$i++){
+	$data1.="\\x1B\\x0A";
+}
 
 
 /************* CABLEADO **********************/
 //los feed deben venir de la base de datos una variable de parametros
 
-echo $data1;
+echo $data;
+//echo $data1;
 
 echo "<script type='text/javascript'>";
 echo "print('".$data1."')";
@@ -304,6 +321,4 @@ echo "</script>";
 ?>
 
    </body>
-
-   
 </html>

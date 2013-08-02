@@ -513,7 +513,9 @@ if(!empty($_POST['ss'])) {
 		//Verificando que todos los sorteos esten entre las horas disponibles
 		if ($sorteo){
 			$row= $obj_modelo->GetHoraSorteo($sorteo);
-			$hora_sorteo=$row['hora_sorteo'];
+			//print_r($row);
+			$hora_sorteo=$row;
+			//$hora_sorteo=$row['hora_sorteo'];
 			
 			//Valor que debe venir de la base de datos tiempo_cierre_sorteos
 			$minutos_bloqueo= $obj_modelo->MinutosBloqueo();
