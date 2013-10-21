@@ -8,8 +8,6 @@
 // Database "lottomax"
 //
 
-);
-
 // lottomax.detalle_ticket
 $detalle_ticket = array(
   array('id_detalle_ticket'=>'0','id_ticket'=>'124606','numero'=>'047','id_sorteo'=>'2','hora_sorteo'=>'00:00:00','id_zodiacal'=>'0','monto'=>'15558888.22')

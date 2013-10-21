@@ -13,24 +13,17 @@ $(document).ready(function(){
 	//auditoria();
 	//segDate();
 	//document.forms[0].reset
-	
 
-	deshabilitarTeclasFechas();
-	
 	ValidateFormSell();
 	 
     datetime = $('#clock');
     update();
     setInterval(update, 1000);	 
 	
-    //Cambio de Turno al seleccionar por radio
-    cambioTurno();
-    
 	$("#txt_numero").focus();
 	//$("#s1").focus();
 	//$("#op_juego").focus();	
 	$("#txtuser").focus();
-	
 
 	// Bloque para el control de logueo de usuarios
 	setInterval(aunEstoyVivo, 60000);
@@ -42,58 +35,6 @@ function aunEstoyVivo(){
 	$.get('scripts/Updatestatus.php', function(str) {
                // alert(str);
 		});
-}
-
-function deshabilitarTeclasFechas(){
-
-	var ar=new Array(33,34,35,36,37,38,39,40);
-	$(document).keydown(function(e) {
-	     var key = e.which;
-	      //console.log(key);
-	      //if(key==35 || key == 36 || key == 37 || key == 39)
-	      if($.inArray(key,ar) > -1) {
-	          e.preventDefault();
-	          return false;
-	      }
-	      return true;
-	});	
-}
-function cambioTurno(){
-
-	$("input[name='turno']").change(function() {
-		//$("input[name=turno]:radio").change(function () {
-			if ($("input[name='turno']:checked").val() == '1'){
-				//Selecciono Turno Manana	
-				$("#txt_numero").focus(); // hace focus en el campo de numeros	
-		    	$('.text-label2').hide();
-		    	$('.text-label3').hide();
-		    	$('.text-label1').show();
-				//$("#s0").focus(); // hace focus en el campo de checkboxes Sorteos			
-			}else if ($("input[name='turno']:checked").val() == '2'){
-				//Selecciono Turno Tarde
-				$("#txt_numero").focus(); // hace focus en el campo de numeros
-		    	$('.text-label1').hide();
-		    	$('.text-label3').hide();
-		    	$('.text-label2').show();
-				//$("#s0").focus(); // hace focus en el campo de checkboxes Sorteos				
-			}else if ($("input[name='turno']:checked").val() == '3'){
-				//Selecciono Turno Noche
-				$("#txt_numero").focus(); // hace focus en el campo de numeros		
-		    	$('.text-label1').hide();
-		    	$('.text-label2').hide();
-		    	$('.text-label3').show();
-		    	//$("#s0").focus(); // hace focus en el campo de checkboxes Sorteos
-			}else if ($("input[name='turno']:checked").val() == '4'){
-				//Selecciono Turno Todos
-				$("#txt_numero").focus(); // hace focus en el campo de numeros			
-		    	$('.text-label1').show(); // Mostrar Todos los Turnos M, T, N
-		    	$('.text-label2').show();
-		    	$('.text-label3').show();
-				//$("#s0").focus(); // hace focus en el campo de checkboxes Sorteos	   			
-			}
-
-	     });	
-
 }
 
 function BorderFooter(){
@@ -310,7 +251,6 @@ function deleteCookie( name, path, domain ) {
 			( ( domain ) ? ';domain=' + domain : '' ) +
 			';expires=Thu, 01-Jan-1970 00:00:01 GMT';
 }
-
 
 
 function showUser(str){
@@ -552,9 +492,7 @@ function procesarticket()
 
 // Funcion para agregar los terminales automaticamente
 function agregarTerminales(){
-	//alert('Holaaaa');
     $.get('ajax/ValidarTerminales.php', function(str) {
-    	//alert(str);
         if (str == "Ok"){
             var monto = prompt("Digite el monto de apuesta para los terminales:", "");
              if (monto != null && monto != 0){
@@ -564,7 +502,7 @@ function agregarTerminales(){
              }
         }else if (str == "NotOk"){
             alert("Debe hacer por lo menos una apuesta de triple para generar los terminales en el ticket!");
-        }      
+        }
          
      });
 }
@@ -610,21 +548,8 @@ function RepetirTicket()
 function PagarTicket()
 {
     window.location='index.php?op=pagar_ganador';
- }  
- 
- // Funcion para llamar al formulario de anular ticket
-function AnularTicket()
-{
-    window.location='index.php?op=anular_ticket&accion=search';
  } 
-
-
-// Funcion para llamar al formulario de Modificar detalle ticket
-function DetalleTicket()
-{
-    window.location='index.php?op=ticket_transaccional';
- }  
-
+ 
 // Funcion para ajustar todos los montos de las apuestas a un prorrateado entre un monto total
 function AjustarMontos(){
     $.get('ajax/ValidarAjustarMontos.php', function(str) {
@@ -698,231 +623,94 @@ $(document).keyup(function(tecla){
 		agregar_ticket(); //para agregar al ticket
 		CargarReset1(); //Limpiar el campo numero 
 		calcula_total();
-    }else if(Atl_down && (tecla.keyCode == 65)){
-    	// tecla A    	
-    	//$('#op_juego').val('1');// hace focus en el campo de tipo de juego y selecciona Triple
-    	$('input:radio[name=op_juego]')[0].checked = true;
-    }else if(Atl_down && (tecla.keyCode == 66)){
-    	// tecla B    	
-		$("#txt_monto").focus(); // hace focus en el campo de monto Bs
-    }else if(Atl_down && (tecla.keyCode == 67)){
-    	// tecla C    	
-		//$('#op_juego').val('4');// hace focus en el campo de tipo de juego y selecciona Permuta
-    	$('input:radio[name=op_juego]')[3].checked = true;
-    }else if(Atl_down && (tecla.keyCode == 69)){
-    	// tecla E
-     	DetalleTicket();
-    }else if(Atl_down && (tecla.keyCode == 70)){
-    	// tecla F
-    	
-    	var myRadio = $("input[name='turno']:checked").val();
-    	//alert(myRadio);
-    	
-    	if(myRadio == '1'){
-    		//el turno es la manana
-        	if ($('input.t_manana').is(':checked')){
-        		$('input.t_manana').prop("checked", false)
-            }else{
-            	$('input.t_manana').prop('checked', true); //seleccionar el turno de la manana
-            }    		
-    	}else if(myRadio == '2'){
-    		//el turno es la tarde
-        	if ($('input.t_tarde').is(':checked')){
-        		$('input.t_tarde').prop("checked", false)
-            }else{
-            	$('input.t_tarde').prop('checked', true); //seleccionar el turno de la tarde
-            }		
-    	}else if(myRadio == '3'){
-    		//el turno es la noche
-        	if ($('input.t_noche').is(':checked')){
-        		$('input.t_noche').prop("checked", false)
-            }else{
-            	$('input.t_noche').prop('checked', true); //seleccionar el turno de la Noche
-            }		
-    	}else if(myRadio == '4'){
-    		//el turno es Todos
-        	if ($('input.t_manana').is(':checked')){
-        		$('input.t_manana').prop("checked", false)
-            }else{
-            	$('input.t_manana').prop('checked', true); //seleccionar el turno de la manana
-            }     		
-        	if ($('input.t_tarde').is(':checked')){
-        		$('input.t_tarde').prop("checked", false)
-            }else{
-            	$('input.t_tarde').prop('checked', true); //seleccionar Todos los Turnos
-            }
-        	if ($('input.t_noche').is(':checked')){
-        		$('input.t_noche').prop("checked", false)
-            }else{
-            	$('input.t_noche').prop('checked', true); //seleccionar el turno de la Noche
-            }	        	
-    	}    	
-
-    }else if(Atl_down && (tecla.keyCode == 71)){
-    	// tecla G    	
-        //Preguntamos monto de los terminales y Generamos los Terminales
-        agregarTerminales();
-    }else if(Atl_down && (tecla.keyCode == 73)){
-        // Tecla I
-        procesarticket(); //para procesar y generar el ticket
-		CargarReset();
+		//$("#txt_numero").focus(); // para focalizar el numero	
+        //$('.a').css({ 'background-color' : 'red' });
     }else if(Atl_down && (tecla.keyCode == 74)){
     	// tecla J    	
-    	AjustarMontos(); //Ajustar los montos de todas las apuestas a un prorrateado del total
-    }else if(Atl_down && (tecla.keyCode == 76)) {
-    	// tecla L 
-    	$("#s0").focus(); // hace focus en el campo de checkboxes Sorteos
-    }else if(Atl_down && (tecla.keyCode == 77)){
-    	// tecla M    	
-        // Turno Manana
-		$("#txt_numero").focus(); // hace focus en el campo de numeros	
-    	$('.text-label2').hide();
-    	$('.text-label3').hide();
-    	$('.text-label1').show();
-    	
-    	$('input:radio[name=turno]')[0].checked = true;
-    	
-		$("#s0").focus(); // hace focus en el campo de checkboxes Sorteos
-    }else if(Atl_down && (tecla.keyCode == 78)){
-    	// tecla N    	
-        // Turno Noche
-		$("#txt_numero").focus(); // hace focus en el campo de numeros		
-    	$('.text-label1').hide();
-    	$('.text-label2').hide();
-    	$('.text-label3').show();
-    	
-    	$('input:radio[name=turno]')[2].checked = true;
-    	
-		$("#s0").focus(); // hace focus en el campo de checkboxes Sorteos
-    }else if(Atl_down && (tecla.keyCode == 79)) {
-    	// tecla O
-		$("#txt_numero").focus(); // hace focus en el campo de numeros			
-    	$('.text-label1').show(); // Mostrar Todos los Turnos M, T, N
-    	$('.text-label2').show();
-    	$('.text-label3').show();
-    	
-    	$('input:radio[name=turno]')[3].checked = true;    	
-		$("#s0").focus(); // hace focus en el campo de checkboxes Sorteos	   	
-    }else if(Atl_down && (tecla.keyCode == 80)){
-    	// tecla P
-    	//$('#op_juego').val('2');// hace focus en el campo de tipo de juego y selecciona Permuta
-    	$('input:radio[name=op_juego]')[1].checked = true;
-    }else if(Atl_down && (tecla.keyCode == 81)){
-    	// tecla Q
-    	CargarReset(); //Limpiar Todos los campos
-    }else if(Atl_down && (tecla.keyCode == 82)) {
-    	// tecla R
-    	$("#recibido").focus(); // hace focus en el campo de vuelto o cambio 
-    }else if(Atl_down && (tecla.keyCode == 83)) {
-    	// tecla S
-    	//$('#op_juego').val('3');// hace focus en el campo de tipo de juego y selecciona Permuta
-    	$('input:radio[name=op_juego]')[2].checked = true;
+    	$("#op_juego").focus(); // hace focus en el campo de tipo de juego
     }else if(Atl_down && (tecla.keyCode == 84)){
     	// tecla T
-        // Turno Tarde
-		$("#txt_numero").focus(); // hace focus en el campo de numeros
-    	$('.text-label1').hide();
-    	$('.text-label3').hide();
-    	$('.text-label2').show();
-    	
-    	$('input:radio[name=turno]')[1].checked = true;
-    	
-		$("#s0").focus(); // hace focus en el campo de checkboxes Sorteos		
-    }else if(Atl_down && (tecla.keyCode == 85)){
-        // Tecla U
-    	$("#txt_numero").focus(); // hace focus en el campo de numeros    	
-    }else if(Atl_down && (tecla.keyCode == 88)){
-        // Tecla X
-        //Borrar PreTicket
-        BorrarPreTicket();     
-    }else if(Atl_down && (tecla.keyCode == 89)){
-        // Tecla Y
-        //Quitar la ultima jugada
-        BorrarUltimaJugada();        
+    	$('#op_juego').val('1');// hace focus en el campo de tipo de juego y selecciona Triple
+    }else if(Atl_down && (tecla.keyCode == 80)){
+    	// tecla P
+    	$('#op_juego').val('2');// hace focus en el campo de tipo de juego y selecciona Permuta
+    }else if(Atl_down && (tecla.keyCode == 78)){
+    	// tecla N    	
+    	$("#txt_numero").focus(); // hace focus en el campo de numeros
+    }else if(Atl_down && (tecla.keyCode == 77)){
+    	// tecla M    	
+    	$("#txt_monto").focus(); // hace focus en el campo de monto Bs
     }else if(Atl_down && (tecla.keyCode == 90)){
     	// tecla Z
     	$("#z0").focus(); // hace focus en el campo de checkboxes Zodiacales
+    }else if(Atl_down && (tecla.keyCode == 83)) {
+    	// tecla S
+    	$('#op_juego').val('3');// hace focus en el campo de tipo de juego y selecciona Permuta
+    }else if(Atl_down && (tecla.keyCode == 67)) {
+    	// tecla C
+    	$('#op_juego').val('4');// hace focus en el campo de tipo de juego y selecciona Permuta
+    }else if(Atl_down && (tecla.keyCode == 76)) {
+    	// tecla L 
+    	$("#s0").focus(); // hace focus en el campo de checkboxes Sorteos
+    }else if(Atl_down && (tecla.keyCode == 69)) {
+    	// tecla E
+    	$("#recibido").focus(); // hace focus en el campo de vuelto o cambio 
+    }else if(tecla.keyCode == 113) {
+    	// tecla F2
+    	CargarReset(); //Limpiar Todos los campos
     }else if(tecla.keyCode == 114) {
     	// tecla F3
-    	PagarTicket(); //Limpiar Todos los campos
-    }else if(tecla.keyCode == 115) {
-    	// tecla F4
-    	PagarTicket(); //Limpiar Todos los campos
-    }else if(tecla.keyCode == 116) {
-    	// tecla F5
-    	location.reload();
-    	//CargarReset();//Refresh
-    }else if(tecla.keyCode == 117) {
-    	// tecla F6
-	 	//Anular Ticket
-        AnularTicket();
-    }else if(tecla.keyCode == 118) {
-    	// tecla F7
-	 	//Repetir Ticket
+    	AjustarMontos(); //Ajustar los montos de todas las apuestas a un prorrateado del total
+    }else if(Atl_down && (tecla.keyCode == 73)){
+        // Tecla I
+        procesarticket(); //para procesar y generar el ticket
+	CargarReset();
+    }else if(Atl_down && (tecla.keyCode == 87)){
+        // Tecla W
+        //Preguntamos monto de los terminales
+        ReImprimirTicket();
+    }else if(Atl_down && (tecla.keyCode == 88)){
+        // Tecla X
+        //Preguntamos monto de los terminales
+        agregarTerminales();
+    }else if(Atl_down && (tecla.keyCode == 81)){
+        // Tecla Q
+        //Quitar la ultima jugada
+        BorrarUltimaJugada();
+    }else if(Atl_down && (tecla.keyCode == 82)){
+        // Tecla R
+        //Repetir Ticket
         RepetirTicket();
-    }else if(tecla.keyCode == 40) {
-    	// tecla Flecha Abajo
-	 	//Anular Ticket
-    	//alert("HOlaaaaaa");
-    	//alert($("*:focus").attr("id"));
- 
-    	//$(this).next().focus();
-    	 //var inputs = $(this).closest('frm1').find(':focusable');
-    	/*
-    	 var inputs = $("*:focus").attr("id");
-    	     	 
-    	 var next_idx = $('input[type=text]').index(this);
-    	 
-    	 var tot_idx = $('body').find('input[type=checkbox]').length;
-    	 
-    	 jquery.next('input').focus();
-    	 
-    	 alert(tot_idx);
-    	 */
-    	//alert($(":input").index(document.activeElement));
-    	if( $(":input").index(document.activeElement) == '7' ){
-    		$(":input")[$(":input").index(document.activeElement) + 7].focus();
-    	}else{
-    		$(":input")[$(":input").index(document.activeElement) + 1].focus();
-    	}
-    	
-    	return false;
-    	
-    	 /*
-
-    	 $(":focus").each(function() {
-    		    alert("Focused Elem_id = "+ this.id );
-    		}); */
-    }else if(tecla.keyCode == 38) {
-    	// tecla Flecha Arriba
-    	//alert($(":input").index(document.activeElement));    	
-    	if( $(":input").index(document.activeElement) == '14' ){
-    		$(":input")[$(":input").index(document.activeElement) - 7].focus();
-    	}else{
-    		$(":input")[$(":input").index(document.activeElement) - 1].focus();
-    	}    	
-    	//$(":input")[$(":input").index(document.activeElement) - 1].focus();
-
-     	return false;
-    }else if(tecla.keyCode == 37) {
-    	// tecla Flecha Izquierda   
-    	if($("*:focus").attr("id") == 'z0'){
-    		$("#s0").focus();    		
-    	}else{
-    		$("#txt_numero").focus();
-    	}
-    }else if(tecla.keyCode == 39) {
-    	// tecla Flecha Derecha    	
-    	if($("*:focus").attr("id") == 'txt_numero'){
-    		$("#s0").focus();    		
-    	}else if($("*:focus").attr("id") == 'txt_monto'){
-    		$("#s0").focus();
-    	}else{
-    		$("#z0").focus();
-    	}
+    }else if(Atl_down && (tecla.keyCode == 66)){
+        // Tecla B
+        // Turno Manana
+    	$('.text-label2').hide();
+    	$('.text-label3').hide();
+    	$('.text-label1').show();
+    }else if(Atl_down && (tecla.keyCode == 72)){
+        // Tecla H
+        // Turno Tarde
+    	$('.text-label1').hide();
+    	$('.text-label3').hide();
+    	$('.text-label2').show();
+    }else if(Atl_down && (tecla.keyCode == 75)){
+        // Tecla K
+        // Turno Noche
+    	$('.text-label1').hide();
+    	$('.text-label2').hide();
+    	$('.text-label3').show();
+    }else if(Atl_down && (tecla.keyCode == 71)){
+        // Tecla G
+        // Turno Todo
+    	$('.text-label1').show();
+    	$('.text-label2').show();
+    	$('.text-label3').show();
+    }else if(tecla.keyCode == 115){
+        // Tecla F4
+        //Borrar PreTicket
+        BorrarPreTicket();
     }
-
-    
+	
 });
 
 
@@ -939,8 +727,7 @@ function ValidateFormSell(){
 	               // Ensure that it is a number and stop the keypress
 	               if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105)) {
 	                 count = jQuery('#txt_numero').val().length;
-	                 var juego = $("input[name='op_juego']:checked").val();
-	                 //juego = jQuery('#op_juego').val();
+	                 juego = jQuery('#op_juego').val();
 	                 
 	                 // si el modo de juego es triple
 	                 if (count > 2 && juego == 1) {

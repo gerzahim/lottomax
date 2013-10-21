@@ -27,9 +27,10 @@
 					<tr class="{estilo_fila}">
 		
 						<td scope="row" align="center">
-							<a href="{pagina_principal}?op={opcion_sistema}&amp;accion=del&amp;id={id_ticket}" title="Eliminar">
+							<a href="{pagina_principal}?op={opcion_sistema}&amp;accion=del&amp;id={id_ticket}" onclick="return confirm('Esta seguro de Anular el Ticket?')" title="Anular">
                             	<img src="./images/delete.png" border="0"/>
                             </a>
+                            
 						</td>
 						<td align="center">&nbsp;{id_ticket}</td>
 						<td align="center">{fecha_hora}</td>
@@ -90,9 +91,14 @@
 
                                                 <div class="botones">
 
-                                                        <input  id="btnok" name="btnentrar" value="Eliminar" type="submit" class="boton"/>&nbsp;&nbsp;&nbsp;
+                                                        <input  id="btnok" name="btnentrar" value="Anular" type="submit" class="boton"/>&nbsp;&nbsp;&nbsp;
 
-                                                        <input  id="btncancel" name="btncancelar" value="Cancelar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
+                                                        <input  id="btncancel" name="btncancelar" value="Cancelar" type="button" class="boton" onclick="location='{ruta_regreso}'"/> 
+                                                        
+														<div id="enlaces_accion">
+															<span>[ <a class="enlaces" href="{pagina_principal}?op={opcion_sistema}&amp;accion=anular_clave&amp;id={id_ticket}">Anular por Clave</a> ]</span>
+														</div>                                                        
+                                                  
 
                                                 </div>
 
@@ -104,6 +110,60 @@
                         </table>
 
                         <!-- END: busqueda_serial -->
+                        
+                        
+                        <!-- BEGIN: anular_clave -->
+                        <table width="800" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF">
+                            <tr>
+                                <td>
+                                    <div id="main">
+
+                                        <br />
+
+                                        <form id="frm1" method="get" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es">
+
+                                                <input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
+                                                <input style="border: hidden" type="hidden" name="accion" id="idaccion" value="looking_clave"/>
+                                                <input style="border: hidden" type="hidden" name="id_ticket" id="id_ticket" value="{id_ticket}"/>
+
+                                                <fieldset>
+
+                                                        <legend>Ingrese la clave Autorizada:</legend>
+
+                                                        <table align="center" border="0" cellpadding="2" cellspacing="0" width="100%">
+
+                                                                <tr><td colspan="2">&nbsp;</td></tr>
+
+                                                                <tr><td colspan="2"></td></tr>
+
+                                                                <tr>
+                                                                        <td class="tag">Clave Autorizada:</td>
+
+                                                                        <td><input id="" name="clave" size="30" maxlength="45" type="text" /></td>
+                                                                </tr>
+
+                                                                <tr><td colspan="2">&nbsp;</td></tr>
+
+                                                        </table>
+
+                                                </fieldset>
+
+                                                <div class="botones">
+
+                                                        <input  id="btnok" name="btnentrar" value="Anular" type="submit" class="boton"/>&nbsp;&nbsp;&nbsp;
+
+                                                        <input  id="btncancel" name="btncancelar" value="Cancelar" type="button" class="boton" onclick="location='{ruta_regreso}'"/> 
+
+                                                </div>
+
+                                        </form>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- END: anular_clave -->                        
 			
 	<!-- BEGIN: busqueda -->
 <table width="800" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF">

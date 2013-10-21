@@ -6,7 +6,8 @@ class ConfigVars{
 	 *
 	 * @var string $vTituloSistema
 	 */
-	private $vTituloSistema= "Sistema Web de Loteria - Lotto Max";
+	private $vTituloSistema= "Sistema Web de Loteria - Lotto 
+	/Max";
 		/**
 	 * Titulo del banner.
 	 *
@@ -110,15 +111,14 @@ class ConfigVars{
 	 *
 	 * @var string $vDataBase
 	 */
-	//private $vDataBase= "vanesoft_siadcova";
+	//private $vDataBase= "grupovoi_lottomax";
 	private $vDataBase= "lottomax";
-		
 	/**
 	 * Usuario para conexion a la base de datos.
 	 *
 	 * @var string $vUsuario
 	 */
-	//private $vUsuario= "vanesoft_root";
+	//private $vUsuario= "grupovoi_lotto";
 	private $vUsuario= "root";	
 	
 	/**
@@ -126,7 +126,7 @@ class ConfigVars{
 	 *
 	 * @var string $vClave
 	 */
-	//private $vClave= "vanesoft_root";
+	//private $vClave= "secreta#7";
 	private $vClave= "";	
 	
 	/**

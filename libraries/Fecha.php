@@ -40,6 +40,19 @@ class Fecha{
 		$fecha_hoy = date('Y-m-d');		
 		return $fecha_hoy; 
 	}
+	
+	
+	/**
+	 * Devuelve la fecha y hora de hoy formato 0000-00-00 ano mes dia.
+	 * 
+	 * @access public
+	 * @return string
+	 */
+	public function FechaHoraHoy(){ 
+
+		$fecha_hoy = date('Y-m-d H:i');		
+		return $fecha_hoy; 
+	}	
 
 	/**
 	 * Devuelve la fecha hoy formato 00/00/0000 ano mes dia.

@@ -32,7 +32,7 @@ class Sorteo{
 		
 		//Preparacion del query
 		//$sql = "SELECT * FROM sorteos WHERE status <> 0";
-		$sql = "SELECT * FROM sorteos ORDER BY id_loteria, hora_sorteo ASC ";
+		$sql = "SELECT * FROM sorteos ORDER BY hora_sorteo, id_loteria, zodiacal, nombre_sorteo";
 		$result= $this->vConexion->ExecuteQuery($sql);
 		
 		
@@ -104,11 +104,11 @@ class Sorteo{
 	 * @param string $clave
 	 * @return boolean, array
 	 */
-	public function GuardarDatosSorteo($id_loteria,$nombre,$time,$zodiacal){
+	public function GuardarDatosSorteo($id_loteria,$nombre,$time, $turno, $zodiacal,$tradicional){
 		
 		// id_sorteo  id_loteria nombre_sorteo	hora_sorteo	zodiacal status
 		//Preparacion del query
-		$sql = "INSERT INTO `sorteos` (`id_loteria` , `nombre_sorteo` , `hora_sorteo` , `zodiacal` , `status`) VALUES ('".$id_loteria."', '".$nombre."', '".$time."', '".$zodiacal."', 1)";
+		$sql = "INSERT INTO `sorteos` (`id_loteria` , `nombre_sorteo` , `hora_sorteo`, `id_turno` , `zodiacal`, `tradicional` , `status`) VALUES ('".$id_loteria."', '".$nombre."', '".$time."', '".$turno."', '".$zodiacal."', '".$tradicional."', 1)";
 		return $this->vConexion->ExecuteQuery($sql);
 		
 	}	
@@ -141,11 +141,11 @@ class Sorteo{
 	 * @param string $clave
 	 * @return boolean, array
 	 */
-	public function ActualizaDatosSorteo($id_sorteo,$id_loteria,$nombre,$hora,$minutos,$zodiacal,$status){
+	public function ActualizaDatosSorteo($id_sorteo,$id_loteria,$nombre,$hora,$minutos,$turno,$zodiacal,$tradicional,$status){
 		
 		$time= $hora.":".$minutos.":00";
 		//Preparacion del query
-		$sql = "UPDATE `sorteos` SET `id_loteria`='".$id_loteria."',  `nombre_sorteo`='".$nombre."', `hora_sorteo`='".$time."', `zodiacal`='".$zodiacal."', `status`='".$status."' WHERE id_sorteo='".$id_sorteo."'";
+		$sql = "UPDATE `sorteos` SET `id_loteria`='".$id_loteria."',  `nombre_sorteo`='".$nombre."', `hora_sorteo`='".$time."', `id_turno`='".$turno."', `zodiacal`='".$zodiacal."', `tradicional`='".$tradicional."', `status`='".$status."' WHERE id_sorteo='".$id_sorteo."'";
 		return $this->vConexion->ExecuteQuery($sql);
 		
 	}

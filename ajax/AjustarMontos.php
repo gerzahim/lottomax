@@ -68,11 +68,11 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
 	global $obj_conexion;
 
 	//determinando el tipo de jugada
-	//$id_tipo_jugada= $obj_modelo->GetTipoJugada($esZodiacal,$txt_numero);
-        $id_tipo_jugada= '2';
+	$id_tipo_jugada= $obj_modelo->GetTipoJugada($esZodiacal,$txt_numero);
+    //$id_tipo_jugada= '2';
 
 	//revisar tabla de ticket_transaccional
-	$numero_jugadoticket= $obj_modelo->GetTicketTransaccional($txt_numero,$sorteo,$zodiacal);
+	$numero_jugadoticket= $obj_modelo->GetTicketTransaccional($txt_numero, $sorteo, $zodiacal, $id_tipo_jugada);
 
 	if ( $numero_jugadoticket['total_registros']>0 ){
 

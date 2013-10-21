@@ -198,7 +198,7 @@ switch (ACCION){
 
 
                                  }else{
-                                      $_SESSION['mensaje']= 'Los números ingresados deben ser de tres digitos! ';
+                                      $_SESSION['mensaje']= 'Los numeros ingresados deben ser de tres digitos! ';
                                       header('location:'.$_SESSION['Ruta_Form']);
                                  }
                              }
@@ -213,7 +213,7 @@ switch (ACCION){
 		// Ruta actual
 		$_SESSION['Ruta_Lista']= $obj_generico->RutaRegreso();
 
-                $obj_xtpl->assign('fecha', date('Y-m-d'));
+        $obj_xtpl->assign('fecha', date('Y-m-d'));
                 
 		// Parseo del bloque
 		$obj_xtpl->parse('main.contenido.buscar_resultados');

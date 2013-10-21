@@ -42,7 +42,7 @@ class InfoLogin{
 		$this->vUsuario= $usuario;
 		$this->vPerfilUsuario= $perfil;
 		$this->vIP= $ip;
-                $this->vTaquilla= $taquilla;
+        $this->vTaquilla= $taquilla;
 	}
 	
 	

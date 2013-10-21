@@ -1,6 +1,6 @@
 <html>
    <!-- License:  LGPL 2.1 or QZ INDUSTRIES SOURCE CODE LICENSE -->
-   <head><title>jZebra Demo</title>    
+   <head><title>VOILA</title>    
    <script type="text/javascript">
       function findPrinter() {
          var applet = document.jzebra;
@@ -645,12 +645,12 @@
    <script type="text/javascript" src="js/jquery.plugin.html2canvas.js"></script>
    </head>
    <body id="content" bgcolor="#FFF380">
-   <h1 id="title">jZebra Sample Applet</h1><br />
+   <h1 id="title">MODULO IMPRESION VOILA</h1><br />
    <table border="1px" cellpadding="5px" cellspacing="0px"><tr>
    
-   <td valign="top"><h2>All Printers</h2>
-   <input type=button onClick="findPrinter()" value="Detect Printer"><br />
-   <input type=button onClick="findPrinters()" value="List All Printers"><br />
+   <td valign="top"><h2>Impresora Predeterminada</h2>
+   <!-- <input type=button onClick="findPrinter()" value="Detect Printer"><br / -->
+   <!-- <input type=button onClick="findPrinters()" value="List All Printers"><br / -->
    <input type=button onClick="useDefaultPrinter()" value="Use Default Printer"><br /><br />
    <applet name="jzebra" code="jzebra.PrintApplet.class" archive="./jzebra.jar" width="50px" height="50px">
       <!-- Optional, searches for printer with "zebra" in the name on load -->
@@ -665,9 +665,9 @@
       <!-- <param name="cache_version" value="1.4.9.1"> -->
    </applet><br />
    
-   </td><td valign="top"><h2>Raw Printers Only</h2>
-   <a href="http://code.google.com/p/jzebra/wiki/WhatIsRawPrinting" target="new">What is Raw Printing?</a><br />
-   <input type=button onClick="print()" value="Print" /><br />     
+   </td><td valign="top"><h2>Imprimir</h2>
+   <input type=button onClick="print()" value="Print" /><br />    
+   <!--  
    <input type=button onClick="print64()" value="Print Base64" /><br />
    <input type=button onClick="printPages()" value="Print Spooling Every 3" /><br />
    <input type=button onClick="printXML()" value="Print XML" /><br />
@@ -679,7 +679,8 @@
    <input type=button onClick="printZPLImage()" value="Print ZPL Image" /><br />
    <input type=button onClick="printToFile()" value="Print To File" /><br />
    <input type=button onClick="useAlternatePrinting()" value="Use Alternate Printing" /><br />
-   
+    -->
+    <!--  
    </td><td valign="top"><h2>PostScript Printers Only</h2>
    <a href="http://code.google.com/p/jzebra/wiki/WhatIsPostScriptPrinting" target="new">What is PostScript Printing?</a><br />
    <input type=button onClick="printHTML()" value="Print HTML" /><br />
@@ -689,12 +690,6 @@
    <input type=button onClick="printPage()" value="Print Current Page" /><br />
    <input type=button onClick="logFeatures()" value="Log Printer Features on Print" /><br />
    
-   </td><td valign="top"><h2>Misc</h2>
-   <input type=button onClick="allowMultiple()" value="Allow Multiple Applets" /><br /></td></tr></table>
-   </body><canvas id="hidden_screenshot" style="display:none;" />
-   <br /><br />To view the applet's html source code:<strong> Right Click This Page --> View Source</strong> and look for <strong>&lt;applet&gt &lt;/applet&gt;</strong> code.
-   <br /><br />The applet is invoked with JavaScript through:  <strong>document.jzebra.applet.append("RAW DATA");</strong> and <strong>document.jzebra.applet.print();</strong>.  For more details, Right Click This Page --> View Source and look for <strong>&lt;script&gt &lt;/script&gt;</strong> code.
-   <br /><br />If the applet loads above, you can view it's output by enabling the Java console through Control Panel.
-   <br /><br />To get the latest version, or submit a bug visit: <a href="http://code.google.com/p/jzebra">http://code.google.com/p/jzebra</a><br />
-   <br /><br /><strong>Java Console:</strong> Please copy/paste details from the <a href="http://java.com/en/download/help/javaconsole.xml">java console</a> when submitting a bug report
+ --> 
+
 </html>

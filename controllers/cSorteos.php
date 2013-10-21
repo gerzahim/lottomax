@@ -45,8 +45,17 @@ switch (ACCION){
 				$obj_xtpl->assign($obj_generico->CleanTextDb($row));
 				$obj_xtpl->parse('main.contenido.formulario.lista_loterias');
 			}
-		}	
-				
+		}
+
+		// Listado de Turnos
+		/*
+		if( $result= $obj_modelo->GetTurnos() ){
+			while($row= $obj_conexion->GetArrayInfo($result)){
+				$obj_xtpl->assign($obj_generico->CleanTextDb($row));
+				$obj_xtpl->parse('main.contenido.formulario.lista_loterias');
+			}
+		}		
+			*/	
 		
 		// Parseo del bloque
 		$obj_xtpl->parse('main.contenido.formulario');			
@@ -57,8 +66,10 @@ switch (ACCION){
 		$nombre= $obj_generico->CleanText($_POST['txt_name']);
 		$id_loteria= $obj_generico->CleanText($_POST['op_loteria']);
 		$hora= $obj_generico->CleanText($_POST['op_hora']);	
-		$minutos= $obj_generico->CleanText($_POST['op_minute']);	
+		$minutos= $obj_generico->CleanText($_POST['op_minute']);
+		$turno= $obj_generico->CleanText($_POST['op_turno']);	
 		$zodiacal= $obj_generico->CleanText($_POST['op_zodiacal']);
+		$tradicional= $obj_generico->CleanText($_POST['op_tradicional']);
 		$status= $obj_generico->CleanText($_POST['op_status']);	
 
 		// Verifica que los datos requeridos no este vacios
@@ -67,7 +78,7 @@ switch (ACCION){
 				$time= $hora.":".$minutos.":00";
 
 				// Crea la cuenta de acceso
-				if( $obj_modelo->GuardarDatosSorteo($id_loteria,$nombre,$time,$zodiacal) ){
+				if( $obj_modelo->GuardarDatosSorteo($id_loteria,$nombre,$time,$turno,$zodiacal,$tradicional) ){
 					
 					$_SESSION['mensaje']= $mensajes['info_agregada'];
 					header('location:'.$_SESSION['Ruta_Lista']);					
@@ -104,7 +115,6 @@ switch (ACCION){
 			// Asignaciones
 			$row_datos= $obj_modelo->GetDatosSorteo($_GET['id']);
 			$obj_xtpl->assign($obj_generico->CleanTextDb($row_datos));
-
 		
 			// Listado de Loterias
 			if( $result= $obj_modelo->GetLoterias() ){
@@ -153,7 +163,17 @@ switch (ACCION){
 				}
 
 			}
-
+			
+			//Selecciona el turno
+			if ($row_datos['id_turno'] == '1'){
+				$obj_xtpl->assign('selecciona_tm','selected="selected"');
+			}
+			else if ($row_datos['id_turno'] == '2'){
+				$obj_xtpl->assign('selecciona_tt','selected="selected"');
+			}else{
+				$obj_xtpl->assign('selecciona_tn','selected="selected"');
+			}
+			
 			//Selecciona si es zodiacal o no
 			if ($row_datos['zodiacal'] == '1'){
 				$obj_xtpl->assign('selecciona','selected="selected"');
@@ -161,6 +181,14 @@ switch (ACCION){
 			else{
 				$obj_xtpl->assign('seleccione','selected="selected"');
 			}
+			
+			//Selecciona si es tradicional o no
+			if ($row_datos['tradicional'] == '1'){
+				$obj_xtpl->assign('seleccionot','selected="selected"');
+			}
+			else{
+				$obj_xtpl->assign('seleccionut','selected="selected"');
+			}			
 			
 			//Selecciona el tipo de status que tiene
 			if ($row_datos['status'] == '1'){
@@ -195,8 +223,10 @@ switch (ACCION){
 		$nombre= $obj_generico->CleanText($_POST['txt_name']);
 		$id_loteria= $obj_generico->CleanText($_POST['op_loteria']);
 		$hora= $obj_generico->CleanText($_POST['op_hora']);	
-		$minutos= $obj_generico->CleanText($_POST['op_minute']);	
+		$minutos= $obj_generico->CleanText($_POST['op_minute']);
+		$turno= $obj_generico->CleanText($_POST['op_turno']);	
 		$zodiacal= $obj_generico->CleanText($_POST['op_zodiacal']);
+		$tradicional= $obj_generico->CleanText($_POST['op_tradicional']);
 		$status= $obj_generico->CleanText($_POST['op_status']);		
 		$id_sorteo= $_REQUEST['idreferencia'];
 
@@ -205,7 +235,7 @@ switch (ACCION){
 				
 
 			// Modifica la cuenta
-			if( $obj_modelo->ActualizaDatosSorteo($id_sorteo,$id_loteria,$nombre,$hora,$minutos,$zodiacal,$status) ){
+			if( $obj_modelo->ActualizaDatosSorteo($id_sorteo,$id_loteria,$nombre,$hora,$minutos,$turno,$zodiacal,$tradicional,$status) ){
 				
 				$_SESSION['mensaje']= $mensajes['info_modificada'];
 				header('location:'.$_SESSION['Ruta_Lista']);					

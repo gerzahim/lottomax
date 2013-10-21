@@ -42,8 +42,10 @@ class LoginAcceso{
 	public function GuardarUsuarioTaquilla($id_usuario, $id_taquilla){
 
 		//Preparacion del query
-		$sql = "INSERT INTO `usuarios_taquillas` (`id_usuario` , `id_taquilla`) VALUES ('".$id_usuario."', '".$id_taquilla."')";
-		return $this->vConexion->ExecuteQuery($sql);
+		/************* CABLEADO **********************/
+		//$sql = "INSERT INTO `usuarios_taquillas` (`id_usuario` , `id_taquilla`) VALUES ('".$id_usuario."', '".$id_taquilla."')";
+		//return $this->vConexion->ExecuteQuery($sql);
+		return true;
 
 	}
 

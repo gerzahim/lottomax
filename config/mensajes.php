@@ -124,12 +124,15 @@ $mensajes['no_sorteo']= "Debe seleccionar un SORTEO para jugar !!!";
 $mensajes['no_zodiacal']= "Debe seleccionar SIGNO ZODIACAL para jugar !!!";
 $mensajes['numero_incompleto']= "NUMERO Incompleto para sorteo ";
 $mensajes['numero_agotado']= "NUMERO Agotado para sorteo ";
-$mensajes['no_sorteo_hora']= "Selecciono un SORTEO ya cerrado !!!";
+$mensajes['no_sorteo_hora']= "Selecciono un SORTEO ya cerrado !!! <br><br> Presionar F5 para Actualizar sorteos";
 $mensajes['numero_repetido_eincompleto']= "El numero ya esta jugado y tiene su cupo completo !!!";
 
+
+$mensajes['serial_coincide']= "El Ticket ha sido Pagado exitosamente !!!";
 $mensajes['serial_no_coincide']= "El serial ingresado no pertenece al ticket seleccionado !!!";
+$mensajes['clave_no_coincide']= "La clave ingresada no esta autorizada para el eliminar al ticket !!!";
 $mensajes['sorteo_cerrado']= "No se puede eliminar el ticket, al menos uno de los sorteos en el ticket ya ha sido cerrado !!!";
 $mensajes['ticket_vencido']= "El ticket seleccionado se encuentra vencido para pagar.";
-$mensajes['no_ticket']= "No se encontro información de este ticket!";
+$mensajes['no_ticket']= "No se encontro informacion de este ticket!";
 $mensajes['ticket_anulado']= "El ticket ha sido anulado.";
 ?>

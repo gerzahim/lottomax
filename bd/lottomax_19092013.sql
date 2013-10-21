@@ -752,7 +752,7 @@ INSERT INTO `zodiacal` (`Id_zodiacal`, `nombre_zodiacal`, `pre_zodiacal`) VALUES
 --
 DROP TABLE IF EXISTS `ver_resultados`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`127.0.0.1` SQL SECURITY DEFINER VIEW `ver_resultados` AS select `r`.`id_resultados` AS `id_resultados`,`s`.`nombre_sorteo` AS `nombre_sorteo`,`s`.`hora_sorteo` AS `hora_sorteo`,`z`.`nombre_zodiacal` AS `nombre_zodiacal`,`r`.`numero` AS `numero`,`r`.`fecha_hora` AS `fecha_hora` from ((`resultados` `r` join `sorteos` `s` on((`r`.`id_sorteo` = `s`.`id_sorteo`))) join `zodiacal` `z` on((`r`.`zodiacal` = `z`.`Id_zodiacal`))) where 1;
+CREATE ALGORITHM=UNDEFINED DEFINER=`grupovoi_lotto`@`127.0.0.1` SQL SECURITY DEFINER VIEW `ver_resultados` AS select `r`.`id_resultados` AS `id_resultados`,`s`.`nombre_sorteo` AS `nombre_sorteo`,`s`.`hora_sorteo` AS `hora_sorteo`,`z`.`nombre_zodiacal` AS `nombre_zodiacal`,`r`.`numero` AS `numero`,`r`.`fecha_hora` AS `fecha_hora` from ((`resultados` `r` join `sorteos` `s` on((`r`.`id_sorteo` = `s`.`id_sorteo`))) join `zodiacal` `z` on((`r`.`zodiacal` = `z`.`Id_zodiacal`))) where 1;
 
 --
 -- Filtros para las tablas descargadas (dump)

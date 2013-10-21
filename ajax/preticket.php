@@ -77,8 +77,9 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
 	//determinando el tipo de jugada
 	$id_tipo_jugada= $obj_modelo->GetTipoJugada($esZodiacal,$txt_numero); 
 	
+	
 	//revisar tabla de ticket_transaccional
-	$numero_jugadoticket= $obj_modelo->GetTicketTransaccional($txt_numero,$sorteo,$zodiacal);
+	$numero_jugadoticket= $obj_modelo->GetTicketTransaccional($txt_numero,$sorteo,$zodiacal, $id_tipo_jugada);
 	
 	if ( $numero_jugadoticket['total_registros']>0 ){
 		
@@ -101,7 +102,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
 		}else{
                         if ($num_ticket_inc == '0'){
                             /************* CABLEADO **********************/
-                            //Proceso CONFIRM: Elimina la apuesta existente en ticket transaccional, y para que no esté repetida, la registra
+                            //Proceso CONFIRM: Elimina la apuesta existente en ticket transaccional, y para que no este repetida, la registra
                             // con el nuevo monto ingresado.
 
                             $id_ticket_transaccional= $obj_modelo->GetIDTicketTransaccional($txt_numero,$sorteo,$zodiacal);
@@ -517,11 +518,19 @@ if(!empty($_POST['ss'])) {
 			$hora_sorteo=$row;
 			//$hora_sorteo=$row['hora_sorteo'];
 			
+			//echo $hora_sorteo;
+			
 			//Valor que debe venir de la base de datos tiempo_cierre_sorteos
 			$minutos_bloqueo= $obj_modelo->MinutosBloqueo();
+			//echo "<br>";
+			//echo $minutos_bloqueo;
 						
 			//Valor que debe venir de la base de datos
-			$hora_actualMas= strtotime("+$minutos_bloqueo minutes");
+			//$hora_actualMas= strtotime(date('H:i:s')"+$minutos_bloqueo minutes");
+			$hora_actualMas= "+$minutos_bloqueo minutes";
+			
+			//echo "<br>";
+			//echo $hora_actualMas;
 			
 			if ($hora_actualMas > $hora_sorteo){
 				
@@ -530,8 +539,8 @@ if(!empty($_POST['ss'])) {
 				
 				/************* CABLEADO **********************/
 				$_SESSION['mensaje']= $mensajes['no_sorteo_hora'];
-				//echo $_SESSION['mensaje'];
-				//exit();
+				echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";	
+				exit();
 			}			
 			
 		}
@@ -587,7 +596,7 @@ if($txt_numero == 0 ){
 	
 		case 1:  
 			// Juega solo triple
-                        $result= $obj_modelo->GetIdTaquilla();
+            $result= $obj_modelo->GetIdTaquilla();
 			                    
 			//recorriendo el array de los sorteos seleccionados	
 			foreach ( $sorteos as $sorteo) {
@@ -631,7 +640,7 @@ if($txt_numero == 0 ){
 		 
 		case 2:  
 			// Juega Permuta
-                        $result= $obj_modelo->GetIdTaquilla();
+            $result= $obj_modelo->GetIdTaquilla();
 
 			//recorriendo el array de los sorteos seleccionados
 			foreach ( $sorteos as $sorteo) {
@@ -646,7 +655,7 @@ if($txt_numero == 0 ){
 
 						// Realizamos la permuta
                                                 if (strlen($txt_numero)<3){
-                                                   echo "<div id='mensaje' class='mensaje' >Debe ingresar un numero de mínimo tres cifras para generar la permuta !!!</div>";
+                                                   echo "<div id='mensaje' class='mensaje' >Debe ingresar un numero de minimo tres cifras para generar la permuta !!!</div>";
                                                 }else{
                                                     $numeros_permuta = Permutar($txt_numero);
 
@@ -669,7 +678,7 @@ if($txt_numero == 0 ){
                                             
                                             // Realizamos la permuta
                                             if (strlen($txt_numero)<3){
-                                               echo "<div id='mensaje' class='mensaje' >Debe ingresar un numero de mínimo tres cifras para generar la permuta !!!</div>";
+                                               echo "<div id='mensaje' class='mensaje' >Debe ingresar un numero de minimo tres cifras para generar la permuta !!!</div>";
                                             }else{
                                                 $numeros_permuta = Permutar($txt_numero);
 
@@ -811,7 +820,8 @@ if( $result= $obj_modelo->GetDatosTicketTransaccional() ){
 			$zodiacal = $obj_modelo->GetPreZodiacal($row['id_zodiacal']);	
 		}
 		//print_r($row);
-		echo "<tr class='eveno'><td align='center'>".$span1."SORTEO: ".$obj_modelo->GetNombreSorteo($row['id_sorteo']).$span2."</td></tr>";
+		//echo "<tr class='eveno'><td align='center'>".$span1."SORTEO: ".$obj_modelo->GetNombreSorteo($row['id_sorteo']).$span2."</td></tr>";
+		echo "<tr class='eveno'><td align='center'>".$span1."".$obj_modelo->GetNombreSorteo($row['id_sorteo']).$span2."</td></tr>";
 		echo "<tr class='eveni'><td align='left'>".$span1.$row['numero']." x ".$row['monto']." ".$zodiacal." ".$inc.$span2."</td></tr>";
 	}		
 	echo "</table>";	

@@ -1,0 +1,224 @@
+<!-- BEGIN: contenido -->       
+<table width="800" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF">
+	<tr>
+		<td >
+	        <br /> 
+            <!--<div id="message" class="message" >{mensaje}</div>  --> 
+		
+<form data-plus-as-tab="true" name="frm1" id="frm1" method="post" enctype="multipart/form-data" action="{pagina_principal}"  xml:lang="es" lang="es">
+<script language='javascript' type='text/javascript'> cargarPreticket();</script>
+<input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
+
+<input style="border: hidden" type="hidden" name="accion" id="idaccion" value="{tipo_accion}"/>
+
+<table width="760" height="348" border="0" align="center" class="table_lister" cellpadding="1" cellspacing="1">
+	<caption>Ventas de Ticket</caption>
+ <thead>
+  <tr class="odd">
+    <th width="194" class="title header" scope="col">Juego</th>
+    <th width="180" class="title header" scope="col">Loterias</th>
+    <th width="200" class="title header" scope="col">Zodiacales</th>
+    <th width="158" class="title header" scope="col">Ticket</th>
+  </tr>
+</thead>
+<tbody>  
+  <tr align="center"  class="evene"> <!-- Clase que me tiene jodido con la clase de las tablas -->
+    <td height="124">
+		Modo Juego:&nbsp;(J)
+		<select id="op_juego" name="op_juego" >
+			<option value="1">Triple</option>
+			<!--si cambia value (permuta) recuerda cambiar el jscript metodo ValidateFormSell()-->
+			<option value="2">Permuta</option>
+			<option value="3">Series</option>
+			<option value="4">Corridas</option>
+		</select><br> <br>    
+		Numeros :&nbsp;(N)<br> 
+        <input id="txt_numero" name="txt_numero" size="7" maxlength="7" type="text" value=""/><br><br>
+		Montos Bs : (M)<br>
+		<input id="txt_monto" name="txt_monto" size="10"  maxlength="10" type="text" value=""/><br><br>
+        <img src="./images/add1.png" onClick='agregar_ticket();CargarReset1();calcula_total();'/>
+        <br>AGREGAR AL TICKET&nbsp;(+)<br><br>
+        <p align="center">&nbsp;Estaci&oacute;n: &nbsp;<input id="taquilla" name="taquilla" size="3" type="text" disabled="disabled" value="{taquilla}"/></p></td>
+   		 
+	</td>
+    <td rowspan="3">
+	    <!-- 
+			Lista Sorteo<select id="sorteos" name="sorteos" >
+				<option value="1">Triple</option>
+				<option value="2">Astral</option>
+			</select>    
+	    -->
+	    <input id="cant_sorteos" name="cant_sorteos" size="10" " maxlength="6" type="hidden" value="{cant_sorteos}"/> 
+	   
+	    <div  id="checkboxesorteos" style=" width:200px; height:500px; overflow:auto;">
+	&nbsp;&nbsp;&nbsp;&nbsp;Todos   Si / No&nbsp;(L)&nbsp;&nbsp;&nbsp;<input type="checkbox" id="s0" name="s0" value="0" onclick="checkAllsorteos(document.getElementsByName('ss[]'));" >
+			<table width="170" border="0">
+			
+			  
+			  <!-- BEGIN: lista_sorteos -->
+			  <tr class="eveni">
+			    <td><input type="checkbox" name="ss[]" value="{id_sorteo}"/>&nbsp;{nombre_sorteo}</td>
+			  </tr>	
+			  <!-- END: lista_sorteos -->
+			
+			</table>
+		</div>
+		
+	</td>
+
+	<td >
+		<table width="150" border="0">
+		&nbsp;&nbsp;&nbsp;&nbsp;Todos   Si / No&nbsp;(Z)&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="z0" value="0" onclick="checkAllZodiacales(document.getElementsByName('zz[]'));" >
+
+                  <tr class="eveni">
+		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" name="zz[]" value="1" /> &nbsp;Acuario</td>
+		  </tr>
+		  <tr class="eveni">
+		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" name="zz[]" value="2" /> &nbsp;Aries</td>
+		  </tr>
+		  <tr class="eveni">
+		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" name="zz[]" value="3" /> &nbsp;Cancer</td>
+		  </tr>
+		  <tr class="eveni">
+		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" name="zz[]" value="4" /> &nbsp;Capricornio</td>
+		  </tr>  
+		  <tr class="eveni">
+		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" name="zz[]" value="5" /> &nbsp;Escorpio</td>
+		  </tr>  
+		  <tr class="eveni">
+		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" name="zz[]" value="6" /> &nbsp;Geminis</td>
+		  </tr>  
+		  <tr class="eveni">
+		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" name="zz[]" value="7" /> &nbsp;Leo</td>
+		  </tr>  
+		  <tr class="eveni">
+		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" name="zz[]" value="8" /> &nbsp;Libra</td>
+		  </tr>  
+		  <tr class="eveni">
+		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" name="zz[]" value="9" /> &nbsp;Piscis</td>
+		  </tr>  
+		  <tr class="eveni">
+		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" name="zz[]" value="10" /> &nbsp;Sagitario</td>
+		  </tr>  
+		  <tr class="eveni">
+		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" name="zz[]" value="11" /> &nbsp;Tauro</td>
+		  </tr>  
+		  <tr class="eveni">
+		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" name="zz[]" value="12" /> &nbsp;Virgo</td>
+		  </tr> 
+		  </table>    
+      
+    </td>
+    <td rowspan="2">
+		<div id="ticket" style=" width:200px; height:400px; overflow:auto;">    
+	    </div>    
+    </td>
+    
+  </tr>
+  <tr align="center">
+    <td height="130">
+
+	<!-- Tabla para la Leyenda -->     
+    <table align="center">
+    <tr>
+      <td align="left">T- Triple | P- Permuta</td>
+    </tr> 
+    <tr>
+      <td align="left">S- Serie   | C- Corrida</td>
+    </tr>     
+    <tr>
+      <td align="left">V- Ver PRETicket </td>
+    </tr>      
+    <tr>
+        <td align="left">X- Agregar Terminales</td>
+    </tr>     
+    <tr>
+      <td align="left">Q- Quitar Ultima Jugada</td>
+    </tr>     
+    <tr>
+      <td align="left">R- Repetir Ticket</td>
+    </tr>
+    <tr>
+      <td align="left">F2- Limpiar Campos</td>
+    </tr>
+    <tr>
+      <td align="left">F3- Ajustar Montos</td>
+    </tr>
+    <tr>
+      <td align="left">F4- Borrar PRETicket</td>
+    </tr>
+    <tr>
+      <td align="left">I- Imprimir Ticket</td>
+    </tr>
+    <tr>
+      <td align="left">W- ReImprimir Ticket </td>
+    </tr>            
+   </table>               
+    <!-- 
+    <img src="./images/add1.png" onClick='agregar_ticket()'/>
+    <br>AGREGAR AL TICKET<br><br>
+    <p align="center">&nbsp;Estaci&oacute;n: &nbsp;<input id="taquilla" name="taquilla" size="3" type="text" readonly="readonly" value="{taquilla}"/></p></td>
+     -->
+    <td>
+    
+              
+         
+         
+    <table align="center">
+    <tr>
+      <td align="left">Efectivo<br>Recibido: (E)</td>
+      <td align="left">Cambio</td>
+    </tr>
+    <tr>
+      <td align="center" colspan="2">
+      <input id="recibido" name="recibido" size="15" maxlength="10" type="text" onkeyup="calcula_cambio()"/>
+      <input id="cambio" name="cambio" size="15" type="text" readonly="readonly"/>
+      </td>
+    </tr>  
+   </table>
+  
+  
+  
+  </td>
+  </tr>
+  <tr>
+    <td height="47">
+	    <div id="clock"></div>
+    </td>
+    <td>
+		<div id="enlaces_accion">
+    		<table align="center" border="0">
+			    <tr align="center">
+			      <td><!--<img src="./images/refresh.png"  /><br><span>[ <a class="enlaces" href="#">RESTAURAR </a> ]</span>--></td>
+                              <td><img src="./images/printer.png" onclick="procesarticket();CargarReset1();" /><br> <span>[ <a class="enlaces" href="#" onclick="procesarticket();CargarReset1();">IMPRIMIR</a> ]</span></td>
+			    </tr>    	
+		    </table>
+		</div>     
+    </td>
+    
+    <td>    
+	    <div id="carga_total"><b>Total Ticket</b>  
+	    	<input id="total" name="total" size="15" type="text" readonly="readonly"/>
+	    </div>    
+    </td>
+    
+  </tr>
+</tbody>  
+</table>
+
+</form>
+
+
+	
+<br /><br />	 
+		
+		</td>	
+	</tr>
+
+</table>
+<!-- para cargar al final del documento -->   
+<a name="final"></a>
+     
+<!-- END: contenido -->       
+
+

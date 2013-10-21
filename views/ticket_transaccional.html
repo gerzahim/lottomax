@@ -1,0 +1,109 @@
+<!-- BEGIN: contenido -->       
+<table width="800" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF">
+	<tr>
+		<td >
+	        <br /> 
+            <div id="message" class="message" >{mensaje}</div>        
+                 
+			<!-- BEGIN: lista_usuario -->
+			<div id="enlaces_accion">
+				<span>[ <a class="enlaces" href="{pagina_principal}?op=ventas#final">Regresar a Ventas</a> ]</span>	
+			</div>              
+			<table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1">
+				<caption>
+				Listado de Ticket
+				</caption>			
+
+				<thead>		
+					<tr>		
+						<th class="title header" scope="col"  width="20">&nbsp;</th>		
+						<th class="title header" scope="col"  width="20">&nbsp;</th>		
+						<th class="title header" scope="col">Numero</th>
+						<th class="title header" scope="col">Sorteo</th>		
+						<th class="title header" scope="col">Monto Bs</th>		
+						<th class="title header" scope="col">Zodiacal</th>
+					</tr>		
+				</thead>
+		
+				<tbody>
+					<form  name="frm1" id="frm1" method="post" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es">
+		
+					<input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
+		
+					<input style="border: hidden" type="hidden" name="accion" id="idaccion" value="upd"/>
+		
+					<!-- BEGIN: lista -->
+					<tr class="{estilo_fila}">
+		
+						<td class="lista1" scope="row" align="center">
+							<a href="{pagina_principal}?op={opcion_sistema}&amp;accion=mod&amp;id={id_ticket_transaccional}" title="Ver / Modificar">
+                            	<img src="./images/lapiz.gif" border="0"/>
+                           	</a>
+						</td>
+						<td scope="row" align="center">
+							<a href="{pagina_principal}?op={opcion_sistema}&amp;accion=del&amp;id={id_ticket_transaccional}" title="Eliminar">
+                            	<img src="./images/delete.png" border="0"/>
+                            </a>
+						</td>
+						<td align="left">&nbsp;{numero}</td>
+						<td align="left">&nbsp;{Nombre_Sorteo}
+                           <!-- BEGIN: lista_sorteos -->
+                           <select id="op_sorteo" name="sorteo-{id_ticket_transaccional}" >
+                               <!-- BEGIN: op_sorteos -->
+                               <option value="{id_sorteo}" {selected}>{nombre_sorteo}</option>
+                               <!-- END: op_sorteos -->
+                           </select>
+                           <!-- END: lista_sorteos -->					
+						
+						</td>		
+						<td align="center">{monto}</td>
+   						<td align="center">
+                           <!-- BEGIN: lista_zodiacal -->
+                           <select id="op_zodiacal" name="zodiacal-{id_ticket_transaccional}">
+                               <!-- BEGIN: op_zodiacal -->
+                               <option value="{Id_zodiacal}" {selected}>{nombre_zodiacal}</option>
+                               <!-- END: op_zodiacal -->
+                               <!-- BEGIN: op_nozodiacal -->
+                               <option value="{Id_zodiacal}" {selected}>{nombre_zodiacal}</option>
+                               <!-- END: op_nozodiacal -->                                                            
+                           </select>
+                           <!-- END: lista_zodiacal -->
+   						</td>				
+					</tr>
+					<!-- END: lista -->
+		
+					<!-- BEGIN: no_lista -->
+		
+					<tr class="even">		
+						<td align="center" colspan="6" class="odd"><br />{sin_listado}<br />&nbsp;</td>		
+					</tr>		
+					<!-- END: no_lista -->
+					<tr>
+					<td align="center" colspan="6" class="odd"><br />
+                    <div class="botones">
+                            <input  id="btnok" name="btnentrar" value="Modificar" type="submit" class="boton"/>&nbsp;&nbsp;&nbsp;
+                            <input  id="btncancel" name="btncancelar" value="Regresar a Ventas" type="button" class="boton" onclick="location='index.php?op=ventas#final'"/>
+                    </div>	                  			
+					</td>
+					</tr>
+					
+	
+ 				</form>	                    	
+				</tbody>				
+				<tfoot>
+                </tfoot>
+			</table>
+                <div class="paginas">{paginacion}</div>	
+					
+			<!-- END: lista_usuario -->
+
+<br />	<br />	 
+		
+		</td>	
+	</tr>
+
+</table>
+     
+<!-- END: contenido -->       
+
+

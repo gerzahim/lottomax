@@ -72,7 +72,8 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
         $id_tipo_jugada= '2';
 
 	//revisar tabla de ticket_transaccional
-	$numero_jugadoticket= $obj_modelo->GetTicketTransaccional($txt_numero,$sorteo,$zodiacal);
+	$numero_jugadoticket= $obj_modelo->GetTicketTransaccional($txt_numero,$sorteo,$zodiacal, $id_tipo_jugada);
+	//$numero_jugadoticket= $obj_modelo->GetTicketTransaccional($txt_numero,$sorteo,$zodiacal);
 
 	if ( $numero_jugadoticket['total_registros']>0 ){
 
@@ -100,10 +101,15 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
                             // hacer javascript confirm,  para que modifique el monto y simplemente cancele porque fue un error de tipeo
                             // en caso de que el confirm se positivo, tomar el valor y crear metodo para modificar el nuevo valor en ticket_transaccional
 
-                            echo "Numero ya registrado, falta crear javascript CONFIRM";
+                           // echo "Numero ya registrado, falta crear javascript CONFIRM";
                             //$texto = '<div id="mensaje" class="mensaje">&nbsp;<script language="javascript" type="text/javascript">alert("Hola");</script></div>';
 
-
+                            $id_ticket_transaccional= $obj_modelo->GetIDTicketTransaccional($txt_numero,$sorteo,$zodiacal);
+                           
+                            echo "--";
+                            //echo "<input id='txt_id_ticket_transaccional' name='txt_id_ticket_transaccional' type='text' value='".$id_ticket_transaccional."'/>";
+                            $obj_modelo->EliminarTicketTransaccional($id_ticket_transaccional);
+                            $result = ProcesoCupos($txt_numero, $txt_monto, $sorteo, $zodiacal, $esZodiacal);
 
                         }
 		}

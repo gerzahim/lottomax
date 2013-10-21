@@ -180,6 +180,63 @@ switch (ACCION){
 		// Parseo del bloque
 		$obj_xtpl->parse('main.contenido.lista_anular_ticket');
 		break;
+		
+		
+          case 'anular_clave':
+
+		// Ruta regreso
+		$obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Lista']);
+                
+		$id_ticket = $_GET['id'];
+              
+		$obj_xtpl->assign('id_ticket',$id_ticket );
+        $obj_xtpl->parse('main.contenido.anular_clave');
+                
+		break;
+		
+         case 'looking_clave':
+
+		// Ruta regreso
+		$obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Search']);
+
+		$id_ticket= $obj_generico->CleanText($_GET['id_ticket']);
+		
+		$clave= $obj_generico->CleanText($_GET['clave']);
+        $fecha_actual=date('Y-m-d');
+		
+        $fecha_clave=date('YmdH');
+        $clave_sistema = substr(md5($fecha_clave),0,7); 
+  		//echo $fecha_actual," - ",$clave_sistema;
+  			
+		if($clave == $clave_sistema){
+
+			// Verificamos que los sorteos en el ticket no esten cerrados y que el ticket a eliminar sea de hoy...
+                    if (!$obj_modelo->ValidaSorteosTicket($id_ticket)  && $fecha_actual==substr($obj_modelo->GetFechaTicket($id_ticket), 0,10)){
+
+                         // Eliminamos el ticket
+                        if( $obj_modelo->EliminarTicket($id_ticket)){
+                            $_SESSION['mensaje']= $mensajes['info_eliminada'];
+                        }
+                        else{
+                                $_SESSION['mensaje']= $mensajes['fallo_eliminar'];
+                        }
+                    }else{
+                         $_SESSION['mensaje']= $mensajes['sorteo_cerrado'];
+                    }
+                    header('location:'.$_SESSION['Ruta_Lista']);
+
+		}
+		else{
+                    // Mensaje
+                     $_SESSION['mensaje']= $mensajes['clave_no_coincide'];
+                     header('location:'.$_SESSION['Ruta_Lista']);
+			
+		}
+               
+		// Parseo del bloque
+		$obj_xtpl->parse('main.contenido.lista_anular_ticket');
+		break;		
+				
 	// Muestra el listado		
 	default:
 		

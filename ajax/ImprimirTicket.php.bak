@@ -102,9 +102,8 @@ $data1.="\\nFECHA: ".$fecha_hora;
 $data1.="\\x1B\\x0A";
 $data1.="\\nTAQUILLA: ".$id_taquilla;
 $data1.="\\x1B\\x0A";
-$data1.="\\nVENDEDOR: ".$nombre;
+$data1.="\\nVENDEDOR\\n: ".$nombre;
 $data1.="\\x1B\\x0A";
-$data1.="\\n";
 $data1.="-----------------------------";
 //Cambio de tamano fuenta a 12 cpi
 $data1.="\\x1B\\x4D";
@@ -235,19 +234,6 @@ $data1.="\\x1B\\x0A";
 $data1.="\\n";
 $data1.="Caduca en ".$tiempo_anulacion_ticket." dias";
 
-// Obtenemos los datos de la taquilla
-$ida_taquilla= $obj_modelo->GetIdTaquillabyNumero($id_taquilla);
-
-//$lineas_saltar_despues= $obj_modelo->lineas_saltar_despues($ida_taquilla);
-
-
-//Determinar si va a imprimir incompletos y Agotados
-$info_impresora= $obj_modelo->GetDatosImpresora($ida_taquilla);
-
-$lineas_saltar_despues=$info_impresora["lineas_saltar_despues"];
-$ver_numeros_incompletos=$info_impresora["ver_numeros_incompletos"];
-$ver_numeros_agotados=$info_impresora["ver_numeros_agotados"];
-
 
 //INCOMPLETOS Y AGOTADOS
 if( $result2= $obj_modelo->GetNumerosIncompletobyIdticket($id_ticket) ){
@@ -258,35 +244,27 @@ if( $result2= $obj_modelo->GetNumerosIncompletobyIdticket($id_ticket) ){
 		if($id_bandera != $id_bandera_actual){
 			$id_bandera_actual=$id_bandera;
 			if ($id_bandera_actual == '1'){
-				
-				// validacion para mostrar o no incompletos
-				if ($ver_numeros_incompletos == '1') {
-					$data.="<br><br><br>";
-					$data.="INCOMPLETOS";
-	
-					$data1.="\\x1B\\x0A";
-					$data1.="\\x1B\\x0A";
-					$data1.="\\x1B\\x0A";
-					$data1.="\\n";
-					$data1.="\\n";
-					$data1.="\\n";				
-					$data1.="INCOMPLETOS";
-				}
+				$data.="<br><br><br>";
+				$data.="INCOMPLETOS";
 
+				$data1.="\\x1B\\x0A";
+				$data1.="\\x1B\\x0A";
+				$data1.="\\x1B\\x0A";
+				$data1.="\\n";
+				$data1.="\\n";
+				$data1.="\\n";				
+				$data1.="INCOMPLETOS";
 						
 			}
 			if ($id_bandera_actual == '2'){
-				// validacion para mostrar o no incompletos
-				if ($ver_numeros_agotados == '1') {				
-					$data.="<br><br>";
-					$data.="AGOTADOS";
-	
-					$data1.="\\x1B\\x0A";
-					$data1.="\\x1B\\x0A";
-					$data1.="\\n";
-					$data1.="\\n";
-					$data1.="AGOTADOS";		
-				}		
+				$data.="<br><br>";
+				$data.="AGOTADOS";
+
+				$data1.="\\x1B\\x0A";
+				$data1.="\\x1B\\x0A";
+				$data1.="\\n";
+				$data1.="\\n";
+				$data1.="AGOTADOS";				
 			}				
 		}
 
@@ -334,7 +312,9 @@ $data1.="\\x1B\\x0A";
 $data1.="\\x1B\\x0A";*/
 
 
-
+// Obtenemos los datos de la taquilla
+$ida_taquilla= $obj_modelo->GetIdTaquillabyNumero($id_taquilla);
+$lineas_saltar_despues= $obj_modelo->lineas_saltar_despues($ida_taquilla);
 
 
 //Saltos de linea para hacer FEED

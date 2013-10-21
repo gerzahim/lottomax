@@ -57,7 +57,7 @@ switch (ACCION){
 
                                 // Verificamos que el ticket no este vencido...
                                 if ($fecha_vencido_ticket >= $fecha_actual) {
-                                    $resultDT = $obj_modelo->GetDetalleTciket($row['id_ticket'],$obj_config->GetVar('num_registros'),$pag);
+                                    $resultDT = $obj_modelo->GetDetalleTciket($row['id_ticket'], 300,$pag);
 
                                     $i=1; $j=0; $monto_total=0;
                                     while($rowDT= $obj_conexion->GetArrayInfo($resultDT['result'])){
@@ -65,7 +65,7 @@ switch (ACCION){
                                             $obj_xtpl->assign('estilo_fila', 'even');
                                         }
                                         else{
-                                                $obj_xtpl->assign('estilo_fila', 'odd');
+                                            $obj_xtpl->assign('estilo_fila', 'odd');
                                         }
 
                                         // Asignacion de los datos
@@ -83,7 +83,8 @@ switch (ACCION){
                                             $monto_total = $monto_total + ($monto_pago*$rowDT['monto']);
                                             $obj_xtpl->assign('monto_ganado', $monto_pago*$rowDT['monto']);
                                         }else{
-                                            $obj_xtpl->assign('monto_ganado', "NO Ganador");
+                                            //$obj_xtpl->assign('monto_ganado', "NO Ganador");
+                                            $obj_xtpl->assign('monto_ganado', "");
                                         }
 
                                         // Verificamos las aproximaciones por arriba y por abajo...
@@ -117,12 +118,14 @@ switch (ACCION){
                                     }
 
                                     if ($j>0){
-                                        $_SESSION['mensaje']= "Total a pagar: ".$monto_total." de ".$j." apuestas.";
+                                        $_SESSION['mensaje']= "Total a pagar :  Bs. ".$monto_total." de ".$j." apuestas.";
                                         $obj_xtpl->assign('total_premiado', $monto_total);
                                         $_SESSION['id_detalle_ticket']=$id_detalle_ticket;
+                                        $obj_xtpl->assign('mensaje',$_SESSION['mensaje']);
                                         $obj_xtpl->parse('main.contenido.detalle_ticket.boton_pagar');
                                     }else{
-                                        $_SESSION['mensaje']= "Este ticket no tiene apuestas ganadoras!";
+                                        $_SESSION['mensaje']= "Este ticket no tiene apuestas ganadoras!";	
+										$obj_xtpl->assign('mensaje',$_SESSION['mensaje']);
                                     }
                                     // Datos para la paginacion
                                     $paginacion= $obj_generico->paginacion($resultDT['pagina'],$resultDT['total_paginas'],$resultDT['total_registros'],$obj_generico->urlPaginacion());
@@ -130,7 +133,7 @@ switch (ACCION){
                                     
                                     $obj_xtpl->parse('main.contenido.detalle_ticket');
 
-                                }else{ // Tciket vencido
+                                }else{ // Ticket vencido
                                     // Mensaje
                                      $_SESSION['mensaje']= $mensajes['ticket_vencido'];
                                      header('location:'.$_SESSION['Ruta_Lista']);
@@ -176,7 +179,7 @@ switch (ACCION){
                                     for ($i = 0; $i < count($id_detalle); $i++){
                                               if( $obj_modelo->PagarDetalleTicket($id_detalle[$i])){}
                                     }                                      
-                                    $_SESSION['mensaje']= $mensajes['info_modificada'];
+                                    $_SESSION['mensaje']= $mensajes['serial_coincide'];
                                      header('location:'.$_SESSION['Ruta_Lista']);
                                 }
                                 else{

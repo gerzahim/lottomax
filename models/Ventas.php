@@ -29,10 +29,51 @@ class Ventas{
 	public function GetSorteos(){
 		
 		//Preparacion del query
-		$sql = "SELECT * FROM sorteos WHERE status = 1 ORDER BY zodiacal, hora_sorteo, nombre_sorteo ASC ";
+		$sql = "SELECT * FROM sorteos WHERE status = 1 ORDER BY hora_sorteo , zodiacal, nombre_sorteo ASC ";
+		$sql = "SELECT * FROM sorteos WHERE id_turno =1 AND STATUS =1 ORDER BY id_loteria, zodiacal, nombre_sorteo ASC "; 
 		return $this->vConexion->ExecuteQuery($sql);
 	}	
 	
+	/**
+	 * Busqueda de todos los Sorteos Manana
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetSorteosManana(){
+		
+		//Preparacion del query
+		$sql = "SELECT * FROM sorteos WHERE id_turno =1 AND STATUS =1 ORDER BY hora_sorteo, id_loteria, zodiacal, nombre_sorteo ASC "; 
+		return $this->vConexion->ExecuteQuery($sql);
+	}		
+	
+	
+	/**
+	 * Busqueda de todos los Sorteos Manana
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetSorteosTarde(){
+		
+		//Preparacion del query
+		$sql = "SELECT * FROM sorteos WHERE id_turno =2 AND STATUS =1 ORDER BY hora_sorteo, id_loteria, zodiacal, nombre_sorteo ASC "; 
+		return $this->vConexion->ExecuteQuery($sql);
+	}	
+
+	
+	/**
+	 * Busqueda de todos los Sorteos Manana
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetSorteosNoche(){
+		
+		//Preparacion del query
+		$sql = "SELECT * FROM sorteos WHERE id_turno =3 AND STATUS =1 ORDER BY hora_sorteo, id_loteria, zodiacal, nombre_sorteo ASC "; 
+		return $this->vConexion->ExecuteQuery($sql);
+	}		
 	/**
 	 * Busqueda de Id de Taquilla.
 	 *
@@ -343,12 +384,12 @@ class Ventas{
 	 * @param string $sorteo
 	 * @return boolean, array
 	 */
-	public function GetTicketTransaccional($numero, $sorteo, $id_zodiacal){
+	public function GetTicketTransaccional($numero, $sorteo, $id_zodiacal, $id_tipo_jugada){
 			
 		//Preparacion del query
-		$sql = "SELECT * FROM ticket_transaccional WHERE id_taquilla='".$_SESSION["taquilla"]."' AND numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal."";
+		$sql = "SELECT * FROM ticket_transaccional WHERE id_taquilla='".$_SESSION["taquilla"]."' AND numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal." AND id_tipo_jugada = ".$id_tipo_jugada."";
 
-		$result= $this->vConexion->ExecuteQuery($sql);
+		$result= $this->vConexion->ExecuteQuery($sql);  
 
 		// Datos para la paginacion
 		$total_registros= $this->vConexion->GetNumberRows($result);
@@ -385,9 +426,12 @@ class Ventas{
 	 * @return boolean, array
 	 */
 	public function GetNumerosJugados($numero, $sorteo, $id_zodiacal){
+		
+		
 			
 		//Preparacion del query
 		$sql = "SELECT monto_restante FROM numeros_jugados WHERE numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal."";
+		
 		$result= $this->vConexion->ExecuteQuery($sql);
 		
 		//numeros_jugados
@@ -439,6 +483,8 @@ class Ventas{
 	
 	public function GetTipoJugada($eszodiacal,$txt_numero){
 
+		//echo $eszodiacal, "-", $txt_numero, "<br>";
+		
 		$tamano_numero = strlen($txt_numero);
 		
 		if ($tamano_numero == 3){
@@ -448,7 +494,8 @@ class Ventas{
 		if ($tamano_numero == 2){
 			$estriple=0;	
 		}		
-			
+		//echo $eszodiacal, "-", $txt_numero, "-", $estriple,  "<br>";	
+		
 		//Preparacion del query
 		$sql = "SELECT id_tipo_jugada FROM tipo_jugadas WHERE zodiacal = ".$eszodiacal." AND triple  = ".$estriple."";
 
@@ -573,8 +620,37 @@ class Ventas{
 		$roww= $this->vConexion->GetArrayInfo($result);
 		return $roww["lineas_saltar_despues"];
 		
-	}	
+	}
+
+	public function Ver_Incompletos($id_taquilla){
+
+		//Preparacion del query  	
+		$sql = "SELECT ver_numeros_incompletos FROM impresora_taquillas WHERE id_taquilla = ".$id_taquilla."";
+		$result= $this->vConexion->ExecuteQuery($sql);		
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["ver_numeros_incompletos"];
+		
+	}
+		
+	public function Ver_Agotados($id_taquilla){
+
+		//Preparacion del query  	ver_numeros_agotados
+		$sql = "SELECT ver_numeros_agotados FROM impresora_taquillas WHERE id_taquilla = ".$id_taquilla."";
+		$result= $this->vConexion->ExecuteQuery($sql);		
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["ver_numeros_agotados"];
+		
+	}
+
 	
+	public function GetDatosImpresora($id_taquilla){
+		
+		//Preparacion del query  	
+		$sql = "SELECT lineas_saltar_despues, ver_numeros_incompletos, ver_numeros_agotados FROM impresora_taquillas WHERE id_taquilla = ".$id_taquilla."";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww;
+	}	
 	/**
 	 * Genera un ID para los tickets
 	 *

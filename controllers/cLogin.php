@@ -59,6 +59,7 @@ if( !empty($_POST['txtuser']) && !empty($_POST['txtpass']) && !empty($_POST['op_
 
                             $_SESSION['taquilla']=$_POST['op_taquilla'];
                             $_SESSION['id_usuario']=$info['id_usuario'];
+                            $_SESSION['id_perfil']=$info['id_perfil'];
                             $nueva_url= $obj_config->GetVar('index_page');
 
                         }

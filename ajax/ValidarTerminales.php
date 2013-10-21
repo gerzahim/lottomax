@@ -25,10 +25,13 @@ $obj_modelo= new Ventas($obj_conexion);
 session_start();
 
 $resultTT= $obj_modelo->GetTriplesTicketTransaccional();
+
 If ($obj_conexion->GetNumberRows($resultTT)>0){
-      echo "Ok";
+      //echo "Ok", $obj_conexion->GetNumberRows($resultTT);
+      echo "Ok"; 
 }else{
-    echo "NotOk";
+     //echo "NotOk", $obj_conexion->GetNumberRows($resultTT);
+     echo "NotOk"; 
 }
 
 

@@ -116,7 +116,7 @@
 		
 								<td class="tag" width="230"><span class="requerido">*</span> Nombre del Sorteo con Hora :</td>
 		
-								<td><input id="txt_name" name="txt_name" size="30" maxlength="20" type="text" value="{txt_name}"/></td>
+								<td><input id="txt_name" name="txt_name" size="30" maxlength="25" type="text" value="{txt_name}"/></td>
 		
 							</tr>
 		
@@ -140,6 +140,24 @@
 								</td>
 		
 							</tr>
+							
+							<tr><td colspan="2"></td></tr>
+                            <tr>
+        
+                                <td class="tag" width="230"><span class="requerido">*</span> Turno:</td>
+        
+                                <td>
+        
+                                    <select id="op_turno" name="op_turno" >
+                                        <option value="1" {selecciona_tm}>Ma&ntilde;ana</option>
+                                        <option value="2" {selecciona_tt}>Tarde</option>
+                                        <option value="3" {selecciona_tn}>Noche</option>                                       
+        
+                                    </select>
+        
+                                </td>
+        
+                            </tr> 							
 		
 							<tr><td colspan="2"></td></tr>
                             <tr>
@@ -160,6 +178,23 @@
                             </tr> 
                             
 							<tr><td colspan="2"></td></tr>
+                            <tr>
+        
+                                <td class="tag" width="230"><span class="requerido">*</span> Tradicional:</td>
+        
+                                <td>
+        
+                                    <select id="op_tradicional" name="op_tradicional" >
+                                        <option value="0" {seleccionut}>No</option>
+                                        <option value="1" {seleccionot}>Si</option>                                        
+        
+                                    </select>
+        
+                                </td>
+        
+                            </tr>                                                         
+		
+							<tr><td colspan="2"></td></tr>    							
                             <tr>
         
                                 <td class="tag" width="230"><span class="requerido">*</span> Status Sorteo:</td>

@@ -42,7 +42,8 @@ if( !$obj_conexion->ConnectDataBase($obj_config->GetVar('host'), $obj_config->Ge
 	
 // Asignaciones
 $obj_xtpl->assign('titulo_web',$obj_config->GetVar('titulo_web'));
-$obj_xtpl->assign('fecha_hoy',$obj_date->FechaActual());
+//$obj_xtpl->assign('fecha_hoy',$obj_date->FechaActual());
+$obj_xtpl->assign('fecha_hoy',$obj_date->FechaHoraHoy());
 $obj_xtpl->assign('titulo_sistema',$obj_config->GetVar('titulo_sistema'));
 $obj_xtpl->assign('pagina_principal',$obj_config->GetVar('index_page'));
 $obj_xtpl->assign('nombre_usuario',$obj_generico->CleanTextDb($_SESSION['InfoLogin']->GetUsuario()));
@@ -103,6 +104,11 @@ switch(OPCION){
 		
 		include($obj_config->GetVar('ruta_controlador').'cSorteos.php');
 		break;
+		
+	case 'ticket_transaccional':
+		
+		include($obj_config->GetVar('ruta_controlador').'cTicket_Transaccional.php');
+		break;		
 
     case 'relacion_pagos':
 
