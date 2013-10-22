@@ -705,8 +705,8 @@ class Ventas{
 
         public function GeneraIDTicket(){
 
-            //Generamos el prefijo año+mes+dia+hora+minutos+segudos+id_agencia+id_taquilla
-            $fecha= date('ymdhis');
+            //Generamos el prefijo ano+mes+dia+hora+minutos+segudos+id_agencia+id_taquilla
+            $fecha= date('ymdHis');
             // Obtenemos el id de la agencia y taquilla
             $sql = "SELECT id_agencia FROM parametros";
             $result= $this->vConexion->ExecuteQuery($sql);
