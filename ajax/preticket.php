@@ -516,7 +516,7 @@ if(!empty($_POST['ss'])) {
 			$row= $obj_modelo->GetHoraSorteo($sorteo);
 			//print_r($row);
 			$hora_sorteo=$row;
-			//$hora_sorteo=$row['hora_sorteo'];
+			$hora_sorteo=strtotime($hora_sorteo);
 			
 			//echo $hora_sorteo;
 			
@@ -524,13 +524,16 @@ if(!empty($_POST['ss'])) {
 			$minutos_bloqueo= $obj_modelo->MinutosBloqueo();
 			//echo "<br>";
 			//echo $minutos_bloqueo;
-						
+								
 			//Valor que debe venir de la base de datos
-			//$hora_actualMas= strtotime(date('H:i:s')"+$minutos_bloqueo minutes");
-			$hora_actualMas= "+$minutos_bloqueo minutes";
-			
-			//echo "<br>";
-			//echo $hora_actualMas;
+			//$hora_actualMas= date('H:i:s', strtotime("+$minutos_bloqueo minutes"));
+			$hora_actualMas= strtotime(date('H:i:s', strtotime("+$minutos_bloqueo minutes")));
+			/*
+			echo "<br>";
+			echo $hora_actualMas;
+			echo " - ";
+			echo $hora_sorteo;			
+			*/
 			
 			if ($hora_actualMas > $hora_sorteo){
 				
