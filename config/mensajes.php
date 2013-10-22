@@ -133,6 +133,6 @@ $mensajes['serial_no_coincide']= "El serial ingresado no pertenece al ticket sel
 $mensajes['clave_no_coincide']= "La clave ingresada no esta autorizada para el eliminar al ticket !!!";
 $mensajes['sorteo_cerrado']= "No se puede eliminar el ticket, al menos uno de los sorteos en el ticket ya ha sido cerrado !!!";
 $mensajes['ticket_vencido']= "El ticket seleccionado se encuentra vencido para pagar.";
-$mensajes['no_ticket']= "No se encontro informacion de este ticket!";
+$mensajes['no_ticket']= "No se encontro informacion de este ticket! <br> o Ticket Ya Premiado !!!";
 $mensajes['ticket_anulado']= "El ticket ha sido anulado.";
 ?>
