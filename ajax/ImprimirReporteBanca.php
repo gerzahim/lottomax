@@ -53,12 +53,15 @@ echo $fecha_desde, $fecha_hasta;
 				// ENCABEZADO DEL TICKET
 				$data="SISTEMA LOTTOMAX";
 				$data.="<br>";
-
+				$data.="CUADRE CON BANCA";
+				$data.="<br>";
  	
             	//Cambio de tamano fuenta a 10 cpi
 				$data1="\\x1B\\x50";
 				$data1.="SISTEMA LOTTOMAX";
-				$data1.="\\n";				            
+				$data1.="\\n";
+				$data1.="CUADRE CON BANCA";
+				$data1.="\\n";										            
               
                 while($row= $obj_conexion->GetArrayInfo($result)){
                         
