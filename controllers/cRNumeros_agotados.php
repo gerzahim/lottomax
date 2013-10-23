@@ -16,7 +16,7 @@ require($obj_config->GetVar('ruta_modelo').'RNumeros_agotados.php');
 
 $obj_modelo= new RNumeros_agotados($obj_conexion);
 
-require('/fpdf/fpdf.php');
+require('./fpdf/fpdf.php');
 
 switch (ACCION){
 
