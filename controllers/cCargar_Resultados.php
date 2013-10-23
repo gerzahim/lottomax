@@ -116,9 +116,23 @@ switch (ACCION){
                                                 }
                                         }
 
+											$term = (substr($row['numero'], 1,2));
+											
+											if($term < 9){
+												$preceroa = "0";
+												$preceroo = "0";	
+											}else{
+												$preceroa = "";
+												$preceroo = "";
+											}
 
-                                            $obj_xtpl->assign('aprox_arriba', (substr($row['numero'], 1,2)) +1);
-                                            $obj_xtpl->assign('aprox_abajo', (substr($row['numero'], 1,2)) -1);
+											if ($term == 9){
+												$preceroa = "";
+												$preceroo = "0";
+											}
+											
+                                            $obj_xtpl->assign('aprox_arriba', $preceroa.($term +1));
+                                            $obj_xtpl->assign('aprox_abajo', $preceroo.($term -1));
                                         }
 
 
