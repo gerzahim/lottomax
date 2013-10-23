@@ -35,10 +35,9 @@ if( !$obj_conexion->ConnectDataBase($obj_config->GetVar('host'), $obj_config->Ge
 
 // Modelo asignado
 require('.'.$obj_config->GetVar('ruta_modelo').'RCuadre_banca.php');
-$obj_modelo= new Ventas($obj_conexion);
+$obj_modelo= new RCuadre_banca($obj_conexion);
 
-session_start();
-
+ 
 
          if( $result= $obj_modelo->GetBalance($fecha_desde, $fecha_hasta)){
             if ($obj_conexion->GetNumberRows($result)>0 ){
@@ -50,19 +49,7 @@ session_start();
             	//Cambio de tamano fuenta a 10 cpi
 				$data1="\\x1B\\x50";
 				$data1.="SISTEMA LOTTOMAX";
-				$data1.="\\n";				
-            	
-                // Establecemos la cabecera de la tabla
-                $pdf->SetFont('Arial','B',10);
-                $pdf->SetTextColor(128,0,0);
-                $pdf->Cell(40,7,'Fecha',1,0,'C',true);
-                $pdf->Cell(30,7,'Total Ventas',1,0,'C',true);
-                $pdf->Cell(30,7,'Comision',1,0,'C',true);
-                $pdf->Cell(30,7,'Total Premiados',1,0,'C',true);
-                $pdf->Cell(30,7,'Balance',1,0,'C',true);
-
-                $pdf->SetFont('Arial','',8);
-               
+				$data1.="\\n";				            
               
                 while($row= $obj_conexion->GetArrayInfo($result)){
                         
