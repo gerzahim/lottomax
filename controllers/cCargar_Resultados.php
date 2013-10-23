@@ -149,9 +149,43 @@ switch (ACCION){
              if( $result= $obj_modelo->GetAllSorteos() ){
                 if ($obj_conexion->GetNumberRows($result)>0 ){
                      while($row= $obj_conexion->GetArrayInfo($result)){
-
-                             $numero = $_GET['txt_numero-'.$row['id_sorteo']];
+                     	
+                     		/*
+                     		 echo $row['id_sorteo'];
+                     		 echo "<br>";
+							*/
+                     	
+                     		 $numero = $_GET['txt_numero-'.$row['id_sorteo']];
                              $id_sorteo = $row['id_sorteo'];
+                     		 //echo $numero, "<br>";
+                     		 
+                     		 
+                     		 // Validar que el sorteo ya esta cerrado para poder cargar los resultados
+                     		 if(!$numero == ''){
+                     		    //Calcular hora del sorteo
+                     		    $hora_sorteo = $obj_modelo->GetHoraSorteo($id_sorteo);  
+                     		    $format = date('Ymd');
+								// Construyendo un formato 20131022+12:00:00 -> 2013102212:00:00
+                     		    $hora_sorteo2 = $format.$hora_sorteo;                    		 	
+                     		 	$hora_sorteo= strtotime($hora_sorteo2);
+                     		 	
+								//Valor que debe venir de la base de datos tiempo_cierre_sorteos
+								$minutos_bloqueo= $obj_modelo->MinutosBloqueo();
+													
+								//Valor que debe venir de la base de datos
+								$hora_actualMas= date('YmdH:i:s', strtotime("-$minutos_bloqueo minutes"));
+								//$hora_actualMas2= date('YmdHis', strtotime("-$minutos_bloqueo minutes"));
+								//$hora_actualMas= strtotime(date('H:i:s', strtotime("-$minutos_bloqueo minutes"))); 
+								$hora_actualMas= strtotime($hora_actualMas);
+								
+								//echo $hora_actualMas, " VERGA ", $hora_sorteo, "<br>";
+								
+								if($hora_actualMas < $hora_sorteo){
+									$_SESSION['mensaje']= 'El sorteo debe estar cerrado para poder cargar Resultados !!! ';
+                                    header('location:'.$_SESSION['Ruta_Form']);
+								}
+                     		 }
+
                              
                              if (!$obj_generico->IsEmpty($numero)){
                                  if (strlen($numero)==3){

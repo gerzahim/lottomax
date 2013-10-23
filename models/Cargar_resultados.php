@@ -153,8 +153,7 @@ class Cargar_Resultados{
 	public function GuardarDatosResultados($id_sorteo, $zodiacal, $numero, $fecha_hora){
 
 		//Preparacion del query
-		$sql = "INSERT INTO `resultados` (`id_sorteo` , `zodiacal`, `numero`, `fecha_hora`)
-                        VALUES ('".$id_sorteo."', '".$zodiacal."', '".$numero."', '".$fecha_hora."')";
+		$sql = "INSERT INTO `resultados` (`id_sorteo` , `zodiacal`, `numero`, `fecha_hora`) VALUES ('".$id_sorteo."', '".$zodiacal."', '".$numero."', '".$fecha_hora."')";
 		return $this->vConexion->ExecuteQuery($sql);
                 
 	}
@@ -175,6 +174,39 @@ class Cargar_Resultados{
 		return $this->vConexion->ExecuteQuery($sql);
 		
 	}
+	
+         /**
+	 * Busqueda de todos los Sorteos
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetHoraSorteo($id_sorteo){
+
+		//Preparacion del query
+		$sql = "SELECT hora_sorteo FROM sorteos WHERE status = 1 AND id_sorteo = ".$id_sorteo."";
+		$result = $this->vConexion->ExecuteQuery($sql);
+        $roww= $this->vConexion->GetArrayInfo($result);
+        $respu = $roww["hora_sorteo"];
+        return $respu; 		
+	}	
+	
+	/**
+	 * Busqueda de minutos antes de bloquear un sorteo
+	 *
+	 */
+	
+	
+	public function MinutosBloqueo(){
+
+		//Preparacion del query
+		$sql = "SELECT tiempo_cierre_sorteos FROM parametros";
+
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["tiempo_cierre_sorteos"];
+		
+	}		
 
 }		
 ?>
