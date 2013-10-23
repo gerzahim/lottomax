@@ -118,7 +118,7 @@ switch (ACCION){
 
 											$term = (substr($row['numero'], 1,2));
 											
-											if($term < 9){
+											if($term < 9 && $term > 0){
 												$preceroa = "0".($term +1);
 												$preceroo = "0".($term -1);	
 											}else if ($term == 9){
@@ -127,8 +127,8 @@ switch (ACCION){
 											}else if ($term == 10){
 												$preceroa = "".($term +1);
 												$preceroo = "0".($term -1);
-											}else if ($term == 0){
-												$preceroa = "".($term +1);
+											}else if ($term == '00'){
+												$preceroa = "0".($term +1);
 												$preceroo = "99";
 											}else if ($term == 99){
 												$preceroa = "00";
