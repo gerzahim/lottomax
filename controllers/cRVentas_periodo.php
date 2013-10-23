@@ -16,7 +16,7 @@ require($obj_config->GetVar('ruta_modelo').'RVentas_periodo.php');
 
 $obj_modelo= new RVentas_periodo($obj_conexion);
 
-require('/fpdf/fpdf.php');
+//require('/fpdf/fpdf.php');
 
 switch (ACCION){
 
