@@ -16,7 +16,7 @@ require($obj_config->GetVar('ruta_modelo').'RTickets_pagados.php');
 
 $obj_modelo= new RTickets_pagados($obj_conexion);
 
-require('/fpdf/fpdf.php');
+require('./fpdf/fpdf.php');
 
 switch (ACCION){
 

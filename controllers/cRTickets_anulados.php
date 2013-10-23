@@ -16,7 +16,7 @@ require($obj_config->GetVar('ruta_modelo').'RTickets_anulados.php');
 
 $obj_modelo= new RTickets_anulados($obj_conexion);
 
-require('/fpdf/fpdf.php');
+require('./fpdf/fpdf.php');
 
 switch (ACCION){
 

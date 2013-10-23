@@ -16,7 +16,7 @@ require($obj_config->GetVar('ruta_modelo').'RPremios_frios.php');
 
 $obj_modelo= new RPremios_frios($obj_conexion);
 
-require('/fpdf/fpdf.php');
+require('./fpdf/fpdf.php');
 
 switch (ACCION){
 

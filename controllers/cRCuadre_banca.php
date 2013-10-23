@@ -16,7 +16,7 @@ require($obj_config->GetVar('ruta_modelo').'RCuadre_banca.php');
 
 $obj_modelo= new RCuadre_banca($obj_conexion);
 
-require('/fpdf/fpdf.php');
+require('./fpdf/fpdf.php');
 
 switch (ACCION){
 

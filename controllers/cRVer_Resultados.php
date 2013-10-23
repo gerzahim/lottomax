@@ -16,7 +16,7 @@ require($obj_config->GetVar('ruta_modelo').'RVer_resultados.php');
 
 $obj_modelo= new RVer_Resultados($obj_conexion);
 
-require('/fpdf/fpdf.php');
+require('./fpdf/fpdf.php');
 
 switch (ACCION){
 
