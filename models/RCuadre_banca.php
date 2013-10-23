@@ -51,6 +51,51 @@ class RCuadre_banca{
                 return $result;
 		
 		
-	}      
+	} 
+	/**
+	 * Busqueda de Id de Taquilla.
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetIdTaquilla(){
+            
+		//Preparacion del query
+//		$sql = "SELECT * FROM parametros";
+//		$result= $this->vConexion->ExecuteQuery($sql);
+//		$roww= $this->vConexion->GetArrayInfo($result);
+//		return $roww["taquilla"];
+       
+            return $_SESSION['taquilla'];
+	}
+
+	public function GetIdTaquillabyNumero($num_taquilla){
+            
+		//Preparacion del query
+		$sql = "SELECT id_taquilla FROM taquillas WHERE numero_taquilla = ".$num_taquilla."";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["id_taquilla"];
+	}	
+	
+	public function lineas_saltar_despues($id_taquilla){
+
+		//Preparacion del query
+		$sql = "SELECT lineas_saltar_despues FROM impresora_taquillas WHERE id_taquilla = ".$id_taquilla."";
+		$result= $this->vConexion->ExecuteQuery($sql);		
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["lineas_saltar_despues"];
+		
+	}
+	
+	public function GetDatosImpresora($id_taquilla){
+		
+		//Preparacion del query  	
+		$sql = "SELECT lineas_saltar_despues, ver_numeros_incompletos, ver_numeros_agotados FROM impresora_taquillas WHERE id_taquilla = ".$id_taquilla."";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww;
+	}			
+	
 }		
 ?>
