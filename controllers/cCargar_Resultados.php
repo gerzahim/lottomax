@@ -119,20 +119,27 @@ switch (ACCION){
 											$term = (substr($row['numero'], 1,2));
 											
 											if($term < 9){
-												$preceroa = "0";
-												$preceroo = "0";	
+												$preceroa = "0".($term +1);
+												$preceroo = "0".($term -1);	
+											}else if ($term == 9){
+												$preceroa = "".($term +1);
+												$preceroo = "0".($term -1);
+											}else if ($term == 10){
+												$preceroa = "".($term +1);
+												$preceroo = "0".($term -1);
+											}else if ($term == 0){
+												$preceroa = "".($term +1);
+												$preceroo = "99";
+											}else if ($term == 99){
+												$preceroa = "00";
+												$preceroo = "".($term -1);;
 											}else{
-												$preceroa = "";
-												$preceroo = "";
+												$preceroa = "".($term +1);
+												$preceroo = "".($term -1);
 											}
-
-											if ($term == 9){
-												$preceroa = "";
-												$preceroo = "0";
-											}
-											
-                                            $obj_xtpl->assign('aprox_arriba', $preceroa.($term +1));
-                                            $obj_xtpl->assign('aprox_abajo', $preceroo.($term -1));
+																						
+                                            $obj_xtpl->assign('aprox_arriba', $preceroa );
+                                            $obj_xtpl->assign('aprox_abajo', $preceroo );
                                         }
 
 
