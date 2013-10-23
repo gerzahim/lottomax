@@ -36,6 +36,12 @@ require('.'.$obj_config->GetVar('ruta_modelo').'RCuadre_banca.php');
 
 $obj_modelo= new RCuadre_banca($obj_conexion);
 
+session_start();
+
+//$id_taquilla=2;
+// Obtenemos los datos de la taquilla
+$id_taquilla= $obj_modelo->GetIdTaquilla();
+
 
 $fecha_desde= $obj_generico->CleanText($_GET['fechadesde']);
 $fecha_hasta= $obj_generico->CleanText($_GET['fechahasta']);
@@ -83,7 +89,18 @@ echo $fecha_desde, $fecha_hasta;
 
          }
 
+// Obtenemos los datos de la taquilla
+$ida_taquilla= $obj_modelo->GetIdTaquillabyNumero($id_taquilla);
+//Determinar si va a imprimir incompletos y Agotados
+$info_impresora= $obj_modelo->GetDatosImpresora($ida_taquilla);
 
+$lineas_saltar_despues=$info_impresora["lineas_saltar_despues"];
+
+//Saltos de linea para hacer FEED
+for($i=1;$i<=$lineas_saltar_despues;$i++){
+	//$data1.="\\x1B\\x0A";
+	$data1.="\\n";
+}
 
 //echo $data1;
 
