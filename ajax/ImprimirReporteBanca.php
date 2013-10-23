@@ -12,8 +12,6 @@
   
 <?php
 
-$fecha_desde= $obj_generico->CleanText($_GET['fechadesde']);
-$fecha_hasta= $obj_generico->CleanText($_GET['fechahasta']);
 
 // Archivo de variables de configuracion
 require_once('../config/config.php');
@@ -35,9 +33,14 @@ if( !$obj_conexion->ConnectDataBase($obj_config->GetVar('host'), $obj_config->Ge
 
 // Modelo asignado
 require('.'.$obj_config->GetVar('ruta_modelo').'RCuadre_banca.php');
+
 $obj_modelo= new RCuadre_banca($obj_conexion);
 
- 
+
+$fecha_desde= $obj_generico->CleanText($_GET['fechadesde']);
+$fecha_hasta= $obj_generico->CleanText($_GET['fechahasta']);
+
+echo $fecha_desde, $fecha_hasta;
 
          if( $result= $obj_modelo->GetBalance($fecha_desde, $fecha_hasta)){
             if ($obj_conexion->GetNumberRows($result)>0 ){
@@ -58,8 +61,9 @@ $obj_modelo= new RCuadre_banca($obj_conexion);
 					$data.="<br>Comision: ".$row['comision'];
 					$data.="<br>Total Premios: ".$row['total_premiado'];					                									
 					$data.="<br>Balance: ".$row['balance'];
+					$data.="<br>";
 					$data.="-----------------------------";
-					$data.="<br><br>";
+					$data.="<br>";
 
 					
 					$data1.="\\nFECHA: ".$row['fecha'];
@@ -67,18 +71,20 @@ $obj_modelo= new RCuadre_banca($obj_conexion);
 					$data1.="\\nComision: ".$row['comision'];
 					$data1.="\\nTotal Premios: ".$row['total_premiado'];					                									
 					$data1.="\\nBalance: ".$row['balance'];
+					$data1.="\\n";
 					$data1.="-----------------------------";
-					$data1.="\\n\\n";					
+					$data1.="\\n";					
 				                        
                     
                 }
-                
+ 				
+                echo $data;               
             } 
 
          }
 
 
-echo $data;
+
 //echo $data1;
 
 echo "<script type='text/javascript'>";
