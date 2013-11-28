@@ -480,23 +480,30 @@ function calcula_cambio()
 
 //calcula el total del ticket
 function imprimirticket(){
-/*
+	
+$.get('ajax/ip_visitor.php', function(str) {
+    //alert(str);
     $.ajax({
         type: "POST",
-        url: "ajax/ImprimirTicket.php",
-		success: function( respuesta ){
-			//alert(respuesta);
-		}
+        url: "ajax/socket.php",
+  		data: {
+   			 ip : str
+ 		}
         });
-		*/
+});	
+
+document.getElementById("ticket").innerHTML ="";
+CargarReset();		
+ 
+/*
+Metodo con Jzebra		
 		document.getElementById("ticket").innerHTML ="";
         CargarReset();		
 		window.open("ajax/ImprimirTicket.php", "nuevo", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=400, height=400");
-		//ventana_secundaria = window.open("ajax/ImprimirTicket.php", "nuevo", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=400, height=400");
-		//sleep(5000); ayuda para salir el mensaje 
-		//ventana_secundaria.close();
-
+*/
 }
+
+
 /*
 function llamadaAjax(){
 
@@ -536,8 +543,10 @@ function procesarticket()
                          //Imprimir el ticket
                          //alert("Imprimir el ticket");
                          imprimirticket();
+
                          $("#txt_numero").val('');
-                         $("#txt_monto").val(''); 
+                         $("#txt_monto").val('');
+						  
                      }else if (str== 'NotOk'){
                         alert("Se presento un error al generar el ticket, por favor intente mas tarde!");
                      }

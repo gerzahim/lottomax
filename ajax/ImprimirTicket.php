@@ -313,7 +313,7 @@ if( $result2= $obj_modelo->GetNumerosIncompletobyIdticket($id_ticket) ){
 
 			//$data1.="\\x1B\\x0A";
 			$data1.="\\n";
-			$data1.=$row['numero']." FALTA ".$row['monto_restante']."  ";
+			$data1.=$row['numero']." ".$nombre_signo." FALTA ".$row['monto_restante']."  ";
 		}		
 			
 	

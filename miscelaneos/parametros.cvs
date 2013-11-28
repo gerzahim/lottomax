@@ -1,0 +1,21 @@
+01
+P
+192.168.1.125
+lottomax
+root
+secreta
+LPT1
+9600
+
+
+"0 Taquilla-01"
+"1 Paralelo-Serial P/S"
+"2 IpServer"
+"3 BD"
+"4 user"
+"5 pass"
+"6 Puerto LPT1/COM1"
+"7 BaudRate 9600"
+"8 parity serial.PARITY_NONE/ NONE/ODD/EVEN"
+"9 stopbits serial.STOPBITS_ONE/ stop 1/2"
+"10 bytesize serial.EIGHTBITS/ data 6/7/8"
