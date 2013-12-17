@@ -59,19 +59,19 @@ def DefinirTicket():
 
     #definiendo Encabezado ticket
     data1 = "SISTEMA LOTTOMAX"
-    data1 += "\\n"
-    data1 += "\\nAGENCIA: "+parametros['nombre_agencia']
-    data1 += "\\n"
-    data1 += "\\nTICKET: "+datos_ticket['id_ticket']
-    data1 += "\\n"
-    data1 += "\\nSERIAL: "+datos_ticket['serial']
-    data1 += "\\n"
-    data1 += "\\nFECHA: "+datos_ticket['fecha_hora']
-    data1 += "\\n"
-    data1 += "\\nTAQUILLA: "+id_taquilla
-    data1 += "\\n"
-    data1 += "\\nVENDEDOR: "+datos_ticket['nombre_usuario']
-    data1 += "\\n"
+    data1 += "\n"
+    data1 += "AGENCIA: "+parametros['nombre_agencia']
+    data1 += "\n"
+    data1 += "TICKET: "+datos_ticket['id_ticket']
+    data1 += "\n"
+    data1 += "SERIAL: "+datos_ticket['serial']
+    data1 += "\n"
+    data1 += "FECHA: "+datos_ticket['fecha_hora']
+    data1 += "\n"
+    data1 += "TAQUILLA: "+id_taquilla
+    data1 += "\n"
+    data1 += "VENDEDOR: "+datos_ticket['nombre_usuario']
+    data1 += "\n"
     data1 += "-----------------------------"
 
     # Obtiene los numeros jugados No zodiacales
@@ -83,13 +83,13 @@ def DefinirTicket():
     data1 += GetDetalleTicketByIdticket2(datos_ticket['id_ticket'])
 
     #definiendo Footer ticket
-    data1 += "\\n"
+    data1 += "\n"
     data1 += "-----------------------------"
-    data1 += "\\n"
+    data1 += "\n"
     data1 += "NUMEROS JUGADOS: "+str(resulta['numero_jugadas'])
-    data1 += "\\n"
+    data1 += "\n"
     data1 += "TOTAL: "+str(datos_ticket['total_ticket'])
-    data1 += "\\n"
+    data1 += "\n"
     data1 += "Caduca en "+str(parametros['tiempo_anulacion_ticket'])+" dias"
 
     # Parametros de Impresora
@@ -105,7 +105,7 @@ def DefinirTicket():
 
     #Numeros de line feed definidos en parametros de impresora
     for id in range(lineas_saltar_despues):
-        data1 += "\\n"        
+        data1 += "\n"        
 
     print data1
 
@@ -171,22 +171,22 @@ def GetNumerosIncompletobyIdticket(id_ticket,ver_numeros_incompletos,ver_numeros
             id_bandera_actual=id_bandera
             if id_bandera_actual == '1':
                 if ver_numeros_incompletos== '1':
-                    data1 += "\\n"
-                    data1 += "\\n"
-                    data1 += "\\n"				
+                    data1 += "\n"
+                    data1 += "\n"
+                    data1 += "\n"				
                     data1 += "INCOMPLETOS";
             if id_bandera_actual == '2':
                 if ver_numeros_agotados == '1':
-                    data1 += "\\n"
-                    data1 += "\\n"			
+                    data1 += "\n"
+                    data1 += "\n"			
                     data1 += "AGOTADOS";
 
         nombre_sorteo = GetNombreSorteo(id_sorteo)
-	data1 += "\\n"
+	data1 += "\n"
         data1 += nombre_sorteo
 
         if id_zodiacal == '0':
-            data1 += "\\n"
+            data1 += "\n"
             data1 += numero+" FALTA "+monto_restante+"  "
             
         else:
@@ -218,14 +218,14 @@ def GetDetalleTicketByIdticket(id_ticket):
         if id_sorteo != id_sorteo_actual and id_zodiacal == '0':
             contador=0
             nombre_sorteo = GetNombreSorteo(id_sorteo)
-            data1 += "\\n"
+            data1 += "\n"
             data1 += nombre_sorteo
             
         if id_zodiacal == '0':
             if contador % 2:
                 data1 += numero+" x "+monto+"  "
             else:
-                data1 += "\\n"
+                data1 += "\n"
                 data1 += numero+" x "+monto+"  "
                 
 
@@ -258,7 +258,7 @@ def GetDetalleTicketByIdticket2(id_ticket):
         if id_sorteo != id_sorteo_actual and id_zodiacal != '0':
             contador=0
             nombre_sorteo = GetNombreSorteo(id_sorteo)
-            data1 += "\\n"
+            data1 += "\n"
             data1 += nombre_sorteo
             
         if id_zodiacal != '0':
@@ -267,7 +267,7 @@ def GetDetalleTicketByIdticket2(id_ticket):
             if contador % 2:
                 data1 += numero+" "+nombre_signo+" x "+monto+"  "
             else:
-                data1 += "\\n"
+                data1 += "\n"
                 data1 += numero+" "+nombre_signo+" x "+monto+"  "
                 
 
