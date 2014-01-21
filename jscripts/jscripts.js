@@ -478,9 +478,10 @@ function calcula_cambio()
 	}
 }
 
-//calcula el total del ticket
+//Imprime el ticket
 function imprimirticket(){
-	
+
+/*	
 $.get('ajax/ip_visitor.php', function(str) {
     //alert(str);
     $.ajax({
@@ -494,13 +495,22 @@ $.get('ajax/ip_visitor.php', function(str) {
 
 document.getElementById("ticket").innerHTML ="";
 CargarReset();		
- 
+ */
 /*
-Metodo con Jzebra		
+//Metodo con Jzebra		
+
 		document.getElementById("ticket").innerHTML ="";
         CargarReset();		
 		window.open("ajax/ImprimirTicket.php", "nuevo", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=400, height=400");
 */
+
+//Metodo con Impresion directa con firefox
+	document.getElementById("ticket").innerHTML ="";
+        CargarReset();		
+		window.open("ajax/ImprimirTicket.php", "nuevo", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=400, height=400");
+
+
+
 }
 
 

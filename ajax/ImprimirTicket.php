@@ -1,5 +1,6 @@
 <html>
    <head><title>jZebra Demo</title>
+<!--
    <script language="javascript" type="text/javascript" src="../jscripts/jquery-latest.js"></script>
    <script language="javascript" type="text/javascript" src="../jscripts/PluginPrint.js"></script>        
    <script language="javascript" type="text/javascript" src="../jscripts/DefaultPrinter.js"></script>    
@@ -9,6 +10,7 @@
    <applet name="jzebra" code="jzebra.PrintApplet.class" archive="../jscripts/jzebra.jar" width="50px" height="50px">
 	  <param name="printer" value="zebra">
    </applet>
+  -->
   
 <?php
 
@@ -349,14 +351,19 @@ for($i=1;$i<=$lineas_saltar_despues;$i++){
 
 echo $data;
 //echo $data1;
+/*
 
 echo "<script type='text/javascript'>";
 echo "print('".$data1."')";
 echo "</script>";
+*/
 
-echo "<script language='javascript'>setTimeout('self.close();',5000)</script>"
 
 ?>
 
+<script type="text/javascript"> 
+window.print();
+</script>
+<script language='javascript'>setTimeout('self.close();',5000)</script>
    </body>
 </html>
