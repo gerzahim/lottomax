@@ -66,17 +66,15 @@
     </div>   
 <br>
 
-	    <input id="cant_sorteos" name="cant_sorteos" size="10" " maxlength="6" type="hidden" value="{cant_sorteos}"/>
-	    <!--  
-	&nbsp;&nbsp;Todos   Si / No&nbsp;(L)&nbsp;&nbsp;&nbsp;<input type="checkbox" id="s0" name="s0" value="0" onClick="checkAllsorteos(document.getElementsByName('ss[]'));" >	   
- 	-->
-	&nbsp;<input type="checkbox" id="s0" name="s0" value="0" onClick="checkAllsorteos(document.getElementsByName('ss[]'));" > &nbsp;<label for="sm">Todos   Si / No&nbsp;(L)</label>
+	    <input id="cant_sorteos" name="cant_sorteos" size="10" " maxlength="6" type="hidden" value="{cant_sorteos}"/> 
+	&nbsp;&nbsp;&nbsp;&nbsp;Todos   Si / No&nbsp;(L)&nbsp;&nbsp;&nbsp;<input type="checkbox" id="s0" name="s0" value="0" onClick="checkAllsorteos(document.getElementsByName('ss[]'));" >	   
+
 	    <div  id="checkboxesorteos" style=" width:200px; height:540px; overflow:auto;">
      <span class="text-label1">
 			<table border="0">
 			  <!-- BEGIN: lista_sorteos_manana -->
 			  <tr class="eveni">
-			    <td><input type="checkbox" name="ss[]" value="{id_sorteo}" {claset} />&nbsp;<label for="sm">{nombre_sorteo}</label></td>
+			    <td><input type="checkbox" name="ss[]" value="{id_sorteo}" {claset} />&nbsp;{nombre_sorteo}</td>
 			  </tr>	
 			  <!-- END: lista_sorteos_manana -->
 			</table>
@@ -86,7 +84,7 @@
 			<table border="0">
 			  <!-- BEGIN: lista_sorteos_tarde -->
 			  <tr class="eveni">
-			    <td><input type="checkbox" name="ss[]" value="{id_sorteo}" {claset} />&nbsp;<label for="sm">{nombre_sorteo}</label></td>
+			    <td><input type="checkbox" name="ss[]" value="{id_sorteo}" {claset} />&nbsp;{nombre_sorteo}</td>
 			  </tr>	
 			  <!-- END: lista_sorteos_tarde -->
 			</table>
@@ -96,7 +94,7 @@
 			<table border="0">			
 			  <!-- BEGIN: lista_sorteos_noche -->
 			  <tr class="eveni">
-			    <td><input type="checkbox" name="ss[]" value="{id_sorteo}" {claset} />&nbsp;<label for="sm">{nombre_sorteo}</label></td>
+			    <td><input type="checkbox" name="ss[]" value="{id_sorteo}" {claset} />&nbsp;{nombre_sorteo}</td>
 			  </tr>	
 			  <!-- END: lista_sorteos_noche -->			  			
 			</table>
@@ -108,44 +106,43 @@
 
 	<td >
 		<table width="150" border="0">
-			<tr class="eveni">
-		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="z0" value="0" onClick="checkAllZodiacales(document.getElementsByName('zz[]'));" > &nbsp;<label for="sm">Todos   Si / No&nbsp;(Z)</label></td>
-		    </tr>
-			<tr class="eveni">
-		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id=""z0" name="zz[]" value="1" /> &nbsp;<label for="sm">Acuario</label></td>
+		&nbsp;&nbsp;&nbsp;&nbsp;Todos   Si / No&nbsp;(Z)&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="z0" value="0" onClick="checkAllZodiacales(document.getElementsByName('zz[]'));" >
+
+                  <tr class="eveni">
+		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id=""z0" name="zz[]" value="1" /> &nbsp;Acuario</td>
 		  </tr>
 		  <tr class="eveni">
-		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="zz[]" value="2" /> &nbsp;<label for="sm">Aries</label></td>
+		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="zz[]" value="2" /> &nbsp;Aries</td>
 		  </tr>
 		  <tr class="eveni">
-		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="zz[]" value="3" /> &nbsp;<label for="sm">Cancer</label></td>
+		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="zz[]" value="3" /> &nbsp;Cancer</td>
 		  </tr>
 		  <tr class="eveni">
-		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="zz[]" value="4" /> &nbsp;<label for="sm">Capricornio</label></td>
+		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="zz[]" value="4" /> &nbsp;Capricornio</td>
 		  </tr>  
 		  <tr class="eveni">
-		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="zz[]" value="5" /> &nbsp;<label for="sm">Escorpio</label></td>
+		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="zz[]" value="5" /> &nbsp;Escorpio</td>
 		  </tr>  
 		  <tr class="eveni">
-		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="zz[]" value="6" /> &nbsp;<label for="sm">Geminis</label></td>
+		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="zz[]" value="6" /> &nbsp;Geminis</td>
 		  </tr>  
 		  <tr class="eveni">
-		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="zz[]" value="7" /> &nbsp;<label for="sm">Leo</label></td>
+		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="zz[]" value="7" /> &nbsp;Leo</td>
 		  </tr>  
 		  <tr class="eveni">
-		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="zz[]" value="8" /> &nbsp;<label for="sm">Libra</label></td>
+		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="zz[]" value="8" /> &nbsp;Libra</td>
 		  </tr>  
 		  <tr class="eveni">
-		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="zz[]" value="9" /> &nbsp;<label for="sm">Piscis</label></td>
+		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="zz[]" value="9" /> &nbsp;Piscis</td>
 		  </tr>  
 		  <tr class="eveni">
-		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="zz[]" value="10" /> &nbsp;<label for="sm">Sagitario</label></td>
+		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="zz[]" value="10" /> &nbsp;Sagitario</td>
 		  </tr>  
 		  <tr class="eveni">
-		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="zz[]" value="11" /> &nbsp;<label for="sm">Tauro</label></td>
+		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="zz[]" value="11" /> &nbsp;Tauro</td>
 		  </tr>  
 		  <tr class="eveni">
-		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="zz[]" value="12" /> &nbsp;<label for="sm">Virgo</label></td>
+		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="zz[]" value="12" /> &nbsp;Virgo</td>
 		  </tr> 
 		  </table>    
       

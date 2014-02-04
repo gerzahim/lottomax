@@ -254,7 +254,7 @@ span  a.enlaces:hover{
 	padding-bottom:20px;
 }
 
-
+/*
 #frm1 label { width: 250px; clear:both; float:left; }
 #frm1 label.error {
 	margin-left: 10px;
@@ -262,7 +262,7 @@ span  a.enlaces:hover{
 	font-size:9px;
 	font-weight:normal;
 }
-
+*/
 a.enlace_normal{
 	text-decoration:none;
 	color:#666666;

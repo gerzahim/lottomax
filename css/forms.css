@@ -22,6 +22,18 @@ input:focus {
 	border: 1px double #ab0000;
 }
 
+/*
+input.text:focus {
+  background-color: #7FFF00; 
+  color: #000;
+}
+*/
+
+input[type=checkbox]:focus + label, input[type=radio]:focus + label {
+  background-color: #FF6; 
+  color: #000; 
+}
+
 textarea {
 	overflow: auto;
 	overflow-y: scroll;
@@ -32,12 +44,13 @@ textarea:focus {
 	border: 1px double #ab0000;
 }
 
+/*
 label {
 	font-size: 12px;
 	font-weight: bold;
 	color: #666;
 }
-
+*/
 fieldset {
 	margin: 4px 3px 4px 1px;
 	border: 1px solid #a0a0a0;

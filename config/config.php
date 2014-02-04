@@ -13,7 +13,7 @@ class ConfigVars{
 	 *
 	 * @var string $vTituloBanner
 	 */
-	private $vTituloWeb= "Lotto Max";
+	private $vTituloWeb= "LottoMax";
 	
 	/**
 	 * Cantidad de registros a mostrar para la paginacion.
@@ -98,7 +98,7 @@ class ConfigVars{
 	 * @var string $vHost
 	 */
 	private $vHost= "localhost";
-	
+	//private $vHost= "www.db4free.net";
 	/**
 	 * Puerto de conexion a la base de datos.
 	 *
@@ -111,23 +111,23 @@ class ConfigVars{
 	 *
 	 * @var string $vDataBase
 	 */
-	//private $vDataBase= "grupovoi_lottomax";
 	private $vDataBase= "lottomax";
+	//private $vDataBase= "lottomaxdb";
 	/**
 	 * Usuario para conexion a la base de datos.
 	 *
 	 * @var string $vUsuario
 	 */
-	//private $vUsuario= "grupovoi_lotto";
 	private $vUsuario= "root";	
+	//private $vUsuario= "lottomaxuser";
 	
 	/**
 	 * Clave para conexion a la base de datos.
 	 *
 	 * @var string $vClave
 	 */
-	//private $vClave= "secreta#7";
 	private $vClave= "";	
+	//private $vClave= "secreta7";
 	
 	/**
 	 * Esquema de  la base de datos.

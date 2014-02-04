@@ -879,6 +879,11 @@ $(document).keyup(function(tecla){
     	// tecla F7
 	 	//Repetir Ticket
         RepetirTicket();
+    }else if(tecla.keyCode == 123) {
+    	// tecla F12
+    	//Procesar Ticket
+        procesarticket(); //para procesar y generar el ticket
+		CargarReset();
     }else if(tecla.keyCode == 40) {
     	// tecla Flecha Abajo
 	 	//Anular Ticket
