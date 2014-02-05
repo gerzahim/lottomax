@@ -36,11 +36,16 @@ class Pagar_Ganador{
 	 * @param string $id_ticket
          * @param string $serial
 	 */
-	public function GetListadosegunVariable($parametro_where){
+	//public function GetListadosegunVariable($parametro_where){
+	public function GetListadosegunVariable(){		
 
 		//Preparacion del query
-                 $sql = "SELECT * FROM ticket WHERE status='1' AND pagado=0 AND ".$parametro_where;
-                 //echo $sql;
+        //$sql = "SELECT * FROM ticket WHERE status='1' AND pagado=0 AND ".$parametro_where;
+        // deberiamos colocar un parametro premiado=0, verificado=0
+        // premiado cambia cuando se premia un ticket
+        // verificado cambia cuando ya se reviso y no esta premiado verificado=1
+        $sql = "SELECT * FROM ticket WHERE status='1' AND pagado='0' AND verificado='0' ";
+        //echo $sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
 		return  $result;
 
@@ -221,15 +226,27 @@ class Pagar_Ganador{
 	 * Actualiza Datos del ticket en detalle ticket  a premiadoo 1.
 	 * @param string $id_detalle_ticket
 	 */
-	public function PagarDetalleTicket($id_detalle_ticket){
+	public function PremiarDetalleTicket($id_detalle_ticket, $total_premiado){
 
 		//Preparacion del query
 
-		$sql = "UPDATE `detalle_ticket` SET `premiado`='1' WHERE id_detalle_ticket='".$id_detalle_ticket."'";
+		$sql = "UPDATE `detalle_ticket` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_detalle_ticket='".$id_detalle_ticket."'";
 		return $this->vConexion->ExecuteQuery($sql);
 
 	}
-
+	
+	/**
+	 * Actualiza Datos del ticket en verificado 1
+	 * @param string $id_ticket
+	 */
+	public function MarcarVerificadoByIdTicket($id_ticket){
+	
+		//Preparacion del query
+		$sql = "UPDATE `ticket` SET `verificado`='1' WHERE id_ticket='".$id_ticket."'";
+	
+		return $this->vConexion->ExecuteQuery($sql);
+	
+	}
 
         /**
 	 * Actualiza Datos del ticket en premiadoo 1 y el monto total del premio

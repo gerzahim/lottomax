@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS `detalle_ticket` (
   `id_tipo_jugada` int(11) NOT NULL DEFAULT '0',
   `monto` decimal(10,2) NOT NULL,
   `premiado` int(11) NOT NULL,
+  `total_premiado` int(11) NOT NULL DEFAULT '0',
   KEY `id_detalle_ticket` (`id_detalle_ticket`),
   KEY `FK_id_ticket` (`id_ticket`),
   KEY `FK_id_tipo_jugada` (`id_tipo_jugada`)
@@ -797,6 +798,7 @@ CREATE TABLE IF NOT EXISTS `ticket` (
   `fecha_hora_anulacion` datetime NOT NULL,
   `taquilla_anulacion` int(11) NOT NULL,
   `subido` int(11) NOT NULL DEFAULT '0',
+  `verificado` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_ticket`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='ticket';
 
@@ -894,7 +896,7 @@ CREATE TABLE IF NOT EXISTS `turno` (
 --
 
 INSERT INTO `turno` (`id_turno`, `nom_turno`, `pre_turno`) VALUES
-(1, 'Mañana', 'M'),
+(1, 'Manana', 'M'),
 (2, 'Tarde', 'T'),
 (3, 'Noche', 'N');
 
