@@ -388,50 +388,88 @@ function agregar_ticket(){
     hr.onreadystatechange = function() {
 	    if(hr.readyState == 4 && hr.status == 200) {
 		    var return_data = hr.responseText;
+		    /*
+		    //alert(return_data);
+		    //classw="<div id='mensaje' class='menwsaje' >Debe seleccionar un SORTEO para jugar !!!</div>";
+
+		    var Cadena="Ejemplo desde Intenta Blog";
+		    vvv = "Blog";
+		    alert(Cadena.search(classw));
+		    */
+		    //alert(return_data.search(classw));
+		    
+		    var geterror = 0;
 
 		    //si regresa este mensaje apunta al campo de texto numero
-		    if(return_data == "<div id='mensaje' class='mensaje' >Debe ingresar un NUMERO para jugar !!!</div>"){
+		    $mensajillo = "<div id='mensaje' class='mensaje' >Debe ingresar un NUMERO para jugar !!!</div>";
+		    if(return_data.search($mensajillo) != '-1'){
 		    	//alert(return_data);
 		    	$("#txt_numero").focus();
+		    	
+		    	geterror = 1;
 		    }
 		    //si regresa este mensaje apunta al campo de texto monto
-		    if(return_data == "<div id='mensaje' class='mensaje' >Debe ingresar un MONTO Bs para jugar !!!</div>"){
+		    $mensajillo = "<div id='mensaje' class='mensaje' >Debe ingresar un MONTO Bs para jugar !!!</div>";
+		    if(return_data.search($mensajillo) != '-1'){
 		    	//alert(return_data);
 		    	$("#txt_monto").focus();
+		    	geterror = 1;
 		    }
+		    
 		    //si regresa este mensaje apunta al campo de sorteos
-		    if(return_data == "<div id='mensaje' class='mensaje' >Debe seleccionar un SORTEO para jugar !!!</div>"){
+		    $mensajillo = "<div id='mensaje' class='mensaje' >Debe seleccionar un SORTEO para jugar !!!</div>";
+		    if(return_data.search($mensajillo) != '-1'){
 		    	//alert(return_data);
 		    	$("#s0").focus();
+		    	geterror = 1;
 		    }
 		    //si regresa este mensaje apunta al campo de signos
-		    if(return_data == "<div id='mensaje' class='mensaje' >Debe seleccionar SIGNO ZODIACAL para jugar !!!</div>"){
+		    $mensajillo = "<div id='mensaje' class='mensaje' >Debe seleccionar SIGNO ZODIACAL para jugar !!!</div>";
+		    if(return_data.search($mensajillo) != '-1'){
 		    	//alert(return_data);
 		    	$("#z0").focus();
+		    	geterror = 1;
 		    }
 
 		    //si regresa este mensaje refresca la pagina para que actualize los sorteos cerrados
-		    if(return_data == "Selecciono un SORTEO ya cerrado !!!"){
+		    $mensajillo = "<div id='mensaje' class='mensaje' >Selecciono un SORTEO ya cerrado !!!</div>";
+		    if(return_data.search($mensajillo) != '-1'){
 		    	//alert(return_data);
 		    	location.reload();
+		    	geterror = 1;
 		    }
 
-                    
-                   var n=return_data.search("--");
-                   if(  n>0 ){
+            // cuando el numero ya esta jugado y se sustituye la jugada       
+            //var n=return_data.search("--");
+		    $mensajillo = "--";
+		    if(return_data.search($mensajillo) != '-1'){
+		    	//alert(return_data);
+		    	 /*if 
                        var numero = document.getElementById("txt_monto");
                         alert("Ya este numero se encuentra registrado en el ticket! El monto de la apuesta va ser cambiado a: Bs. F. " + numero.value);
-                       /*if (confirm("Ya este numero se encuentra registrado, desea cambiar el valor de la apuesta?")){
+                      (confirm("Ya este numero se encuentra registrado, desea cambiar el valor de la apuesta?")){
                             var monto = prompt("Ingrese el monto de la apuesta", "");
                             var numero = document.getElementById("txt_monto");
                             alert(numero.value);
                             
                         }*/
                         //location.reload();
+                    
+                    geterror = 1;
                         
 		    }
+            
+            //alert(geterror);
 
+            // sino obtuvo errores borra el campo de numerosy hace focus en numero
+            if(geterror == '0'){
+            	  $("#txt_numero").val('');
+            	  //$("#txt_monto").val(''); // en caso que quieras borrar tambien el monto
+            	  $("#txt_numero").focus();            	
+            }
+            
 
+            
 		    //mensaje que muestra para el ticket de la derecha
 			document.getElementById("ticket").innerHTML = return_data;
 	    }
@@ -439,11 +477,13 @@ function agregar_ticket(){
     // taken all the inputs and answer for a one variable
 	var vars = $("#frm1").serialize("ajax/preticket.php");
 	//alert(vars);
+	//op=ventas&accion=add&op_juego=1&txt_numero=234&txt_monto=234&turno=4&cant_sorteos=&ss%5B%5D=11&ss%5B%5D=12&ss%5B%5D=14&recibido=&cambio=&total=47
 
     // Send the data to PHP now... and wait for response to update the status div
     hr.send(vars); // Actually execute the request
     document.getElementById("ticket").innerHTML = "processing...";	
-
+    
+    calcula_total();
 }
 
 // Funcion que carga el preticket
@@ -593,7 +633,9 @@ function agregarMontoTerminales(monto)
     $.get('ajax/AgregarTerminales.php?monto=' + monto, function(str) {
        document.getElementById("ticket").innerHTML = str;
             $("#txt_numero").focus();
+            
     });
+    calcula_total();
  }
 
 
@@ -601,8 +643,9 @@ function BorrarUltimaJugada()
 {
     $.get('ajax/BorrarUltimaJugada.php', function(str) {
         document.getElementById("ticket").innerHTML = str;
-        calcula_total();
+       
     });
+    calcula_total();
  }
 
 function BorrarPreTicket(){
@@ -637,11 +680,16 @@ function AnularTicket()
     window.location='index.php?op=anular_ticket&accion=search';
  } 
 
-
-// Funcion para llamar al formulario de Modificar detalle ticket
-function DetalleTicket()
+// Funcion para llamar al formulario de anular ticket
+function verDetallaTicket()
 {
     window.location='index.php?op=ticket_transaccional';
+ } 
+ 
+// Funcion para llamar al formulario de Modificar detalle ticket
+function verResultados()
+{
+    window.location='index.php?op=Rver_resultados';
  }  
 
 // Funcion para ajustar todos los montos de las apuestas a un prorrateado entre un monto total
@@ -715,7 +763,7 @@ $(document).keyup(function(tecla){
     if (tecla.keyCode == 107) {
     	// tecla +
 		agregar_ticket(); //para agregar al ticket
-		CargarReset1(); //Limpiar el campo numero 
+		//CargarReset1(); //Limpiar el campo numero 
 		calcula_total();
     }else if(Atl_down && (tecla.keyCode == 65)){
     	// tecla A    	
@@ -879,6 +927,14 @@ $(document).keyup(function(tecla){
     	// tecla F7
 	 	//Repetir Ticket
         RepetirTicket();
+    }else if(tecla.keyCode == 119) {
+    	// tecla F8
+	 	//Ver detalle ticket
+    	verDetallaTicket();
+    }else if(tecla.keyCode == 120) {
+    	// tecla F9
+	 	//Ver Resultados
+    	verResultados();
     }else if(tecla.keyCode == 123) {
     	// tecla F12
     	//Procesar Ticket

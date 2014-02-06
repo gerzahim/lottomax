@@ -21,9 +21,14 @@ input,textarea,select {
 input:focus {
 	border: 1px double #ab0000;
 }
-
 /*
 input.text:focus {
+        background-color: #7FFF00; 
+        color: #000;
+      }
+
+
+input[type=text]:focus {
   background-color: #7FFF00; 
   color: #000;
 }

@@ -1,5 +1,5 @@
 <html>
-   <head><title>jZebra Demo</title>
+   <head><title>Impresion de Ticket</title>
 <!--
    <script language="javascript" type="text/javascript" src="../jscripts/jquery-latest.js"></script>
    <script language="javascript" type="text/javascript" src="../jscripts/PluginPrint.js"></script>        
@@ -342,7 +342,8 @@ $data1.="\\x1B\\x0A";*/
 //Saltos de linea para hacer FEED
 for($i=1;$i<=$lineas_saltar_despues;$i++){
 	//$data1.="\\x1B\\x0A";
-	$data1.="\\n";
+	//$data1.="\\n";
+	$data.=".<br>";
 }
 
 

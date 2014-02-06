@@ -107,11 +107,12 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
 
                             $id_ticket_transaccional= $obj_modelo->GetIDTicketTransaccional($txt_numero,$sorteo,$zodiacal);
                            
-                            echo "--";
+                            
                             //echo "<input id='txt_id_ticket_transaccional' name='txt_id_ticket_transaccional' type='text' value='".$id_ticket_transaccional."'/>";
                             $obj_modelo->EliminarTicketTransaccional($id_ticket_transaccional);
                             $result = ProcesoCupos($txt_numero, $txt_monto, $sorteo, $zodiacal, $esZodiacal);
                             
+                            echo "--";
                         }
 		}
 		
@@ -478,16 +479,25 @@ function Corrida($txt_numero){
 
 }
 
+
 //Verificando que escriban el numero y el monto 
 if(isset($_POST['txt_numero'])){
 	$txt_numero=$_POST['txt_numero'];
 	$tamano_numero = strlen($txt_numero);
-	if ($tamano_numero < 2){
-		$txt_numero=1;		
+	if ($tamano_numero == 1){
+		$txt_numero='0'.$_POST['txt_numero'];		
 	}
 	
-}else{
-	$txt_numero=0;
+}
+
+//verifica que el numero no sea un campo vacio 
+if(empty($_POST['txt_numero']) == true){
+	if ($_POST['txt_numero'] == ''){
+		$txt_numero =  'a';
+	}else{
+		$txt_numero='00';
+	}
+	//
 }
 
 if(isset($_POST['txt_monto'])){
@@ -570,10 +580,10 @@ if(!empty($_POST['ss'])) {
 
 
 
-if($txt_numero == 0 ){
+if($txt_numero ==  'a' ){
 	$_SESSION['mensaje']= $mensajes['no_numero'];
 	echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";	
-}elseif ($txt_numero == 1 ){	
+}elseif ($txt_numero == 'b'){	
 	$_SESSION['mensaje']= $mensajes['no_numero_completo'];
 	echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";
 	

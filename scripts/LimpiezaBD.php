@@ -19,14 +19,25 @@ if( !$obj_conexion->ConnectDataBase($obj_config->GetVar('host'), $obj_config->Ge
 }
 
 // Modelo asignado
-require('.'.$obj_config->GetVar('ruta_modelo').'LoginAcceso.php');
-$obj_modelo= new LoginAcceso($obj_conexion);
+require('.'.$obj_config->GetVar('ruta_modelo').'Limpieza_BD.php');
+$obj_modelo= new Limpieza_BD($obj_conexion);
 
-session_start();
-$id_usuario =  $_SESSION['id_usuario'];
 
-if ($obj_modelo->UpdateTimePing($id_usuario)){
-    
-}
+
+//Script Para Mantenimiento Numeros_Jugados
+//Borra los numeros que no sean del dia de hoy
+
+$where = "'".date('Y-m-d')."'";
+$obj_modelo->EliminarNumerosJugados($where);
+
+
+//Script Para Mantenimiento IncompletosAgotados
+//Borra los numeros que no sean del dia de hoy
+$obj_modelo->EliminarIncompletosAgotados($where);
+
+
+//Script Para Mantenimiento Resultados
+//Elaborar script para que borre y deje los resultados de al menos un mes
 
 ?>
+

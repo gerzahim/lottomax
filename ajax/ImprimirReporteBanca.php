@@ -1,5 +1,6 @@
 <html>
-   <head><title>jZebra Demo</title>
+   <head><title>Impresion de Reporte Banca</title>
+<!--   
    <script language="javascript" type="text/javascript" src="../jscripts/jquery-latest.js"></script>
    <script language="javascript" type="text/javascript" src="../jscripts/PluginPrint.js"></script>        
    <script language="javascript" type="text/javascript" src="../jscripts/DefaultPrinter.js"></script>    
@@ -9,6 +10,7 @@
    <applet name="jzebra" code="jzebra.PrintApplet.class" archive="../jscripts/jzebra.jar" width="50px" height="50px">
 	  <param name="printer" value="zebra">
    </applet>
+-->
   
 <?php
 
@@ -46,7 +48,7 @@ $id_taquilla= $obj_modelo->GetIdTaquilla();
 $fecha_desde= $obj_generico->CleanText($_GET['fechadesde']);
 $fecha_hasta= $obj_generico->CleanText($_GET['fechahasta']);
 
-echo $fecha_desde, $fecha_hasta;
+//echo $fecha_desde, $fecha_hasta;
 
          if( $result= $obj_modelo->GetBalance($fecha_desde, $fecha_hasta)){
             if ($obj_conexion->GetNumberRows($result)>0 ){
@@ -87,7 +89,7 @@ echo $fecha_desde, $fecha_hasta;
                     
                 }
  				
-                echo $data;               
+                //echo $data;               
             } 
 
          }
@@ -102,18 +104,26 @@ $lineas_saltar_despues=$info_impresora["lineas_saltar_despues"];
 //Saltos de linea para hacer FEED
 for($i=1;$i<=$lineas_saltar_despues;$i++){
 	//$data1.="\\x1B\\x0A";
-	$data1.="\\n";
+	//$data1.="\\n";
+	$data.=".<br>";
 }
 
 //echo $data1;
-
+/*
 echo "<script type='text/javascript'>";
 echo "print('".$data1."')";
 echo "</script>";
 
 echo "<script language='javascript'>setTimeout('self.close();',5000)</script>"
+*/
 
+echo $data;
 ?>
 
+
+<script type="text/javascript"> 
+window.print();
+</script>
+<script language='javascript'>setTimeout('self.close();',5000)</script>
    </body>
 </html>
