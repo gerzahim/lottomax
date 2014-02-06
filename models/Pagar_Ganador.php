@@ -44,9 +44,11 @@ class Pagar_Ganador{
         // deberiamos colocar un parametro premiado=0, verificado=0
         // premiado cambia cuando se premia un ticket
         // verificado cambia cuando ya se reviso y no esta premiado verificado=1
-        $sql = "SELECT * FROM ticket WHERE status='1' AND pagado='0' AND verificado='0' ";
-        //echo $sql;
+        $sql = "SELECT * FROM ticket WHERE status=1 AND verificado=0 ";
+       // echo $sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
+		
+		//print_r($result);
 		return  $result;
 
 	}
@@ -231,6 +233,7 @@ class Pagar_Ganador{
 		//Preparacion del query
 
 		$sql = "UPDATE `detalle_ticket` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_detalle_ticket='".$id_detalle_ticket."'";
+		//echo $sql;
 		return $this->vConexion->ExecuteQuery($sql);
 
 	}

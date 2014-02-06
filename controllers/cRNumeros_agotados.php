@@ -15,15 +15,16 @@ $obj_xtpl->assign_file('contenido', $obj_config->GetVar('ruta_vista').'Rnumeros_
 require($obj_config->GetVar('ruta_modelo').'RNumeros_agotados.php');
 
 $obj_modelo= new RNumeros_agotados($obj_conexion);
+$obj_date= new Fecha();
 
 require('./fpdf/fpdf.php');
 
 switch (ACCION){
 
     case 'listar_resultados':
-        $fecha = $_GET['txt_fecha'];
-        $obj_xtpl->assign('fecha', $fecha);
-        
+        $fecha = $obj_date->changeFormatDateII($_GET['txt_fecha']);
+        $obj_xtpl->assign('fecha', $obj_date->changeFormatDateI($fecha, 0));
+    //    echo $fecha;
         // Ruta actual
         $_SESSION['Ruta_Lista']= $obj_generico->RutaRegreso();
 
@@ -141,7 +142,7 @@ switch (ACCION){
             // Ruta actual
             $_SESSION['Ruta_Form']= $obj_generico->RutaRegreso();
 
-            $obj_xtpl->assign('fecha', date('Y-m-d'));
+            $obj_xtpl->assign('fecha', $obj_date->FechaHoy2());
             // Parseo del bloque
             $obj_xtpl->parse('main.contenido.buscar_numeros');
 

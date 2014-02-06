@@ -231,6 +231,24 @@ class Ventas{
 		
 		return $this->vConexion->ExecuteQuery($sql);
 	}	
+	
+	
+	
+
+	/**
+	 * Busqueda de datos Numeros Incompletos en Ticket Transaccional
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetNumerosIncompletosTransaccional($id_taquilla){
+		//echo "PASa";
+		//Preparacion del query
+		$sql = "SELECT * FROM ticket_transaccional WHERE id_taquilla = '".$id_taquilla."' AND incompleto=1 ORDER BY id_ticket_transaccional DESC ";
+		//$sql.= "ORDER BY incompleto, numero, id_sorteo ASC";	
+		return $this->vConexion->ExecuteQuery($sql);
+	}
+	
 		
      /**
 	 * Busqueda de datos ticket transaccional, incluyendo los registrados como agotados(2)
@@ -882,9 +900,9 @@ class Ventas{
 	 * @param string $id_ticket_transaccional
 	 * @return boolean, array
 	 */
-	public function EliminarTicketTransaccional($id_ticket_transaccional){
+	public function EliminarTicketTransaccional($id_taquilla){
 		//Preparacion del query
-		$sql = "DELETE FROM `ticket_transaccional` WHERE id_ticket_transaccional='".$id_ticket_transaccional."'";
+		$sql = "DELETE FROM `ticket_transaccional` WHERE id_taquilla='".$id_taquilla."'";
 		return $this->vConexion->ExecuteQuery($sql);
 
 	}

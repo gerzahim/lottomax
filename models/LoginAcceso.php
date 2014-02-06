@@ -43,8 +43,9 @@ class LoginAcceso{
 
 		//Preparacion del query
 		/************* CABLEADO **********************/
-		//$sql = "INSERT INTO `usuarios_taquillas` (`id_usuario` , `id_taquilla`) VALUES ('".$id_usuario."', '".$id_taquilla."')";
-		//return $this->vConexion->ExecuteQuery($sql);
+		$sql = "INSERT INTO `usuarios_taquillas` (`id_usuario` , `id_taquilla`, `time_ping`) VALUES ('".$id_usuario."', '".$id_taquilla."','".date('H:i:s')."')";
+	//	echo $sql;
+		return $this->vConexion->ExecuteQuery($sql);
 		return true;
 
 	}
@@ -59,15 +60,21 @@ class LoginAcceso{
 	public function VerificarUsuarioTaquilla($id_referencia){
 
 		//Preparacion del query
-		$sql = "SELECT * FROM usuarios_taquillas WHERE id_taquilla= '".$id_referencia."'";
-
-		if( $result= $this->vConexion->ExecuteQuery($sql) ){
-			return $this->vConexion->GetArrayInfo($result);
-		}
-		else{
+		//$date=strtotime(date('H:i:s'));
+		$sql = "SELECT * FROM usuarios_taquillas WHERE id_taquilla= '".$id_referencia."' ";
+		//echo $sql;	
+		$result= $this->vConexion->ExecuteQuery($sql);
+		if( $row=$this->vConexion->GetArrayInfo($result)){
+			if((strtotime(date("H:i:s"))-strtotime($row['time_ping'])) <30)
 			return false;
+			else
+			{
+				self::EliminarUsuarioTaquilla($id_referencia);
+				return true;
+			}			
 		}
-
+		else
+		return true;			
 	}
 
         /**

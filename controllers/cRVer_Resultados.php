@@ -15,14 +15,15 @@ $obj_xtpl->assign_file('contenido', $obj_config->GetVar('ruta_vista').'Rver_resu
 require($obj_config->GetVar('ruta_modelo').'RVer_resultados.php');
 
 $obj_modelo= new RVer_Resultados($obj_conexion);
+$obj_date= new Fecha();
 
 require('./fpdf/fpdf.php');
 
 switch (ACCION){
 
     case 'listar_resultados':
-        $fecha = $_GET['txt_fecha'];
-        $obj_xtpl->assign('fecha', $fecha);
+        $fecha = $obj_date->changeFormatDateII($_GET['txt_fecha']);
+        $obj_xtpl->assign('fecha', $obj_date->changeFormatDateI($fecha, 0));
         
         // Ruta actual
         $_SESSION['Ruta_Lista']= $obj_generico->RutaRegreso();
@@ -83,7 +84,7 @@ switch (ACCION){
         //Primera página
         $pdf->AddPage();
 
-        $fecha = $_GET['fecha'];
+         $fecha = $obj_date->changeFormatDateII($_GET['fecha']);
 
 
         // Imagen  de encabezado
@@ -92,7 +93,7 @@ switch (ACCION){
         // Titulo del Reporte
             $pdf->SetFont('Arial','B',20);
             $pdf->SetY(45);
-            $pdf->Cell(50,10,'Resultados a la fecha '.$fecha);
+            $pdf->Cell(50,10,'Resultados a la fecha '.$obj_date->changeFormatDateI($fecha,0));
 
 
             
@@ -142,7 +143,7 @@ switch (ACCION){
             // Ruta actual
             $_SESSION['Ruta_Form']= $obj_generico->RutaRegreso();
 
-            $obj_xtpl->assign('fecha', date('Y-m-d'));
+            $obj_xtpl->assign('fecha', $obj_date->FechaHoy2());
             // Parseo del bloque
             $obj_xtpl->parse('main.contenido.buscar_resultados');
 

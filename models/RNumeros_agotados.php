@@ -45,6 +45,7 @@ class RNumeros_agotados{
                     WHERE incompleto='2' AND IA.fecha LIKE '%".$fecha."%'";
                 
 		$result= $this->vConexion->ExecuteQuery($sql);
+		//echo $sql;
                 if ($this->vConexion->GetNumberRows($result) >0){
                     return $result;
                 }else{

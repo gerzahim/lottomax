@@ -18,7 +18,7 @@ require($obj_config->GetVar('ruta_modelo').'Cargar_resultados.php');
 require($obj_config->GetVar('ruta_modelo').'Pagar_Ganador.php');
 
 $obj_modelo= new Cargar_Resultados($obj_conexion);
-
+$obj_date= new Fecha();
 $id_detalle_ticket[]="";
 $id_tickets[]="";
 $totales[]="";
@@ -268,7 +268,7 @@ switch (ACCION){
 		// Ruta actual
 		$_SESSION['Ruta_Lista']= $obj_generico->RutaRegreso();
 
-        $obj_xtpl->assign('fecha', date('Y-m-d'));
+        $obj_xtpl->assign('fecha', $obj_date->FechaHoy2());
                 
 		// Parseo del bloque
 		$obj_xtpl->parse('main.contenido.buscar_resultados');
@@ -281,70 +281,119 @@ switch (ACCION){
 // Funcion para premiar los tickets ganadores
 function PremiarGanadores(){
     global $obj_conexion;
-   $obj_modelo= new Pagar_Ganador($obj_conexion);
+    
+	$obj_modelo= new Pagar_Ganador($obj_conexion);
+	
+	$id_detalle_ticket[]="";
+	$id_tickets[]="";
+	$totales[]="";
+	
+	$aprox_abajo= $obj_modelo->GetAprox_abajo();
+	$aprox_arriba= $obj_modelo->GetAprox_arriba();
+    ;
 
-    $where = " fecha_hora LIKE '%".date('Y-m-d')."%'";
-    $result= $obj_modelo->GetListadosegunVariable($where);
+    //$where = " fecha_hora LIKE '%".date('Y-m-d')."%'";
+    $result= $obj_modelo->GetListadosegunVariable();
     If ($obj_conexion->GetNumberRows($result)>0){
-       $i=0; $j=0;
-        while ($roww= $obj_conexion->GetArrayInfo($result)){
-            $monto_total=0;
-            $id_ticket=$roww["id_ticket"];
-            $fecha_ticket= $obj_modelo->GetFechaTicket($id_ticket);
-            $resultDT = $obj_modelo->GetAllDetalleTciket($id_ticket);
-
-            while($rowDT= $obj_conexion->GetArrayInfo($resultDT)){
-
-                // Verificamos si hay alguna apuesta ganadora...
-                if ($obj_modelo->GetGanador($rowDT['id_sorteo'], $rowDT['id_zodiacal'], $rowDT['numero'], substr($fecha_ticket,0,10), $rowDT['id_tipo_jugada'])){
-                   $id_detalle_ticket[$j]=$rowDT['id_detalle_ticket'];
-                   
-                    $monto_pago = $obj_modelo->GetRelacionPagos($rowDT['id_tipo_jugada']);
-                    $monto_total = $monto_total + ($monto_pago*$rowDT['monto']);
-                    
-                }
-                
-                // Verificamos las aproximaciones por arriba y por abajo...
-                if ($obj_modelo->GetAprox_abajo()){ // Si esta activa la aproximacion por abajo...
-                    if ($rowDT['id_tipo_jugada']==2){ // Si el tipo de jugada es Terminal
-                        // Verificamos si hay aproximaciones por abajo
-                         if ($obj_modelo->GetAproximacion($rowDT['id_sorteo'], $rowDT['id_zodiacal'], $rowDT['numero'], substr($fecha_ticket,0,10), 'abajo')){
-                             $id_detalle_ticket[$j]=$rowDT['id_detalle_ticket'];
-                            
-                             $monto_pago = $obj_modelo->GetRelacionPagos('5'); // Tipo Jugada Aproximacion
-                             $monto_total = $monto_total + ($monto_pago*$rowDT['monto']);
-                           
-                         }
-                    }
-                }
-
-                if ($obj_modelo->GetAprox_arriba()){ // Si esta activa la aproximacion por arriba...
-                    if ($rowDT['id_tipo_jugada']==2){ // Si el tipo de jugada es Terminal
-                        // Verificamos si hay aproximaciones por abajo
-                         if ($obj_modelo->GetAproximacion($rowDT['id_sorteo'], $rowDT['id_zodiacal'], $rowDT['numero'], substr($fecha_ticket,0,10), 'arriba')){
-                             $id_detalle_ticket[$j]=$rowDT['id_detalle_ticket'];
-                             
-                             $monto_pago = $obj_modelo->GetRelacionPagos('5'); // Tipo Jugada Aproximacion
-                             $monto_total = $monto_total + ($monto_pago*$rowDT['monto']);
-                            
-                         }
-                    }
-                }
-
-           }
-             $id_tickets[$j]=$id_ticket;$j++;
-             $totales[$i]=$monto_total; $i++;
-        }
-        
-        // Premiamos los tickets
-        for ($i = 0; $i < count($id_tickets); $i++){
-             if( $obj_modelo->PremiarTicket($id_tickets[$i],$totales[$i])){
-
-             }
-        }
-        for ($i = 0; $i < count($id_detalle_ticket); $i++){
-             if( $obj_modelo->PagarDetalleTicket($id_detalle_ticket[$i])){}
-        }
+    	$i=0; $j=0;
+    	$ticket_premiado=0;
+    	$monto_total_ticket=0;
+    	while ($roww= $obj_conexion->GetArrayInfo($result)){
+    
+    		 
+    		$id_ticket=$roww["id_ticket"];
+    		$fecha_ticket= $obj_modelo->GetFechaTicket($id_ticket);
+    		$resultDT = $obj_modelo->GetAllDetalleTciket($id_ticket);
+    
+    		//revisamos la tabla de detalle ticket y comparamos con los resultados
+    		while($rowDT= $obj_conexion->GetArrayInfo($resultDT)){
+    			$monto_total=0;
+    			// Verificamos si hay alguna apuesta ganadora...
+    			if ($obj_modelo->GetGanador($rowDT['id_sorteo'], $rowDT['id_zodiacal'], $rowDT['numero'], substr($fecha_ticket,0,10), $rowDT['id_tipo_jugada'])){
+    				 
+    				$id_detalle_ticket[$j]=$rowDT['id_detalle_ticket'];
+    
+    				$monto_pago = $obj_modelo->GetRelacionPagos($rowDT['id_tipo_jugada']);
+    				$monto_total = $monto_total + ($monto_pago*$rowDT['monto']);
+    
+    				//destacamos la jugada ganadora en detalle ticket premiado 1 y monto ganado por la jugada
+    				$obj_modelo->PremiarDetalleTicket($id_detalle_ticket[$j], $monto_total);
+    				$ticket_premiado=1;
+    				$monto_total_ticket = $monto_total_ticket + $monto_total;
+    			}
+    
+    			// Verificamos las aproximaciones por arriba y por abajo...
+    			if ($aprox_abajo){ // Si esta activa la aproximacion por abajo...
+    				if ($rowDT['id_tipo_jugada']==2){ // Si el tipo de jugada es Terminal
+    					// Verificamos si hay aproximaciones por abajo
+    					if ($obj_modelo->GetAproximacion($rowDT['id_sorteo'], $rowDT['id_zodiacal'], $rowDT['numero'], substr($fecha_ticket,0,10), 'abajo')){
+    						$id_detalle_ticket[$j]=$rowDT['id_detalle_ticket'];
+    						 
+    						$monto_pago = $obj_modelo->GetRelacionPagos('5'); // Tipo Jugada Aproximacion
+    						$monto_total = $monto_total + ($monto_pago*$rowDT['monto']);
+    						 
+    						//destacamos la jugada ganadora en detalle ticket premiado 1 y monto ganado por la jugada
+    						$obj_modelo->PremiarDetalleTicket($id_detalle_ticket[$j], $monto_total);
+    						$ticket_premiado=1;
+    						$monto_total_ticket = $monto_total_ticket + $monto_total;
+    					}
+    				}
+    			}
+    
+    			if ($aprox_arriba){ // Si esta activa la aproximacion por arriba...
+    				if ($rowDT['id_tipo_jugada']==2){ // Si el tipo de jugada es Terminal
+    					// Verificamos si hay aproximaciones por abajo
+    					if ($obj_modelo->GetAproximacion($rowDT['id_sorteo'], $rowDT['id_zodiacal'], $rowDT['numero'], substr($fecha_ticket,0,10), 'arriba')){
+    						$id_detalle_ticket[$j]=$rowDT['id_detalle_ticket'];
+    						 
+    						$monto_pago = $obj_modelo->GetRelacionPagos('5'); // Tipo Jugada Aproximacion
+    						$monto_total = $monto_total + ($monto_pago*$rowDT['monto']);
+    						 
+    						 
+    						//destacamos la jugada ganadora en detalle ticket premiado 1 y monto ganado por la jugada
+    						$obj_modelo->PremiarDetalleTicket($id_detalle_ticket[$j], $monto_total);
+    						$ticket_premiado=1;
+    						$monto_total_ticket = $monto_total_ticket + $monto_total;
+    					}
+    				}
+    			}
+    
+    
+    		}// fin del subwhile
+    		 
+    		//Cambiar a Verficado=1 en tabla ticket independientemente si gano o no gano
+    		//$id_ticket=$roww["id_ticket"];
+    		$obj_modelo->MarcarVerificadoByIdTicket($id_ticket);
+    		 
+    		//contadores
+    		$id_tickets[$j]=$id_ticket;$j++;
+    		$totales[$i]=$monto_total; $i++; //total en Bs premiados,
+    
+    		//verificando que estemos pasando por un ticket premiado
+    		// vamos a destacar el ticket premiado 1 y monto total ganado
+    		if($ticket_premiado==1){
+    
+    			$obj_modelo->PremiarTicket($id_ticket,$monto_total_ticket);
+    			$ticket_premiado=0;
+    			$monto_total_ticket=0;
+    		}
+    
+    	}// fin del while mayor
+    
+    	/*
+    	 // Premiamos los tickets
+    	for ($i = 0; $i < count($id_tickets); $i++){
+    	if( $obj_modelo->PremiarTicket($id_tickets[$i],$totales[$i])){
+    
+    	}
+    	}
+    
+    	if (count($id_detalle_ticket)>0){
+    	for ($i = 0; $i < count($id_detalle_ticket); $i++){
+    	if( $obj_modelo->PagarDetalleTicket($id_detalle_ticket[$i])){}
+    	}
+    	}
+    	*/
     }
 }
 

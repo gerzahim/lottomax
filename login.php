@@ -8,7 +8,6 @@ if(isset($_SESSION['InfoLogin'])){
 	// Redireccionamiento
 	header('location:index.php');
 }
-
 	//exit();
 // Archivo de variables de configuracion
 require_once('./config/config.php');
@@ -39,7 +38,7 @@ if( !isset($_POST['btnentrar']) ){
 	$obj_xtpl->assign('titulo_web',$obj_config->GetVar('titulo_web'));
 	$obj_xtpl->assign('fecha_hoy',$obj_date->FechaActual());
 	$obj_xtpl->assign('titulo_sistema',$obj_config->GetVar('titulo_sistema'));
-	
+	//echo "pasamos";
 	//Definiendo $_GET['msj']
 	if( !isset($_GET['msj']) ){
 	$_GET['msj']= 0;

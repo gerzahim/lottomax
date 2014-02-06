@@ -13,6 +13,7 @@ $obj_xtpl->assign_file('contenido', $obj_config->GetVar('ruta_vista').'RVentas_p
 
 // Modelo asignado
 require($obj_config->GetVar('ruta_modelo').'RVentas_periodo.php');
+$obj_date= new Fecha();
 
 $obj_modelo= new RVentas_periodo($obj_conexion);
 
@@ -30,16 +31,21 @@ switch (ACCION){
         // Ruta regreso
         $obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Form']);
         
-        $fecha_desde= $obj_generico->CleanText($_GET['fechadesde']);
+/*        $fecha_desde= $obj_generico->CleanText($_GET['fechadesde']);
         $fecha_hasta= $obj_generico->CleanText($_GET['fechahasta']);
-        $taquilla= $obj_generico->CleanText($_GET['op_taquilla']);
+  */      $taquilla= $obj_generico->CleanText($_GET['op_taquilla']);
         $sorteo= $obj_generico->CleanText($_GET['sorteo']);
 
-        $obj_xtpl->assign('fechadesde', $fecha_desde);
-        $obj_xtpl->assign('fechahasta', $fecha_hasta);
+        $obj_xtpl->assign('fechadesde', $_GET['fechadesde']);
+        $obj_xtpl->assign('fechahasta', $_GET['fechahasta']);
         $obj_xtpl->assign('taquilla', $taquilla);
         $obj_xtpl->assign('sorteo', $sorteo);
 
+        
+
+        $fecha_desde= $obj_date->changeFormatDateII($obj_generico->CleanText($_GET['fechadesde']));
+        $fecha_hasta= $obj_date->changeFormatDateII($obj_generico->CleanText($_GET['fechahasta']));
+        
         $i=0; $total_ventas=0; $cantidad_anulados=0;
 
         if( $result= $obj_modelo->GetTickets($fecha_desde, $fecha_hasta, $taquilla, $sorteo) ){
@@ -58,7 +64,7 @@ switch (ACCION){
                                 $obj_xtpl->assign('estilo_fila', 'odd');
                         }
 
-                        $obj_xtpl->assign('fecha_hora', $row['fecha_hora']);
+                        $obj_xtpl->assign('fecha_hora', $obj_date->changeFormatDateI($row['fecha_hora'],1));
                         $obj_xtpl->assign('id_ticket', $row['id_ticket']);
                         $obj_xtpl->assign('total', $row['total_ticket']);
 
@@ -108,8 +114,9 @@ switch (ACCION){
         //Primera página
         $pdf->AddPage();
 
-        $fecha_desde= $obj_generico->CleanText($_GET['fechadesde']);
-        $fecha_hasta= $obj_generico->CleanText($_GET['fechahasta']);
+        $fecha_desde= $obj_date->changeFormatDateII($obj_generico->CleanText($_GET['fechadesde']));
+        $fecha_hasta= $obj_date->changeFormatDateII($obj_generico->CleanText($_GET['fechahasta']));
+        
         $taquilla= $obj_generico->CleanText($_GET['taquilla']);
         $sorteo= $obj_generico->CleanText($_GET['sorteo']);
 
@@ -120,7 +127,7 @@ switch (ACCION){
         // Titulo del Reporte
             $pdf->SetFont('Arial','B',20);
             $pdf->SetY(45);
-            $pdf->Cell(50,10,'Tickets desde la fecha '.$fecha_desde.' hasta '.$fecha_hasta);
+            $pdf->Cell(50,10,'Tickets desde la fecha '.$obj_date->changeFormatDateI($fecha_desde,0).' hasta '.$obj_date->changeFormatDateI($fecha_hasta,0));
 
 
             
@@ -151,7 +158,7 @@ switch (ACCION){
                     }else{
                         $pdf->Ln();
                         $pdf->SetTextColor(0);
-                        $pdf->Cell(40,7,$row['fecha_hora'],1);
+                        $pdf->Cell(40,7,$obj_date->changeFormatDateI($row['fecha_hora'],1),1);
                         $pdf->Cell(30,7,$row['id_ticket'],1,0,'C');
                         $pdf->Cell(30,7,$row['total_ticket'],1,0,'C');
 
@@ -258,7 +265,7 @@ switch (ACCION){
             // Ruta actual
             $_SESSION['Ruta_Form']= $obj_generico->RutaRegreso();
 
-            $obj_xtpl->assign('fecha', date('Y-m-d'));
+            $obj_xtpl->assign('fecha', $obj_date->FechaHoy2());
 
             //Cargar taquilla
             if( $result = $obj_modelo->GetDatosTaquillas() ){

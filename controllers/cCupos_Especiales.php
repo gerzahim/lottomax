@@ -15,6 +15,7 @@ $obj_xtpl->assign_file('contenido', $obj_config->GetVar('ruta_vista').'cupos_esp
 require($obj_config->GetVar('ruta_modelo').'Cupos_Especiales.php');
 
 $obj_modelo= new Cupo_Especial($obj_conexion);
+$obj_date= new Fecha();
 
 
 switch (ACCION){

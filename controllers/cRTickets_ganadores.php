@@ -13,6 +13,7 @@ $obj_xtpl->assign_file('contenido', $obj_config->GetVar('ruta_vista').'Rtickets_
 
 // Modelo asignado
 require($obj_config->GetVar('ruta_modelo').'RTickets_ganadores.php');
+$obj_date= new Fecha();
 
 $obj_modelo= new RTickets_ganadores($obj_conexion);
 
@@ -21,8 +22,9 @@ require('./fpdf/fpdf.php');
 switch (ACCION){
 
     case 'listar_resultados':
-        $fecha = $_GET['txt_fecha'];
-        $obj_xtpl->assign('fecha', $fecha);
+        $fecha = $obj_date->changeFormatDateII($_GET['txt_fecha']);
+        
+        $obj_xtpl->assign('fecha', $obj_date->changeFormatDateI($fecha,0));
         
         // Ruta actual
         $_SESSION['Ruta_Lista']= $obj_generico->RutaRegreso();
@@ -42,7 +44,7 @@ switch (ACCION){
                             $obj_xtpl->assign('estilo_fila', 'odd');
                     }
 
-                    $obj_xtpl->assign('fecha_hora', $row['fecha_hora']);
+                    $obj_xtpl->assign('fecha_hora', $obj_date->changeFormatDateI($row['fecha_hora'],1));
                     $obj_xtpl->assign('id_ticket', $row['id_ticket']);
                     $obj_xtpl->assign('total', $row['total_ticket']);
                     $obj_xtpl->assign('total_premiado', $row['total_premiado']);
@@ -90,7 +92,7 @@ switch (ACCION){
         //Primera página
         $pdf->AddPage();
 
-        $fecha = $_GET['fecha'];
+        $fecha = $obj_date->changeFormatDateII($_GET['fecha']);
 
 
         // Imagen  de encabezado
@@ -99,7 +101,7 @@ switch (ACCION){
         // Titulo del Reporte
             $pdf->SetFont('Arial','B',20);
             $pdf->SetY(45);
-            $pdf->Cell(50,10,'Tickets Ganadores a la fecha '.$fecha);
+            $pdf->Cell(50,10,'Tickets Ganadores a la fecha '.$obj_date->changeFormatDateII($fecha,0));
 
 
             
@@ -127,7 +129,7 @@ switch (ACCION){
                 while($row= $obj_conexion->GetArrayInfo($result)){
                     $pdf->Ln();
                     $pdf->SetTextColor(0);
-                    $pdf->Cell(40,7,$row['fecha_hora'],1);
+                    $pdf->Cell(40,7,$obj_date->changeFormatDateI($row['fecha_hora'],1),1);
                     $pdf->Cell(30,7,$row['id_ticket'],1,0,'C');
                     $pdf->Cell(30,7,$row['total_ticket'],1,0,'C');
                     $pdf->Cell(30,7,$row['total_premiado'],1,0,'C');
@@ -231,7 +233,7 @@ switch (ACCION){
             // Ruta actual
             $_SESSION['Ruta_Form']= $obj_generico->RutaRegreso();
 
-            $obj_xtpl->assign('fecha', date('Y-m-d'));
+            $obj_xtpl->assign('fecha', $obj_date->FechaHoy2());
             // Parseo del bloque
             $obj_xtpl->parse('main.contenido.buscar_tickets');
 

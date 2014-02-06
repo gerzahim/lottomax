@@ -1,11 +1,13 @@
 <?php
 //Creamos la conexión a las distintas base de datos, la de arriba y las de abajo.
+// Archivo de variables de configuracion
+//require('../models/Pagar_Ganador.php');
 
-$conexion_abajo = mysql_connect("localhost" , "root" , "secreta");
+$conexion_abajo = mysql_connect("localhost" , "root" , "");
 mysql_select_db("lottomax",$conexion_abajo);
 
-$conexion_arriba = mysql_connect("www.db4free.net:3306" , "lottomaxuser" , "secreta7",true);
-mysql_select_db("lottomaxdb",$conexion_arriba);
+$conexion_arriba = mysql_connect("sql3.freesqldatabase.com:3306" , "sql329054" , "gA5!tM4*",true);
+mysql_select_db("sql329054",$conexion_arriba);
 
 
 /*$conexion_arriba = mysql_connect("www.db4free.net:3306" , "lottomaxuser" , "secreta7");
@@ -71,7 +73,13 @@ if($error==0)
 		if (mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
 			if (mysql_query("BEGIN;",$conexion_arriba)) //dar inicio a la transacción
 				if (mysql_query($sql,$conexion_arriba))
-				$error=0;//mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);	
+				{
+					$error=0;//mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);	
+					mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
+					mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
+					header ("Location: BuscarTicketsGanadores.php");
+				//	PremiarGanadores($conexion_abajo);
+				}
 				else
 				$error=1;
 			else
@@ -81,13 +89,10 @@ if($error==0)
 	}
 
 if($error==1)
-	mysql_query("ROLLBACK;",$conexion_abajo); //garantizo que se haga el retroceso de las operaciones	
-else
-if($error==0) 
 {
-	mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
-	mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
+	//echo "pasa";
+	mysql_query("ROLLBACK;",$conexion_arriba);
+	mysql_query("ROLLBACK;",$conexion_abajo); //garantizo que se haga el retroceso de las operaciones	
 }
-
 }
 ?>

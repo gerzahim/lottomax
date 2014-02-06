@@ -15,15 +15,16 @@ $obj_xtpl->assign_file('contenido', $obj_config->GetVar('ruta_vista').'Rpremios_
 require($obj_config->GetVar('ruta_modelo').'RPremios_frios.php');
 
 $obj_modelo= new RPremios_frios($obj_conexion);
+$obj_date= new Fecha();
 
 require('./fpdf/fpdf.php');
 
 switch (ACCION){
 
     case 'listar_resultados':
-        $fecha = $_GET['txt_fecha'];
-        $obj_xtpl->assign('fecha', $fecha);
-        
+        $fecha = $obj_date->changeFormatDateII($_GET['txt_fecha']);
+        $obj_xtpl->assign('fecha', $obj_date->changeFormatDateI($fecha,0));
+                
         // Ruta actual
         $_SESSION['Ruta_Lista']= $obj_generico->RutaRegreso();
 
@@ -47,7 +48,7 @@ switch (ACCION){
                                     $obj_xtpl->assign('estilo_fila', 'odd');
                             }
 
-                            $obj_xtpl->assign('fecha_hora', $row['fecha_hora']);
+                    		$obj_xtpl->assign('fecha_hora', $obj_date->changeFormatDateI($row['fecha_hora'],1));
                             $obj_xtpl->assign('id_ticket', $row['id_ticket']);
                             $obj_xtpl->assign('taquilla', $row['taquilla']);
                             $obj_xtpl->assign('total', $row['total_ticket']);
@@ -92,8 +93,8 @@ switch (ACCION){
         //Primera página
         $pdf->AddPage();
 
-        $fecha = $_GET['fecha'];
-
+        $fecha = $obj_date->changeFormatDateII($_GET['fecha']);
+        
 
         // Imagen  de encabezado
         $pdf->Image("./images/banner4.jpg" , 0 ,0, 200 ,40  , "JPG" ,"");
@@ -135,7 +136,7 @@ switch (ACCION){
                      if ($fecha_vencido_ticket < $fecha_actual) {
                             $pdf->Ln();
                             $pdf->SetTextColor(0);
-                            $pdf->Cell(40,7,$row['fecha_hora'],1);
+                    		$pdf->Cell(40,7,$obj_date->changeFormatDateI($row['fecha_hora'],1),1);
                             $pdf->Cell(30,7,$row['id_ticket'],1,0,'C');
                             $pdf->Cell(30,7,$row['taquilla'],1,0,'C');
                             $pdf->Cell(30,7,$row['total_ticket'],1,0,'C');
@@ -237,8 +238,8 @@ switch (ACCION){
             // Ruta actual
             $_SESSION['Ruta_Form']= $obj_generico->RutaRegreso();
 
-            $obj_xtpl->assign('fecha', date('Y-m-d'));
-            // Parseo del bloque
+            $obj_xtpl->assign('fecha', $obj_date->FechaHoy2());
+                        // Parseo del bloque
             $obj_xtpl->parse('main.contenido.buscar_tickets');
 
             break;

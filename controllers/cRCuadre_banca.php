@@ -15,6 +15,7 @@ $obj_xtpl->assign_file('contenido', $obj_config->GetVar('ruta_vista').'RCuadre_b
 require($obj_config->GetVar('ruta_modelo').'RCuadre_banca.php');
 
 $obj_modelo= new RCuadre_banca($obj_conexion);
+$obj_date= new Fecha();
 
 require('./fpdf/fpdf.php');
 
@@ -35,7 +36,10 @@ switch (ACCION){
 
         $obj_xtpl->assign('fechadesde', $fecha_desde);
         $obj_xtpl->assign('fechahasta', $fecha_hasta);
-
+		
+       	$fecha_desde=$obj_date->changeFormatDateII($fecha_desde);
+       	$fecha_hasta=$obj_date->changeFormatDateII($fecha_hasta);
+       	
         $i=0; 
 
         if( $result= $obj_modelo->GetBalance($fecha_desde, $fecha_hasta) ){
@@ -58,7 +62,7 @@ switch (ACCION){
                          }
                     }
 
-                    $obj_xtpl->assign('fecha', $row['fecha']);
+                    $obj_xtpl->assign('fecha', $obj_date->changeFormatDateI($row['fecha'], 0));
                     $obj_xtpl->assign('total_ventas', number_format($row['total_ventas'], 2) );
                     $obj_xtpl->assign('comision', number_format($row['comision'],2));
                     $obj_xtpl->assign('total_premiado', number_format($row['total_premiado'],2));
@@ -104,14 +108,19 @@ switch (ACCION){
 
         $fecha_desde= $obj_generico->CleanText($_GET['fechadesde']);
         $fecha_hasta= $obj_generico->CleanText($_GET['fechahasta']);
-     
+        
+        $fecha_desde=$obj_date->changeFormatDateII($fecha_desde);
+        $fecha_hasta=$obj_date->changeFormatDateII($fecha_hasta);
+        
+        
+        
         // Imagen  de encabezado
         $pdf->Image("./images/banner4.jpg" , 0 ,0, 200 ,40  , "JPG" ,"");
         
         // Titulo del Reporte
             $pdf->SetFont('Arial','B',20);
             $pdf->SetY(45);
-            $pdf->Cell(50,10,'Cuadre con Banca desde '.$fecha_desde.' hasta '.$fecha_hasta);
+            $pdf->Cell(50,10,'Cuadre con Banca desde '.$obj_date->changeFormatDateI($fecha_desde, 0).' hasta '.$obj_date->changeFormatDateI($fecha_hasta, 0));
 
 
             
@@ -150,7 +159,7 @@ switch (ACCION){
                         }
                         
                         
-                        $pdf->Cell(40,7,$row['fecha'],1,0,'C');
+                        $pdf->Cell(40,7,$obj_date->changeFormatDateI($row['fecha'], 0),1,0,'C');
                         $pdf->Cell(30,7,number_format($row['total_ventas'],2), 1,0,'C');
                         $pdf->Cell(30,7,number_format($row['comision'],2), 1,0,'C');
                         $pdf->Cell(30,7,number_format($row['total_premiado'],2), 1,0,'C');
@@ -176,7 +185,7 @@ switch (ACCION){
             // Ruta actual
             $_SESSION['Ruta_Form']= $obj_generico->RutaRegreso();
 
-            $obj_xtpl->assign('fecha', date('Y-m-d'));
+            $obj_xtpl->assign('fecha', $obj_date->FechaHoy2());
 
 
             // Parseo del bloque

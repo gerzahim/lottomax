@@ -63,9 +63,9 @@ If ($obj_conexion->GetNumberRows($resultTT)>0){
                      if ($obj_modelo->GuardarDetalleTicket($id_ticket, $row['numero'], $row['id_sorteo'], $hora_sorteo, $row['id_zodiacal'], $row['id_tipo_jugada'], $row['monto'])){
 
                         //Verificamos los numeros incompletos  y guardamos en tabla
-                        if ($row['incompleto']=='1'){
-                            $incompleto=1;
-                            $obj_modelo->GuardarIncompletosAgotados($id_ticket, $fecha_hora, $row['numero'], $row['id_sorteo'], $row['id_tipo_jugada'], $row['id_zodiacal'], $row['monto_faltante'], $incompleto);
+                        if ($row['incompleto']=='3' OR $row['incompleto']=='1'){
+                            $incompleto=2;
+                            $obj_modelo->GuardarIncompletosAgotados($id_ticket, $fecha_hora, $row['numero'], $row['id_sorteo'], $row['id_tipo_jugada'],$row['id_zodiacal'], 0, $incompleto);
                         }
 
                         //Actualizamos en tabla numeros jugados
@@ -77,7 +77,7 @@ If ($obj_conexion->GetNumberRows($resultTT)>0){
                             $row_nj = $obj_conexion->GetArrayInfo($result);
 
                             if ($row_nj['monto_restante']>0){
-                                $nuevo_monto=$row_nj['monto_restante']-$row['monto'];
+                                $nuevo_monto=$row_nj['monto_restante']-($row['monto']*(-1));
                                 // Actualizamos el nuevo monto disponible para jugar del numero
                                 $obj_modelo->ActualizaNumeroJugados($row_nj['id_numero_jugados'], $nuevo_monto);
                             }else{
@@ -87,26 +87,23 @@ If ($obj_conexion->GetNumberRows($resultTT)>0){
                         }else{ // Si el numero no se encuentra registrado en numeros jugados debe guardarse en la tabla
 
                             //Calculamos el monto_restante
-                            if ($row['incompleto']=='1'){
-                                // Si incompleto es 1, quiere decir que se hizo la jugada por el valor maximo disponible del cupo
-                                $monto_restante=0;
-                            }elseif ($row['incompleto']=='0'){
-                                // Si incompleto es 0, quiere decir que se hizo la jugada por el valor inferior al disponible del cupo y
-                                // el disponible para jugar quedo registrado en monto_faltante
-                                $monto_restante=$row['monto_faltante'];
-                            }
-
+                           
                             //Guardamos el numero en la tabla
-                            $obj_modelo->GuardarNumerosJugados($fecha_hora, $row['numero'], $row['id_sorteo'], $row['id_tipo_jugada'], $row['id_zodiacal'], $monto_restante);
+                            if($row['monto_faltante']<=0)
+                            $monto_faltante=0;
+                            else
+                            $monto_faltante=$row['monto_faltante'];
+                            	
+                            $obj_modelo->GuardarNumerosJugados($fecha_hora, $row['numero'], $row['id_sorteo'], $row['id_tipo_jugada'], $row['id_zodiacal'], $monto_faltante);
                         }
                     }
                 }else{//Verificamos los numeros agotados y guardamos en tabla
                      $incompleto=2;
-                     $obj_modelo->GuardarIncompletosAgotados($id_ticket, $fecha_hora, $row['numero'], $row['id_sorteo'], $row['id_tipo_jugada'], $row['id_zodiacal'], $row['monto_faltante'], $incompleto);
+                     $obj_modelo->GuardarIncompletosAgotados($id_ticket, $fecha_hora, $row['numero'], $row['id_sorteo'], $row['id_tipo_jugada'], $row['id_zodiacal'], 0, $incompleto);
                 }
 
                 // Despues de guardado en detalle_ticket, borramos el registro de ticket transaccional...
-                $obj_modelo->EliminarTicketTransaccional($row['id_ticket_transaccional']);
+             //   $obj_modelo->EliminarTicketTransaccional($row['id_ticket_transaccional']);
             }
         }
 

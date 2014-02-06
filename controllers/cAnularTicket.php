@@ -15,6 +15,7 @@ $obj_xtpl->assign_file('contenido', $obj_config->GetVar('ruta_vista').'anular_ti
 require($obj_config->GetVar('ruta_modelo').'AnularTicket.php');
 
 $obj_modelo= new AnularTicket($obj_conexion);
+$obj_date= new Fecha();
 
 
 switch (ACCION){
@@ -68,7 +69,7 @@ switch (ACCION){
 
 				// Asignacion de los datos
                                 $obj_xtpl->assign('id_ticket', $obj_generico->CleanTextDb($row["id_ticket"]));
-                                $obj_xtpl->assign('fecha_hora', $obj_generico->CleanTextDb($row["fecha_hora"]));
+                                $obj_xtpl->assign('fecha_hora', $obj_date->changeFormatDateI($obj_generico->CleanTextDb($row["fecha_hora"]),1) );
                                 $obj_xtpl->assign('total_ticket', $obj_generico->CleanTextDb($row["total_ticket"]));
 
 				// Parseo del bloque de la fila
@@ -265,8 +266,8 @@ switch (ACCION){
 				
 				// Asignacion de los datos
 				$obj_xtpl->assign('id_ticket', $obj_generico->CleanTextDb($row["id_ticket"]));
-                                $obj_xtpl->assign('fecha_hora', $obj_generico->CleanTextDb($row["fecha_hora"]));
-                                $obj_xtpl->assign('total_ticket', $obj_generico->CleanTextDb($row["total_ticket"]));
+                               $obj_xtpl->assign('fecha_hora', $obj_date->changeFormatDateI($obj_generico->CleanTextDb($row["fecha_hora"]),1));
+                                   $obj_xtpl->assign('total_ticket', $obj_generico->CleanTextDb($row["total_ticket"]));
                                
 						
 				// Parseo del bloque de la fila  

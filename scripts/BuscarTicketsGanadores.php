@@ -35,29 +35,32 @@ $aprox_arriba= $obj_modelo->GetAprox_arriba();
 //$result= $obj_modelo->GetListadosegunVariable($where);
 
 $result= $obj_modelo->GetListadosegunVariable();
+
+
 If ($obj_conexion->GetNumberRows($result)>0){
    $i=0; $j=0; 
    $ticket_premiado=0;
    $monto_total_ticket=0;
     while ($roww= $obj_conexion->GetArrayInfo($result)){
 
-        $monto_total=0;
+       
         $id_ticket=$roww["id_ticket"];
         $fecha_ticket= $obj_modelo->GetFechaTicket($id_ticket);
         $resultDT = $obj_modelo->GetAllDetalleTciket($id_ticket);
         
         //revisamos la tabla de detalle ticket y comparamos con los resultados
         while($rowDT= $obj_conexion->GetArrayInfo($resultDT)){
-            
+        	$monto_total=0;
             // Verificamos si hay alguna apuesta ganadora...
             if ($obj_modelo->GetGanador($rowDT['id_sorteo'], $rowDT['id_zodiacal'], $rowDT['numero'], substr($fecha_ticket,0,10), $rowDT['id_tipo_jugada'])){
-               $id_detalle_ticket[$j]=$rowDT['id_detalle_ticket'];
+               
+            	$id_detalle_ticket[$j]=$rowDT['id_detalle_ticket'];
               
                 $monto_pago = $obj_modelo->GetRelacionPagos($rowDT['id_tipo_jugada']);
                 $monto_total = $monto_total + ($monto_pago*$rowDT['monto']);
                 
                 //destacamos la jugada ganadora en detalle ticket premiado 1 y monto ganado por la jugada
-                $obj_modelo->PremiarDetalleTicket($id_detalle_ticket, $monto_total);
+                $obj_modelo->PremiarDetalleTicket($id_detalle_ticket[$j], $monto_total);
                 $ticket_premiado=1;
                 $monto_total_ticket = $monto_total_ticket + $monto_total;
             }
@@ -73,7 +76,7 @@ If ($obj_conexion->GetNumberRows($result)>0){
                          $monto_total = $monto_total + ($monto_pago*$rowDT['monto']);
                          
                          //destacamos la jugada ganadora en detalle ticket premiado 1 y monto ganado por la jugada
-                         $obj_modelo->PremiarDetalleTicket($id_detalle_ticket, $monto_total);
+                         $obj_modelo->PremiarDetalleTicket($id_detalle_ticket[$j], $monto_total);
                          $ticket_premiado=1;
                          $monto_total_ticket = $monto_total_ticket + $monto_total;
                      }
@@ -91,7 +94,7 @@ If ($obj_conexion->GetNumberRows($result)>0){
                          
                          
                          //destacamos la jugada ganadora en detalle ticket premiado 1 y monto ganado por la jugada
-                         $obj_modelo->PremiarDetalleTicket($id_detalle_ticket, $monto_total);
+                         $obj_modelo->PremiarDetalleTicket($id_detalle_ticket[$j], $monto_total);
                          $ticket_premiado=1;
                          $monto_total_ticket = $monto_total_ticket + $monto_total;
                      }

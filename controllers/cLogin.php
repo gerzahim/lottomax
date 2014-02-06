@@ -1,7 +1,6 @@
 <?php
 
 if( !empty($_POST['txtuser']) && !empty($_POST['txtpass']) && !empty($_POST['op_taquilla']) ){
-	
 	// Conexion a la base de datos
 	require($obj_config->GetVar('ruta_libreria').'Bd.php');
 	$obj_conexion= new Bd();
@@ -15,11 +14,10 @@ if( !empty($_POST['txtuser']) && !empty($_POST['txtpass']) && !empty($_POST['op_
 		require($obj_config->GetVar('ruta_modelo').'LoginAcceso.php');
 
 		$obj_modelo= new LoginAcceso($obj_conexion);
-		
 		if( $info= $obj_modelo->VerificarUsuario($_POST['txtuser'],$_POST['txtpass'])){
 
                         // Verificamos que la taquilla no esta siendo usada por otro usuario...
-                        if (!$obj_modelo->VerificarUsuarioTaquilla($_POST['op_taquilla'])){
+                        if ($obj_modelo->VerificarUsuarioTaquilla($_POST['op_taquilla'])){
                             
                             // Destruccion de las variables de sesion
                             session_unset();
