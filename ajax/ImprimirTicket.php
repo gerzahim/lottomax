@@ -250,9 +250,9 @@ $lineas_saltar_despues=$info_impresora["lineas_saltar_despues"];
 $ver_numeros_incompletos=$info_impresora["ver_numeros_incompletos"];
 $ver_numeros_agotados=$info_impresora["ver_numeros_agotados"];
 
-
 //INCOMPLETOS Y AGOTADOS
-if( $result2= $obj_modelo->GetNumerosIncompletobyIdticket($id_ticket) ){
+if( $result2= $obj_modelo->GetNumerosIncompletosTransaccional($id_taquilla) ){
+		
 	$id_bandera_actual=0;	
 	while($row= $obj_conexion->GetArrayInfo($result2)){
 		$id_bandera=$row['incompleto'];
@@ -303,19 +303,19 @@ if( $result2= $obj_modelo->GetNumerosIncompletobyIdticket($id_ticket) ){
 		//comprobando si es zodiacal o no
 		if($row['id_zodiacal'] == 0){
 			$data.="<br>";	
-			$data.=$row['numero']." FALTA ".$row['monto_restante']."&nbsp;&nbsp;&nbsp;";
+			$data.=$row['numero']." FALTA ".($row['monto_faltante']*(-1))."&nbsp;&nbsp;&nbsp;";
 			
 			//$data1.="\\x1B\\x0A";
 			$data1.="\\n";
-			$data1.=$row['numero']." FALTA ".$row['monto_restante']."  ";
+			$data1.=$row['numero']." FALTA ".($row['monto_faltante']*(-1))."  ";
 		}else{
 			$nombre_signo=$obj_modelo->GetPreNombreSigno($row['id_zodiacal']);
 			$data.="<br>";
-			$data.=$row['numero']." ".$nombre_signo." FALTA ".$row['monto_restante']."&nbsp;&nbsp;&nbsp;";
+			$data.=$row['numero']." ".$nombre_signo." FALTA ".($row['monto_faltante']*(-1))."&nbsp;&nbsp;&nbsp;";
 
 			//$data1.="\\x1B\\x0A";
 			$data1.="\\n";
-			$data1.=$row['numero']." ".$nombre_signo." FALTA ".$row['monto_restante']."  ";
+			$data1.=$row['numero']." ".$nombre_signo." FALTA ".($row['monto_faltante']*(-1))."  ";
 		}		
 			
 	
@@ -349,7 +349,8 @@ for($i=1;$i<=$lineas_saltar_despues;$i++){
 
 /************* CABLEADO **********************/
 //los feed deben venir de la base de datos una variable de parametros
-
+// Despues de guardado en detalle_ticket, borramos el registro de ticket transaccional...
+  $obj_modelo->EliminarTicketTransaccional($id_taquilla);
 echo $data;
 //echo $data1;
 /*

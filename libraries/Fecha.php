@@ -52,7 +52,7 @@ class Fecha{
 
 		$fecha_hoy = date('Y');		
 		return $fecha_hoy; 
-	}	
+	}
 
 	/**
 	 * Devuelve la fecha y hora de hoy formato 0000-00-00 ano mes dia.
@@ -117,15 +117,33 @@ class Fecha{
 	 * @param date $fecha
 	 * @return date $nueva_fecha
 	 */
-	public function changeFormatDateI($fecha){
+	public function changeFormatDateI($fecha,$tipo){
+		if($tipo==0)
+		{
 		if( $fecha=="" || $fecha=="0000-00-00"){
 			$nueva_fecha= "";
 		}
 		else{
 			$nueva_fecha= substr($fecha, 8, 2)."-".substr($fecha, 5, 2)."-".substr($fecha, 0, 4);
 		}
+	//	echo "pasa";
+		}
+		else
+		{
+			if( $fecha=="" || $fecha=="0000-00-00"){
+				$nueva_fecha= "";
+			}
+			else{
+				$nueva_fecha= substr($fecha, 8, 2)."-".substr($fecha, 5, 2)."-".substr($fecha, 0, 4);
+				$nueva_fecha.=" ".substr($fecha, -8);
+			}
+			
+		}
 		return $nueva_fecha;
 	}	
+	
+	
+	
 	
 	/**
 	 * Cambia el formato de la fecha

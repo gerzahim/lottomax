@@ -43,7 +43,7 @@ if( !$obj_conexion->ConnectDataBase($obj_config->GetVar('host'), $obj_config->Ge
 // Asignaciones
 $obj_xtpl->assign('titulo_web',$obj_config->GetVar('titulo_web'));
 //$obj_xtpl->assign('fecha_hoy',$obj_date->FechaActual());
-$obj_xtpl->assign('fecha_hoy',$obj_date->FechaHoraHoy());
+$obj_xtpl->assign('fecha_hoy',$obj_date->FechaHoy2());
 $obj_xtpl->assign('fecha_ano',$obj_date->FechaAno());
 $obj_xtpl->assign('titulo_sistema',$obj_config->GetVar('titulo_sistema'));
 $obj_xtpl->assign('pagina_principal',$obj_config->GetVar('index_page'));
