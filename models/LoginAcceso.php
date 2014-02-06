@@ -65,7 +65,7 @@ class LoginAcceso{
 		//echo $sql;	
 		$result= $this->vConexion->ExecuteQuery($sql);
 		if( $row=$this->vConexion->GetArrayInfo($result)){
-			if((strtotime(date("H:i:s"))-strtotime($row['time_ping'])) <30)
+			if((strtotime(date("H:i:s"))-strtotime($row['time_ping'])) <180)
 			return false;
 			else
 			{
