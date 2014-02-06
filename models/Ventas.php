@@ -873,6 +873,33 @@ class Ventas{
 
 	}
 
+	/**
+	 * Actualiza impreso=1 en Impresion
+	 * @param string $id_ticket
+	 * @return boolean, array
+	 */
+	public function SeteaImpresionenTicket($id_ticket){
+	
+		//Preparacion del query `id_ticket`, `serial`
+		$sql = "UPDATE `ticket` SET `impreso`= 1 WHERE id_ticket='".$id_ticket."'";
+		return $this->vConexion->ExecuteQuery($sql);
+	
+	}	
+	
+	/**
+	 * Actualiza Serial para reimpresion
+	 * @param string $id_ticket
+	 * @param string $serial
+	 * @return boolean, array
+	 */
+	public function ActualizaSerialReimpresion($id_ticket, $serial){
+	
+		//Preparacion del query `id_ticket`, `serial`
+		$sql = "UPDATE `ticket` SET `serial`='".$serial."', `impreso`= 2 WHERE id_ticket='".$id_ticket."'";
+		return $this->vConexion->ExecuteQuery($sql);
+	
+	}	
+
         /**
 	 * Guardar Datos de numeros jugados
 	 *

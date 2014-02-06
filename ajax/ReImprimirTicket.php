@@ -1,5 +1,5 @@
 <html>
-   <head><title>Impresion de Ticket</title>
+   <head><title>RE-Impresion de Ticket</title>
 <!--
    <script language="javascript" type="text/javascript" src="../jscripts/jquery-latest.js"></script>
    <script language="javascript" type="text/javascript" src="../jscripts/PluginPrint.js"></script>        
@@ -42,13 +42,31 @@ session_start();
 // Obtenemos los datos de la taquilla
 $id_taquilla= $obj_modelo->GetIdTaquilla();
 
+
+// Generacion del Id del Ticket
+$id_ticket= $obj_modelo->GeneraIDTicket();
+
+
+// Generacion del serial del ticket
+$serial="";
+$serial = $obj_modelo->GeneraSerialTicket();
+while ($obj_modelo->GetExisteSerialTicket($serial)){
+	$serial = $obj_modelo->GeneraSerialTicket();
+}
+
+
 /************* CABLEADO **********************/
 //id_taquilla debe venir de una variable de sesion
 
 $info_ticket= $obj_modelo->GetLastTicket($id_taquilla);
-//echo "<pre>".print_r($info_ticket)."</pre>";
+
 $id_ticket=$info_ticket["id_ticket"];
-$serial=$info_ticket["serial"]; 
+
+$obj_modelo->ActualizaSerialReimpresion($id_ticket, $serial);
+
+//echo "<pre>".print_r($info_ticket)."</pre>";
+
+//$serial=$info_ticket["serial"]; 
 $string=$info_ticket["fecha_hora"]; 
 $year = substr($string,0,4);
 $month = substr($string,5,2);
@@ -70,7 +88,9 @@ $tiempo_anulacion_ticket=$info_agencia["tiempo_anulacion_ticket"];
 
 
 // ENCABEZADO DEL TICKET
-$data="SISTEMA LOTTOMAX";
+$data="** REIMPRESION **";
+$data.="<br>";
+$data.="SISTEMA LOTTOMAX";
 $data.="<br>";
 $data.="AGENCIA: ".$nombre_agencia;
 $data.="<br>";
@@ -111,8 +131,7 @@ $data1.="-----------------------------";
 //Cambio de tamano fuenta a 12 cpi
 $data1.="\\x1B\\x4D";
 
-//setea impreso=1 en ticket para saber que ya esta impreso
-$obj_modelo->SeteaImpresionenTicket($id_ticket);
+
 
 if( $result= $obj_modelo->GetDetalleTicketByIdticket($id_ticket) ){
 		
@@ -251,9 +270,9 @@ $lineas_saltar_despues=$info_impresora["lineas_saltar_despues"];
 $ver_numeros_incompletos=$info_impresora["ver_numeros_incompletos"];
 $ver_numeros_agotados=$info_impresora["ver_numeros_agotados"];
 
+
 //INCOMPLETOS Y AGOTADOS
-if( $result2= $obj_modelo->GetNumerosIncompletosTransaccional($id_taquilla) ){
-		
+if( $result2= $obj_modelo->GetNumerosIncompletobyIdticket($id_ticket) ){
 	$id_bandera_actual=0;	
 	while($row= $obj_conexion->GetArrayInfo($result2)){
 		$id_bandera=$row['incompleto'];
@@ -304,19 +323,19 @@ if( $result2= $obj_modelo->GetNumerosIncompletosTransaccional($id_taquilla) ){
 		//comprobando si es zodiacal o no
 		if($row['id_zodiacal'] == 0){
 			$data.="<br>";	
-			$data.=$row['numero']." FALTA ".($row['monto_faltante']*(-1))."&nbsp;&nbsp;&nbsp;";
+			$data.=$row['numero']." FALTA ".$row['monto_restante']."&nbsp;&nbsp;&nbsp;";
 			
 			//$data1.="\\x1B\\x0A";
 			$data1.="\\n";
-			$data1.=$row['numero']." FALTA ".($row['monto_faltante']*(-1))."  ";
+			$data1.=$row['numero']." FALTA ".$row['monto_restante']."  ";
 		}else{
 			$nombre_signo=$obj_modelo->GetPreNombreSigno($row['id_zodiacal']);
 			$data.="<br>";
-			$data.=$row['numero']." ".$nombre_signo." FALTA ".($row['monto_faltante']*(-1))."&nbsp;&nbsp;&nbsp;";
+			$data.=$row['numero']." ".$nombre_signo." FALTA ".$row['monto_restante']."&nbsp;&nbsp;&nbsp;";
 
 			//$data1.="\\x1B\\x0A";
 			$data1.="\\n";
-			$data1.=$row['numero']." ".$nombre_signo." FALTA ".($row['monto_faltante']*(-1))."  ";
+			$data1.=$row['numero']." ".$nombre_signo." FALTA ".$row['monto_restante']."  ";
 		}		
 			
 	
@@ -350,8 +369,7 @@ for($i=1;$i<=$lineas_saltar_despues;$i++){
 
 /************* CABLEADO **********************/
 //los feed deben venir de la base de datos una variable de parametros
-// Despues de guardado en detalle_ticket, borramos el registro de ticket transaccional...
-  $obj_modelo->EliminarTicketTransaccional($id_taquilla);
+
 echo $data;
 //echo $data1;
 /*

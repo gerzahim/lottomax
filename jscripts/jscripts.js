@@ -553,6 +553,16 @@ CargarReset();
 
 }
 
+//Imprime el ticket
+function ReImprimirticket(){
+
+
+//Metodo con Impresion directa con firefox
+	document.getElementById("ticket").innerHTML ="";
+        CargarReset();		
+		window.open("ajax/ReImprimirTicket.php", "nuevo", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=400, height=400");
+
+}
 
 /*
 function llamadaAjax(){
@@ -831,8 +841,8 @@ $(document).keyup(function(tecla){
         agregarTerminales();
     }else if(Atl_down && (tecla.keyCode == 73)){
         // Tecla I
-        procesarticket(); //para procesar y generar el ticket
-		CargarReset();
+        //procesarticket(); //para procesar y generar el ticket
+		//CargarReset();
     }else if(Atl_down && (tecla.keyCode == 74)){
     	// tecla J    	
     	AjustarMontos(); //Ajustar los montos de todas las apuestas a un prorrateado del total
@@ -935,6 +945,10 @@ $(document).keyup(function(tecla){
     	// tecla F9
 	 	//Ver Resultados
     	verResultados();
+    }else if(tecla.keyCode == 121) {
+    	// tecla F10
+	 	//Reimprimir Ticket
+    	ReImprimirticket();
     }else if(tecla.keyCode == 123) {
     	// tecla F12
     	//Procesar Ticket
