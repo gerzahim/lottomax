@@ -43,7 +43,7 @@ class LoginAcceso{
 
 		//Preparacion del query
 		/************* CABLEADO **********************/
-		$sql = "INSERT INTO `usuarios_taquillas` (`id_usuario` , `id_taquilla`, `time_ping`) VALUES ('".$id_usuario."', '".$id_taquilla."','".date('H:i:s')."')";
+		$sql = "INSERT INTO `usuarios_taquillas` (`id_usuario` , `id_taquilla`, `time_ping`) VALUES ('".$id_usuario."', '".$id_taquilla."','".date('Y-m-d H:i:s')."')";
 	//	echo $sql;
 		return $this->vConexion->ExecuteQuery($sql);
 		return true;
@@ -102,7 +102,7 @@ class LoginAcceso{
 	public function UpdateTimePing($id_usuario){
 
 		//Preparacion del query
-		$sql = "UPDATE `usuarios_taquillas` SET `time_ping`='".date('H:i:s')."' WHERE id_usuario='".$id_usuario."'";
+		$sql = "UPDATE `usuarios_taquillas` SET `time_ping`='".date('Y-m-d H:i:s')."' WHERE id_usuario='".$id_usuario."'";
                 return $this->vConexion->ExecuteQuery($sql);
 	}
 
