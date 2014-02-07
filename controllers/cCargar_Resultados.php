@@ -45,8 +45,8 @@ switch (ACCION){
 			$pag= $_GET['pg'];
 		}
 
-                $fecha = $_GET['txt_fecha'];
-                 $obj_xtpl->assign('fecha', $fecha);
+                $fecha = $obj_date->changeFormatDateII($_GET['txt_fecha']);
+                $obj_xtpl->assign('fecha', $obj_date->changeFormatDateI($fecha,0));
                 $periodo = $_GET['radio_periodo'];
                 // Listado de Sorteos
                     if( $result= $obj_modelo->GetSorteos($fecha, $periodo) ){
@@ -166,7 +166,9 @@ switch (ACCION){
                break;
 
         case 'save':
-            $fecha_hora = $_GET['fecha'];
+        	
+        	$fecha_hora = $obj_date->changeFormatDateII($_GET['fecha']);
+             
              if( $result= $obj_modelo->GetAllSorteos() ){
                 if ($obj_conexion->GetNumberRows($result)>0 ){
                      while($row= $obj_conexion->GetArrayInfo($result)){
