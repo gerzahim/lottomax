@@ -74,14 +74,12 @@ switch (ACCION){
 
         // Creamos el PDF
 
-   
-
-        //Creación del objeto de la clase heredada
+        //Creacion del objeto de la clase heredada
         $pdf=new FPDF();
         
         $pdf->AliasNbPages();
         
-        //Primera página
+        //Primera pagina
         $pdf->AddPage();
 
          $fecha = $obj_date->changeFormatDateII($_GET['fecha']);

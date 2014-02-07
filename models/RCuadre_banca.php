@@ -46,12 +46,39 @@ class RCuadre_banca{
                         FROM ticket
                         WHERE fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."  23:59:59'
                         GROUP BY LEFT(fecha_hora,10)";
-                
+		//echo $sql;
+		
 		$result= $this->vConexion->ExecuteQuery($sql);
                 return $result;
 		
 		
 	} 
+	
+	/**
+	 * Devuelve el listado de balance por dia entre dos fechas
+	 *
+	 * @param string $fecha_desde
+	 * @param string $fecha_hasta
+	 * @return boolean, array
+	 */
+	
+	public function GetBalancebyTaquilla($fecha_desde, $fecha_hasta, $num_taquilla){
+	
+		//Preparacion del query
+		 
+		 
+	
+		$sql = "SELECT LEFT(fecha_hora,10) AS fecha, SUM(total_ticket) AS total_ventas, SUM(total_ticket)* 15 /100 AS comision, SUM(total_premiado) AS total_premiado, SUM(total_ticket)- ((SUM(total_ticket)* 15 /100) + SUM(total_premiado)) AS balance
+                        FROM ticket
+                        WHERE `taquilla`='".$num_taquilla."' AND fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."  23:59:59'				
+						GROUP BY LEFT(fecha_hora,10)";
+		//echo $sql;
+		
+		$result= $this->vConexion->ExecuteQuery($sql);
+		return $result;
+	
+	
+	}	
 	/**
 	 * Busqueda de Id de Taquilla.
 	 *

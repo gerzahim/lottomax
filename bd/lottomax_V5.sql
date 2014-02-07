@@ -523,7 +523,7 @@ CREATE TABLE IF NOT EXISTS `parametros` (
 --
 
 INSERT INTO `parametros` (`id_parametros`, `id_agencia`, `nombre_agencia`, `tiempo_cierre_sorteos`, `tiempo_anulacion_ticket`, `tiempo_vigencia_ticket`, `aprox_abajo`, `aprox_arriba`, `comision_agencia`) VALUES
-(1, 1, 'La Tostadita', 10, 3, 3, 1, 1, 15);
+(1, 1, 'Makamindres', 10, 5, 3, 1, 1, 30);
 
 -- --------------------------------------------------------
 
@@ -647,7 +647,7 @@ INSERT INTO `sorteos` (`id_sorteo`, `id_loteria`, `nombre_sorteo`, `hora_sorteo`
 (28, 4, 'LEON C 4:30PM', '16:30:00', 2, 0, 0, 1),
 (29, 4, 'TRIPLETON 4:30PM', '16:30:00', 2, 1, 0, 1),
 (30, 5, 'CHANCE A 4:30PM', '16:30:00', 2, 0, 1, 1),
-(31, 5, 'CHANCE B 16:30PM', '16:30:00', 2, 0, 1, 1),
+(31, 5, 'CHANCE B 4:30PM', '16:30:00', 2, 0, 1, 1),
 (32, 5, 'CHANCE C 4:30PM', '16:30:00', 2, 0, 0, 1),
 (33, 5, 'ASTRAL 4:30PM', '16:30:00', 2, 1, 0, 1),
 (34, 3, 'ZODIACAL A 4:45PM', '16:45:00', 2, 0, 1, 1),

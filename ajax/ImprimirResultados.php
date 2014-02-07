@@ -1,6 +1,6 @@
 <html>
-   <head><title>Impresion de Reporte Banca</title>
-<!--   
+   <head><title>Impresion de Resultados</title>
+<!--
    <script language="javascript" type="text/javascript" src="../jscripts/jquery-latest.js"></script>
    <script language="javascript" type="text/javascript" src="../jscripts/PluginPrint.js"></script>        
    <script language="javascript" type="text/javascript" src="../jscripts/DefaultPrinter.js"></script>    
@@ -10,10 +10,9 @@
    <applet name="jzebra" code="jzebra.PrintApplet.class" archive="../jscripts/jzebra.jar" width="50px" height="50px">
 	  <param name="printer" value="zebra">
    </applet>
--->
+  -->
   
 <?php
-
 
 // Archivo de variables de configuracion
 require_once('../config/config.php');
@@ -26,10 +25,6 @@ require_once('.'.$obj_config->GetVar('ruta_config').'mensajes.php');
 require('.'.$obj_config->GetVar('ruta_libreria').'Generica.php');
 $obj_generico= new Generica();
 
-// Clase Date
-require('.'.$obj_config->GetVar('ruta_libreria').'Fecha.php');
-$obj_date= new Fecha();
-
 // Conexion a la bases de datos
 require('.'.$obj_config->GetVar('ruta_libreria').'Bd.php');
 $obj_conexion= new Bd();
@@ -38,9 +33,8 @@ if( !$obj_conexion->ConnectDataBase($obj_config->GetVar('host'), $obj_config->Ge
 }
 
 // Modelo asignado
-require('.'.$obj_config->GetVar('ruta_modelo').'RCuadre_banca.php');
-
-$obj_modelo= new RCuadre_banca($obj_conexion);
+require('.'.$obj_config->GetVar('ruta_modelo').'RVer_resultados.php');
+$obj_modelo= new RVer_Resultados($obj_conexion);
 
 session_start();
 
@@ -48,59 +42,58 @@ session_start();
 // Obtenemos los datos de la taquilla
 $id_taquilla= $obj_modelo->GetIdTaquilla();
 
+$fecha= $obj_generico->CleanText($_GET['txt_fecha']);
 
-$fecha_desde= $obj_generico->CleanText($_GET['fechadesde']);
-$fecha_hasta= $obj_generico->CleanText($_GET['fechahasta']);
+$fecha_desde=$obj_date->changeFormatDateII($fecha);
 
-$fecha_desde=$obj_date->changeFormatDateII($fecha_desde);
-$fecha_hasta=$obj_date->changeFormatDateII($fecha_hasta);
-
+// txt_fecha=06%2F02%2F2014&radio_periodo=1&btnentrar=Cargar
 //echo $fecha_desde, $fecha_hasta;
 $data="";
-         if( $result= $obj_modelo->GetBalance($fecha_desde, $fecha_hasta)){
-            if ($obj_conexion->GetNumberRows($result)>0 ){
-            	
-				// ENCABEZADO DEL TICKET
-				$data.="SISTEMA LOTTOMAX";
-				$data.="<br>";
-				$data.="CUADRE CON BANCA";
-				$data.="<br>";
- 	
-            	//Cambio de tamano fuenta a 10 cpi
-				$data1="\\x1B\\x50";
-				$data1.="SISTEMA LOTTOMAX";
-				$data1.="\\n";
-				$data1.="CUADRE CON BANCA";
-				$data1.="\\n";										            
-              
-                while($row= $obj_conexion->GetArrayInfo($result)){
-                        
-					$data.="<br>FECHA: ".$row['fecha'];
-					$data.="<br>Total Ventas: ".$row['total_ventas'];					                									
-					$data.="<br>Comision: ".$row['comision'];
-					$data.="<br>Total Premios: ".$row['total_premiado'];					                									
-					$data.="<br>Balance: ".$row['balance'];
-					$data.="<br>";
-					$data.="-----------------------------";
-					$data.="<br>";
+if( $result= $obj_modelo->GetResultados($fecha) ){
 
-					
-					$data1.="\\nFECHA: ".$row['fecha'];
-					$data1.="\\nTotal Ventas: ".$row['total_ventas'];					                									
-					$data1.="\\nComision: ".$row['comision'];
-					$data1.="\\nTotal Premios: ".$row['total_premiado'];					                									
-					$data1.="\\nBalance: ".$row['balance'];
-					$data1.="\\n";
-					$data1.="-----------------------------";
-					$data1.="\\n";					
-				                        
-                    
-                }
- 				
-                //echo $data;               
-            } 
+	if ($obj_conexion->GetNumberRows($result)>0 ){
+		 
+		// ENCABEZADO DEL TICKET
+		$data.="SISTEMA LOTTOMAX";
+		$data.="<br>";
+		$data.="Resultados Sorteos";
+		$data.="<br>";
 
-         }
+		//Cambio de tamano fuenta a 10 cpi
+		$data1="\\x1B\\x50";
+		$data1.="SISTEMA LOTTOMAX";
+		$data1.="\\n";
+		$data1.="Resultados Sorteos";
+		$data1.="\\n";
+
+		while($row= $obj_conexion->GetArrayInfo($result)){
+
+			$data.="<br>FECHA: ".$row['fecha'];
+			$data.="<br>Total Ventas: ".$row['total_ventas'];
+			$data.="<br>Comision: ".$row['comision'];
+			$data.="<br>Total Premios: ".$row['total_premiado'];
+			$data.="<br>Balance: ".$row['balance'];
+			$data.="<br>";
+			$data.="-----------------------------";
+			$data.="<br>";
+
+				
+			$data1.="\\nFECHA: ".$row['fecha'];
+			$data1.="\\nTotal Ventas: ".$row['total_ventas'];
+			$data1.="\\nComision: ".$row['comision'];
+			$data1.="\\nTotal Premios: ".$row['total_premiado'];
+			$data1.="\\nBalance: ".$row['balance'];
+			$data1.="\\n";
+			$data1.="-----------------------------";
+			$data1.="\\n";
+
+
+		}
+			
+		//echo $data;
+	}
+
+}
 
 // Obtenemos los datos de la taquilla
 $ida_taquilla= $obj_modelo->GetIdTaquillabyNumero($id_taquilla);
@@ -118,7 +111,7 @@ for($i=1;$i<=$lineas_saltar_despues;$i++){
 
 //echo $data1;
 /*
-echo "<script type='text/javascript'>";
+ echo "<script type='text/javascript'>";
 echo "print('".$data1."')";
 echo "</script>";
 

@@ -1,5 +1,5 @@
 <html>
-   <head><title>Impresion de Reporte Banca</title>
+   <head><title>Impresion de Reporte Taquilla</title>
 <!--   
    <script language="javascript" type="text/javascript" src="../jscripts/jquery-latest.js"></script>
    <script language="javascript" type="text/javascript" src="../jscripts/PluginPrint.js"></script>        
@@ -57,13 +57,13 @@ $fecha_hasta=$obj_date->changeFormatDateII($fecha_hasta);
 
 //echo $fecha_desde, $fecha_hasta;
 $data="";
-         if( $result= $obj_modelo->GetBalance($fecha_desde, $fecha_hasta)){
+         if( $result= $obj_modelo->GetBalancebyTaquilla($fecha_desde, $fecha_hasta, $id_taquilla)){
             if ($obj_conexion->GetNumberRows($result)>0 ){
             	
 				// ENCABEZADO DEL TICKET
 				$data.="SISTEMA LOTTOMAX";
 				$data.="<br>";
-				$data.="CUADRE CON BANCA";
+				$data.="CUADRE TAQUILLA";
 				$data.="<br>";
  	
             	//Cambio de tamano fuenta a 10 cpi
