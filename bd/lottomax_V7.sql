@@ -427,8 +427,8 @@ CREATE TABLE IF NOT EXISTS `impresora_taquillas` (
 
 INSERT INTO `impresora_taquillas` (`id_impresora_taquillas`, `id_taquilla`, `nombre_vendedor_ticket`, `cortar_ticket`, `lineas_saltar_antes`, `lineas_saltar_despues`, `ver_numeros_incompletos`, `ver_numeros_agotados`) VALUES
 (2, 2, 1, 0, 0, 7, 1, 1),
-(3, 1, 1, 0, 0, 7, 1, 1),
-(9, 3, 1, 0, 0, 7, 1, 1);
+(3, 1, 1, 0, 0, 0, 1, 1),
+(9, 3, 1, 0, 0, 0, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -523,7 +523,7 @@ CREATE TABLE IF NOT EXISTS `parametros` (
 --
 
 INSERT INTO `parametros` (`id_parametros`, `id_agencia`, `nombre_agencia`, `tiempo_cierre_sorteos`, `tiempo_anulacion_ticket`, `tiempo_vigencia_ticket`, `aprox_abajo`, `aprox_arriba`, `comision_agencia`) VALUES
-(1, 1, 'La Tostadita', 10, 3, 3, 1, 1, 15);
+(1, 1, 'Makamindres', 10, 5, 3, 1, 1, 30);
 
 -- --------------------------------------------------------
 
@@ -658,7 +658,7 @@ INSERT INTO `sorteos` (`id_sorteo`, `id_loteria`, `nombre_sorteo`, `hora_sorteo`
 (28, 4, 'LEON C 4:30PM', '16:30:00', 2, 0, 0, 1),
 (29, 4, 'TRIPLETON 4:30PM', '16:30:00', 2, 1, 0, 1),
 (30, 5, 'CHANCE A 4:30PM', '16:30:00', 2, 0, 1, 1),
-(31, 5, 'CHANCE B 16:30PM', '16:30:00', 2, 0, 1, 1),
+(31, 5, 'CHANCE B 4:30PM', '16:30:00', 2, 0, 1, 1),
 (32, 5, 'CHANCE C 4:30PM', '16:30:00', 2, 0, 0, 1),
 (33, 5, 'ASTRAL 4:30PM', '16:30:00', 2, 1, 0, 1),
 (34, 3, 'ZODIACAL A 4:45PM', '16:45:00', 2, 0, 1, 1),
@@ -870,7 +870,10 @@ CREATE TABLE IF NOT EXISTS `usuario` (
 
 INSERT INTO `usuario` (`id_usuario`, `id_perfil`, `nombre_usuario`, `email_usuario`, `login_usuario`, `clave_usuario`, `id_status_usuario`) VALUES
 (1, 1, 'Gerzahim Salas', 'rasce88@gmail.com', 'admin', 'admin1', 1),
-(3, 4, 'Rasce Salas', 'rasce88@gmail.com', 'yumi', '123', 1);
+(3, 4, 'Yumijaika Oduber', 'rasce88@gmail.com', 'yumi', '1234', 1),
+(4, 4, 'Yiserly Fagundez', 'yiserly_17@hotmail.com', 'yiserly', '1234', 1),
+(5, 4, 'Jasmin Burgo', 'jasmin_burgo@hotmail.com', 'jasmin', '1234', 1),
+(6, 4, 'Daryeli Barrios', 'daryeli_barrios@hotmail.com', 'daryeli', '1234', 1);
 
 -- --------------------------------------------------------
 
