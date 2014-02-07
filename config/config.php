@@ -6,8 +6,7 @@ class ConfigVars{
 	 *
 	 * @var string $vTituloSistema
 	 */
-	private $vTituloSistema= "Sistema Web de Loteria - Lotto 
-	/Max";
+	private $vTituloSistema= "Sistema Web de Loteria - LottoMax";
 		/**
 	 * Titulo del banner.
 	 *
@@ -126,7 +125,7 @@ class ConfigVars{
 	 *
 	 * @var string $vClave
 	 */
-	private $vClave= "";	
+	private $vClave= "secreta";	
 	//private $vClave= "secreta7";
 	
 	/**

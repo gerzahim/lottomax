@@ -1,11 +1,10 @@
 <?php
-$conex=mysql_connect("localhost","root","");
-mysql_select_db("prueba",$conex);
+$conex=mysql_connect("192.168.0.125","root","secreta");
+mysql_select_db("lottomax",$conex);
 
 $date=date("Y-m-d H:i:s");
-mysql_query("INSERT INTO prueba (date)VALUES ('".$date."')");
-
-
+$sql="INSERT INTO prueba (date)VALUES ('".$date."')";
+mysql_query($sql);
 
 
 ?>

@@ -1,7 +1,7 @@
 <?php
 //Creamos la conexión a las distintas base de datos, la de arriba y las de abajo.
 
-$conexion_abajo = mysql_connect("localhost" , "root" , "");
+$conexion_abajo = mysql_connect("localhost" , "root" , "secreta");
 mysql_select_db("lottomax",$conexion_abajo);
 
 $conexion_arriba = mysql_connect("sql3.freesqldatabase.com" , "sql329054" , "gA5!tM4*",true);

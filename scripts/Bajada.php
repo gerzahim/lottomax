@@ -3,7 +3,7 @@
 // Archivo de variables de configuracion
 //require('../models/Pagar_Ganador.php');
 
-$conexion_abajo = mysql_connect("localhost" , "root" , "");
+$conexion_abajo = mysql_connect("localhost" , "root" , "secreta");
 mysql_select_db("lottomax",$conexion_abajo);
 
 $conexion_arriba = mysql_connect("sql3.freesqldatabase.com:3306" , "sql329054" , "gA5!tM4*",true);
