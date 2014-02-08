@@ -4,7 +4,7 @@
 $conexion_abajo = mysql_connect("localhost" , "root" , "secreta");
 mysql_select_db("lottomax",$conexion_abajo);
 
-$conexion_arriba = mysql_connect("sql3.freesqldatabase.com" , "sql329054" , "gA5!tM4*",true);
+$conexion_arriba = mysql_connect("sql3.freesqldatabase.com:3306" , "sql329054" , "gA5!tM4*",true);
 mysql_select_db("sql329054",$conexion_arriba);
 
 
@@ -23,7 +23,7 @@ if($result= mysql_query($sql,$conexion_abajo))
 	$numero_registros = mysql_num_rows($result);
 	
 	//Creamos la cadena para insertar los ticket y detalle_ticket que no han sido subidos.
-	$consulta_arriba_ticket="INSERT INTO ticket (id_ticket, serial, fecha_hora, taquilla, total_ticket, id_usuario, premiado, pagado, total_premiado, status, fecha_hora_anulacion, taquilla_anulacion, subido,verificado) VALUES ( ";
+	$consulta_arriba_ticket="INSERT INTO ticket (id_ticket, serial, fecha_hora, taquilla, total_ticket, id_usuario, premiado, pagado, total_premiado, status, fecha_hora_anulacion, taquilla_anulacion, subido, verificado, impreso) VALUES ( ";
 	$consulta_arriba_detalle="INSERT INTO detalle_ticket (id_detalle_ticket,id_ticket, numero, id_sorteo, hora_sorteo, id_zodiacal, id_tipo_jugada, monto, premiado, total_premiado ) VALUES ";
 	
 	$h=0;
