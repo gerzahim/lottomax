@@ -125,7 +125,7 @@ class ConfigVars{
 	 *
 	 * @var string $vClave
 	 */
-	private $vClave= "secreta";	
+	private $vClave= "";	
 	//private $vClave= "secreta7";
 	
 	/**

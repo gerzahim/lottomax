@@ -77,9 +77,6 @@ $data="";
                         
 					$data.="<br>FECHA: ".$row['fecha'];
 					$data.="<br>Total Ventas: ".$row['total_ventas'];					                									
-					$data.="<br>Comision: ".$row['comision'];
-					$data.="<br>Total Premios: ".$row['total_premiado'];					                									
-					$data.="<br>Balance: ".$row['balance'];
 					$data.="<br>";
 					$data.="-----------------------------";
 					$data.="<br>";
@@ -87,9 +84,6 @@ $data="";
 					
 					$data1.="\\nFECHA: ".$row['fecha'];
 					$data1.="\\nTotal Ventas: ".$row['total_ventas'];					                									
-					$data1.="\\nComision: ".$row['comision'];
-					$data1.="\\nTotal Premios: ".$row['total_premiado'];					                									
-					$data1.="\\nBalance: ".$row['balance'];
 					$data1.="\\n";
 					$data1.="-----------------------------";
 					$data1.="\\n";					
