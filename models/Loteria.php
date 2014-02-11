@@ -117,6 +117,9 @@ class Loteria{
 	public function EliminarDatosLoteria($id_loteria){		
 		//Preparacion del query
 		$sql = "UPDATE `loterias` SET `status`= 0 WHERE id_loteria='".$id_loteria."'";
+		$this->vConexion->ExecuteQuery($sql);
+		
+		$sql = "UPDATE `sorteos` SET `status`= 0 WHERE id_loteria='".$id_loteria."'";
 		return $this->vConexion->ExecuteQuery($sql);
 		
 	}		
