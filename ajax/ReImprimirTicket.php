@@ -73,7 +73,19 @@ $month = substr($string,5,2);
 $day = substr($string,8,2);
 $hour = substr($string,11,2);
 $minute = substr($string,14,2);
-$fecha_hora=$day."-".$month."-".$year." ".$hour.":".$minute;
+//$fecha_hora=$day."-".$month."-".$year." ".$hour.":".$minute;
+$fecha_hora=$day."-".$month."-".$year;
+
+if($hour > 11){
+	$formato="PM";	
+}else{
+	$formato="AM";
+}
+$formato_militar= array("13","14","15","16","17","18","19","20","21","22","23","24");
+$formato_civil= array("01","02","03","04","05","06","07","08","09","10","11","12");
+
+$hour= str_replace($formato_militar,$formato_civil,$hour);
+$hora=$hour.":".$minute." ".$formato;
 
 $total_ticket=$info_ticket["total_ticket"]; 
 $id_usuario=$info_ticket["id_usuario"];
