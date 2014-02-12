@@ -40,7 +40,7 @@ while ($row = mysql_fetch_row($result))
 	{
 		if ($i!=mysql_num_fields($result)-1)
 		{
-			if($i==4 )
+			if($i==4 OR $i==3)
 				$consulta_abajo.=" '".$row[$i]."', ";
 			else
 			$consulta_abajo.=" ".$row[$i].", ";
