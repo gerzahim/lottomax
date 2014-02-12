@@ -119,9 +119,6 @@ if( $result= $obj_modelo->GetSorteosNoche() ){
 	}
 }
 
-
-
-
 // Objeto de no entiendo porque me cambia el font
 //$obj_modelo->GetL();
 
@@ -129,5 +126,6 @@ if( $result= $obj_modelo->GetSorteosNoche() ){
 $obj_xtpl->assign('taquilla', $obj_modelo->GetIdTaquilla());
 
 $obj_xtpl->parse('main.contenido');
+
 
 ?>

@@ -141,7 +141,20 @@ switch (ACCION){
                                 }
                             
                         }
-                        header('location:index.php?op=ventas');
+                        if (isset($_SESSION['mensaje_errorcopia'])){
+                        	$bodytag ="Existen Numeros Agotados...\\n"; 
+                        	$bodytag.= str_replace("<br>", "\\n", $_SESSION['mensaje_errorcopia']);
+                        	//la variable existe
+                        	echo "<script type='text/javascript'>";
+                        	echo "alert('$bodytag')";
+                        	echo "</script>";
+                        	echo "<script type='text/javascript'>";
+                        	echo "window.location.href = 'index.php?op=ventas'";
+                        	echo "</script>";
+
+                        }
+                        //sleep(3);
+                        //header('location:index.php?op=ventas');
                 }
 		//echo $id_ticket;exit();
 		break;
@@ -300,7 +313,7 @@ function CalculaIncompletoYnuevoMonto($monto_disponible, $monto_jugado){
 
 }
 
-$_SESSION['mensajillo']="";
+$_SESSION['mensaje_errorcopia']="";
 function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
     
 	global $taquilla;
@@ -379,8 +392,8 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
                         //Se registra el numero como agotado
                         $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$txt_monto,2,0,$taquilla);
 			$_SESSION['mensaje']= $txt_numero." AGOTADO para sorteo ".$obj_modelo->GetNombreSorteo($sorteo)."  ".$obj_modelo->GetPreZodiacal($zodiacal);
-			$_SESSION['mensajillo'].= $txt_numero." AGOTADO para sorteo ".$obj_modelo->GetNombreSorteo($sorteo)."  ".$obj_modelo->GetPreZodiacal($zodiacal)."<br>";					
-			echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";			
+			$_SESSION['mensaje_errorcopia'].= $txt_numero." AGOTADO para sorteo ".$obj_modelo->GetNombreSorteo($sorteo)."  ".$obj_modelo->GetPreZodiacal($zodiacal)."<br>";					
+			//echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";			
 						
 		}
 					
@@ -433,9 +446,9 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
                                                 $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$txt_monto,2,0,$taquilla);
                                                 
 						$_SESSION['mensaje']= $txt_numero." AGOTADO para sorteo ".$obj_modelo->GetNombreSorteo($sorteo)."  ".$obj_modelo->GetPreZodiacal($zodiacal);
-						$_SESSION['mensajillo'].= $txt_numero." AGOTADO para sorteo ".$obj_modelo->GetNombreSorteo($sorteo)."  ".$obj_modelo->GetPreZodiacal($zodiacal)."<br>";
+						$_SESSION['mensaje_errorcopia'].= $txt_numero." AGOTADO para sorteo ".$obj_modelo->GetNombreSorteo($sorteo)."  ".$obj_modelo->GetPreZodiacal($zodiacal)."<br>";
 						
-						echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";							
+						//echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";							
 					}									
 						
 				}else{
@@ -510,6 +523,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
 	return 1;
 	
 	}
+	
 }
 
 

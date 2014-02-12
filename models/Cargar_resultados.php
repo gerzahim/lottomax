@@ -38,7 +38,7 @@ class Cargar_Resultados{
 
 		//Preparacion del query
                 switch ($periodo){
-                    case '1': // Mañana
+                    case '1': // Manana
                             $sql_periodo=" hora_sorteo BETWEEN '00:00' AND '14:00'" ;
                         break;
                     case '2': // Tarde

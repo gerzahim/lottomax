@@ -62,7 +62,10 @@ class RVer_Resultados{
 		$sql = "SELECT * FROM resultados R
 				INNER JOIN zodiacal Z ON R.zodiacal=Z.Id_zodiacal
                 INNER JOIN  sorteos S ON S.id_sorteo=R.id_sorteo
-				WHERE fecha_hora LIKE '%".$fecha."%'";
+				WHERE fecha_hora LIKE '%".$fecha."%'  AND S.status = 1";
+		
+		//echo $sql;
+		
 		$result= $this->vConexion->ExecuteQuery($sql);
 		if ($this->vConexion->GetNumberRows($result) >0){
 			return $result;
@@ -84,7 +87,7 @@ class RVer_Resultados{
 	public function GetNumSoteos(){
 
 		//Preparacion del query
-		$sql = "SELECT COUNT(id_sorteo) as  N FROM  sorteos";
+		$sql = "SELECT COUNT(id_sorteo) as N FROM sorteos WHERE status = 1";
                 
 		$result= $this->vConexion->ExecuteQuery($sql);
                 if ($this->vConexion->GetNumberRows($result) >0){
