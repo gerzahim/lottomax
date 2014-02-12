@@ -172,6 +172,7 @@ class Cargar_Resultados{
 		//Preparacion del query
 		$sql = "UPDATE `resultados` SET `id_sorteo`='".$id_sorteo."', `zodiacal`='".$zodiacal."', `numero`='".$numero."', `fecha_hora`='".$fecha_hora."' WHERE id_resultados='".$id_resultados."'";
 		return $this->vConexion->ExecuteQuery($sql);
+	
 		
 	}
 	

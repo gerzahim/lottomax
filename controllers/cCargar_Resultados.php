@@ -158,7 +158,6 @@ switch (ACCION){
 		break;
 
         case 'save':
-        	
         	$fecha_hora = $obj_date->changeFormatDateII($_GET['fecha']);
              
              if( $result= $obj_modelo->GetAllSorteos() ){
@@ -197,7 +196,7 @@ switch (ACCION){
 								
 								if($hora_actualMas < $hora_sorteo){
 									$_SESSION['mensaje']= 'El sorteo debe estar cerrado para poder cargar Resultados !!! ';
-                                    header('location:'.$_SESSION['Ruta_Form']);
+                                   header('location:'.$_SESSION['Ruta_Form']);
 								}
                      		 }
 
@@ -218,7 +217,7 @@ switch (ACCION){
                                                 if ($obj_modelo->ActualizaDatosResultados($id_resultados, $id_sorteo, $zodiacal, $numero, $fecha_hora)){
                                                     PremiarGanadores(); // Premiamos los tickets ganadores
                                                    $_SESSION['mensaje']= $mensajes['info_agregada'];
-                                                     header('location:'.$_SESSION['Ruta_Form']);
+                                                    header('location:'.$_SESSION['Ruta_Form']);
                                                }
                                             }
                                         }else{

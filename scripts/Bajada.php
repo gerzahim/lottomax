@@ -17,7 +17,7 @@ mysql_select_db("lottomaxdb",$conexion_arriba);
 //Buscamos los resultados que no han sido bajados.
 */
 
-$sql = "SELECT * FROM resultados WHERE bajado=0";
+$sql = "SELECT * FROM resultados WHERE bajado = 0";
 
 if($result= mysql_query($sql,$conexion_arriba))
 {

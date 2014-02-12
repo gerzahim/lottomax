@@ -35,6 +35,10 @@ class RVer_Resultados{
          * @param string $fecha
 	 * @return boolean, array
 	 */
+	
+	/// PARA TABLA VISTA
+	
+	/*
 	public function GetResultados($fecha){
 
 		//Preparacion del query
@@ -48,7 +52,28 @@ class RVer_Resultados{
                 }
 		
 		
+	}*/
+	
+	/// SIN TABLA VISTA
+	
+	public function GetResultados($fecha){
+	
+		//Preparacion del query
+		$sql = "SELECT * FROM resultados R
+				INNER JOIN zodiacal Z ON R.zodiacal=Z.Id_zodiacal
+                INNER JOIN  sorteos S ON S.id_sorteo=R.id_sorteo
+				WHERE fecha_hora LIKE '%".$fecha."%'";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		if ($this->vConexion->GetNumberRows($result) >0){
+			return $result;
+		}else{
+			return "";
+		}
+	
+	
 	}
+	
+	
 
 
         /**

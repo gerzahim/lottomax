@@ -658,6 +658,15 @@ function BorrarUltimaJugada()
     calcula_total();
  }
 
+function BorrarTerminales()
+{
+    $.get('ajax/BorrarTerminales.php', function(str) {
+        document.getElementById("ticket").innerHTML = str;
+       
+    });
+    calcula_total();
+ }
+
 function BorrarPreTicket(){
     if (confirm("Esta seguro que desea BORRAR el PreTicket?")){
          $.get('ajax/BorrarPreTicket.php', function(str) {
@@ -916,7 +925,12 @@ $(document).keyup(function(tecla){
         // Tecla Y
         //Quitar la ultima jugada
         BorrarUltimaJugada();        
-    }else if(Atl_down && (tecla.keyCode == 90)){
+    }else if(Atl_down && (tecla.keyCode == 87)){
+        // Tecla W
+        //Quitar los terminales
+    	BorrarTerminales();        
+    }
+    else if(Atl_down && (tecla.keyCode == 90)){
     	// tecla Z
     	$("#z0").focus(); // hace focus en el campo de checkboxes Zodiacales
     }else if(tecla.keyCode == 114) {

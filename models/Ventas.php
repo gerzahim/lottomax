@@ -920,6 +920,19 @@ class Ventas{
                 return $this->vConexion->ExecuteQuery($sql);
 
 	}
+	
+	/**
+	 * Eliminar terminales de Ticket transaccional segun un Id
+	 *
+	 * @param string $id_ticket_transaccional
+	 * @return boolean, array
+	 */
+	public function EliminarTerminalTransaccional($id_taquilla){
+		//Preparacion del query
+		$sql = "DELETE FROM `ticket_transaccional` WHERE id_taquilla='".$id_taquilla."' AND id_tipo_jugada=2 OR id_tipo_jugada=4";
+		return $this->vConexion->ExecuteQuery($sql);
+	
+	}
 
         /**
 	 * Eliminar registros de Ticket transaccional segun un Id

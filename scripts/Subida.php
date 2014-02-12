@@ -78,7 +78,8 @@ if($result= mysql_query($sql,$conexion_abajo))
 	}
 	$consulta_arriba_ticket.=";";
 	$consulta_arriba_detalle.=";";
-//	echo $consulta_arriba_detalle;
+echo $consulta_arriba_detalle;
+//	echo $consulta_arriba_ticket;*/
 	$error=0;
 	if (mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
 		if (mysql_query("BEGIN;",$conexion_arriba)) //dar inicio a la transacción
@@ -86,10 +87,18 @@ if($result= mysql_query($sql,$conexion_abajo))
 		
 		//	echo $consulta_arriba_detalle;
 			if (mysql_query($consulta_arriba_ticket,$conexion_arriba))
+			{
+				echo "PASA1";
+				
 				if (mysql_query($consulta_arriba_detalle,$conexion_arriba))
-					$error=0;//mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);	
+			{
+					echo "PASA2";
+					$error=0;//mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
+			}	
 				else
 				$error=1;
+				
+			}
 			else
 			$error=1;
 		}
@@ -107,10 +116,7 @@ if($result= mysql_query($sql,$conexion_abajo))
 			if (mysql_query("SET AUTOCOMMIT=0;",$conexion_abajo))//desactivar el modo de autoguardado
 				if (mysql_query("BEGIN;",$conexion_abajo)) //dar inicio a la transacción
 					if (mysql_query($sql,$conexion_abajo))
-					{		
-							mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
-							mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
-					}					
+					$error=0;	
 				else
 					$error=1;
 				else
@@ -124,6 +130,11 @@ if($result= mysql_query($sql,$conexion_abajo))
 		mysql_query("ROLLBACK;",$conexion_abajo); //garantizo que se haga el retroceso de las operaciones
 		mysql_query("ROLLBACK;",$conexion_arriba); //garantizo que se haga el retroceso de las operaciones	
 	}
+	else
+	{
+		mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
+		mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
+	}	
 }
 
 

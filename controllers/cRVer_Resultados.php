@@ -24,7 +24,6 @@ switch (ACCION){
     case 'listar_resultados':
         $fecha = $obj_date->changeFormatDateII($_GET['txt_fecha']);
         $obj_xtpl->assign('fecha', $obj_date->changeFormatDateI($fecha, 0));
-        
         // Ruta actual
         $_SESSION['Ruta_Lista']= $obj_generico->RutaRegreso();
 
