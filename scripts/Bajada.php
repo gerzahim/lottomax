@@ -67,32 +67,30 @@ else
 $error=1;
 if($error==0)
 	// Busco los resultados arriba que acabo de bajar.
-	foreach ($arreglo as $id)
-	{
-		$sql="UPDATE resultados SET bajado=1 WHERE bajado=0 AND id_resultados=".$id;
-		if (mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
-			if (mysql_query("BEGIN;",$conexion_arriba)) //dar inicio a la transacción
-				if (mysql_query($sql,$conexion_arriba))
-				{
-					$error=0;//mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);	
-					mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
-					mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
-					header ("Location: BuscarTicketsGanadores.php");
-				//	PremiarGanadores($conexion_abajo);
-				}
+	if (mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
+		if (mysql_query("BEGIN;",$conexion_arriba)) //dar inicio a la transacción
+			foreach ($arreglo as $id)
+			{
+				$sql="UPDATE resultados SET bajado=1 WHERE bajado=0 AND id_resultados=".$id;
+				if (mysql_query($sql,$conexion_arriba)){}
 				else
 				$error=1;
-			else
-			$error=1;
+			}
 		else
 		$error=1;
-	}
-
+	else
+	$error=1;
 if($error==1)
 {
 	//echo "pasa";
 	mysql_query("ROLLBACK;",$conexion_arriba);
 	mysql_query("ROLLBACK;",$conexion_abajo); //garantizo que se haga el retroceso de las operaciones	
+}
+else 
+{
+	mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
+	mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
+	header ("Location: BuscarTicketsGanadores.php");
 }
 }
 ?>
