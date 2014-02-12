@@ -63,7 +63,18 @@ class CopiarTicket{
 		
 	}
 	
-
+	/**
+	 * Eliminar registros de Ticket transaccional segun un Id
+	 *
+	 * @param string $id_ticket_transaccional
+	 * @return boolean, array
+	 */
+	public function EliminarTicketTransaccionalByTicket($id_ticket_transaccional){
+		//Preparacion del query
+		$sql = "DELETE FROM `ticket_transaccional` WHERE id_ticket_transaccional='".$id_ticket_transaccional."'";
+		return $this->vConexion->ExecuteQuery($sql);
+	
+	}
 
         /**
 	 * Busqueda de Tickets Segun parametro.

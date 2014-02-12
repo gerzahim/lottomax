@@ -941,11 +941,24 @@ class Ventas{
 	 * @param string $id_ticket_transaccional
 	 * @return boolean, array
 	 */
-	public function EliminarTicketTransaccional($id_taquilla){
+	public function EliminarTicketTransaccionalByTicket($id_ticket_transaccional){
+		//Preparacion del query
+		$sql = "DELETE FROM `ticket_transaccional` WHERE id_ticket_transaccional='".$id_ticket_transaccional."'";
+		return $this->vConexion->ExecuteQuery($sql);
+
+	}
+	
+	/**
+	 * Eliminar registros de Ticket transaccional segun un Id
+	 *
+	 * @param string $id_ticket_transaccional
+	 * @return boolean, array
+	 */
+	public function EliminarTicketTransaccionalByTaquilla($id_taquilla){
 		//Preparacion del query
 		$sql = "DELETE FROM `ticket_transaccional` WHERE id_taquilla='".$id_taquilla."'";
 		return $this->vConexion->ExecuteQuery($sql);
-
+	
 	}
 
         /**

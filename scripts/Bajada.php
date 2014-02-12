@@ -3,6 +3,8 @@
 // Archivo de variables de configuracion
 //require('../models/Pagar_Ganador.php');
 
+//// BAJADO = 0 Significa que el resultado no ha sido copiado en la BD local, BAJADO=1 significa que el resultado fue bajado a la BD, cuando BAJADO=2 significa que se hizo un cambio el resultado del servidor de arriba y este tiene que ser actualizado en la BD local
+
 $conexion_abajo = mysql_connect("localhost" , "root" , "secreta");
 mysql_select_db("lottomax",$conexion_abajo);
 
@@ -93,4 +95,30 @@ else
 	header ("Location: BuscarTicketsGanadores.php");
 }
 }
+
+// COMIENZA LAS INSTRUCCIONES PARA CUANDO UN RESULTADO FUE MODIFICADO Y REQUIERE SER ACTUALIZADO EN LA BD LOCAL
+
+$sql = "SELECT * FROM resultados WHERE bajado = 2";  
+if($result= mysql_query($sql,$conexion_arriba))
+{
+	$numero_registros = mysql_num_rows($result);
+	//Creamos la cadena para insertar los resultados que no han sido bajados.
+	while ($row = mysql_fetch_row($result))
+	{
+		$consulta_abajo="UPDATE resultados SET numero='".$row['numero']."' WHERE id_resultado=".$row['id_resultado'];
+		$consulta_arriba="UPDATE resultados SET bajado=1 WHERE id_resultado=".$row['id_resultado']; // volvemos a setear bajado=1 para que el sistema sepa que este resultado ya fue actualizado.
+		if (mysql_query("SET AUTOCOMMIT=0;",$conexion_abajo) AND mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
+		if (mysql_query("BEGIN;",$conexion_abajo) AND mysql_query("BEGIN;",$conexion_arriba)) //dar inicio a la transacción
+			if (mysql_query($consulta_abajo,$conexion_abajo)) //EJECUTA EL QUERY
+				if (mysql_query($consulta_arriba,$conexion_abajo)) //EJECUTA EL QUERY
+				{	
+					mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
+					mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
+				}
+				else 
+				mysql_query("ROLLBACK;",$conexion_abajo);
+	}
+
+}
+header ("Location: BuscarTicketsGanadores.php");
 ?>

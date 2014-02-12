@@ -114,7 +114,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
 
 
 				//echo "<input id='txt_id_ticket_transaccional' name='txt_id_ticket_transaccional' type='text' value='".$id_ticket_transaccional."'/>";
-				$obj_modelo->EliminarTicketTransaccional($id_ticket_transaccional);
+				$obj_modelo->EliminarTicketTransaccionalByTicket($id_ticket_transaccional);
 				$result = ProcesoCupos($txt_numero, $txt_monto, $sorteo, $zodiacal, $esZodiacal);
 
 				echo "--";
@@ -290,17 +290,17 @@ If ($obj_conexion->GetNumberRows($resultTT)>0){
 
     $monto_prorrateado= round($txt_monto/$catidad_apuestas, 2,PHP_ROUND_HALF_EVEN);
     
-    echo $monto_prorrateado;
-    
+   // echo $monto_prorrateado;
+
+    $obj_modelo->EliminarTicketTransaccionalByTaquilla($taquilla);
     while($row= $obj_conexion->GetArrayInfo($resultTT)){
        $txt_numero = $row['numero'];
        $sorteo = $row['id_sorteo'];
        $id_zodiacal=$row['id_zodiacal'];
-       $id_ticket_transaccional = $row['id_ticket_transaccional'];
-       if ($obj_modelo->EliminarTicketTransaccional($id_ticket_transaccional)){
-        $result= ProcesoCupos($txt_numero, $monto_prorrateado, $sorteo, $id_zodiacal, 0);
-       }
+       $id_ticket_transaccional = $row['id_ticket_transaccional'];  
+       $result= ProcesoCupos($txt_numero, $monto_prorrateado, $sorteo, $id_zodiacal, 0);
     }
+    
 
 }
 

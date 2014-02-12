@@ -87,43 +87,37 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
 	//determinando el tipo de jugada
 	$id_tipo_jugada= $obj_modelo->GetTipoJugada($esZodiacal,$txt_numero); 
 	
-	
 	//revisar tabla de ticket_transaccional
 	$numero_jugadoticket= $obj_modelo->GetTicketTransaccional($txt_numero,$sorteo,$zodiacal, $id_tipo_jugada);
 	
-	if ( $numero_jugadoticket['total_registros']>0 ){
-		
+	if ( $numero_jugadoticket['total_registros']>0 )
+	{
 		//adicionar y dar mensaje de confirm (adicionar al ticket u obviar)
-		
 		//significa que ya existe y debemos ver el monto que queda
 		$num_ticket_faltante = $numero_jugadoticket['monto_faltante'];
 		$num_ticket_monto = $numero_jugadoticket['monto'];		
 		$num_ticket_inc = $numero_jugadoticket['incompleto'];
-		
 		//Verificando que si esta incompleto
-		if ($num_ticket_inc == '1'){
-			
+		if ($num_ticket_inc == '1'|| $num_ticket_inc == '3')
+		{
 			// ya no se puede anadir, mas bien le falto por jugar
 			//echo "El numero ya esta jugado y tiene su cupo completo";			
-			
 			//$_SESSION['mensaje']= $mensajes['numero_repetido_eincompleto'];
+		//	echo "PAASA";
 			echo "<div id='mensaje' class='mensaje' >El numero ya esta jugado y tiene su cupo completo !!!</div>";			
-			
-		}else{
-                        if ($num_ticket_inc == '0'){
-                            /************* CABLEADO **********************/
-                            //Proceso CONFIRM: Elimina la apuesta existente en ticket transaccional, y para que no este repetida, la registra
-                            // con el nuevo monto ingresado.
-
-                            $id_ticket_transaccional= $obj_modelo->GetIDTicketTransaccional($txt_numero,$sorteo,$zodiacal);
-                            
-                            
-                            //echo "<input id='txt_id_ticket_transaccional' name='txt_id_ticket_transaccional' type='text' value='".$id_ticket_transaccional."'/>";
-                            $obj_modelo->EliminarTicketTransaccional($id_ticket_transaccional);
-                            $result = ProcesoCupos($txt_numero, $txt_monto, $sorteo, $zodiacal, $esZodiacal);
-                            
-                            echo "--";
-                        }
+		}
+		else
+		{
+        	if ($num_ticket_inc == '0')
+        	{
+                //Proceso CONFIRM: Elimina la apuesta existente en ticket transaccional, y para que no este repetida, la registra
+                // con el nuevo monto ingresado.
+                $id_ticket_transaccional= $obj_modelo->GetIDTicketTransaccional($txt_numero,$sorteo,$zodiacal);
+				//echo "<input id='txt_id_ticket_transaccional' name='txt_id_ticket_transaccional' type='text' value='".$id_ticket_transaccional."'/>";
+                $obj_modelo->EliminarTicketTransaccionalByTicket($id_ticket_transaccional);
+                $result = ProcesoCupos($txt_numero, $txt_monto, $sorteo, $zodiacal, $esZodiacal);
+                echo "--";
+        	}
 		}
 		
 	}else{
@@ -142,6 +136,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
 			$matriz2= CalculaIncompletoYnuevoMonto($txt_monto, $num_jug);
 			// Guardar ticket a tabla transaccional
 			if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$matriz2[0],$matriz2[1],$matriz2[2],$taquilla) ){
+				
 																		
 			}else{
 				
@@ -154,7 +149,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
 			//Mensaje de ERROR -- NUMERO AGOTADO PARA ESTE SORTEO
 			
                         //Se registra el numero como agotado
-                        $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$txt_monto,2,0,$taquilla);
+            $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$txt_monto,2,0,$taquilla);
 			$_SESSION['mensaje']= $txt_numero." AGOTADO para sorteo ".$obj_modelo->GetNombreSorteo($sorteo)."  ".$obj_modelo->GetPreZodiacal($zodiacal);		
 			echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";			
 						

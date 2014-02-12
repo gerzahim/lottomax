@@ -351,7 +351,7 @@ for($i=1;$i<=$lineas_saltar_despues;$i++){
 /************* CABLEADO **********************/
 //los feed deben venir de la base de datos una variable de parametros
 // Despues de guardado en detalle_ticket, borramos el registro de ticket transaccional...
-  $obj_modelo->EliminarTicketTransaccional($id_taquilla);
+  $obj_modelo->EliminarTicketTransaccionalByTaquilla($id_taquilla);
 echo $data;
 //echo $data1;
 /*

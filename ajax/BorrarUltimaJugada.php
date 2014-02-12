@@ -29,7 +29,7 @@ If ($obj_conexion->GetNumberRows($resultTT)>0){
     $roww= $obj_conexion->GetArrayInfo($resultTT);
     $id_ticket_transaccional=$roww["id_ticket_transaccional"];
     
-    $obj_modelo->EliminarTicketTransaccional($id_ticket_transaccional);
+    $obj_modelo->EliminarTicketTransaccionalByTicket($id_ticket_transaccional);
       
 }
 

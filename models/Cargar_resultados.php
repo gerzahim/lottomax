@@ -170,7 +170,7 @@ class Cargar_Resultados{
 	public function ActualizaDatosResultados($id_resultados, $id_sorteo, $zodiacal, $numero, $fecha_hora){
 		
 		//Preparacion del query
-		$sql = "UPDATE `resultados` SET `id_sorteo`='".$id_sorteo."', `zodiacal`='".$zodiacal."', `numero`='".$numero."', `fecha_hora`='".$fecha_hora."' WHERE id_resultados='".$id_resultados."'";
+		$sql = "UPDATE `resultados` SET `id_sorteo`='".$id_sorteo."', `zodiacal`='".$zodiacal."', `numero`='".$numero."', `fecha_hora`='".$fecha_hora."', `bajado`=2 WHERE id_resultados='".$id_resultados."'";
 		return $this->vConexion->ExecuteQuery($sql);
 	
 		

@@ -108,7 +108,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
                            
                             echo "--";
                             //echo "<input id='txt_id_ticket_transaccional' name='txt_id_ticket_transaccional' type='text' value='".$id_ticket_transaccional."'/>";
-                            $obj_modelo->EliminarTicketTransaccional($id_ticket_transaccional);
+                            $obj_modelo->EliminarTicketTransaccionalByTicket($id_ticket_transaccional);
                             $result = ProcesoCupos($txt_numero, $txt_monto, $sorteo, $zodiacal, $esZodiacal);
 
                         }
