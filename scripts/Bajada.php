@@ -103,10 +103,10 @@ if($result= mysql_query($sql,$conexion_arriba))
 {
 	$numero_registros = mysql_num_rows($result);
 	//Creamos la cadena para insertar los resultados que no han sido bajados.
-	while ($row = mysql_fetch_row($result))
+	while ($row = mysql_fetch_array($result))
 	{
-		$consulta_abajo="UPDATE resultados SET numero='".$row['numero']."' WHERE id_resultado=".$row['id_resultado'];
-		$consulta_arriba="UPDATE resultados SET bajado=1 WHERE id_resultado=".$row['id_resultado']; // volvemos a setear bajado=1 para que el sistema sepa que este resultado ya fue actualizado.
+		$consulta_abajo="UPDATE resultados SET numero='".$row['numero']."' WHERE id_resultados=".$row['id_resultados'];
+		$consulta_arriba="UPDATE resultados SET bajado=1 WHERE id_resultados=".$row['id_resultados']; // volvemos a setear bajado=1 para que el sistema sepa que este resultado ya fue actualizado.
 		if (mysql_query("SET AUTOCOMMIT=0;",$conexion_abajo) AND mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
 		if (mysql_query("BEGIN;",$conexion_abajo) AND mysql_query("BEGIN;",$conexion_arriba)) //dar inicio a la transacción
 			if (mysql_query($consulta_abajo,$conexion_abajo)) //EJECUTA EL QUERY
