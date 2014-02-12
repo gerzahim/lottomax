@@ -158,8 +158,8 @@ if( $result= $obj_modelo->GetDetalleTicketByIdticket($id_ticket) ){
 			$contador=0;
 			$id_sorteo_actual=$row['id_sorteo'];
 			$nombre_sorteo=$obj_modelo->GetNombreSorteo($row['id_sorteo']);
-			//$data.="<br>"; //para cada nombre de sorteo aparte			
-			$data.="---".$nombre_sorteo."<br>";
+			$data.="<br>"; //para cada nombre de sorteo aparte			
+			$data.="---".$nombre_sorteo;
 			
 			//$data1.="\\x1B\\x0A";
 			$data1.="\\n";
