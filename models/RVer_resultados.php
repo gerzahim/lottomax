@@ -62,7 +62,7 @@ class RVer_Resultados{
 		$sql = "SELECT * FROM resultados R
 				INNER JOIN zodiacal Z ON R.zodiacal=Z.Id_zodiacal
                 INNER JOIN  sorteos S ON S.id_sorteo=R.id_sorteo
-				WHERE fecha_hora LIKE '%".$fecha."%'  AND S.status = 1";
+				WHERE fecha_hora LIKE '%".$fecha."%'  AND S.status = 1  ORDER BY  `id_loteria` ASC , R.id_sorteo ASC ";
 		
 		//echo $sql;
 		
