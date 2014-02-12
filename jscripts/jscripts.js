@@ -968,6 +968,16 @@ $(document).keyup(function(tecla){
     	//Procesar Ticket
         procesarticket(); //para procesar y generar el ticket
 		CargarReset();
+    }else if(tecla.keyCode == 32) {
+    	// tecla SPACE
+    	
+    	//var posicion = $(":input").index(document.activeElement);
+    	//alert(posicion); 
+    	//alert($(":input").index(document.activeElement));
+    	//$("input:checkbox[value=64]").attr("checked", true);
+
+    	$(":input")[$(":input").index(document.activeElement) + 1].focus();
+
     }else if(tecla.keyCode == 40) {
     	// tecla Flecha Abajo
 	 	//Anular Ticket
@@ -1038,18 +1048,19 @@ $(document).keyup(function(tecla){
 function ValidateFormSell(){
 	jQuery('#txt_numero').keydown(function (event) {
 	    // Allow only backspace and delete
-	           if (event.keyCode == 46 || event.keyCode == 8  || event.keyCode == 9 || event.keyCode == 106 || event.keyCode == 109) {
-	               // let it happen, don't do anything
+	           if (event.keyCode == 46 || event.keyCode == 8  || event.keyCode == 9 || event.keyCode == 110 || event.keyCode == 109 || (event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105)) {
+	        	   //alert(event.keyCode);
+	        	   // let it happen, don't do anything
 	        	   // 46 = punto ; 8 = Retroceso ; 9 = tabulador
-	        	   //106 = asterisco; 109 = restar
-	           }
-	           else {
+	        	   // 106 = asterisco; 109 = menos para corrida
+	        	   // 110 punto; 16 = shift; 32= space
+	        	   
 	               // Ensure that it is a number and stop the keypress
 	               if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105)) {
 	                 count = jQuery('#txt_numero').val().length;
 	                 var juego = $("input[name='op_juego']:checked").val();
 	                 //juego = jQuery('#op_juego').val();
-	                 
+ 	                 
 	                 // si el modo de juego es triple
 	                 if (count > 2 && juego == 1) {
 	                    event.preventDefault();
@@ -1070,7 +1081,12 @@ function ValidateFormSell(){
 	               }
 	               else {
 	                   event.preventDefault();
-	               }
+	               }    	   
+	           }
+	           else {
+	        	   //alert(event.keyCode);
+	        	   event.preventDefault();
+	        	   //alert('VERGA');
 	           }
 	});
 	

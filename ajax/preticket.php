@@ -455,6 +455,7 @@ function Corrida($txt_numero){
 //Verificando que escriban el numero y el monto 
 if(isset($_POST['txt_numero'])){
 	$txt_numero=$_POST['txt_numero'];
+	$txt_numero= $obj_generico->ConvertirSoloNumero($txt_numero);
 	$tamano_numero = strlen($txt_numero);
 	if ($tamano_numero == 1){
 		$txt_numero='0'.$_POST['txt_numero'];		

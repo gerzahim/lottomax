@@ -359,6 +359,20 @@ class Generica{
   		return $cadena;
 	}	
 	
+	
+	/**
+	 * Convierte una cadena a numerica quitando los caracteres especiales
+	 * por ejemplo, si mandamos "Bs 300" retorna solo 300 sin la unidad.
+	 *
+	 * @access public
+	 * @param string $cadena
+	 * @return string
+	 */
+	public function ConvertirSoloNumero($cadena){
+		$legalChars = "%[^0-9]%";
+		$cadena=preg_replace($legalChars,"",$cadena);
+		return $cadena;
+	}	
 	/**
 	 * Coloca la primera letra de cada palabra en mayuscula
 	 *
