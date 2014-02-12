@@ -369,7 +369,7 @@ class Generica{
 	 * @return string
 	 */
 	public function ConvertirSoloNumero($cadena){
-		$legalChars = "%[^0-9]%";
+		$legalChars = "%[^0-9\-]%";
 		$cadena=preg_replace($legalChars,"",$cadena);
 		return $cadena;
 	}	
