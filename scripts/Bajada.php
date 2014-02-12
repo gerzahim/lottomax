@@ -110,7 +110,7 @@ if($result= mysql_query($sql,$conexion_arriba))
 		if (mysql_query("SET AUTOCOMMIT=0;",$conexion_abajo) AND mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
 		if (mysql_query("BEGIN;",$conexion_abajo) AND mysql_query("BEGIN;",$conexion_arriba)) //dar inicio a la transacción
 			if (mysql_query($consulta_abajo,$conexion_abajo)) //EJECUTA EL QUERY
-				if (mysql_query($consulta_arriba,$conexion_abajo)) //EJECUTA EL QUERY
+				if (mysql_query($consulta_arriba,$conexion_arriba)) //EJECUTA EL QUERY
 				{	
 					mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
 					mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
