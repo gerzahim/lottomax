@@ -99,10 +99,10 @@ class LoginAcceso{
 	 * @param integer $id_usuario
 	 * @return boolean or array
 	 */
-	public function UpdateTimePing($id_usuario){
+	public function UpdateTimePing($id_usuario,$id_taquilla){
 
 		//Preparacion del query
-		$sql = "UPDATE `usuarios_taquillas` SET `time_ping`='".date('Y-m-d H:i:s')."' WHERE id_usuario='".$id_usuario."'";
+		$sql = "UPDATE `usuarios_taquillas` SET `time_ping`='".date('Y-m-d H:i:s')."' WHERE id_usuario='".$id_usuario."' AND id_taquilla='".$id_taquilla."'";
                 return $this->vConexion->ExecuteQuery($sql);
 	}
 

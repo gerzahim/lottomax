@@ -24,8 +24,9 @@ $obj_modelo= new LoginAcceso($obj_conexion);
 
 session_start();
 $id_usuario =  $_SESSION['id_usuario'];
+$id_usuario =  $_SESSION['id_taquilla'];
 
-if ($obj_modelo->UpdateTimePing($id_usuario)){
+if ($obj_modelo->UpdateTimePing($id_usuario,$id_taquilla)){
     
 }
 
