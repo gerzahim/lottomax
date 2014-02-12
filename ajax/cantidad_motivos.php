@@ -1,6 +1,6 @@
 <?php
 
-
+date_default_timezone_set("America/Caracas");
 if(isset($_GET['cantm'])){
 	$cantidad_motivos=$_GET['cantm'];
 }else{

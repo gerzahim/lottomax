@@ -1,5 +1,5 @@
 <?php
-
+date_default_timezone_set("America/Caracas");
 // Sesion e informacion del usuario conectado
 include('./libraries/InfoLogin.php');
 

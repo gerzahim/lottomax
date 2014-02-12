@@ -13,7 +13,7 @@
 -->
   
 <?php
-
+date_default_timezone_set("America/Caracas");
 
 // Archivo de variables de configuracion
 require_once('../config/config.php');

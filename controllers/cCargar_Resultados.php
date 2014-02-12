@@ -63,9 +63,10 @@ switch (ACCION){
 					// Obtiene el parametros de los minutos para no listar el sorteo
 					$minutos_bloqueo= $obj_modelo->MinutosBloqueo();
 					//echo "Hora".$hora_sorteo."<br>";
-										
+					
 					$fecha_hora_actual=date("Y-m-d H:i:s");
 					
+			
 					// Restando la fecha actual con la fecha y hora del sorteo.
 					$resta=strtotime($fecha_hora_actual)-strtotime($hora_sorteo);
 						
