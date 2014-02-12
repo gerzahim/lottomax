@@ -53,19 +53,38 @@ class Cargar_Resultados{
 
                 }
                 
-		$sql = "SELECT S.id_sorteo, S.id_loteria, S.nombre_sorteo, S.zodiacal, 'signo','numero', 'id_resultado'
+		$sql = "SELECT S.id_sorteo, S.hora_sorteo, S.id_loteria, S.nombre_sorteo, S.zodiacal, 'signo','numero', 'id_resultado'
                     FROM sorteos S
                     WHERE ".$sql_periodo. " AND S.status = 1 AND S.id_sorteo NOT IN (SELECT id_sorteo FROM resultados WHERE fecha_hora LIKE '%".$fecha."%')
                    
                     UNION ALL
-                    SELECT S.id_sorteo, S.id_loteria, S.nombre_sorteo, S.zodiacal, Z.nombre_zodiacal,R.numero, R.id_resultados
+                    SELECT S.id_sorteo, S.hora_sorteo, S.id_loteria, S.nombre_sorteo, S.zodiacal, Z.nombre_zodiacal,R.numero, R.id_resultados
                     FROM resultados R
                     INNER JOIN zodiacal Z ON R.zodiacal=Z.Id_zodiacal
                     INNER JOIN  sorteos S ON S.id_sorteo=R.id_sorteo
                     WHERE ".$sql_periodo. " AND S.status = 1 AND R.fecha_hora LIKE '%".$fecha."%'  ORDER BY  `id_loteria` ASC , id_sorteo ASC  
                     ";
+		
 		return $this->vConexion->ExecuteQuery($sql);
 	}
+	
+	/**
+	 * Busqueda de minutos antes de bloquear un sorteo
+	 *
+	 */
+	
+	
+	public function MinutosBloqueo(){
+	
+		//Preparacion del query
+		$sql = "SELECT tiempo_cierre_sorteos FROM parametros";
+	
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["tiempo_cierre_sorteos"];
+	
+	}
+	
 
 
          /**
@@ -192,22 +211,7 @@ class Cargar_Resultados{
         return $respu; 		
 	}	
 	
-	/**
-	 * Busqueda de minutos antes de bloquear un sorteo
-	 *
-	 */
 	
-	
-	public function MinutosBloqueo(){
-
-		//Preparacion del query
-		$sql = "SELECT tiempo_cierre_sorteos FROM parametros";
-
-		$result= $this->vConexion->ExecuteQuery($sql);
-		$roww= $this->vConexion->GetArrayInfo($result);
-		return $roww["tiempo_cierre_sorteos"];
-		
-	}		
 
 }		
 ?>

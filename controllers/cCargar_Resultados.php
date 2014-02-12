@@ -49,10 +49,30 @@ switch (ACCION){
 		$periodo = $_GET ['radio_periodo'];
 		// Listado de Sorteos
 		if ($result = $obj_modelo->GetSorteos ( $fecha, $periodo )) {
+			
 			if ($obj_conexion->GetNumberRows ( $result ) > 0) {
 				$i = 1;
 				$j = 0;
 				while ( $row = $obj_conexion->GetArrayInfo ( $result ) ) {
+					
+					
+					//Saca la hora del sorteo
+					$hora_sorteo= $fecha." ".$row['hora_sorteo'];
+						
+					//Valor que viene de la base de datos
+					// Obtiene el parametros de los minutos para no listar el sorteo
+					$minutos_bloqueo= $obj_modelo->MinutosBloqueo();
+					//echo "Hora".$hora_sorteo."<br>";
+										
+					$fecha_hora_actual=date("Y-m-d H:i:s");
+					
+					// Restando la fecha actual con la fecha y hora del sorteo.
+					$resta=strtotime($fecha_hora_actual)-strtotime($hora_sorteo);
+						
+					// Si la resta es negativo quiere decir que todavia los sorteos no han cerrado
+					if ($resta>0)
+					{
+					
 					if (($i % 2) > 0) {
 						$obj_xtpl->assign ( 'estilo_fila', 'even' );
 					} else {
@@ -143,7 +163,8 @@ switch (ACCION){
 					$obj_xtpl->parse ( 'main.contenido.lista_cargar_resultados.lista' );
 					$i ++;
 				}
-			} else {
+			} 
+			}else {
 				// Mensaje
 				$obj_xtpl->assign ( 'sin_listado', $mensajes ['sin_lista'] );
 				
