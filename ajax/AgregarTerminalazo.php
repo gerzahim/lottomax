@@ -320,10 +320,10 @@ If ($obj_conexion->GetNumberRows($resultTT)>0){
       	
       	if ($row['incompleto']== 0 || $row['incompleto']== 1){
               $txt_terminal = substr($row['numero'],1,2);
-              echo $txt_terminal;
-              echo "<br>";
-              //$txt_monto = $_GET['monto'];
-              $txt_monto = "2";
+              //echo $txt_terminal;
+              //echo "<br>";
+              $txt_monto = $_GET['monto'];
+              //$txt_monto = "2";
               $id_zodiacal = $row['id_zodiacal'];
               
               $combinacion_actual=$txt_terminal."-".$row['id_sorteo']."-".$id_zodiacal;
@@ -341,7 +341,7 @@ If ($obj_conexion->GetNumberRows($resultTT)>0){
               $i++;
           }
       }
-      print_r($combinacion_jugada);
+      //print_r($combinacion_jugada);
 }
 
 

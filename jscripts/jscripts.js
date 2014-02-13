@@ -634,7 +634,7 @@ function agregarTerminales(){
         }else if (str == "NotOk"){
             alert("Debe hacer por lo menos una apuesta de triple para generar los terminales en el ticket!");
         }      
-         
+        //calcula_total();   
      });
 }
 
@@ -663,14 +663,17 @@ function agregarTerminalazo(){
           }
      }else if (str == "NotOk"){
          alert("Debe hacer por lo menos una apuesta de Astral para generar los Terminalazos en el ticket!");
-     }      
+     }
+     
+     calcula_total();
       
   });
 }
 
 function agregarMontoTerminalazo(monto)
 {
- $.get('ajax/AgregarTerminales.php?monto=' + monto, function(str) {
+ //alert(monto);	
+ $.get('ajax/AgregarTerminalazo.php?monto=' + monto, function(str) {
     document.getElementById("ticket").innerHTML = str;
          $("#txt_numero").focus();
          
@@ -877,11 +880,12 @@ $(document).keyup(function(tecla){
     	// tecla G    	
         //Preguntamos monto de los terminales y Generamos los Terminales
         agregarTerminales();
-        //agregarTerminalazo();
+        calcula_total();
     }else if(Atl_down && (tecla.keyCode == 72)){
     	// tecla H    	
         //Preguntamos monto de los terminales y Generamos los Terminales        
         agregarTerminalazo();
+        calcula_total();
     }else if(Atl_down && (tecla.keyCode == 73)){
         // Tecla I
         //procesarticket(); //para procesar y generar el ticket
