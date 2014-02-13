@@ -267,10 +267,10 @@ CREATE TABLE IF NOT EXISTS `relacion_pagos` (
 
 INSERT INTO `relacion_pagos` (`id_relacion_pagos`, `monto`, `id_tipo_jugada`, `status`) VALUES
 (1, 800, 1, 1),
-(2, 50, 2, 1),
+(2, 60, 2, 1),
 (3, 6000, 3, 1),
-(4, 120, 4, 1),
-(5, 30, 5, 1);
+(4, 600, 4, 1),
+(5, 10, 5, 1);
 
 -- --------------------------------------------------------
 
