@@ -31,14 +31,14 @@ class Pagar_Ganador{
 
 
         /**
-	 * Busqueda de Tickets Segun parametro.
+	 * Busqueda de Tickets Segun fecha.
 	 *
 	 * @param string $id_ticket
          * @param string $serial
 	 */
 	//public function GetListadosegunVariable($parametro_where){
 	public function GetListadosegunVariable($fecha_resultado){		
-
+		//echo $fecha_resultado;
 		//Preparacion del query
         //$sql = "SELECT * FROM ticket WHERE status='1' AND pagado=0 AND ".$parametro_where;
         // deberiamos colocar un parametro premiado=0, verificado=0
@@ -51,6 +51,29 @@ class Pagar_Ganador{
 		//print_r($result);
 		return  $result;
 
+	}
+	
+	/**
+	 * Busqueda de Tickets Segun parametro.
+	 *
+	 * @param string $where
+	
+	 */
+	//public function GetListadosegunVariable($parametro_where){
+	public function GetListadosegunVariable2($where){
+		//echo $fecha_resultado;
+		//Preparacion del query
+		//$sql = "SELECT * FROM ticket WHERE status='1' AND pagado=0 AND ".$parametro_where;
+		// deberiamos colocar un parametro premiado=0, verificado=0
+		// premiado cambia cuando se premia un ticket
+		// verificado cambia cuando ya se reviso y no esta premiado verificado=1
+		$sql = "SELECT * FROM ticket WHERE status='1' AND pagado=0 AND ".$where;
+		// echo $sql;
+		$result= $this->vConexion->ExecuteQuery($sql);
+	
+		//print_r($result);
+		return  $result;
+	
 	}
 	
 	/**

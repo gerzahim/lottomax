@@ -62,7 +62,7 @@ if($result= mysql_query($sql,$conexion_abajo))
 		{
 			if ($i!=mysql_num_fields($result)-1)
 			{
-				if($i==2 OR $i==10)
+				if($i==2 OR $i==10 OR $i==1)
 					$consulta_arriba_ticket.=" '".$row[$i]."', ";
 				else
 				$consulta_arriba_ticket.=" ".$row[$i].", ";

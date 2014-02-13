@@ -45,10 +45,9 @@ switch (ACCION){
 
                 
 		// Busca el listado de la informacion.
-		$lista= $obj_modelo->GetListadosegunVariable($where);
+		$lista= $obj_modelo->GetListadosegunVariable2($where);
 		$total_registros= $obj_conexion->GetNumberRows($lista);
 		if( $total_registros >0 ){
-			
 			while($row= $obj_conexion->GetArrayInfo($lista)){
 				$fecha_ticket= $obj_modelo->GetFechaTicket($row['id_ticket']);
                                 $tiempo_vigencia = $obj_modelo->TiempoVigencia();
@@ -146,7 +145,7 @@ switch (ACCION){
 		}
 		else{
 			$_SESSION['mensaje']= $mensajes['no_ticket'];
-                        header('location:'.$_SESSION['Ruta_Lista']);
+                       header('location:'.$_SESSION['Ruta_Lista']);
 		}
 
 		break;
@@ -173,16 +172,16 @@ switch (ACCION){
                 if(!$obj_generico->IsEmpty($serial)){
                      $where = "serial='".$serial."' ";
                      // Busca el listado de la informacion.
-                        $lista= $obj_modelo->GetListadosegunVariable($where);
+                        $lista= $obj_modelo->GetListadosegunVariable2($where);
                         $total_registros= $obj_conexion->GetNumberRows($lista);
                         if( $total_registros >0 ){
                             $row= $obj_conexion->GetArrayInfo($lista);
                                  // Actualizamos el ticket a premiado y pagado
                                 if( $obj_modelo->PagarTicket($row['id_ticket'], $total_premiado)){
                                     // Actualizamos el estado premiado en cada una de las apuestas del ticket
-                                    for ($i = 0; $i < count($id_detalle); $i++){
-                                              if( $obj_modelo->PagarDetalleTicket($id_detalle[$i])){}
-                                    }                                      
+                                   /* for ($i = 0; $i < count($id_detalle); $i++){
+                                           //   if( $obj_modelo->PagarDetalleTicket($id_detalle[$i])){}
+                                    }*/                                      
                                     $_SESSION['mensaje']= $mensajes['serial_coincide'];
                                      header('location:'.$_SESSION['Ruta_Lista']);
                                 }

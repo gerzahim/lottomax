@@ -75,6 +75,22 @@ class CopiarTicket{
 		return $this->vConexion->ExecuteQuery($sql);
 	
 	}
+	
+	/**
+	 * Obtiene el hora del Sorteo Segun ID
+	 *
+	 * @param string $id
+	 * @return boolean, array
+	 */
+	public function GetHoraSorteo($id){
+	
+		//Preparacion del query
+		$sql = "SELECT hora_sorteo FROM sorteos WHERE status = 1 AND id_sorteo  = ".$id."";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["hora_sorteo"];
+	
+	}
 
         /**
 	 * Busqueda de Tickets Segun parametro.
@@ -260,12 +276,29 @@ class CopiarTicket{
 		//Preparacion del query
 		$sql = "INSERT INTO `ticket_transaccional` (`numero` , `id_sorteo` , `id_zodiacal`, `id_tipo_jugada` , `monto_faltante` , `incompleto`, `monto`, `id_taquilla`)
                     VALUES ('".$numero."', '".$id_sorteo."', '".$id_zodiacal."', '".$id_tipo_jugada."', '".$montofaltante."', '".$incompleto."', '".$monto."', '".$id_taquilla."')";
-        //echo "SQL";       
+       // echo $sql;       
 		return $this->vConexion->ExecuteQuery($sql);
 		
 		
 	}	
 
+	/**
+	 * Obtiene el ID de un ticket transaccional
+	 *
+	 * @param string $numero
+	 * @param string $sorteo
+	 * @return boolean, string
+	 */
+	public function GetIDTicketTransaccional($numero, $sorteo, $id_zodiacal){
+	
+		//Preparacion del query
+		$sql = "SELECT id_ticket_transaccional FROM ticket_transaccional WHERE id_taquilla='".$_SESSION["taquilla"]."' AND numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal."";
+	
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww['id_ticket_transaccional'];
+	
+	}
         /**
 	 * Busqueda en tabla de Cupos_Especiales
 	 *
