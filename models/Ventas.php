@@ -275,6 +275,19 @@ class Ventas{
 		$sql = "SELECT * FROM ticket_transaccional WHERE id_tipo_jugada='1' AND id_taquilla='".$_SESSION["taquilla"]."' ORDER BY id_ticket_transaccional DESC";
 		return $this->vConexion->ExecuteQuery($sql);
 	}
+	
+	/**
+	 * Busqueda de triples en ticket transaccional
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetAstralesTicketTransaccional(){
+	
+		//Preparacion del query
+		$sql = "SELECT * FROM ticket_transaccional WHERE id_tipo_jugada='3' AND id_taquilla='".$_SESSION["taquilla"]."' ORDER BY id_ticket_transaccional DESC";
+		return $this->vConexion->ExecuteQuery($sql);
+	}	
 
         /**
 	 * Busqueda de la ultima jugada en ticket

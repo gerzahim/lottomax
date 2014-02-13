@@ -649,6 +649,35 @@ function agregarMontoTerminales(monto)
  }
 
 
+//Funcion para agregar los terminales automaticamente
+function agregarTerminalazo(){
+	//alert('Holaaaa');
+ $.get('ajax/ValidarTerminalazo.php', function(str) {
+ 	//alert(str);
+     if (str == "Ok"){
+         var monto = prompt("Digite el monto de apuesta para los terminalazos:", "");
+          if (monto != null && monto != 0){
+    	  agregarMontoTerminalazo(monto);
+          }else{
+              alert("Debe ingresar un monto de apuesta para los terminalazos!");
+          }
+     }else if (str == "NotOk"){
+         alert("Debe hacer por lo menos una apuesta de Astral para generar los Terminalazos en el ticket!");
+     }      
+      
+  });
+}
+
+function agregarMontoTerminalazo(monto)
+{
+ $.get('ajax/AgregarTerminales.php?monto=' + monto, function(str) {
+    document.getElementById("ticket").innerHTML = str;
+         $("#txt_numero").focus();
+         
+ });
+ calcula_total();
+}
+
 function BorrarUltimaJugada()
 {
     $.get('ajax/BorrarUltimaJugada.php', function(str) {
@@ -848,6 +877,11 @@ $(document).keyup(function(tecla){
     	// tecla G    	
         //Preguntamos monto de los terminales y Generamos los Terminales
         agregarTerminales();
+        //agregarTerminalazo();
+    }else if(Atl_down && (tecla.keyCode == 72)){
+    	// tecla H    	
+        //Preguntamos monto de los terminales y Generamos los Terminales        
+        agregarTerminalazo();
     }else if(Atl_down && (tecla.keyCode == 73)){
         // Tecla I
         //procesarticket(); //para procesar y generar el ticket

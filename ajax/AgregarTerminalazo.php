@@ -69,7 +69,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
 
 	//determinando el tipo de jugada
 	//$id_tipo_jugada= $obj_modelo->GetTipoJugada($esZodiacal,$txt_numero);
-        $id_tipo_jugada= '2';
+    $id_tipo_jugada= '4';
 
 	//revisar tabla de ticket_transaccional
 	$numero_jugadoticket= $obj_modelo->GetTicketTransaccional($txt_numero,$sorteo,$zodiacal, $id_tipo_jugada);
@@ -311,26 +311,37 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
 	}
 }
 
-$resultTT= $obj_modelo->GetTriplesTicketTransaccional();
+$resultTT= $obj_modelo->GetAstralesTicketTransaccional();
+
 If ($obj_conexion->GetNumberRows($resultTT)>0){
     $combinacion_jugada = array();$i=0;
       while($row= $obj_conexion->GetArrayInfo($resultTT)){
-          if ($row['incompleto']== 0 || $row['incompleto']== 1){
+      	//print_r($row);
+      	
+      	if ($row['incompleto']== 0 || $row['incompleto']== 1){
               $txt_terminal = substr($row['numero'],1,2);
-              $txt_monto = $_GET['monto'];
-              $combinacion_actual=$txt_terminal."-".$row['id_sorteo'];
+              echo $txt_terminal;
+              echo "<br>";
+              //$txt_monto = $_GET['monto'];
+              $txt_monto = "2";
+              $id_zodiacal = $row['id_zodiacal'];
+              
+              $combinacion_actual=$txt_terminal."-".$row['id_sorteo']."-".$id_zodiacal;
               
               // Si ya esta no lo vuelvas a ingresar              
               $yaesta = array_search($combinacion_actual, $combinacion_jugada);
               
+              //echo $yaesta."AAA<br>";
+              // Si ya esta no lo vuelvas a ingresar 
               if ($obj_generico->IsEmpty($yaesta)){
-              	// echo "NO ESTA";
-              	$result= ProcesoCupos($txt_terminal, $txt_monto, $row['id_sorteo'], 0, 0);
+              	//echo "No ESTA";
+                $result= ProcesoCupos($txt_terminal, $txt_monto, $row['id_sorteo'], $id_zodiacal, 1);
               }              
               $combinacion_jugada[$i]=$combinacion_actual;
               $i++;
           }
       }
+      print_r($combinacion_jugada);
 }
 
 
