@@ -37,15 +37,15 @@ class Pagar_Ganador{
          * @param string $serial
 	 */
 	//public function GetListadosegunVariable($parametro_where){
-	public function GetListadosegunVariable(){		
+	public function GetListadosegunVariable($fecha_resultado){		
 
 		//Preparacion del query
         //$sql = "SELECT * FROM ticket WHERE status='1' AND pagado=0 AND ".$parametro_where;
         // deberiamos colocar un parametro premiado=0, verificado=0
         // premiado cambia cuando se premia un ticket
         // verificado cambia cuando ya se reviso y no esta premiado verificado=1
-        $sql = "SELECT * FROM ticket WHERE status=1 AND verificado=0 ";
-       // echo $sql;
+        $sql = "SELECT * FROM ticket WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'";
+        echo $sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
 		
 		//print_r($result);

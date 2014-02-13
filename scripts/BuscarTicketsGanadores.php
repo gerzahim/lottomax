@@ -25,7 +25,7 @@ $obj_modelo= new Pagar_Ganador($obj_conexion);
 $id_detalle_ticket[]="";
 $id_tickets[]="";
 $totales[]="";
-
+$fecha_hora=$_GET['fecha_hora'];
 $aprox_abajo= $obj_modelo->GetAprox_abajo();
 $aprox_arriba= $obj_modelo->GetAprox_arriba();
 
@@ -34,7 +34,7 @@ $aprox_arriba= $obj_modelo->GetAprox_arriba();
 //$where = " fecha_hora LIKE '%".date('Y-m-d')."%'";
 //$result= $obj_modelo->GetListadosegunVariable($where);
 
-$result= $obj_modelo->GetListadosegunVariable();
+$result= $obj_modelo->GetListadosegunVariable($fecha_hora);
 
 
 If ($obj_conexion->GetNumberRows($result)>0){

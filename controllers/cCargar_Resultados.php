@@ -98,10 +98,10 @@ switch (ACCION){
 
 		case 'upd':
 			
-			echo "<pre>";
+	/*		echo "<pre>";
 			print_r($_POST);
 			echo "</pre>";
-			
+		*/	
 			$id_resultados;
 			$id_sorteo = $_POST['idreferencia'];
 			$numero = $_POST['txt_numero'];
@@ -276,7 +276,6 @@ switch (ACCION){
 
         case 'save':
         	$fecha_hora = $obj_date->changeFormatDateII($_GET['fecha']);
-             
              if( $result= $obj_modelo->GetAllSorteos() ){
                 if ($obj_conexion->GetNumberRows($result)>0 ){
                      while($row= $obj_conexion->GetArrayInfo($result)){
@@ -325,14 +324,16 @@ switch (ACCION){
                                         if (!$obj_generico->IsEmpty($zodiacal)){
                                             if ($obj_modelo->GetResultadoSorteo($id_sorteo, $fecha_hora)== ""){ // Es un resultado nuevo a ingresar
                                                if ($obj_modelo->GuardarDatosResultados($id_sorteo, $zodiacal, $numero, $fecha_hora)){
-                                                   PremiarGanadores(); // Premiamos los tickets ganadores
+                                                   PremiarGanadores($fecha_hora); // Premiamos los tickets ganadores
                                                    $_SESSION['mensaje']= $mensajes['info_agregada'];
                                                      header('location:'.$_SESSION['Ruta_Form']);
                                                }
                                             }else{ // Es una actualizacion de un resultado ingresado previamente
                                                 $id_resultados= $obj_modelo->GetResultadoSorteo($id_sorteo, $fecha_hora);
                                                 if ($obj_modelo->ActualizaDatosResultados($id_resultados, $id_sorteo, $zodiacal, $numero, $fecha_hora)){
-                                                    PremiarGanadores(); // Premiamos los tickets ganadores
+                                                	
+                                                	echo "	";
+                                                    PremiarGanadores($fecha_hora); // Premiamos los tickets ganadores
                                                    $_SESSION['mensaje']= $mensajes['info_agregada'];
                                                     header('location:'.$_SESSION['Ruta_Form']);
                                                }
@@ -346,16 +347,16 @@ switch (ACCION){
                                         $zodiacal = 0;
                                         if ($obj_modelo->GetResultadoSorteo($id_sorteo, $fecha_hora)== ""){ // Es un resultado nuevo a ingresar
                                             if ($obj_modelo->GuardarDatosResultados($id_sorteo, $zodiacal, $numero, $fecha_hora)){
-                                                PremiarGanadores(); // Premiamos los tickets ganadores
+                                                PremiarGanadores($fecha_hora); // Premiamos los tickets ganadores
                                                 $_SESSION['mensaje']= $mensajes['info_agregada'];
                                                 header('location:'.$_SESSION['Ruta_Form']);
                                             }
                                         }else{ // Es una actualizacion de un resultado ingresado previamente
                                                 $id_resultados= $obj_modelo->GetResultadoSorteo($id_sorteo, $fecha_hora);
                                                 if ($obj_modelo->ActualizaDatosResultados($id_resultados, $id_sorteo, $zodiacal, $numero, $fecha_hora)){
-                                                    PremiarGanadores(); // Premiamos los tickets ganadores
+                                                    PremiarGanadores($fecha_hora); // Premiamos los tickets ganadores
                                                    $_SESSION['mensaje']= $mensajes['info_agregada'];
-                                                     header('location:'.$_SESSION['Ruta_Form']);
+                                                    header('location:'.$_SESSION['Ruta_Form']);
                                                }
                                             }
                                      }
@@ -389,7 +390,7 @@ switch (ACCION){
 
 
 // Funcion para premiar los tickets ganadores
-function PremiarGanadores(){
+function PremiarGanadores($fecha_hora){
     global $obj_conexion;
     
 	$obj_modelo= new Pagar_Ganador($obj_conexion);
@@ -403,7 +404,8 @@ function PremiarGanadores(){
     ;
 
     //$where = " fecha_hora LIKE '%".date('Y-m-d')."%'";
-    $result= $obj_modelo->GetListadosegunVariable();
+
+    $result= $obj_modelo->GetListadosegunVariable($fecha_hora);
     If ($obj_conexion->GetNumberRows($result)>0){
     	$i=0; $j=0;
     	$ticket_premiado=0;

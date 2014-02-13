@@ -36,7 +36,7 @@ $jj=0;
 
 while ($row = mysql_fetch_row($result)) 
 {
-	
+	$fecha_hora=$row['fecha_hora'];
 	// Creamos la consulta para insertar los datos de los premios
 	for ($i = 0; $i < mysql_num_fields($result); $i++)
 	{
@@ -92,7 +92,7 @@ else
 {
 	mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
 	mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
-	header ("Location: BuscarTicketsGanadores.php");
+	header ("Location: BuscarTicketsGanadores.php?fecha_hora=".$fecha_hora);
 }
 }
 
@@ -105,6 +105,7 @@ if($result= mysql_query($sql,$conexion_arriba))
 	//Creamos la cadena para insertar los resultados que no han sido bajados.
 	while ($row = mysql_fetch_array($result))
 	{
+		$fecha_hora=$row['fecha_hora'];
 		$consulta_abajo="UPDATE resultados SET numero='".$row['numero']."' WHERE id_resultados=".$row['id_resultados'];
 		$consulta_arriba="UPDATE resultados SET bajado=1 WHERE id_resultados=".$row['id_resultados']; // volvemos a setear bajado=1 para que el sistema sepa que este resultado ya fue actualizado.
 		if (mysql_query("SET AUTOCOMMIT=0;",$conexion_abajo) AND mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
@@ -114,11 +115,12 @@ if($result= mysql_query($sql,$conexion_arriba))
 				{	
 					mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
 					mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
+					header ("Location: BuscarTicketsGanadores.php?fecha_hora=".$fecha_hora);
 				}
 				else 
 				mysql_query("ROLLBACK;",$conexion_abajo);
 	}
 
 }
-header ("Location: BuscarTicketsGanadores.php");
+//$fecha_hora=date('Y-m-d');
 ?>
