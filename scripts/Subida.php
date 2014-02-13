@@ -7,7 +7,6 @@ mysql_select_db("lottomax",$conexion_abajo);
 $conexion_arriba = mysql_connect("sql3.freesqldatabase.com:3306" , "sql329054" , "gA5!tM4*",true);
 mysql_select_db("sql329054",$conexion_arriba);
 
-
 /*$conexion_arriba = mysql_connect("www.db4free.net:3306" , "lottomaxuser" , "secreta7");
 mysql_select_db("lottomaxdb",$conexion_arriba);
 
@@ -49,7 +48,7 @@ if($result= mysql_query($sql,$conexion_abajo))
 					if($g==0 AND $jj==0)
 					$consulta_arriba_detalle.="(".$row1[$g].",";
 					else
-					if($g==4)
+					if($g==4 OR $g==2)
 					$consulta_arriba_detalle.=" '".$row1[$g]."', ";			
 					else
 					$consulta_arriba_detalle.=$row1[$g].",";

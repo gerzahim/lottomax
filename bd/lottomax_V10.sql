@@ -130,7 +130,7 @@ CREATE TABLE IF NOT EXISTS `incompletos_agotados` (
   `id_tipo_jugada` int(11) NOT NULL,
   `id_zodiacal` int(11) NOT NULL,
   `monto_restante` decimal(10,2) NOT NULL,
-  `incompleto` int(11) NOT NULL COMMENT '0=completo, 1=Incompleto, 2=Agotado',
+  `incompleto` int(11) NOT NULL COMMENT '0=completo, 1=Incompleto, 2=Agotado, 3=Con esta Jugada Se Agota',
   PRIMARY KEY (`id_incompletos_agotados`),
   KEY `id_sorteo` (`id_sorteo`),
   KEY `id_tipo_jugada` (`id_tipo_jugada`),

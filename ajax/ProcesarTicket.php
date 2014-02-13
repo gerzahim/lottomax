@@ -77,7 +77,7 @@ If ($obj_conexion->GetNumberRows($resultTT)>0){
                             $row_nj = $obj_conexion->GetArrayInfo($result);
 
                             if ($row_nj['monto_restante']>0){
-                                $nuevo_monto=$row_nj['monto_restante']-($row['monto']*(-1));
+                                $nuevo_monto=$row_nj['monto_restante']-($row['monto']);
                                 // Actualizamos el nuevo monto disponible para jugar del numero
                                 $obj_modelo->ActualizaNumeroJugados($row_nj['id_numero_jugados'], $nuevo_monto);
                             }else{
