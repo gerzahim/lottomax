@@ -70,7 +70,11 @@ switch (ACCION){
 
                                         // Asignacion de los datos
                                         $obj_xtpl->assign('sorteo', $obj_generico->CleanTextDb($rowDT["nombre_sorteo"]));
-                                        $obj_xtpl->assign('hora_sorteo', $obj_generico->CleanTextDb($rowDT["hora_sorteo"]));
+                                        
+                                        $hora_sorteo= $obj_modelo->GetHoraSorteo($row['id_sorteo']);
+                                        
+                                        
+                                        $obj_xtpl->assign('hora_sorteo', $obj_generico->CleanTextDb($hora_sorteo));
                                         $obj_xtpl->assign('numero', $obj_generico->CleanTextDb($rowDT["numero"]));
                                         $obj_xtpl->assign('tipo_jugada', $obj_generico->CleanTextDb($rowDT["nombre_jugada"]));
                                         $obj_xtpl->assign('zodiacal', $obj_generico->CleanTextDb($rowDT["nombre_zodiacal"]));

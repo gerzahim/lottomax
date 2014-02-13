@@ -24,7 +24,7 @@ if($result= mysql_query($sql,$conexion_abajo))
 	
 	//Creamos la cadena para insertar los ticket y detalle_ticket que no han sido subidos.
 	$consulta_arriba_ticket="INSERT INTO ticket (id_ticket, serial, fecha_hora, taquilla, total_ticket, id_usuario, premiado, pagado, total_premiado, status, fecha_hora_anulacion, taquilla_anulacion, subido, verificado, impreso) VALUES ( ";
-	$consulta_arriba_detalle="INSERT INTO detalle_ticket (id_detalle_ticket,id_ticket, numero, id_sorteo, hora_sorteo, id_zodiacal, id_tipo_jugada, monto, premiado, total_premiado ) VALUES ";
+	$consulta_arriba_detalle="INSERT INTO detalle_ticket (id_detalle_ticket,id_ticket, numero, id_sorteo, fecha_sorteo, id_zodiacal, id_tipo_jugada, monto, premiado, total_premiado ) VALUES ";
 	
 	$h=0;
 	$jj=0;

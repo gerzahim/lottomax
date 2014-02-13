@@ -808,17 +808,17 @@ class Ventas{
          * @param string $id_ticket
          * @param string $numero
          * @param string $id_sorteo
-         * @param string $hora_sorteo
+         * @param string $fecha_sorteo
          * @param string $id_zodiacal
          * @param string $id_tipo_jugada
          * @param string $monto
 	 * @return boolean, array
 	 */
-	public function GuardarDetalleTicket($id_ticket,$numero,$id_sorteo,$hora_sorteo,$id_zodiacal,$id_tipo_jugada,$monto){
+	public function GuardarDetalleTicket($id_ticket,$numero,$id_sorteo,$fecha_sorteo,$id_zodiacal,$id_tipo_jugada,$monto){
 
 		//Preparacion del query
-		$sql = "INSERT INTO `detalle_ticket` (`id_ticket`, `numero` , `id_sorteo` , `hora_sorteo`, `id_zodiacal` , `id_tipo_jugada` , `monto`)
-                    VALUES ('".$id_ticket."', '".$numero."', '".$id_sorteo."', '".$hora_sorteo."', '".$id_zodiacal."', '".$id_tipo_jugada."', '".$monto."')";
+		$sql = "INSERT INTO `detalle_ticket` (`id_ticket`, `numero` , `id_sorteo` , `fecha_sorteo`, `id_zodiacal` , `id_tipo_jugada` , `monto`)
+                    VALUES ('".$id_ticket."', '".$numero."', '".$id_sorteo."', '".$fecha_sorteo."', '".$id_zodiacal."', '".$id_tipo_jugada."', '".$monto."')";
 
                 return $this->vConexion->ExecuteQuery($sql);
 	}

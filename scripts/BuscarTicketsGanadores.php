@@ -29,6 +29,7 @@ $fecha_hora=$_GET['fecha_hora'];
 $aprox_abajo= $obj_modelo->GetAprox_abajo();
 $aprox_arriba= $obj_modelo->GetAprox_arriba();
 
+$obj_modelo->DespremiarTicket($fecha_hora);
 
 
 //$where = " fecha_hora LIKE '%".date('Y-m-d')."%'";

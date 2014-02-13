@@ -66,6 +66,22 @@ class RTickets_ganadores{
 
 
 	}
+	
+	/**
+	 * Obtiene el hora del Sorteo Segun ID
+	 *
+	 * @param string $id
+	 * @return boolean, array
+	 */
+	public function GetHoraSorteo($id){
+	
+		//Preparacion del query
+		$sql = "SELECT hora_sorteo FROM sorteos WHERE status = 1 AND id_sorteo  = ".$id."";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["hora_sorteo"];
+	
+	}
     	
 }		
 ?>

@@ -219,6 +219,21 @@ class Cargar_Resultados{
 	
 		
 	}
+	
+	/**
+	 * Quitar Premios a Ticket
+	 * @param string $fecha_hora
+	 * @return boolean, array
+	 */
+	public function DespremiarTicket($fecha_hora){
+	
+		//Preparacion del query
+		$sql = "UPDATE `ticket` SET `premiado`=0 WHERE `fecha_hora` LIKE '%".$fecha_hora."%'";
+		$this->vConexion->ExecuteQuery($sql);
+		$sql = "UPDATE `detalle_ticket` SET `premiado`='0' WHERE `fecha_sorteo` LIKE '%".$fecha_hora."%'";
+	//	echo $sql;
+		return $this->vConexion->ExecuteQuery($sql);
+	}
 		
 	/**
 	 * Busqueda de todos los Sorteos

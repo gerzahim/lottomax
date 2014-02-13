@@ -45,12 +45,28 @@ class Pagar_Ganador{
         // premiado cambia cuando se premia un ticket
         // verificado cambia cuando ya se reviso y no esta premiado verificado=1
         $sql = "SELECT * FROM ticket WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'";
-        echo $sql;
+       // echo $sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
 		
 		//print_r($result);
 		return  $result;
 
+	}
+	
+	/**
+	 * Obtiene el hora del Sorteo Segun ID
+	 *
+	 * @param string $id
+	 * @return boolean, array
+	 */
+	public function GetHoraSorteo($id){
+	
+		//Preparacion del query
+		$sql = "SELECT hora_sorteo FROM sorteos WHERE status = 1 AND id_sorteo  = ".$id."";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["hora_sorteo"];
+	
 	}
 
         /**
@@ -96,7 +112,7 @@ class Pagar_Ganador{
 		$inicial= ($pagina-1) * $cantidad;
 		
 		//Preparacion del query
-                 $sql = "SELECT S.id_sorteo, S.nombre_sorteo, DT.id_detalle_ticket, DT.hora_sorteo, DT.numero, DT.id_tipo_jugada, TJ.nombre_jugada, DT.id_zodiacal, Z.nombre_zodiacal, DT.monto
+                 $sql = "SELECT S.id_sorteo, S.nombre_sorteo, DT.id_detalle_ticket, S.hora_sorteo, DT.numero, DT.id_tipo_jugada, TJ.nombre_jugada, DT.id_zodiacal, Z.nombre_zodiacal, DT.monto
                         FROM detalle_ticket DT
                             INNER JOIN sorteos S ON DT.id_sorteo=S.id_sorteo
                             INNER JOIN zodiacal Z ON DT.id_zodiacal=Z.Id_zodiacal
@@ -236,6 +252,20 @@ class Pagar_Ganador{
 		//echo $sql;
 		return $this->vConexion->ExecuteQuery($sql);
 
+	}
+	
+	/**
+	 * Quitar Premios a Ticket
+	 * @param string $fecha_hora
+	 * @return boolean, array
+	 */
+	public function DespremiarTicket($fecha_hora){
+	
+		//Preparacion del query
+		$sql = "UPDATE `ticket` SET `premiado`=0 WHERE `fecha_hora` LIKE '%".$fecha_hora."%'";
+		$this->vConexion->ExecuteQuery($sql);
+		$sql = "UPDATE `detalle_ticket` SET `premiado`='0', WHERE `fecha_sorteo` LIKE '%".$fecha_hora."%'";
+		return $this->vConexion->ExecuteQuery($sql);
 	}
 	
 	/**

@@ -31,7 +31,7 @@ switch (ACCION){
 		$_SESSION['Ruta_Form']= $obj_generico->RutaRegreso();
 	
 		// Ruta regreso
-		$obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Lista']);
+		$obj_xtpl->assign('ruta_regreso',$_SESSION['Ruta_Form']);
 	
 		// Accion a realizar
 		$obj_xtpl->assign('tipo_accion', 'upd');
@@ -116,8 +116,9 @@ switch (ACCION){
 			$bajado=2;
 					
 			$fecha_hora = $obj_date->changeFormatDateII($_POST['fecha']);
-						
 			if ($obj_modelo->ActualizaDatosResultados($id_resultado, $id_sorteo, $zodiacal, $numero, $fecha_hora,$bajado)){
+				
+				$obj_modelo->DespremiarTicket($fecha_hora);
 				PremiarGanadores($fecha_hora); // Premiamos los tickets ganadores
 				$_SESSION['mensaje']= $mensajes['info_agregada'];
 				header('location:'.$_SESSION['Ruta_Lista']);
@@ -129,10 +130,10 @@ switch (ACCION){
         case 'cargar_resultados':
 		
 		// Ruta actual
-		$_SESSION ['Ruta_Lista'] = $obj_generico->RutaRegreso ();
+		$_SESSION ['Ruta_Lista'] = $obj_generico->RutaRegreso();
 		
 		// Ruta regreso
-		$obj_xtpl->assign ( 'ruta_regreso', $_SESSION ['Ruta_Lista'] );
+		$obj_xtpl->assign ( 'ruta_regreso', $_SESSION ['Ruta_Fecha'] );
 		
 		// Accion a realizar
 		$obj_xtpl->assign ( 'tipo_accion', 'save' );
@@ -291,113 +292,50 @@ switch (ACCION){
 		break;
 
         case 'save':
-        	$fecha_hora = $obj_date->changeFormatDateII($_GET['fecha']);
-             if( $result= $obj_modelo->GetAllSorteos() ){
-                if ($obj_conexion->GetNumberRows($result)>0 ){
-                     while($row= $obj_conexion->GetArrayInfo($result)){
-                     	
-                     		/*
-                     		 echo $row['id_sorteo'];
-                     		 echo "<br>";
-							*/
-                     	
-                     		 $numero = $_GET['txt_numero-'.$row['id_sorteo']];
-                             $id_sorteo = $row['id_sorteo'];
-                     		 //echo $numero, "<br>";
-                     		 
-                     		 
-                     		 // Validar que el sorteo ya esta cerrado para poder cargar los resultados
-                     		 if(!$numero == ''){
-                     		    //Calcular hora del sorteo
-                     		    $hora_sorteo = $obj_modelo->GetHoraSorteo($id_sorteo);  
-                     		    $format = date('Ymd');
-								// Construyendo un formato 20131022+12:00:00 -> 2013102212:00:00
-                     		    $hora_sorteo2 = $format.$hora_sorteo;                    		 	
-                     		 	$hora_sorteo= strtotime($hora_sorteo2);
-                     		 	
-								//Valor que debe venir de la base de datos tiempo_cierre_sorteos
-								$minutos_bloqueo= $obj_modelo->MinutosBloqueo();
-													
-								//Valor que debe venir de la base de datos
-								$hora_actualMas= date('YmdH:i:s', strtotime("-$minutos_bloqueo minutes"));
-								//$hora_actualMas2= date('YmdHis', strtotime("-$minutos_bloqueo minutes"));
-								//$hora_actualMas= strtotime(date('H:i:s', strtotime("-$minutos_bloqueo minutes"))); 
-								$hora_actualMas= strtotime($hora_actualMas);
-								
-								//echo $hora_actualMas, " VERGA ", $hora_sorteo, "<br>";
-								
-								if($hora_actualMas < $hora_sorteo){
-									$_SESSION['mensaje']= 'El sorteo debe estar cerrado para poder cargar Resultados !!! ';
-                                   header('location:'.$_SESSION['Ruta_Lista']);
+//        	print_r($_GET);
+  //      	exit();
+  		$sw=0; // PARA PREMIAR TICKETS LUEGO
+		$fecha_hora = $obj_date->changeFormatDateII ( $_GET ['fecha'] );
+		if ($result = $obj_modelo->GetAllSorteos ()) {
+			while ( $row = $obj_conexion->GetArrayInfo ( $result ) ) {
+				$numero = $_GET ['txt_numero-' . $row ['id_sorteo']];
+				$id_sorteo = $row ['id_sorteo'];
+				if (!$obj_generico->IsEmpty ( $numero )) {
+					if (strlen ( $numero ) == 3) {
+						if($obj_modelo->GetResultadoSorteo($row ['id_sorteo'],$fecha_hora)==""){
+							if (isset( $_GET ['zodiacal-' . $row ['id_sorteo']] )) {
+								$zodiacal = $_GET ['zodiacal-' . $row ['id_sorteo']];
+								if ($obj_modelo->GuardarDatosResultados ( $id_sorteo, $zodiacal, $numero, $fecha_hora )) {
+									$sw=1;
+									$_SESSION ['mensaje'] = $mensajes ['info_agregada'];
+								}		
+							} 
+							else { // NO ES ZODIACAL
+								$zodiacal = 0;
+								if ($obj_modelo->GuardarDatosResultados ( $id_sorteo, $zodiacal, $numero, $fecha_hora )) {
+									$sw=1;
+									$_SESSION ['mensaje'] = $mensajes ['info_agregada'];
 								}
-                     		 }
-
-                             
-                             if (!$obj_generico->IsEmpty($numero)){
-                                 if (strlen($numero)==3){
-                                     if ($obj_modelo->GetTrueZodiacal($id_sorteo)){
-                                        $zodiacal= $_GET['zodiacal-'.$row['id_sorteo']];
-                                        if (!$obj_generico->IsEmpty($zodiacal)){
-                                            if ($obj_modelo->GetResultadoSorteo($id_sorteo, $fecha_hora)== ""){ // Es un resultado nuevo a ingresar
-                                               if ($obj_modelo->GuardarDatosResultados($id_sorteo, $zodiacal, $numero, $fecha_hora)){
-                                                   PremiarGanadores($fecha_hora); // Premiamos los tickets ganadores
-                                                   $_SESSION['mensaje']= $mensajes['info_agregada'];
-                                                     header('location:'.$_SESSION['Ruta_Lista']);
-                                               }
-                                            }
-                                            
-                                            /*else{ // Es una actualizacion de un resultado ingresado previamente
-                                                $id_resultados= $obj_modelo->GetResultadoSorteo($id_sorteo, $fecha_hora);
-                                                if ($obj_modelo->ActualizaDatosResultados($id_resultados, $id_sorteo, $zodiacal, $numero, $fecha_hora)){
-                                                	
-                                                	echo "	";
-                                                    PremiarGanadores($fecha_hora); // Premiamos los tickets ganadores
-                                                   $_SESSION['mensaje']= $mensajes['info_agregada'];
-                                                    header('location:'.$_SESSION['Ruta_Form']);
-                                               }
-                                            }*/
-                                        }else{
-                                            $_SESSION['mensaje']= 'Debe seleccionar un signo para los sorteos zodiacales! ';
-                                            header('location:'.$_SESSION['Ruta_Lista']);
-                                        }
-
-                                     }else{
-                                        $zodiacal = 0;
-                                        if ($obj_modelo->GetResultadoSorteo($id_sorteo, $fecha_hora)== ""){ // Es un resultado nuevo a ingresar
-                                            if ($obj_modelo->GuardarDatosResultados($id_sorteo, $zodiacal, $numero, $fecha_hora)){
-                                                PremiarGanadores($fecha_hora); // Premiamos los tickets ganadores
-                                                $_SESSION['mensaje']= $mensajes['info_agregada'];
-                                                header('location:'.$_SESSION['Ruta_Lista']);
-                                            }
-                                        }else{ // Es una actualizacion de un resultado ingresado previamente
-                                                $id_resultados= $obj_modelo->GetResultadoSorteo($id_sorteo, $fecha_hora);
-                                                if ($obj_modelo->ActualizaDatosResultados($id_resultados, $id_sorteo, $zodiacal, $numero, $fecha_hora)){
-                                                    PremiarGanadores($fecha_hora); // Premiamos los tickets ganadores
-                                                   $_SESSION['mensaje']= $mensajes['info_agregada'];
-                                                    header('location:'.$_SESSION['Ruta_Lista']);
-                                               }
-                                            }
-                                     }
-
-
-
-                                 }else{
-                                      $_SESSION['mensaje']= 'Los numeros ingresados deben ser de tres digitos! ';
-                                      header('location:'.$_SESSION['Ruta_Lista']);
-                                 }
-                             }
-                     }
-                }
-             }
-           
+							}
+						}
+					} else {
+						$_SESSION ['mensaje'] = 'Los numeros ingresados deben ser de tres digitos! ';
+						header ( 'location:' . $_SESSION ['Ruta_Lista'] );
+					}
+				}
+			}
+			if($sw==1)
+			PremiarGanadores ( $fecha_hora ); // Premiamos los tickets ganadores
+			else
+			$_SESSION ['mensaje'] = "No se ingresaron nuevos resultados";
+			header ( 'location:' . $_SESSION ['Ruta_Lista'] );
+		}
 		break;
-			
 	default:
 		
 		// Ruta actual
-		$_SESSION['Ruta_Lista']= $obj_generico->RutaRegreso();
-
-        $obj_xtpl->assign('fecha', $obj_date->FechaHoy2());
+		$_SESSION['Ruta_Fecha']=$obj_generico->RutaRegreso();
+	    $obj_xtpl->assign('fecha', $obj_date->FechaHoy2());
                 
 		// Parseo del bloque
 		$obj_xtpl->parse('main.contenido.buscar_resultados');

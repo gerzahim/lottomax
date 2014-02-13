@@ -59,8 +59,8 @@ If ($obj_conexion->GetNumberRows($resultTT)>0){
             while($row= $obj_conexion->GetArrayInfo($result2)){
                 // Guarda los datos en detalle Ticket
                 if ($row['incompleto']<>'2'){
-                    $hora_sorteo= $obj_modelo->GetHoraSorteo($row['id_sorteo']);
-                     if ($obj_modelo->GuardarDetalleTicket($id_ticket, $row['numero'], $row['id_sorteo'], $hora_sorteo, $row['id_zodiacal'], $row['id_tipo_jugada'], $row['monto'])){
+                	$fecha_sorteo= date('Y-m-d');
+                     if ($obj_modelo->GuardarDetalleTicket($id_ticket, $row['numero'], $row['id_sorteo'], $fecha_sorteo, $row['id_zodiacal'], $row['id_tipo_jugada'], $row['monto'])){
 
                         //Verificamos los numeros incompletos  y guardamos en tabla
                         if ($row['incompleto']=='3' OR $row['incompleto']=='1'){

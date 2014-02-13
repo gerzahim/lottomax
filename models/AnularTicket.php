@@ -139,15 +139,21 @@ class AnularTicket{
 	public function ValidaSorteosTicket($id_ticket){
 
 		//Preparacion del query
-                 $sql = "SELECT hora_sorteo FROM detalle_ticket WHERE id_ticket='".$id_ticket."'";
+                $sql = "SELECT id_sorteo FROM detalle_ticket WHERE id_ticket='".$id_ticket."'";
                  
-		$result= $this->vConexion->ExecuteQuery($sql);
-                $total_registros= $this->vConexion->GetNumberRows($result);
+				$result= $this->vConexion->ExecuteQuery($sql);
+		        $total_registros= $this->vConexion->GetNumberRows($result);
                 $flag=false;
+                             
 		if( $total_registros >0 ){
                     $hora_actual= strtotime(date('H:i:s'));
                     while ($roww= $this->vConexion->GetArrayInfo($result)){
-                        if ($hora_actual>strtotime($roww["hora_sorteo"])){
+                    	
+                    	$sql = "SELECT hora_sorteo FROM sorteos WHERE status = 1 AND id_sorteo  = ".$roww["id_sorteo"]."";
+                    	$result= $this->vConexion->ExecuteQuery($sql);
+                    	$row= $this->vConexion->GetArrayInfo($result);
+                    	
+                        if ($hora_actual>strtotime($row["hora_sorteo"])){
                             $flag=true;
                         }
                     }
