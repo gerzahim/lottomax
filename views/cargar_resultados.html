@@ -90,10 +90,15 @@
                                             <!-- BEGIN: lista -->
 
                                             <tr class="{estilo_fila}">
+													
+																								
 													<td class="lista1" scope="row" align="center">
-														<a href="{pagina_principal}?op={opcion_sistema}&amp;accion=mod&amp;id={id_Sorteo}&amp;fecha={fecha}" title="Ver / Modificar">
-							                            	<img src="./images/lapiz.gif" border="0"/>
+														<!-- BEGIN: modificar -->
+														<a href="{pagina_principal}?op={opcion_sistema}&amp;accion=mod&amp;id={id_Sorteo}&amp;fecha={fecha}&amp;bajado={bajado}" title="Ver / Modificar">
+							                            	<img src="./images/lapiz.gif" border="0" />
 							                           	</a>
+														
+														<!-- END: modificar -->
 													</td>                                                      <td align="left">&nbsp;{sorteo}</td>
                                                     <td align="left">&nbsp;{numero}</td>
                                                     <td align="left">&nbsp;{terminal}</td>
@@ -106,6 +111,12 @@
                                                             <!-- END: op_zodiacal -->
                                                         </select>
                                                         <!-- END: lista_zodiacal -->
+														<!-- BEGIN: text_zodiacal -->
+                                                       
+													   {text_zodiacal}
+													   
+                                                        <!-- END: text_zodiacal  -->
+														
                                                     </td>
                                                     <td align="left">&nbsp;{aprox_arriba}</td>
                                                     <td align="left">&nbsp;{aprox_abajo}</td>
@@ -147,6 +158,7 @@
 					<input style="border: hidden" type="hidden" name="accion" id="idaccion" value="{tipo_accion}"/>
 					<input style="border: hidden" type="hidden" name="fecha" id="fecha" value="{fecha}"/>
                     <input style="border: hidden" type="hidden" name="id_resultado" id="id_resultado" value="{id_resultado}"/>					
+ 					<input style="border: hidden" type="hidden" name="bajado" id="bajado" value="{bajado}"/>					
 
 					<!-- BEGIN: identificador -->
 		

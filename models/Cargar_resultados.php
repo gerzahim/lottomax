@@ -53,12 +53,12 @@ class Cargar_Resultados{
 
                 }
                 
-		$sql = "SELECT S.id_sorteo, S.hora_sorteo, S.id_loteria, S.nombre_sorteo, S.zodiacal, 'signo','numero', 'id_resultado'
+		$sql = "SELECT S.id_sorteo, S.hora_sorteo, S.id_loteria, S.nombre_sorteo, S.zodiacal, 'signo','numero', 'id_resultado', 'bajado'
                     FROM sorteos S
                     WHERE ".$sql_periodo. " AND S.status = 1 AND S.id_sorteo NOT IN (SELECT id_sorteo FROM resultados WHERE fecha_hora LIKE '%".$fecha."%')
                    
                     UNION ALL
-                    SELECT S.id_sorteo, S.hora_sorteo, S.id_loteria, S.nombre_sorteo, S.zodiacal, Z.nombre_zodiacal,R.numero, R.id_resultados
+                    SELECT S.id_sorteo, S.hora_sorteo, S.id_loteria, S.nombre_sorteo, S.zodiacal, Z.nombre_zodiacal,R.numero, R.id_resultados, R.bajado
                     FROM resultados R
                     INNER JOIN zodiacal Z ON R.zodiacal=Z.Id_zodiacal
                     INNER JOIN  sorteos S ON S.id_sorteo=R.id_sorteo
@@ -211,10 +211,10 @@ class Cargar_Resultados{
          * @param string $fecha_hora
 	 * @return boolean, array
 	 */
-	public function ActualizaDatosResultados($id_resultados, $id_sorteo, $zodiacal, $numero, $fecha_hora){
+	public function ActualizaDatosResultados($id_resultados, $id_sorteo, $zodiacal, $numero, $fecha_hora,$bajado){
 		
 		//Preparacion del query
-		$sql = "UPDATE `resultados` SET `id_sorteo`='".$id_sorteo."', `zodiacal`='".$zodiacal."', `numero`='".$numero."', `fecha_hora`='".$fecha_hora."', `bajado`=2 WHERE id_resultados='".$id_resultados."'";
+		$sql = "UPDATE `resultados` SET `id_sorteo`='".$id_sorteo."', `zodiacal`='".$zodiacal."', `numero`='".$numero."', `fecha_hora`='".$fecha_hora."', `bajado`='".$bajado."' WHERE id_resultados='".$id_resultados."'";
 		return $this->vConexion->ExecuteQuery($sql);
 	
 		

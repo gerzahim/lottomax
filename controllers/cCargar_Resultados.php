@@ -46,7 +46,7 @@ switch (ACCION){
 			$fecha= $_GET['fecha'];
 			$fecha_hora = $obj_date->changeFormatDateII($fecha);
 			$id_sorteo= $_GET['id'];
-			
+			$bajado= $_GET['bajado'];
 			$id_resultado = $obj_modelo->VerificarResultadoSorteo($id_sorteo, $fecha_hora);
 			
 			if($obj_generico->IsEmpty($id_resultado)){
@@ -86,6 +86,8 @@ switch (ACCION){
 			$obj_xtpl->assign('zodiacal', $row ['zodiacal']);
 			$obj_xtpl->assign('id_Sorteo', $_GET['id']);
 			$obj_xtpl->assign('id_resultado', $id_resultado);
+			$obj_xtpl->assign('bajado', $bajado);
+				
 			// ID en el hidden
 			$obj_xtpl->parse('main.contenido.formulario.identificador');
 	
@@ -107,11 +109,16 @@ switch (ACCION){
 			$numero = $_POST['txt_numero'];
 			$zodiacal = $_POST['zodiacal'];
 			$id_resultado = $_POST['id_resultado'];
-			
+			$bajado= $_POST['bajado'];
+			if($bajado==0)
+			$bajado=0;
+			else
+			$bajado=2;
+					
 			$fecha_hora = $obj_date->changeFormatDateII($_POST['fecha']);
 						
-			if ($obj_modelo->ActualizaDatosResultados($id_resultado, $id_sorteo, $zodiacal, $numero, $fecha_hora)){
-				PremiarGanadores(); // Premiamos los tickets ganadores
+			if ($obj_modelo->ActualizaDatosResultados($id_resultado, $id_sorteo, $zodiacal, $numero, $fecha_hora,$bajado)){
+				PremiarGanadores($fecha_hora); // Premiamos los tickets ganadores
 				$_SESSION['mensaje']= $mensajes['info_agregada'];
 				header('location:'.$_SESSION['Ruta_Lista']);
 			}
@@ -149,7 +156,7 @@ switch (ACCION){
 				$j = 0;
 				while ( $row = $obj_conexion->GetArrayInfo ( $result ) ) {
 					
-					
+					//print_r($row);
 					//Saca la hora del sorteo
 					$hora_sorteo= $fecha." ".$row['hora_sorteo'];
 						
@@ -177,12 +184,15 @@ switch (ACCION){
 					$obj_xtpl->assign ( 'sorteo', $row ['nombre_sorteo'] );
 					if ($row ['numero'] == 'numero') {
 						$j ++;
+						
+						
 						$obj_xtpl->assign ( 'estilo_fila', 'evenred' );
 						$obj_xtpl->assign ( 'id_Sorteo', $row ['id_sorteo']);
 						$obj_xtpl->assign ( 'id_resultado', '' );
 						$obj_xtpl->assign ( 'id_sorteo', $row ['id_sorteo'] );
 						$obj_xtpl->assign ( 'numero', '<input id="txt_numero" name="txt_numero-' . $row ['id_sorteo'] . '" size="12" type="text" maxlength="3" />' );
 						$obj_xtpl->assign ( 'terminal', '' );
+						$obj_xtpl->assign('bajado', $row['bajado']);
 						
 						if ($row ['zodiacal'] == 1) {
 							// Listado de Zodiacal
@@ -205,15 +215,21 @@ switch (ACCION){
 						$obj_xtpl->assign ( 'id_Sorteo', $row ['id_sorteo']);
 						$obj_xtpl->assign ( 'id_resultado', $row ['id_resultado'] );
 						$obj_xtpl->assign ( 'id_sorteo', $row ['id_sorteo'] );
-						$obj_xtpl->assign ( 'numero', '<input id="txt_numero" name="txt_numero-' . $row ['id_sorteo'] . '" size="12" value="' . $row ['numero'] . '"" type="text" maxlength="3" />' );
+						$obj_xtpl->assign ( 'numero', '<input id="txt_numero" readonly name="txt_numero-' . $row ['id_sorteo'] . '" size="12" value="' . $row ['numero'] . '"" type="text" maxlength="3" />' );
 						$obj_xtpl->assign ( 'terminal', substr ( $row ['numero'], 1, 2 ) );
 						$obj_xtpl->assign ( 'signo', substr ( $row ['numero'], 1, 2 ) );
+						$obj_xtpl->assign('bajado', $row['bajado']);
+						$obj_xtpl->parse ( 'main.contenido.lista_cargar_resultados.lista.modificar' );
 						
 						if ($row ['zodiacal'] == 1) {
 							// Listado de Zodiacal
 							if ($result_z = $obj_modelo->GetZodiacales ()) {
 								while ( $row_z = $obj_conexion->GetArrayInfo ( $result_z ) ) {
-									$obj_xtpl->assign ( $obj_generico->CleanTextDb ( $row_z ) );
+									
+									$obj_xtpl->assign ( 'text_zodiacal', $row ['signo'] );
+										
+									
+									/*$obj_xtpl->assign ( $obj_generico->CleanTextDb ( $row_z ) );
 									$obj_xtpl->assign ( 'Id_zodiacal', $row_z ['Id_zodiacal'] );
 									$obj_xtpl->assign ( 'nombre_zodiacal', $row_z ['nombre_zodiacal'] );
 									if ($row_z ['nombre_zodiacal'] == $row ['signo']) {
@@ -222,9 +238,9 @@ switch (ACCION){
 										$obj_xtpl->assign ( 'selected', '' );
 									}
 									
-									$obj_xtpl->parse ( 'main.contenido.lista_cargar_resultados.lista.lista_zodiacal.op_zodiacal' );
+									$obj_xtpl->parse ( 'main.contenido.lista_cargar_resultados.lista.lista_zodiacal.op_zodiacal' );*/
 								}
-								$obj_xtpl->parse ( 'main.contenido.lista_cargar_resultados.lista.lista_zodiacal' );
+								$obj_xtpl->parse ( 'main.contenido.lista_cargar_resultados.lista.text_zodiacal' );
 							}
 						}
 						
@@ -312,7 +328,7 @@ switch (ACCION){
 								
 								if($hora_actualMas < $hora_sorteo){
 									$_SESSION['mensaje']= 'El sorteo debe estar cerrado para poder cargar Resultados !!! ';
-                                   header('location:'.$_SESSION['Ruta_Form']);
+                                   header('location:'.$_SESSION['Ruta_Lista']);
 								}
                      		 }
 
@@ -326,9 +342,11 @@ switch (ACCION){
                                                if ($obj_modelo->GuardarDatosResultados($id_sorteo, $zodiacal, $numero, $fecha_hora)){
                                                    PremiarGanadores($fecha_hora); // Premiamos los tickets ganadores
                                                    $_SESSION['mensaje']= $mensajes['info_agregada'];
-                                                     header('location:'.$_SESSION['Ruta_Form']);
+                                                     header('location:'.$_SESSION['Ruta_Lista']);
                                                }
-                                            }else{ // Es una actualizacion de un resultado ingresado previamente
+                                            }
+                                            
+                                            /*else{ // Es una actualizacion de un resultado ingresado previamente
                                                 $id_resultados= $obj_modelo->GetResultadoSorteo($id_sorteo, $fecha_hora);
                                                 if ($obj_modelo->ActualizaDatosResultados($id_resultados, $id_sorteo, $zodiacal, $numero, $fecha_hora)){
                                                 	
@@ -337,10 +355,10 @@ switch (ACCION){
                                                    $_SESSION['mensaje']= $mensajes['info_agregada'];
                                                     header('location:'.$_SESSION['Ruta_Form']);
                                                }
-                                            }
+                                            }*/
                                         }else{
                                             $_SESSION['mensaje']= 'Debe seleccionar un signo para los sorteos zodiacales! ';
-                                            header('location:'.$_SESSION['Ruta_Form']);
+                                            header('location:'.$_SESSION['Ruta_Lista']);
                                         }
 
                                      }else{
@@ -349,14 +367,14 @@ switch (ACCION){
                                             if ($obj_modelo->GuardarDatosResultados($id_sorteo, $zodiacal, $numero, $fecha_hora)){
                                                 PremiarGanadores($fecha_hora); // Premiamos los tickets ganadores
                                                 $_SESSION['mensaje']= $mensajes['info_agregada'];
-                                                header('location:'.$_SESSION['Ruta_Form']);
+                                                header('location:'.$_SESSION['Ruta_Lista']);
                                             }
                                         }else{ // Es una actualizacion de un resultado ingresado previamente
                                                 $id_resultados= $obj_modelo->GetResultadoSorteo($id_sorteo, $fecha_hora);
                                                 if ($obj_modelo->ActualizaDatosResultados($id_resultados, $id_sorteo, $zodiacal, $numero, $fecha_hora)){
                                                     PremiarGanadores($fecha_hora); // Premiamos los tickets ganadores
                                                    $_SESSION['mensaje']= $mensajes['info_agregada'];
-                                                    header('location:'.$_SESSION['Ruta_Form']);
+                                                    header('location:'.$_SESSION['Ruta_Lista']);
                                                }
                                             }
                                      }
@@ -365,7 +383,7 @@ switch (ACCION){
 
                                  }else{
                                       $_SESSION['mensaje']= 'Los numeros ingresados deben ser de tres digitos! ';
-                                      header('location:'.$_SESSION['Ruta_Form']);
+                                      header('location:'.$_SESSION['Ruta_Lista']);
                                  }
                              }
                      }
