@@ -158,6 +158,31 @@ class Cargar_Resultados{
 		
 		
 	}
+	
+	/**
+	 * Obtiene los datos de un sorteo
+	 *
+	 * @param string $id_sorteo
+	 * @param string $fecha
+	 * @return boolean, array
+	 */
+	public function GetDatosSorteo($id_sorteo){
+	
+		//Preparacion del query
+		$sql = "SELECT * FROM resultados WHERE id_sorteo = ".$id_sorteo;
+	
+		$result= $this->vConexion->ExecuteQuery($sql);
+		if ($this->vConexion->GetNumberRows($result) >0){
+			$roww= $this->vConexion->GetArrayInfo($result);
+			//$respu = $roww["id_resultados"];
+			return $roww;
+		}else{
+			return "";
+		}
+	
+	
+	}
+	
 
 
 	/**
@@ -194,6 +219,23 @@ class Cargar_Resultados{
 	
 		
 	}
+		
+	/**
+	 * Busqueda de todos los Sorteos
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function VerificarResultadoSorteo($id_sorteo, $fecha_hora){
+	
+		//Preparacion del query
+		$sql = "SELECT id_resultados FROM resultados WHERE id_sorteo='".$id_sorteo."' AND fecha_hora='".$fecha_hora."' ";
+		
+		$result = $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		$respu = $roww["id_resultados"];
+		return $respu;
+	}	
 	
          /**
 	 * Busqueda de todos los Sorteos

@@ -24,11 +24,105 @@ $id_tickets[]="";
 $totales[]="";
 
 switch (ACCION){
+	
+	case 'mod':
+	
+		// Ruta actual
+		$_SESSION['Ruta_Form']= $obj_generico->RutaRegreso();
+	
+		// Ruta regreso
+		$obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Lista']);
+	
+		// Accion a realizar
+		$obj_xtpl->assign('tipo_accion', 'upd');
+		$obj_xtpl->assign('tag_boton', 'Modificar');
+		
+
+	
+
+		//Obteniendo Datos del Usuario
+		if( is_numeric($_GET['id'])){
+			
+			$fecha= $_GET['fecha'];
+			$fecha_hora = $obj_date->changeFormatDateII($fecha);
+			$id_sorteo= $_GET['id'];
+			
+			$id_resultado = $obj_modelo->VerificarResultadoSorteo($id_sorteo, $fecha_hora);
+			
+			if($obj_generico->IsEmpty($id_resultado)){
+							
+				// no tiene id_resultado, es decir no lo han cargado aun
+				$_SESSION['mensaje']= $mensajes['no_idresultado'];
+				header('location:'.$_SESSION['Ruta_Lista']);
+			}			
+			
+			// Asignaciones
+			$row = $obj_modelo->GetDatosSorteo($_GET['id']);
+			
+			//print_r($row);
+			// Array ( [0] => 1 [id_resultados] => 1 [1] => 4 [id_sorteo] => 4 [2] => 0 [zodiacal] => 0 [3] => 833 [numero] => 833 [4] => 2014-02-08 [fecha_hora] => 2014-02-08 [5] => 1 [bajado] => 1 ) 
+			
+			if ($row ['zodiacal'] != 0) {
+							// Listado de Zodiacal
+							if ($result_z = $obj_modelo->GetZodiacales ()) {
+								while ( $row_z = $obj_conexion->GetArrayInfo ( $result_z ) ) {
+									$obj_xtpl->assign ( $obj_generico->CleanTextDb ( $row_z ) );
+									$obj_xtpl->assign ( 'Id_zodiacal', $row_z ['Id_zodiacal'] );
+									$obj_xtpl->assign ( 'nombre_zodiacal', $row_z ['nombre_zodiacal'] );
+									$obj_xtpl->assign ( 'selected', '' );
+									$obj_xtpl->parse ( 'main.contenido.formulario.lista_zodiacal.op_zodiacal' );
+								}
+								//$obj_xtpl->parse ( 'main.contenido.formulario.lista_zodiacal' );
+							}
+			}else{
+				$obj_xtpl->assign ( 'Id_zodiacal', '0' );
+				$obj_xtpl->assign ( 'nombre_zodiacal', 'NO ZODIACAL' );
+				$obj_xtpl->parse ( 'main.contenido.formulario.lista_zodiacal.op_zodiacal' );
+			}
+			$obj_xtpl->parse ( 'main.contenido.formulario.lista_zodiacal' );
+				
+			// Lista los datos del usuario obtenidos de la BD
+			$obj_xtpl->assign('fecha', $_GET['fecha']);
+			$obj_xtpl->assign('zodiacal', $row ['zodiacal']);
+			$obj_xtpl->assign('id_Sorteo', $_GET['id']);
+			$obj_xtpl->assign('id_resultado', $id_resultado);
+			// ID en el hidden
+			$obj_xtpl->parse('main.contenido.formulario.identificador');
+	
+		}
+	
+	
+		// Parseo del bloque
+		$obj_xtpl->parse('main.contenido.formulario');
+		break;
+
+		case 'upd':
+			
+			echo "<pre>";
+			print_r($_POST);
+			echo "</pre>";
+			
+			$id_resultados;
+			$id_sorteo = $_POST['idreferencia'];
+			$numero = $_POST['txt_numero'];
+			$zodiacal = $_POST['zodiacal'];
+			$id_resultado = $_POST['id_resultado'];
+			
+			$fecha_hora = $obj_date->changeFormatDateII($_POST['fecha']);
+						
+			if ($obj_modelo->ActualizaDatosResultados($id_resultado, $id_sorteo, $zodiacal, $numero, $fecha_hora)){
+				PremiarGanadores(); // Premiamos los tickets ganadores
+				$_SESSION['mensaje']= $mensajes['info_agregada'];
+				header('location:'.$_SESSION['Ruta_Lista']);
+			}
+			
+	
+			break;		
 
         case 'cargar_resultados':
 		
 		// Ruta actual
-		$_SESSION ['Ruta_Form'] = $obj_generico->RutaRegreso ();
+		$_SESSION ['Ruta_Lista'] = $obj_generico->RutaRegreso ();
 		
 		// Ruta regreso
 		$obj_xtpl->assign ( 'ruta_regreso', $_SESSION ['Ruta_Lista'] );
@@ -84,6 +178,7 @@ switch (ACCION){
 					if ($row ['numero'] == 'numero') {
 						$j ++;
 						$obj_xtpl->assign ( 'estilo_fila', 'evenred' );
+						$obj_xtpl->assign ( 'id_Sorteo', $row ['id_sorteo']);
 						$obj_xtpl->assign ( 'id_resultado', '' );
 						$obj_xtpl->assign ( 'id_sorteo', $row ['id_sorteo'] );
 						$obj_xtpl->assign ( 'numero', '<input id="txt_numero" name="txt_numero-' . $row ['id_sorteo'] . '" size="12" type="text" maxlength="3" />' );
@@ -107,7 +202,7 @@ switch (ACCION){
 						$obj_xtpl->assign ( 'aprox_arriba', '' );
 						$obj_xtpl->assign ( 'aprox_abajo', '' );
 					} else {
-						
+						$obj_xtpl->assign ( 'id_Sorteo', $row ['id_sorteo']);
 						$obj_xtpl->assign ( 'id_resultado', $row ['id_resultado'] );
 						$obj_xtpl->assign ( 'id_sorteo', $row ['id_sorteo'] );
 						$obj_xtpl->assign ( 'numero', '<input id="txt_numero" name="txt_numero-' . $row ['id_sorteo'] . '" size="12" value="' . $row ['numero'] . '"" type="text" maxlength="3" />' );

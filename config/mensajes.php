@@ -135,4 +135,7 @@ $mensajes['sorteo_cerrado']= "No se puede eliminar el ticket, al menos uno de lo
 $mensajes['ticket_vencido']= "El ticket seleccionado se encuentra vencido para pagar.";
 $mensajes['no_ticket']= "No se encontro informacion de este ticket! <br> o Ticket Ya Premiado !!!";
 $mensajes['ticket_anulado']= "El ticket ha sido anulado.";
+
+
+$mensajes['no_idresultado']= "Esta funcion es para modificar no para cargar !!!";
 ?>

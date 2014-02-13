@@ -75,6 +75,7 @@
                             <table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1" style="font-size:9.5px;">
                                     <thead>
                                             <tr>
+                                            		<th class="title header" scope="col"  width="20">&nbsp;</th>
                                                     <th class="title header" scope="col">Sorteos</th>
                                                     <th class="title header" scope="col">Triple</th>
                                                     <th class="title header" scope="col">Terminal</th>
@@ -89,8 +90,11 @@
                                             <!-- BEGIN: lista -->
 
                                             <tr class="{estilo_fila}">
-
-                                                    <td align="left">&nbsp;{sorteo}</td>
+													<td class="lista1" scope="row" align="center">
+														<a href="{pagina_principal}?op={opcion_sistema}&amp;accion=mod&amp;id={id_Sorteo}&amp;fecha={fecha}" title="Ver / Modificar">
+							                            	<img src="./images/lapiz.gif" border="0"/>
+							                           	</a>
+													</td>                                                      <td align="left">&nbsp;{sorteo}</td>
                                                     <td align="left">&nbsp;{numero}</td>
                                                     <td align="left">&nbsp;{terminal}</td>
                                                     <td align="left">&nbsp;
@@ -132,7 +136,83 @@
                             </div>
                     </form>
 			<!-- END: lista_cargar_resultados -->
-			
+			<!-- BEGIN: formulario -->
+		
+			<div id="formularios" align="center">
+		
+				<form  name="frm1" id="frm1" method="post" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es">
+		
+					<input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
+		
+					<input style="border: hidden" type="hidden" name="accion" id="idaccion" value="{tipo_accion}"/>
+					<input style="border: hidden" type="hidden" name="fecha" id="fecha" value="{fecha}"/>
+                    <input style="border: hidden" type="hidden" name="id_resultado" id="id_resultado" value="{id_resultado}"/>					
+
+					<!-- BEGIN: identificador -->
+		
+					<input style="border: hidden" type="hidden" name="idreferencia" id="idreferencia" value="{id_Sorteo}"/>
+		
+					<!-- END: identificador -->	
+									
+		
+					<fieldset>
+		
+						<legend>Formulario de Modificar Resultado:</legend>
+		
+						<table align="center" border="0" cellpadding="2" cellspacing="0" width="80%">
+		
+							<tr><td colspan="2" style="text-align:right;">(*)Campos Requeridos&nbsp;</td></tr>
+							
+							<tr>
+		
+								<td class="tag" width="230"><span class="requerido">*</span> Nombre Completo:</td>		
+								<td>
+								<input id="txt_numero" name="txt_numero" size="12" type="text" maxlength="3" />
+								</td>
+		
+							</tr>
+
+		
+							<tr><td colspan="2"></td></tr>
+                            <tr>
+        
+                                <td class="tag" width="230"><span class="requerido">*</span> Signo:</td>        
+                                <td>
+        
+                                <!-- BEGIN: lista_zodiacal -->
+                                <select id="op_zodiacal" name="zodiacal" >
+                                    <!-- <option value="" >Seleccione...</option>  -->
+                                    <!-- BEGIN: op_zodiacal -->
+                                    <option value="{Id_zodiacal}"{selected} >{nombre_zodiacal}</option>
+                                    <!-- END: op_zodiacal -->
+                                </select>
+                                <!-- END: lista_zodiacal -->
+        
+                                </td>
+        
+                            </tr>                            
+		
+							<tr><td colspan="2"></td></tr>                                                                                        
+		
+						</table>
+		
+					</fieldset>
+		
+					<div class="botones" align="center">
+		
+						<input  id="btnok" name="btnentrar" value="{tag_boton}" type="submit" class="boton"/>
+
+						&nbsp;&nbsp;&nbsp;
+		
+						<input  id="btncancel" name="btncancelar" value="Regresar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
+						
+					</div>
+					
+				</form>			 
+		
+			</div>
+		
+			<!-- END: formulario -->			
 			
 	
                         <br />	<br />
