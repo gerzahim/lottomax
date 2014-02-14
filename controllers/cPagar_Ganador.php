@@ -70,7 +70,7 @@ switch (ACCION){
                                         // Asignacion de los datos
                                         $obj_xtpl->assign('sorteo', $obj_generico->CleanTextDb($rowDT["nombre_sorteo"]));
                                         
-                                        $hora_sorteo= $obj_modelo->GetHoraSorteo($row['id_sorteo']);
+                                        $hora_sorteo= $obj_modelo->GetHoraSorteo($rowDT['id_sorteo']);
                                         
                                         
                                         $obj_xtpl->assign('hora_sorteo', $obj_generico->CleanTextDb($hora_sorteo));

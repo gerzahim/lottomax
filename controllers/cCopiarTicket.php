@@ -137,11 +137,21 @@ switch (ACCION){
                                             $result = ProcesoCupos($row['numero'], $row['monto'], $row['id_sorteo'], $row['id_zodiacal'], $eszodiacal,$id_taquilla);
 
                                     }
+                                    header('location:index.php?op=ventas');
 
+                                }
+                                else
+                                {
+                                	echo "<script type='text/javascript'>";
+                                	echo "alert('Algunos de los sorteos han sido cerrados')";
+                                	echo "</script>";
+                                	echo "<script type='text/javascript'>";
+                                	echo "window.location.href = 'index.php?op=ventas'";
+                                	echo "</script>";
                                 }
                             
                         }
-                        if (isset($_SESSION['mensaje_errorcopia'])){
+                        if ($_SESSION['mensaje_errorcopia']!=""){
                         	$bodytag ="Existen Numeros Agotados...\\n"; 
                         	$bodytag.= str_replace("<br>", "\\n", $_SESSION['mensaje_errorcopia']);
                         	//la variable existe
@@ -343,6 +353,8 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 			//echo "El numero ya esta jugado y tiene su cupo completo";			
 			
 			//$_SESSION['mensaje']= $mensajes['numero_repetido_eincompleto'];
+			
+			
 			echo "<div id='mensaje' class='mensaje' >El numero ya esta jugado y tiene su cupo completo !!!</div>";			
 			
 		}else{
