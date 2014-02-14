@@ -115,7 +115,7 @@ switch (ACCION){
         
         
         // Imagen  de encabezado
-        $pdf->Image("./images/banner4.jpg" , 0 ,0, 200 ,40  , "JPG" ,"");
+        $pdf->Image("./images/banner4.jpg" , 10 ,0, 180 ,40  , "JPG" ,"");
         
         // Titulo del Reporte
             $pdf->SetFont('Arial','B',20);

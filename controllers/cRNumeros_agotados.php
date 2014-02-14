@@ -83,11 +83,11 @@ switch (ACCION){
         //Primera página
         $pdf->AddPage();
 
-        $fecha = $_GET['fecha'];
+        $fecha = $obj_date->changeFormatDateII($_GET['fecha']);
 
 
         // Imagen  de encabezado
-        $pdf->Image("./images/banner4.jpg" , 0 ,0, 200 ,40  , "JPG" ,"");
+        $pdf->Image("./images/banner4.jpg" , 10 ,0, 180 ,40  , "JPG" ,"");
         
         // Titulo del Reporte
             $pdf->SetFont('Arial','B',20);
@@ -111,7 +111,7 @@ switch (ACCION){
                 $pdf->SetFont('Arial','B',16);
                 $pdf->SetTextColor(128,0,0);
                 $pdf->Cell(60,7,'Sorteo',1,0,'C',true);
-                $pdf->Cell(40,7,'Hora sorteo',1,0,'C',true);
+                //$pdf->Cell(40,7,'Hora sorteo',1,0,'C',true);
                 $pdf->Cell(40,7,'Signo',1,0,'C',true);
                 $pdf->Cell(40,7,'Numero',1,0,'C',true);
 
@@ -120,7 +120,7 @@ switch (ACCION){
                     $pdf->Ln();
                     $pdf->SetTextColor(0);
                     $pdf->Cell(60,7,$row['nombre_sorteo'],1);
-                    $pdf->Cell(40,7,$row['hora_sorteo'],1,0,'C');
+                    //$pdf->Cell(40,7,$row['hora_sorteo'],1,0,'C');
                     $pdf->Cell(40,7,$row['nombre_zodiacal'],1,0,'C');
                     $pdf->Cell(40,7,$row['numero'],1,0,'C');
                 }
