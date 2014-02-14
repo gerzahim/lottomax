@@ -83,7 +83,7 @@ $nombre = $nombre[0];
 
 $info_agencia= $obj_modelo->GetDatosParametros();
 $nombre_agencia=$info_agencia["nombre_agencia"];
-$tiempo_anulacion_ticket=$info_agencia["tiempo_anulacion_ticket"];
+$tiempo_vigencia_ticket=$info_agencia["tiempo_vigencia_ticket"];
 
 
 
@@ -242,7 +242,7 @@ $data.="NUMEROS JUGADOS: ".$numero_jugadas;
 $data.="<br>";
 $data.="TOTAL: ".$total_ticket;
 $data.="<br>";
-$data.="Caduca en ".$tiempo_anulacion_ticket." dias";
+$data.="Caduca en ".$tiempo_vigencia_ticket." dias";
 
 //$data1.="\\x1B\\x0A";
 $data1.="\\n";
@@ -255,7 +255,7 @@ $data1.="\\n";
 $data1.="TOTAL: ".$total_ticket;
 //$data1.="\\x1B\\x0A";
 $data1.="\\n";
-$data1.="Caduca en ".$tiempo_anulacion_ticket." dias";
+$data1.="Caduca en ".$tiempo_vigencia_ticket." dias";
 
 // Obtenemos los datos de la taquilla
 $ida_taquilla= $obj_modelo->GetIdTaquillabyNumero($id_taquilla);
