@@ -504,6 +504,14 @@ function calcula_total(){
 	
 }
 
+//calcula el total del ticket
+function borra_txtNumero(){
+	$("#txt_numero").val('');
+	$("#txt_numero").focus();	
+}
+
+
+
 // calcula el cambio del vuelto
 function calcula_cambio()
 {
@@ -816,10 +824,13 @@ $(document).keyup(function(tecla){
 		agregar_ticket(); //para agregar al ticket
 		//CargarReset1(); //Limpiar el campo numero 
 		calcula_total();
+		
     }else if(Atl_down && (tecla.keyCode == 65)){
     	// tecla A    	
     	//$('#op_juego').val('1');// hace focus en el campo de tipo de juego y selecciona Triple
     	$('input:radio[name=op_juego]')[0].checked = true;
+    	borra_txtNumero();
+    	
     }else if(Atl_down && (tecla.keyCode == 66)){
     	// tecla B    	
 		$("#txt_monto").focus(); // hace focus en el campo de monto Bs
@@ -827,6 +838,7 @@ $(document).keyup(function(tecla){
     	// tecla C    	
 		//$('#op_juego').val('4');// hace focus en el campo de tipo de juego y selecciona Permuta
     	$('input:radio[name=op_juego]')[3].checked = true;
+    	borra_txtNumero();
     }else if(Atl_down && (tecla.keyCode == 69)){
     	// tecla E
      	DetalleTicket();
@@ -931,6 +943,7 @@ $(document).keyup(function(tecla){
     	// tecla P
     	//$('#op_juego').val('2');// hace focus en el campo de tipo de juego y selecciona Permuta
     	$('input:radio[name=op_juego]')[1].checked = true;
+    	borra_txtNumero();
     }else if(Atl_down && (tecla.keyCode == 81)){
     	// tecla Q
     	CargarReset(); //Limpiar Todos los campos
@@ -941,6 +954,7 @@ $(document).keyup(function(tecla){
     	// tecla S
     	//$('#op_juego').val('3');// hace focus en el campo de tipo de juego y selecciona Permuta
     	$('input:radio[name=op_juego]')[2].checked = true;
+    	borra_txtNumero();
     }else if(Atl_down && (tecla.keyCode == 84)){
     	// tecla T
         // Turno Tarde
