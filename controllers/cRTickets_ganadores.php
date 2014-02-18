@@ -101,7 +101,7 @@ switch (ACCION){
         // Titulo del Reporte
             $pdf->SetFont('Arial','B',20);
             $pdf->SetY(45);
-            $pdf->Cell(50,10,'Tickets Anulados a la fecha '.$obj_date->changeFormatDateI($fecha,0));
+            $pdf->Cell(50,10,'Tickets Ganadores a la fecha '.$obj_date->changeFormatDateI($fecha,0));
             //$pdf->Cell(50,10,'Tickets Ganadores a la fecha '.$obj_date->changeFormatDateII($fecha,0));
 
 
