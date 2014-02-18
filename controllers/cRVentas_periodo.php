@@ -39,6 +39,7 @@ switch (ACCION){
         $obj_xtpl->assign('fechadesde', $_GET['fechadesde']);
         $obj_xtpl->assign('fechahasta', $_GET['fechahasta']);
         $obj_xtpl->assign('taquilla', $taquilla);
+        echo $taquilla;
         $obj_xtpl->assign('sorteo', $sorteo);
 
         

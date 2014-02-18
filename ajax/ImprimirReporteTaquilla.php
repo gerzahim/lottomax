@@ -46,7 +46,7 @@ session_start();
 
 //$id_taquilla=2;
 // Obtenemos los datos de la taquilla
-$id_taquilla= $obj_modelo->GetIdTaquilla();
+$id_taquilla= $_GET['taquilla'];
 
 
 $fecha_desde= $obj_generico->CleanText($_GET['fechadesde']);

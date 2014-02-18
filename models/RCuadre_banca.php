@@ -70,7 +70,7 @@ class RCuadre_banca{
 	
 		$sql = "SELECT LEFT(fecha_hora,10) AS fecha, SUM(total_ticket) AS total_ventas, SUM(total_ticket)* 15 /100 AS comision, SUM(total_premiado) AS total_premiado, SUM(total_ticket)- ((SUM(total_ticket)* 15 /100) + SUM(total_premiado)) AS balance
                         FROM ticket
-                        WHERE `taquilla`='".$num_taquilla."' AND fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."  23:59:59'				
+                        WHERE `taquilla`='".$num_taquilla."' AND fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."  23:59:59' AND status=1				
 						GROUP BY LEFT(fecha_hora,10)";
 		//echo $sql;
 		
