@@ -39,9 +39,9 @@ class RTickets_ganadores{
 
 		//Preparacion del query
 		$sql = "SELECT * FROM  ticket WHERE premiado='1' AND fecha_hora LIKE '%".$fecha."%'";
-                
+        //echo $sql;        
 		$result= $this->vConexion->ExecuteQuery($sql);
-                return $result;
+        return $result;
 		
 		
 	}
@@ -66,6 +66,44 @@ class RTickets_ganadores{
 
 
 	}
+
+	/**
+	 * Busqueda de Id de Taquilla.
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetIdTaquilla(){
+	
+		//Preparacion del query
+		//		$sql = "SELECT * FROM parametros";
+		//		$result= $this->vConexion->ExecuteQuery($sql);
+		//		$roww= $this->vConexion->GetArrayInfo($result);
+		//		return $roww["taquilla"];
+		 
+		return $_SESSION['taquilla'];
+	}	
+	
+	/**
+	 * Devuelve el detalle de jugadas de algun ticket
+	 *
+	 * @param string $id_ticket
+	 * @return boolean, array
+	 */
+	public function GetDetalleTicketPremiados($id_ticket){
+	
+		//Preparacion del query
+		$sql = "SELECT DT.*, S.nombre_sorteo, Z.nombre_zodiacal
+                        FROM  detalle_ticket DT
+                        INNER JOIN sorteos S ON S.id_sorteo=DT.id_sorteo
+                        INNER JOIN zodiacal Z ON Z.Id_zodiacal=DT.id_zodiacal
+                        WHERE id_ticket='".$id_ticket."' AND premiado=1";
+	
+		$result= $this->vConexion->ExecuteQuery($sql);
+		return $result;
+	
+	
+	}	
 	
 	/**
 	 * Obtiene el hora del Sorteo Segun ID
@@ -82,6 +120,43 @@ class RTickets_ganadores{
 		return $roww["hora_sorteo"];
 	
 	}
+	
+	public function GetIdTaquillabyNumero($num_taquilla){
+	
+		//Preparacion del query
+		$sql = "SELECT id_taquilla FROM taquillas WHERE numero_taquilla = ".$num_taquilla."";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["id_taquilla"];
+	}
+	
+	public function GetNumeroTaquillabyId($id_taquilla){
+	
+		//Preparacion del query
+		$sql = "SELECT numero_taquilla FROM taquillas WHERE id_taquilla = ".$id_taquilla."";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["numero_taquilla"];
+	}	
+	
+	public function lineas_saltar_despues($id_taquilla){
+	
+		//Preparacion del query
+		$sql = "SELECT lineas_saltar_despues FROM impresora_taquillas WHERE id_taquilla = ".$id_taquilla."";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["lineas_saltar_despues"];
+	
+	}
+	
+	public function GetDatosImpresora($id_taquilla){
+	
+		//Preparacion del query
+		$sql = "SELECT lineas_saltar_despues, ver_numeros_incompletos, ver_numeros_agotados FROM impresora_taquillas WHERE id_taquilla = ".$id_taquilla."";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww;
+	}	
     	
 }		
 ?>

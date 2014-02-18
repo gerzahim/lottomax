@@ -32,7 +32,7 @@ switch (ACCION){
         // Ruta regreso
         $obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Form']);
         
-        $i=0;
+        $i=0;$total_ganadores=0;
         if( $result= $obj_modelo->GetTicketsGanadores($fecha) ){
             if ($obj_conexion->GetNumberRows($result)>0 ){
                 
@@ -59,8 +59,14 @@ switch (ACCION){
                    
                     // Parseo del bloque de la fila
                     $obj_xtpl->parse('main.contenido.lista_resultados.lista');
+                    $total_ganadores= $total_ganadores + $row['total_premiado'];
                     $i++;
                 }
+                
+                $obj_xtpl->assign('fecha', $fecha);
+                $obj_xtpl->assign('total_ganadores', ' El Total de Ganadores fue: Bs. F. '.$total_ganadores);
+                //echo $total_ganadores;
+                
                  // Parseo del bloque de la fila
                 $obj_xtpl->parse('main.contenido.lista_resultados');
             }else{
