@@ -45,10 +45,10 @@ class Pagar_Ganador{
         // premiado cambia cuando se premia un ticket
         // verificado cambia cuando ya se reviso y no esta premiado verificado=1
         $sql = "SELECT * FROM ticket WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'";
-        echo $sql;
+      //  echo $sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
 		
-		print_r($result);
+	//	print_r($result);
 		return  $result;
 
 	}
