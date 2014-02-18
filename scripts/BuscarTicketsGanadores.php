@@ -26,6 +26,7 @@ $id_detalle_ticket[]="";
 $id_tickets[]="";
 $totales[]="";
 $fecha_hora=$_GET['fecha_hora'];
+echo "FECH".$fecha_hora;
 $aprox_abajo= $obj_modelo->GetAprox_abajo();
 $aprox_arriba= $obj_modelo->GetAprox_arriba();
 
