@@ -101,6 +101,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal){
 	
 	if ( $numero_jugadoticket['total_registros']>0 )
 	{
+		$txt_monto+=$numero_jugadoticket['monto'];
 		//adicionar y dar mensaje de confirm (adicionar al ticket u obviar)
 		//significa que ya existe y debemos ver el monto que queda
 		$num_ticket_faltante = $numero_jugadoticket['monto_faltante'];
