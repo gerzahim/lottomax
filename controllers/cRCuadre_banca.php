@@ -41,8 +41,8 @@ switch (ACCION){
        	$fecha_hasta=$obj_date->changeFormatDateII($fecha_hasta);
        	
         $i=0; 
-
-        if( $result= $obj_modelo->GetBalance($fecha_desde, $fecha_hasta) ){
+        $comision=$obj_modelo->GetComision();
+        if( $result= $obj_modelo->GetBalance($fecha_desde, $fecha_hasta,$comision) ){
             if ($obj_conexion->GetNumberRows($result)>0 ){
                 
                 while($row= $obj_conexion->GetArrayInfo($result)){

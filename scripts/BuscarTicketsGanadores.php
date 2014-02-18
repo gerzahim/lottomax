@@ -40,11 +40,9 @@ $obj_modelo->DespremiarTicket($fecha_hora);
 
 $result= $obj_modelo->GetListadosegunVariable($fecha_hora);
 
-echo "Hay ".$obj_conexion->GetNumberRows($result);
 
 If ($obj_conexion->GetNumberRows($result)>0){
    $i=0; $j=0; 
-   echo "Pasa";
    $ticket_premiado=0;
    $monto_total_ticket=0;
     while ($roww= $obj_conexion->GetArrayInfo($result)){
