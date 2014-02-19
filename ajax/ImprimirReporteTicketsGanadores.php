@@ -57,13 +57,15 @@ $data="";
             if ($obj_conexion->GetNumberRows($result)>0 ){
             	
 				// ENCABEZADO DEL TICKET
+				
+            	
 				$data.=" <table width='200' border='0' ><tr>
-    <td colspan='3' align='center'>SISTEMA LOTTOMAX</td> </tr>";
+    <td colspan='3' align='center'><font face='arial' size='2' >SISTEMA LOTTOMAX</font></td> </tr>";
 				$data.="<tr>
-    <td colspan='3' align='center'>Números Premiados</td> </tr>";
+    <td colspan='3' align='center'><font face='arial' size='2' >Números Premiados</font></td> </tr>";
 				
 				$data.="<tr>
-    <td colspan='3' align='center'>Fecha: ".$obj_date->changeFormatDateI($fecha,0)."</td> </tr>";
+    <td colspan='3' align='center'><font face='arial' size='2' >Fecha: ".$obj_date->changeFormatDateI($fecha,0)."</font></td> </tr>";
 				
 				//$data.="<br>";
 				//$data.="TICKET GANADOR";
@@ -77,12 +79,17 @@ $data="";
 				$data1.="\\n";		
 				$total_premios=0;								            
 				$total_pagado=0;
-				$data.="<tr><td  align='center'>ID </td> <td align='center'>Monto </td><td align='center'>Pagado</td>";
+				$data.="<tr><td width='40' align='center'><font face='arial' size='2' ></font> </td> <td align='center' width='62' ><font face='arial' size='2' > </font></td><td align='center' width='64' ><font face='arial' size='2' ></font></td></tr>";
+				
+				$data.="<tr><td width='40' align='center'><font face='arial' size='2' >ID</font> </td> <td align='center' width='62' ><font face='arial' size='2' >Monto </font></td><td align='center' width='64' ><font face='arial' size='2' >Pagado</font></td></tr>";
+				
 					
                 while($row= $obj_conexion->GetArrayInfo($result)){
-                	$data.="<tr><td> ";
                 //	$data.="SISTEMA LOTTOMAX";
-					$data.="<br>".$row['id_ticket'];
+                	$data.="<tr><td width='40' align='left'> <font face='times' size='2' >".$row['id_ticket']."</font></td> ";
+                	$data.="<td width='62' align='center'><font face='times' size='2' >".$row['total_premiado']."</font></td> ";
+                	
+                	 
 					//$data.="<br>Taquilla: ".$obj_modelo->GetNumeroTaquillabyId($row['taquilla']);
 
 					//$data.="<br><br>Detalle Jugada Ganadora: ";
@@ -98,14 +105,15 @@ $data="";
 					
 					}*/
 					$total_premios+=$row['total_premiado'];
-					$data.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$row['total_premiado']." Bs.";
 					if($row['pagado'] == '0'){
 						$pagado="NO";
 					}else{
 						$total_pagado+=$row['total_premiado'];
 						$pagado="SI";
 					}
-					$data.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$pagado;
+					
+					
+					$data.="<td width='64' align='center'><font face='times' size='2' >".$pagado."</font></td></tr> ";
 				//	$data.="<br>";
 				//	$data.="<br>";
 					//$data.="-----------------------------";
@@ -128,7 +136,6 @@ $data="";
             } 
 
          }
-
 // Obtenemos los datos de la taquilla
 $ida_taquilla= $obj_modelo->GetIdTaquillabyNumero($id_taquilla);
 //Determinar si va a imprimir incompletos y Agotados
@@ -142,11 +149,21 @@ for($i=1;$i<=$lineas_saltar_despues;$i++){
 	//$data1.="\\n";
 	$data.=".<br>";
 }
-$data.="<br><br> Total:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ".$total_premios. " Bs.";
-$data.="<br>Total Pagado:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ".$total_pagado. " Bs.";
-$data.="<br>Balance:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ".($total_premios-$total_pagado). " Bs.";
 
-$data.="</FONT>";
+$data.="<tr><td width='40' align='center'><font face='arial' size='2' ></font> </td> <td align='center' width='62' ><font face='arial' size='2' > </font></td><td align='center' width='64' ><font face='arial' size='2' ></font></td></tr>";
+
+$data.="<tr><td width='40' align='left'> <font face='times' size='2' > Total: </font></td> ";
+$data.="<td colspan='2' align='center'> <font face='times' size='2' > ".$total_premios." Bs.</font></td></tr> ";
+
+$data.="<tr><td width='40' align='left'> <font face='times' size='2' > Total Pagado: </font></td> ";
+$data.="<td colspan='2' align='center'> <font face='times' size='2' > ".$total_pagado." Bs.</font></td></tr> ";
+
+$data.="<tr><td width='40' align='left'> <font face='times' size='2' > Balance: </font></td> ";
+$data.="<td colspan='2' align='center'> <font face='times' size='2' > ".($total_premios-$total_pagado)." Bs. </font></td></tr> ";
+$data.="</table>";
+
+
+//$data.="</FONT>";
 //echo $data1;
 /*
 echo "<script type='text/javascript'>";
@@ -160,11 +177,11 @@ echo $data;
 ?>
 
 
-<script type="text/javascript"> 
+ <script type="text/javascript"> 
 window.print();
 </script>
 <script language='javascript'>setTimeout('self.close();',5000)</script>
 
    </body>
    
-</html> 
+</html>  
