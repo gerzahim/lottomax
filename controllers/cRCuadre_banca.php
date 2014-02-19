@@ -23,9 +23,6 @@ require('./fpdf/fpdf.php');
 switch (ACCION){
 
     case 'listar_resultados':
-
-        
-        
         // Ruta actual
         $_SESSION['Ruta_Lista']= $obj_generico->RutaRegreso();
 

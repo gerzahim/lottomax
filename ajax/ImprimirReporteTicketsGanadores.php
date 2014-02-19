@@ -57,7 +57,11 @@ $data="";
             if ($obj_conexion->GetNumberRows($result)>0 ){
             	
 				// ENCABEZADO DEL TICKET
-				//$data.="SISTEMA LOTTOMAX";
+				$data.="<FONT FACE='times new roman' SIZE=2 > SISTEMA LOTTOMAX";
+				$data.="<br>Números Premiados";
+				
+				$data.="<br>Fecha: ".$obj_date->changeFormatDateI($fecha,0)."<br><br>";
+				
 				//$data.="<br>";
 				//$data.="TICKET GANADOR";
 				//$data.="<br>";
@@ -67,16 +71,18 @@ $data="";
 				$data1.="SISTEMA LOTTOMAX";
 				$data1.="\\n";
 				$data1.="TICKET GANADOR";
-				$data1.="\\n";										            
-              
+				$data1.="\\n";		
+				$total_premios=0;								            
+				$total_pagado=0;
+				$data.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Monto&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pagado";
+					
                 while($row= $obj_conexion->GetArrayInfo($result)){
-                	$data.="SISTEMA LOTTOMAX";
-					$data.="<br>FECHA: ".$obj_date->changeFormatDateI($row['fecha_hora'],1);
-					$data.="<br>Id Ticket: ".$row['id_ticket'];
+                //	$data.="SISTEMA LOTTOMAX";
+					$data.="<br>".$row['id_ticket'];
 					//$data.="<br>Taquilla: ".$obj_modelo->GetNumeroTaquillabyId($row['taquilla']);
 
-					$data.="<br><br>Detalle Jugada Ganadora: ";
-					$resulta= $obj_modelo->GetDetalleTicketPremiados($row['id_ticket']);
+					//$data.="<br><br>Detalle Jugada Ganadora: ";
+					/*$resulta= $obj_modelo->GetDetalleTicketPremiados($row['id_ticket']);
 					while($rowa= $obj_conexion->GetArrayInfo($resulta)){
 						
 						$data.="<br><br>Numero: ".$rowa['numero'];
@@ -86,18 +92,20 @@ $data="";
 						}
 						$data.="<br>Premiado Bs : ".$rowa['total_premiado'];
 					
-					}
-					$data.="<br><br>TOTAL Bs : ".$row['total_premiado'];
+					}*/
+					$total_premios+=$row['total_premiado'];
+					$data.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$row['total_premiado']." Bs.";
 					if($row['pagado'] == '0'){
 						$pagado="NO";
 					}else{
+						$total_pagado+=$row['total_premiado'];
 						$pagado="SI";
 					}
-					$data.="<br>PAGADO : ".$pagado;
-					$data.="<br>";
-					$data.="<br>";
-					$data.="-----------------------------";
-					$data.="<br>";
+					$data.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$pagado;
+				//	$data.="<br>";
+				//	$data.="<br>";
+					//$data.="-----------------------------";
+					//$data.="<br>";
 
 					
 					//$data1.="\\nFECHA: ".$row['fecha'];
@@ -130,7 +138,11 @@ for($i=1;$i<=$lineas_saltar_despues;$i++){
 	//$data1.="\\n";
 	$data.=".<br>";
 }
+$data.="<br><br> Total: ".$total_premios. " Bs.";
+$data.="<br>Total Pagado: ".$total_pagado. " Bs.";
+$data.="<br>Balance: ".($total_premios-$total_pagado). " Bs.";
 
+$data.="</FONT>";
 //echo $data1;
 /*
 echo "<script type='text/javascript'>";
@@ -144,11 +156,11 @@ echo $data;
 ?>
 
 
-<script type="text/javascript"> 
+<!-- <script type="text/javascript"> 
 window.print();
 </script>
 <script language='javascript'>setTimeout('self.close();',5000)</script>
 
    </body>
    
-</html>
+</html>-->
