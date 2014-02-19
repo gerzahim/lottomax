@@ -74,7 +74,7 @@ $data="";
 				$data1.="\\n";		
 				$total_premios=0;								            
 				$total_pagado=0;
-				$data.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Monto&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pagado";
+				$data.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Monto&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pagado";
 					
                 while($row= $obj_conexion->GetArrayInfo($result)){
                 //	$data.="SISTEMA LOTTOMAX";
@@ -138,9 +138,9 @@ for($i=1;$i<=$lineas_saltar_despues;$i++){
 	//$data1.="\\n";
 	$data.=".<br>";
 }
-$data.="<br><br> Total: ".$total_premios. " Bs.";
-$data.="<br>Total Pagado: ".$total_pagado. " Bs.";
-$data.="<br>Balance: ".($total_premios-$total_pagado). " Bs.";
+$data.="<br><br> Total:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ".$total_premios. " Bs.";
+$data.="<br>Total Pagado:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ".$total_pagado. " Bs.";
+$data.="<br>Balance:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ".($total_premios-$total_pagado). " Bs.";
 
 $data.="</FONT>";
 //echo $data1;
