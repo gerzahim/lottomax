@@ -77,7 +77,7 @@ $data="";
 				$data1.="\\n";		
 				$total_premios=0;								            
 				$total_pagado=0;
-				$data.="<tr><td align='center'>ID </td> <td align='center'>Monto </td><td align='center'>Pagado</td>";
+				$data.="<tr><td  align='center'>ID </td> <td align='center'>Monto </td><td align='center'>Pagado</td>";
 					
                 while($row= $obj_conexion->GetArrayInfo($result)){
                 	$data.="<tr><td> ";
@@ -160,11 +160,11 @@ echo $data;
 ?>
 
 
-<!-- <script type="text/javascript"> 
+<script type="text/javascript"> 
 window.print();
 </script>
 <script language='javascript'>setTimeout('self.close();',5000)</script>
 
    </body>
    
-</html> --> 
+</html> 
