@@ -57,10 +57,13 @@ $data="";
             if ($obj_conexion->GetNumberRows($result)>0 ){
             	
 				// ENCABEZADO DEL TICKET
-				$data.="<FONT FACE='times new roman' SIZE=2 > SISTEMA LOTTOMAX";
-				$data.="<br>Números Premiados";
+				$data.=" <table width='200' border='0' ><tr>
+    <td colspan='3' align='center'>SISTEMA LOTTOMAX</td> </tr>";
+				$data.="<tr>
+    <td colspan='3' align='center'>Números Premiados</td> </tr>";
 				
-				$data.="<br>Fecha: ".$obj_date->changeFormatDateI($fecha,0)."<br><br>";
+				$data.="<tr>
+    <td colspan='3' align='center'>Fecha: ".$obj_date->changeFormatDateI($fecha,0)."</td> </tr>";
 				
 				//$data.="<br>";
 				//$data.="TICKET GANADOR";
@@ -74,9 +77,10 @@ $data="";
 				$data1.="\\n";		
 				$total_premios=0;								            
 				$total_pagado=0;
-				$data.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Monto&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pagado";
+				$data.="<tr><td align='center'>ID </td> <td align='center'>Monto </td><td align='center'>Pagado</td>";
 					
                 while($row= $obj_conexion->GetArrayInfo($result)){
+                	$data.="<tr><td> ";
                 //	$data.="SISTEMA LOTTOMAX";
 					$data.="<br>".$row['id_ticket'];
 					//$data.="<br>Taquilla: ".$obj_modelo->GetNumeroTaquillabyId($row['taquilla']);
@@ -156,11 +160,11 @@ echo $data;
 ?>
 
 
- <script type="text/javascript"> 
+<!-- <script type="text/javascript"> 
 window.print();
 </script>
 <script language='javascript'>setTimeout('self.close();',5000)</script>
 
    </body>
    
-</html>
+</html> --> 
