@@ -54,10 +54,10 @@ $fecha_hasta= $obj_generico->CleanText($_GET['fechahasta']);
 
 $fecha_desde=$obj_date->changeFormatDateII($fecha_desde);
 $fecha_hasta=$obj_date->changeFormatDateII($fecha_hasta);
-
+$comision=$obj_modelo->GetComision();
 //echo $fecha_desde, $fecha_hasta;
 $data="";
-         if( $result= $obj_modelo->GetBalance($fecha_desde, $fecha_hasta)){
+         if( $result= $obj_modelo->GetBalance($fecha_desde, $fecha_hasta,$comision)){
             if ($obj_conexion->GetNumberRows($result)>0 ){
             	
 				// ENCABEZADO DEL TICKET

@@ -16,6 +16,7 @@ require($obj_config->GetVar('ruta_modelo').'RCuadre_banca.php');
 
 $obj_modelo= new RCuadre_banca($obj_conexion);
 $obj_date= new Fecha();
+$comision=$obj_modelo->GetComision();
 
 require('./fpdf/fpdf.php');
 
@@ -41,7 +42,6 @@ switch (ACCION){
        	$fecha_hasta=$obj_date->changeFormatDateII($fecha_hasta);
        	
         $i=0; 
-        $comision=$obj_modelo->GetComision();
         if( $result= $obj_modelo->GetBalance($fecha_desde, $fecha_hasta,$comision) ){
             if ($obj_conexion->GetNumberRows($result)>0 ){
                 
@@ -133,7 +133,7 @@ switch (ACCION){
             $pdf->SetFont('','B');
 
         
-         if( $result= $obj_modelo->GetBalance($fecha_desde, $fecha_hasta)){
+         if( $result= $obj_modelo->GetBalance($fecha_desde, $fecha_hasta,$comision)){
             if ($obj_conexion->GetNumberRows($result)>0 ){
                 // Establecemos la cabecera de la tabla
                 $pdf->SetFont('Arial','B',10);
