@@ -107,6 +107,31 @@ class CopiarTicket{
 		return  $result;
 
 	}
+	
+	/**
+	 * Busqueda el ultimo id de insercción para despues borrar la última jugada
+	 *
+	 * @param string $id_taquilla
+	 * @return integer, id_insert_jugada
+	 */
+	
+	
+	public function GetUltimoIdInsert($id_taquilla){
+			
+		//Preparacion del query
+		$sql = "SELECT MAX( id_insert_jugada) as maximo FROM ticket_transaccional WHERE id_taquilla = ".$id_taquilla." ";
+	
+		$result= $this->vConexion->ExecuteQuery($sql);
+	
+		//  cupo_especial
+		// id_cupo_especial	numero	id_sorteo  monto_cupo  id_tipo_jugada  id_zodiacal  fecha_desde  fecha_hasta
+	
+		// Datos para la paginacion
+	
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww['maximo'];
+	
+	}
 
          /**
 	 * Busqueda de detalle de Tickets Segun parametro.
@@ -271,11 +296,11 @@ class CopiarTicket{
 	 * @param string $monto
 	 * @return boolean, array
 	 */
-	public function GuardarTicketTransaccional($numero,$id_sorteo,$id_zodiacal,$id_tipo_jugada,$montofaltante,$incompleto,$monto, $id_taquilla){
+	public function GuardarTicketTransaccional($numero,$id_sorteo,$id_zodiacal,$id_tipo_jugada,$montofaltante,$incompleto,$monto, $id_taquilla,$id_insert_taquilla){
 		
 		//Preparacion del query
-		$sql = "INSERT INTO `ticket_transaccional` (`numero` , `id_sorteo` , `id_zodiacal`, `id_tipo_jugada` , `monto_faltante` , `incompleto`, `monto`, `id_taquilla`)
-                    VALUES ('".$numero."', '".$id_sorteo."', '".$id_zodiacal."', '".$id_tipo_jugada."', '".$montofaltante."', '".$incompleto."', '".$monto."', '".$id_taquilla."')";
+		$sql = "INSERT INTO `ticket_transaccional` (`numero` , `id_sorteo` , `id_zodiacal`, `id_tipo_jugada` , `monto_faltante` , `incompleto`, `monto`, `id_taquilla`, `id_insert_jugada`)
+                    VALUES ('".$numero."', '".$id_sorteo."', '".$id_zodiacal."', '".$id_tipo_jugada."', '".$montofaltante."', '".$incompleto."', '".$monto."', '".$id_taquilla."',$id_insert_taquilla)";
        // echo $sql;       
 		return $this->vConexion->ExecuteQuery($sql);
 		

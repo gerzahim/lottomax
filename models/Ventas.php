@@ -157,12 +157,12 @@ class Ventas{
          * @param string $id_taquilla
 	 * @return boolean, array
 	 */
-	public function GuardarTicketTransaccional($numero,$id_sorteo,$id_zodiacal,$id_tipo_jugada,$montofaltante,$incompleto,$monto, $id_taquilla){
+	public function GuardarTicketTransaccional($numero,$id_sorteo,$id_zodiacal,$id_tipo_jugada,$montofaltante,$incompleto,$monto, $id_taquilla,$id_insert_taquilla){
 		
 		//Preparacion del query
-		$sql = "INSERT INTO `ticket_transaccional` (`numero` , `id_sorteo` , `id_zodiacal`, `id_tipo_jugada` , `monto_faltante` , `incompleto`, `monto`, `id_taquilla`)
-                    VALUES ('".$numero."', '".$id_sorteo."', '".$id_zodiacal."', '".$id_tipo_jugada."', '".$montofaltante."', '".$incompleto."', '".$monto."', '".$id_taquilla."')";
-        //echo "SQL";       
+		$sql = "INSERT INTO `ticket_transaccional` (`numero` , `id_sorteo` , `id_zodiacal`, `id_tipo_jugada` , `monto_faltante` , `incompleto`, `monto`, `id_taquilla`,`id_insert_jugada`)
+                    VALUES ('".$numero."', '".$id_sorteo."', '".$id_zodiacal."', '".$id_tipo_jugada."', '".$montofaltante."', '".$incompleto."', '".$monto."', '".$id_taquilla."',".$id_insert_taquilla.")";
+       // echo $sql;       
 		return $this->vConexion->ExecuteQuery($sql);
 		
 		
@@ -564,6 +564,32 @@ class Ventas{
 		
 	}	
 
+	
+	/**
+	 * Busqueda el ultimo id de insercción para despues borrar la última jugada
+	 *
+	 * @param string $id_taquilla
+	 * @return integer, id_insert_jugada
+	 */
+	
+	
+	public function GetUltimoIdInsert($id_taquilla){
+			
+		//Preparacion del query
+		$sql = "SELECT MAX( id_insert_jugada) as maximo FROM ticket_transaccional WHERE id_taquilla = ".$id_taquilla." ";
+	
+		$result= $this->vConexion->ExecuteQuery($sql);
+	
+		//  cupo_especial
+		// id_cupo_especial	numero	id_sorteo  monto_cupo  id_tipo_jugada  id_zodiacal  fecha_desde  fecha_hasta
+	
+		// Datos para la paginacion
+	
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww['maximo'];
+	
+	}
+	
 	/**
 	 * Comparar si hoy esta entre 2 fechas.
 	 *
@@ -961,6 +987,19 @@ class Ventas{
 		$sql = "DELETE FROM `ticket_transaccional` WHERE id_ticket_transaccional='".$id_ticket_transaccional."'";
 		return $this->vConexion->ExecuteQuery($sql);
 
+	}
+	
+	/**
+	 * Eliminar registros de Ticket transaccional segun Id de Jugada
+	 *
+	 * @param string $id_insert_taquilla
+	 * @return boolean, array
+	 */
+	public function EliminarTicketTransaccionalByInsert($id_insert_taquilla){
+		//Preparacion del query
+		$sql = "DELETE FROM `ticket_transaccional` WHERE id_insert_jugada='".$id_insert_taquilla."'";
+		return $this->vConexion->ExecuteQuery($sql);
+	
 	}
 	
 	/**

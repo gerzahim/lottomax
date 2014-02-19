@@ -23,13 +23,14 @@ require('.'.$obj_config->GetVar('ruta_modelo').'Ventas.php');
 $obj_modelo= new Ventas($obj_conexion);
 
 session_start();
+$taquilla= $obj_modelo->GetIdTaquilla();
 
-$resultTT= $obj_modelo->GetLastTicketTransaccional();
-If ($obj_conexion->GetNumberRows($resultTT)>0){
-    $roww= $obj_conexion->GetArrayInfo($resultTT);
-    $id_ticket_transaccional=$roww["id_ticket_transaccional"];
+$id_insert_taquilla=$obj_modelo->GetUltimoIdInsert($taquilla);
+
+//$resultTT= $obj_modelo->GetLastTicketTransaccional();
+If ($id_insert_taquilla>0){
     
-    $obj_modelo->EliminarTicketTransaccionalByTicket($id_ticket_transaccional);
+    $obj_modelo->EliminarTicketTransaccionalByInsert($id_insert_taquilla);
       
 }
 
