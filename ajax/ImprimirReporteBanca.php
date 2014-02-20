@@ -76,10 +76,10 @@ $data="";
                 while($row= $obj_conexion->GetArrayInfo($result)){
                         
 					$data.="<br>FECHA: ".$row['fecha'];
-					$data.="<br>Total Ventas: ".$row['total_ventas'];					                									
-					$data.="<br>Comision: ".$row['comision'];
-					$data.="<br>Total Premios: ".$row['total_premiado'];					                									
-					$data.="<br>Balance: ".$row['balance'];
+					$data.="<br>Total Ventas: ".round($row['total_ventas'], 2);					                									
+					$data.="<br>Comision: ".round($row['comision'], 2);
+					$data.="<br>Total Premios: ".round($row['total_premiado'], 2);					                									
+					$data.="<br>Balance: ".round($row['balance'], 2);
 					$data.="<br>";
 					$data.="-----------------------------";
 					$data.="<br>";

@@ -95,10 +95,12 @@ switch (ACCION){
         
         $pdf->AliasNbPages();
         
-        //Primera página
+        //Primera pagina
         $pdf->AddPage();
 
-        $fecha = $obj_date->changeFormatDateII($_GET['fecha']);
+        //echo $_GET['fecha'];
+        
+        $fecha = $_GET['fecha'];
 
 
         // Imagen  de encabezado
@@ -107,8 +109,8 @@ switch (ACCION){
         // Titulo del Reporte
             $pdf->SetFont('Arial','B',20);
             $pdf->SetY(45);
+            //$pdf->Cell(50,10,'Tickets Ganadores a la fecha '.$_GET['fecha']);
             $pdf->Cell(50,10,'Tickets Ganadores a la fecha '.$obj_date->changeFormatDateI($fecha,0));
-            //$pdf->Cell(50,10,'Tickets Ganadores a la fecha '.$obj_date->changeFormatDateII($fecha,0));
 
 
             

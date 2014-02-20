@@ -122,7 +122,7 @@ switch (ACCION){
                 while($row= $obj_conexion->GetArrayInfo($result)){
                     $pdf->Ln();
                     $pdf->SetTextColor(0);
-                    $pdf->Cell(40,7,$row['fecha_hora_anulacion'],1);
+                    $pdf->Cell(40,7,$obj_date->changeFormatDateI($row['fecha_hora_anulacion'],1),1);
                     $pdf->Cell(30,7,$row['id_ticket'],1,0,'C');
                     $pdf->Cell(30,7,$row['taquilla_anulacion'],1,0,'C');
                     $pdf->Cell(30,7,$row['total_ticket'],1,0,'C');                    

@@ -38,8 +38,7 @@ class RTickets_pagados{
 	public function GetTicketsGanadores($fecha){
 
 		//Preparacion del query
-		$sql = "SELECT * FROM  ticket WHERE premiado='1' AND pagado='1' AND fecha_hora LIKE '%".$fecha."%'";
-                
+		$sql = "SELECT * FROM  ticket WHERE premiado='1' AND pagado='1' AND fecha_hora LIKE '%".$fecha."%'";        
 		$result= $this->vConexion->ExecuteQuery($sql);
                 return $result;
 		
