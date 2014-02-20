@@ -1,5 +1,7 @@
 <?php
 echo exec('ls');
+echo system('ls');
+
 //exec("php5 /var/www/lottomax/miscelaneos/base.php?var=1");
 
 //header ("Location: http://192.168.0.125/miscelaneos/base.php?var=1");
