@@ -97,7 +97,8 @@ else
 	mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
 	mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
 //	echo "PASA";
-	header ("Location: BuscarTicketsGanadores.php?fecha_hora=".$fecha_hora);
+	shell_exec("curl http://localhost/scripts/BuscarTicketsGanadores.php?fecha_hora=".$fecha_hora);
+	//header ("Location: );
 }
 }
 
@@ -120,7 +121,8 @@ if($result= mysql_query($sql,$conexion_arriba))
 				{	
 					mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
 					mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
-					header ("Location: BuscarTicketsGanadores.php?fecha_hora=".$fecha_hora);
+					shell_exec("curl http://localhost/scripts/BuscarTicketsGanadores.php?fecha_hora=".$fecha_hora);
+					//header ("Location: BuscarTicketsGanadores.php?fecha_hora=".$fecha_hora);
 				}
 				else 
 				mysql_query("ROLLBACK;",$conexion_abajo);
