@@ -1,8 +1,8 @@
 <?php
-echo exec('ls -all');
+//echo exec('ls -all');
 //echo system('ls');
 
-//exec("php5 /var/www/lottomax/miscelaneos/base.php?var=1");
+exec("php5 /var/www/lottomax/miscelaneos/base.php?var=1");
 
 //header ("Location: http://192.168.0.125/miscelaneos/base.php?var=1");
 //shell_exec ("php5 /var/www/base.php?var=1");
