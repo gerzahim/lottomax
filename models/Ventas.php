@@ -116,6 +116,7 @@ class Ventas{
 		
 		//Preparacion del query
 		$sql = "SELECT pre_zodiacal FROM zodiacal WHERE Id_zodiacal = ".$id."";
+		//echo $sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
 		$roww= $this->vConexion->GetArrayInfo($result);
 		return $roww["pre_zodiacal"];
@@ -180,6 +181,39 @@ class Ventas{
 		$sql = "SELECT * FROM ticket_transaccional WHERE incompleto<> 2 AND id_taquilla='".$_SESSION["taquilla"]."' ORDER BY id_ticket_transaccional DESC";
 		return $this->vConexion->ExecuteQuery($sql);
 	}
+	
+	/**
+	 * Busqueda de datos detalle ticket
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetDetalleTicketNoZodiacalByIdticket($id_ticket){
+	
+		//Preparacion del query
+		$sql = "SELECT * FROM detalle_ticket WHERE id_ticket = ".$id_ticket." AND id_zodiacal = '0' ";
+		$sql.= "ORDER BY id_sorteo, id_zodiacal, numero ASC";
+		//echo $sql;
+	
+		return $this->vConexion->ExecuteQuery($sql);
+	}
+
+	/**
+	 * Busqueda de datos detalle ticket
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetDetalleTicketZodiacalByIdticket($id_ticket){
+	
+		//Preparacion del query
+		$sql = "SELECT * FROM detalle_ticket WHERE id_ticket = ".$id_ticket." AND id_zodiacal != '0' ";
+		//$sql = "SELECT * FROM detalle_ticket WHERE id_ticket = ".$id_ticket." ";
+		$sql.= "ORDER BY numero, id_sorteo, id_zodiacal  ASC";
+		//echo $sql;
+	
+		return $this->vConexion->ExecuteQuery($sql);
+	}	
 	
 	
 	/**
@@ -249,6 +283,33 @@ class Ventas{
 		return $this->vConexion->ExecuteQuery($sql);
 	}
 	
+	/**
+	 * Busqueda de datos Numeros Incompletos en Ticket Transaccional
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetNumerosIncompletosTransaccionalNoZodiacal($id_taquilla){
+		//echo "PASa";
+		//Preparacion del query
+		$sql = "SELECT * FROM ticket_transaccional WHERE id_taquilla = '".$id_taquilla."' AND id_zodiacal ='0' AND incompleto !='0' ORDER BY incompleto ASC ";
+		//echo $sql;
+		return $this->vConexion->ExecuteQuery($sql);
+	}	
+	
+	/**
+	 * Busqueda de datos Numeros Incompletos en Ticket Transaccional
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetNumerosIncompletosTransaccionalZodiacal($id_taquilla){
+		//echo "PASa";
+		//Preparacion del query
+		$sql = "SELECT * FROM ticket_transaccional WHERE id_taquilla = '".$id_taquilla."' AND id_zodiacal !='0' AND incompleto !='0' ORDER BY incompleto ASC ";
+		//echo $sql;
+		return $this->vConexion->ExecuteQuery($sql);
+	}	
 		
      /**
 	 * Busqueda de datos ticket transaccional, incluyendo los registrados como agotados(2)
