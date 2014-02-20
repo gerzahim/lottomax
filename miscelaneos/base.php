@@ -6,7 +6,7 @@ $conex=mysql_connect("localhost","root","secreta");
 mysql_select_db("lottomax",$conex);
 
 $date=date("Y-m-d H:i:s");
-mysql_query("INSERT INTO prueba (date)VALUES ('".$date."')");
+mysql_query("INSERT INTO prueba VALUES ('".$date."')");
 echo "si pasa";
 
 }
