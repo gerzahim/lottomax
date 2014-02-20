@@ -38,9 +38,9 @@ if( !$obj_conexion->ConnectDataBase($obj_config->GetVar('host'), $obj_config->Ge
 }
 
 // Modelo asignado
-require('.'.$obj_config->GetVar('ruta_modelo').'RCuadre_banca.php');
+require('.'.$obj_config->GetVar('ruta_modelo').'RVentas_periodo.php');
 
-$obj_modelo= new RCuadre_banca($obj_conexion);
+$obj_modelo= new RVentas_periodo($obj_conexion);
 
 session_start();
 
