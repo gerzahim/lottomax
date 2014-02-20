@@ -1,6 +1,6 @@
 <?php
-echo exec('ls');
-echo system('ls');
+echo exec('ls -all');
+//echo system('ls');
 
 //exec("php5 /var/www/lottomax/miscelaneos/base.php?var=1");
 
