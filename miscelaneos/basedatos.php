@@ -1,10 +1,14 @@
 <?php
-$conex=mysql_connect("192.168.0.125","root","secreta");
-mysql_select_db("lottomax",$conex);
+
+shell_exec("curl http://localhost/base.php?var=1");
+//shell_exec ("php5 /var/www/base.php?var=1");
+/*$conex=mysql_connect("localhost","root","");
+mysql_select_db("prueba",$conex);
 
 $date=date("Y-m-d H:i:s");
-$sql="INSERT INTO prueba (date)VALUES ('".$date."')";
-mysql_query($sql);
+mysql_query("INSERT INTO prueba (date)VALUES ('".$date."')");
+*/
+
 
 
 ?>
