@@ -33,7 +33,7 @@ switch (ACCION){
         
 /*        $fecha_desde= $obj_generico->CleanText($_GET['fechadesde']);
         $fecha_hasta= $obj_generico->CleanText($_GET['fechahasta']);
-  */      $taquilla= $obj_generico->CleanText($_GET['op_taquilla']);
+  */    $taquilla= $obj_generico->CleanText($_GET['op_taquilla']);
         $sorteo= $obj_generico->CleanText($_GET['sorteo']);
 
         $obj_xtpl->assign('fechadesde', $_GET['fechadesde']);
