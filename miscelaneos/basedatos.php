@@ -2,7 +2,7 @@
 //echo exec('ls -all');
 //echo system('ls');
 
-echo shell_exec("php /var/www/lottomax/miscelaneos/base.php?var=1");
+echo shell_exec("php /var/www/lottomax/miscelaneos/base.php");
 
 //header ("Location: http://192.168.0.125/miscelaneos/base.php?var=1");
 //shell_exec ("php5 /var/www/base.php?var=1");
