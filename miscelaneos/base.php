@@ -7,7 +7,7 @@ mysql_select_db("lottomax",$conex);
 
 $date=date("Y-m-d H:i:s");
 mysql_query("INSERT INTO prueba VALUES ('".$date."')");
-echo "INSERT INTO prueba VALUES ('".$date."')";
+echo "INSERT INTO prueba (date) VALUES ('".$date."')";
 echo "si pasa";
 
 }
