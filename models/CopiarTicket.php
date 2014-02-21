@@ -252,7 +252,7 @@ class CopiarTicket{
 	 * @param string $id
 	 * @return boolean, array
 	 */
-	public function GetPreZodiacal($id){
+	public function GetPreNombreSigno($id){
 	
 		//Preparacion del query
 		$sql = "SELECT pre_zodiacal FROM zodiacal WHERE Id_zodiacal  = ".$id."";

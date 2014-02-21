@@ -59,13 +59,15 @@ $data="";
 				// ENCABEZADO DEL TICKET
 				
             	
-				$data.=" <table width='200' border='0' ><tr>
-    <td colspan='3' align='center'><font face='arial' size='2' >SISTEMA LOTTOMAX</font></td> </tr>";
-				$data.="<tr>
-    <td colspan='3' align='center'><font face='arial' size='2' >Números Premiados</font></td> </tr>";
-				
-				$data.="<tr>
-    <td colspan='3' align='center'><font face='arial' size='2' >Fecha: ".$obj_date->changeFormatDateI($fecha,0)."</font></td> </tr>";
+				$data.=" <table width='200' border='0' ><tr><td colspan='3' align='center'><font face='arial' size='2' >";
+				$data.=" SISTEMA LOTTOMAX";
+				$data.=" </font></td> </tr>";
+				$data.="<tr> <td colspan='3' align='center'><font face='arial' size='2' >";
+				$data.="Números Premiados";
+				$data.="</font></td> </tr>";
+				$data.="<tr><td colspan='3' align='center'><font face='arial' size='2' >";
+				$data.="Fecha: ".$obj_date->changeFormatDateI($fecha,0);
+				$data.="</font></td> </tr>";
 				
 				//$data.="<br>";
 				//$data.="TICKET GANADOR";

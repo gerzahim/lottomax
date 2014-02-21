@@ -278,24 +278,12 @@ class Ventas{
 	public function GetNumerosIncompletosTransaccional($id_taquilla){
 		//echo "PASa";
 		//Preparacion del query
-		$sql = "SELECT * FROM ticket_transaccional WHERE id_taquilla = '".$id_taquilla."' AND incompleto=1 ORDER BY id_ticket_transaccional DESC ";
+		$sql = "SELECT * FROM ticket_transaccional WHERE id_taquilla = '".$id_taquilla."' AND incompleto ='1' OR incompleto ='2'  ORDER BY id_ticket_transaccional DESC ";
 		//$sql.= "ORDER BY incompleto, numero, id_sorteo ASC";	
 		return $this->vConexion->ExecuteQuery($sql);
 	}
 	
-	/**
-	 * Busqueda de datos Numeros Incompletos en Ticket Transaccional
-	 *
-	 * @access public
-	 * @return boolean
-	 */
-	public function GetNumerosIncompletosTransaccionalNoZodiacal($id_taquilla){
-		//echo "PASa";
-		//Preparacion del query
-		$sql = "SELECT * FROM ticket_transaccional WHERE id_taquilla = '".$id_taquilla."' AND id_zodiacal ='0' AND incompleto !='0' ORDER BY incompleto ASC ";
-		//echo $sql;
-		return $this->vConexion->ExecuteQuery($sql);
-	}	
+
 	
 	/**
 	 * Busqueda de datos Numeros Incompletos en Ticket Transaccional
@@ -434,18 +422,21 @@ class Ventas{
 	}	
 	
 	/**
-	 * Obtiene el pre del Zodiacal Segun ID
+	 * Obtiene el pre del Zodiacal 
 	 *
 	 * @param string $id
 	 * @return boolean, array
 	 */
-	public function GetPreZodiacal($id){
+	public function GetPreZodiacal(){
 		
 		//Preparacion del query
-		$sql = "SELECT pre_zodiacal FROM zodiacal WHERE Id_zodiacal  = ".$id."";
+		$sql = "SELECT id_zodiacal, pre_zodiacal FROM zodiacal";
 		$result= $this->vConexion->ExecuteQuery($sql);
-		$roww= $this->vConexion->GetArrayInfo($result);
-		return $roww["pre_zodiacal"];
+		return $result;
+		//print_r(mysql_fetch_array($result));
+		
+		/*$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["pre_zodiacal"];*/
 		
 	}	
 

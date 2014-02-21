@@ -50,7 +50,7 @@ if( $result= $obj_modelo->GetDatosTicketTransaccional() ){
             $zodiacal="";
             // determinando el signo zodiacal... si lo hay...
             if($row['id_zodiacal'] <> 0){
-                    $zodiacal = $obj_modelo->GetPreZodiacal($row['id_zodiacal']);
+                    $zodiacal = $obj_modelo->GetPreNombreSigno($row['id_zodiacal']);
             }
             
             //print_r($row);
