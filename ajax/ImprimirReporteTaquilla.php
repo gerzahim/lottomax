@@ -97,7 +97,7 @@ $data="";
          }
 
 // Obtenemos los datos de la taquilla
-$ida_taquilla= $obj_modelo->GetIdTaquillabyNumero($id_taquilla);
+$ida_taquilla= $obj_modelo->GetIdTaquilla($id_taquilla);
 //Determinar si va a imprimir incompletos y Agotados
 $info_impresora= $obj_modelo->GetDatosImpresora($ida_taquilla);
 
