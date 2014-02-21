@@ -58,6 +58,13 @@ $minute = substr($string,14,2);
 //$fecha_hora=$day."-".$month."-".$year." ".$hour.":".$minute;
 $fecha_hora=$day."-".$month."-".$year;
 
+$result=$obj_modelo->GetPreZodiacal();
+
+while($row=$obj_conexion->GetArrayInfo($result))
+{
+	$pre_zod[]=$row['pre_zodiacal'];
+	
+}
 if($hour > 11){
 	$formato="PM";	
 }else{
@@ -80,28 +87,33 @@ $nombre_agencia=$info_agencia["nombre_agencia"];
 $tiempo_vigencia_ticket=$info_agencia["tiempo_vigencia_ticket"];
 
 
-
 // ENCABEZADO DEL TICKET
-$data="SISTEMA LOTTOMAX";
-$data.="<br>";
-$data.="AGENCIA: ".$nombre_agencia;
-$data.="<br>";
-$data.="TICKET: ".$id_ticket;
-$data.="<br>";
-$data.="SERIAL: ".$serial;
-$data.="<br>";
-$data.="FECHA: ".$fecha_hora;
-$data.="<br>";
-$data.="HORA: ".$hora;
-$data.="<br>";
-$data.="TAQUILLA: ".$id_taquilla;
-$data.="<br>";
-$data.="VENDEDOR: ".$nombre;
-$data.="<br>";
-$data.="------------------------------------";
+$data=" <table width='247' cellpadding='0' cellspacing='0' border='0' >";
+$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
+$data.="SISTEMA LOTTOMAX";
+$data.=" </font></td> </tr>";
+$data.="<tr> <td colspan='2' align='center'><font face='Times New Roman' size='3' >";
+$data.="Agencia: ".$nombre_agencia;
+$data.="</font></td> </tr>";
+$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
+$data.="Ticket: ".$id_ticket;
+$data.="</font></td> </tr>";
+$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
+$data.="Serial: ".$serial;
+$data.="</font></td> </tr>";
+$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
+$data.="Fecha: ".$fecha_hora." ".$hora;
+$data.="</font></td> </tr>";
+$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
+$data.="Taquilla: ".$id_taquilla;
+$data.="</font></td> </tr>";
+$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
+$data.="Vendedor: ".$nombre;
+$data.="</font></td> </tr>";
+
+$data.="<tr height='10'><td colspan='2' align='center'></td></tr>";
 
 $data1="";
-
 
 //setea impreso=1 en ticket para saber que ya esta impreso
 $obj_modelo->SeteaImpresionenTicket($id_ticket);
@@ -111,41 +123,39 @@ $sorteosenticket=array();
 $combinacionunica=array();
 $ticket_completo=array();
 
-//Determinando Numeros No Zodiacales Primero
-if( $result= $obj_modelo->GetDetalleTicketNoZodiacalByIdticket($id_ticket) ){
+//Determinando  Primero
+if( $result= $obj_modelo->GetDetalleTicketByIdticket($id_ticket) ){
 	//Numeros jugados NoZodiacal
-	$numero_jugadasNoZodiacal=$obj_conexion->GetNumberRows($result);
+	$numero_jugadas=$obj_conexion->GetNumberRows($result);
 	while($row= $obj_conexion->GetArrayInfo($result)){
-
-		$combinacion=$row['numero']." x ".$row['monto'];	
-			
-		//Guardar todos los sorteos pero una sola vez
-		if(!in_array($row['id_sorteo'], $sorteosenticket) ) {
-			$sorteosenticket[]=$row['id_sorteo'];
-		}		
-
-		//Guardar todos las combinaciones Unicas de Numero y Monto 14-1.00
-		if(!in_array($combinacion, $combinacionunica) ) {
-			$combinacionunica[]=$combinacion;
+		if($row['id_zodiacal']==0){
+			$combinacion=$row['numero']." x ".$row['monto'];
+			$ticket_completo[]=$row['id_sorteo']."x".$row['numero']." x ".$row['monto'];
 		}
-		$ticket_completo[]=$row['id_sorteo']."x".$row['numero']." x ".$row['monto'];
+		else{
+			$combinacion=$row['numero']." x ".$row['monto']."-".$row['id_zodiacal'];
+			$ticket_completo[]=$row['id_sorteo']."x".$row['numero']." x ".$row['monto']."-".$row['id_zodiacal'];
+		}
+		//Guardar todos los sorteos pero una sola vez
+		//$sorteoszodiac[]=$row['id_zodiacal'];
+		if(!in_array($row['id_sorteo'], $sorteosenticket)){
+			$sorteosenticket[]=$row['id_sorteo'];
+		}
+			
+		//Guardar todos las combinaciones Unicas de Numero y Monto 14-1.00
+		if(!in_array($combinacion, $combinacionunica) )
+			$combinacionunica[]=$combinacion;
 	}// fin de while
-	
-
 	// Creamos un array General $combinacion_ticket
 	// donde el key es la combinacion de ['numero x monto']
 	// y donde los valores es una cadena con los id_sorteo  [123 x 1.00] => 26-27-41-42
 	$combinacion_ticket=array();
-	$i=0;
-	for($i;$i<count($combinacionunica);$i++){
-		$j=0;
-		for($j;$j<count($sorteosenticket);$j++){
-				
+	for($i=0;$i<count($combinacionunica);$i++){
+		for($j=0;$j<count($sorteosenticket);$j++){
 			//verificar si esta combinacion existe
 			foreach ($ticket_completo as $tc){	
 				$combinacion_creada= $sorteosenticket[$j]."x".$combinacionunica[$i];
 				if ($tc == $combinacion_creada){
-										
 					if (isset($combinacion_ticket[$combinacionunica[$i]])) {
 						$combinacion_ticket[$combinacionunica[$i]].= "-".$sorteosenticket[$j];
 					}else{
@@ -156,9 +166,7 @@ if( $result= $obj_modelo->GetDetalleTicketNoZodiacalByIdticket($id_ticket) ){
 			}
 		}
 	}
-
 	//Creando el Ticket Final 
-	
 	// Invirtiendo el Arreglo 
 	// Ahora los keys sera la cadena de los Id_sorteos [4-5-6-11-12-13-15-16-79-80] => Array
 	// y los valores sera un subarray con todos las combinaciones de ['numero x monto'] 
@@ -166,151 +174,77 @@ if( $result= $obj_modelo->GetDetalleTicketNoZodiacalByIdticket($id_ticket) ){
 	foreach ($combinacion_ticket as $comb_numMonto => $todoslossorteos){
 		$ticket_final[$todoslossorteos][]=$comb_numMonto;
 	}
-	
-
 	$nombre_sorteo=array();
 	$i=0;
 	foreach ($ticket_final as $todoslossorteos => $comb_numMonto){
-
 		//Convertir en array todos los sorteos 
 		$todoslossorteos2 = preg_split('/-/', $todoslossorteos);
-		
+		$g=0;
 		foreach ($todoslossorteos2 as $ts){
-			if (!isset($nombre_sorteo[$ts])) {
+			$sw=0;
+			if (!isset($nombre_sorteo[$ts])){
 				$nombre_sorteo[$ts]=$obj_modelo->GetNombreSorteo($ts);
 			}
-			$data.="<br>"; //para cada nombre de sorteo aparte
-			$data.="-".$nombre_sorteo[$ts];							
+			if($g==2 OR $g==0){
+				if($obj_generico->SizeText($obj_generico->ToTitle($nombre_sorteo[$ts])) <= 18){
+					$data.="<tr><td align='left' ><font face='Times New Roman' size='3'  ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td>";
+					$sw=1;
+				}					
+				else
+					$data.="<tr><td colspan='2' align='left'><font face='Times New Roman' size='3'><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
+				$g=0;
+			}					
+			else{
+				if($obj_generico->SizeText($obj_generico->ToTitle($nombre_sorteo[$ts])) <= 18)
+					$data.="<td align='left' ><font face='Times New Roman' size='3' ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
+				else
+					$data.="<td></td><tr><td colspan='2' align='left' ><font face='Times New Roman' size='3' ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
+			}					
+			$g++;
 		}
-		
+		if($sw==1)
+		$data.="<td align='left'></td></tr>";
+		$data.="<tr  height='10'><td colspan='2'><table width='247' cellpadding='1' cellspacing='4' border='0' >";
+		$g=0;
 		foreach($comb_numMonto as $cn){
-			$data.="<br>"; //para cada nombre de sorteo aparte
-			$data.=$cn;							
-		}
-		$data.="<br>";// para separar bloques
-
-	}
-	
-
-
-}
-
-//Determinando Ahora Numeros Zodiacales
-$sorteosenticket=array();
-$combinacionunica=array();
-$ticket_completo=array();
-
-if( $result= $obj_modelo->GetDetalleTicketZodiacalByIdticket($id_ticket) ){
-	//Numeros jugados NoZodiacal
-	$numero_jugadasZodiacal=$obj_conexion->GetNumberRows($result);
-	
-	$numero_jugadas=$numero_jugadasZodiacal+$numero_jugadasNoZodiacal;
-		
-	while($row= $obj_conexion->GetArrayInfo($result)){
-		
-		$combinacion=$row['numero']." x ".$row['monto']."-".$row['id_zodiacal'];
-			
-		//Guardar todos los sorteos pero una sola vez
-		if(!in_array($row['id_sorteo'], $sorteosenticket) ) {
-			$sorteosenticket[]=$row['id_sorteo'];
-		}
-
-		//Guardar todos las combinaciones Unicas de Numero,Monto y IdZodiacal 14x1.00x9
-		if(!in_array($combinacion, $combinacionunica) ) {
-			$combinacionunica[]=$combinacion;
-		}
-		$ticket_completo[]=$row['id_sorteo']."x".$row['numero']." x ".$row['monto']."-".$row['id_zodiacal'];
-	}// fin de while
-
-	// Creamos un array General $combinacion_ticket
-	// donde el key es la combinacion de ['numero x monto']
-	// y donde los valores es una cadena con los id_sorteo  [123 x 1.00] => 26-27-41-42
-	$combinacion_ticket=array();
-	$i=0;
-	for($i;$i<count($combinacionunica);$i++){
-		$j=0;
-		for($j;$j<count($sorteosenticket);$j++){
-
-			//verificar si esta combinacion existe
-			foreach ($ticket_completo as $tc){
-				$combinacion_creada= $sorteosenticket[$j]."x".$combinacionunica[$i];
-				if ($tc == $combinacion_creada){
-					//$combinacion_ticket[$combinacionunica[$i]][]= $sorteosenticket[$j];
-						
-					if (isset($combinacion_ticket[$combinacionunica[$i]])) {
-						$combinacion_ticket[$combinacionunica[$i]].= "-".$sorteosenticket[$j];
-					}else{
-						$combinacion_ticket[$combinacionunica[$i]]= $sorteosenticket[$j];
-					}
-						
-				}
+			$array_sorteo=preg_split('/-/',$cn);
+			if(count($array_sorteo)>1)
+				$cn=$array_sorteo[0]." - ".$pre_zod[$array_sorteo[1]];
+			if($g==0){
+				$data.="<tr><td align='left'><font face='Arial' size='2' > ".$cn."</td>";
+				$g++;
 			}
-		}
-	} 
-	//print_r($combinacion_ticket);
-	//Creando el Ticket Final 
-	
-	// Invirtiendo el Arreglo 
-	// Ahora los keys sera la cadena de los Id_sorteos [4-5-6-11-12-13-15-16-79-80] => Array
-	// y los valores sera un subarray con todos las combinaciones de ['numero x monto'] 
-	$ticket_final=array();
-	foreach ($combinacion_ticket as $comb_numMonto => $todoslossorteos){
-		$ticket_final[$todoslossorteos][]=$comb_numMonto;
-	}
-
-	$nombre_sorteo=array();
-	$nombre_prezodiacal=array();
-	$i=0;
-	foreach ($ticket_final as $todoslossorteos => $comb_numMonto){
-
-		//Convertir en array todos los sorteos
-		$todoslossorteos2 = preg_split('/-/', $todoslossorteos);
-
-		foreach ($todoslossorteos2 as $ts){
-			if (!isset($nombre_sorteo[$ts])) {
-				$nombre_sorteo[$ts]=$obj_modelo->GetNombreSorteo($ts);
+			elseif($g==1){
+				$data.="<td align='center'><font face='Arial' size='2' >".$cn."</td>";
+				$g++;
 			}
-			$data.="<br>"; //para cada nombre de sorteo aparte
-			$data.="-".$nombre_sorteo[$ts];
+			elseif($g==2){
+				$data.="<td align='left'><font face='Arial' size='2' >".$cn."</td></tr>";
+				$g=0;
+			}	
 		}
-					
-
-		foreach($comb_numMonto as $cn){
-			
-			// para separar combNumxMonto-Idzodi por "-"
-			$resulto= explode('-', $cn);
-			//print_r($resulto);
-			$numxMonto=$resulto[0];
-			$id_zod=$resulto[1];
-			if (!isset($nombre_prezodiacal[$id_zod])) {
-				$prenombre_signo[$id_zod]=$obj_modelo->GetPreNombreSigno($id_zod);
-			}			
-			
-			$data.="<br>"; //para cada nombre de sorteo aparte
-			$data.=$numxMonto." ".$prenombre_signo[$id_zod];
-		}
-		$data.="<br>";// para separar bloques  
-
+		if($g==1)
+		$data.="<td colspan='2'align='left'></td></tr>";
+		elseif($g==2)
+		$data.="<td align='left'></td></tr>";
+		$data.="</td></tr></table>";
 	}
-
-
-
 }
-
-
-
 // FOOTER
-$data.="<br>";
-$data.="------------------------------------";
-$data.="<br>";
-$data.="BUENA SUERTE...";
-$data.="<br>";
-$data.="NUMEROS JUGADOS: ".$numero_jugadas;
-$data.="<br>";
+$data.="<tr  height='10'><td colspan='2'></td></tr>";
+$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
+$data.="BUENA SUERTE";
+$data.=" </font></td> </tr>";
+$data.="<tr> <td colspan='2' align='center'><font face='Times New Roman' size='3' >";
+$data.="Numeros Jugados: ".$numero_jugadas;
+$data.=" </font></td> </tr>";
+$data.="<tr> <td colspan='2' align='center'><font face='Times New Roman' size='3' >";
 $data.="TOTAL: ".$total_ticket;
-$data.="<br>";
-$data.="Caduca en ".$tiempo_vigencia_ticket." dias el Premio";
-
+$data.=" </font></td> </tr>";
+$data.="<tr> <td colspan='2' align='center'><font face='Times New Roman' size='3' >";
+$data.="Caduca en: ".$tiempo_vigencia_ticket." dias el Premio";
+$data.=" </font></td> </tr>";
+$data.="</table>";
 
 // Obtenemos los datos de la taquilla
 $ida_taquilla= $obj_modelo->GetIdTaquillabyNumero($id_taquilla);
@@ -325,51 +259,45 @@ $lineas_saltar_despues=$info_impresora["lineas_saltar_despues"];
 $ver_numeros_incompletos=$info_impresora["ver_numeros_incompletos"];
 $ver_numeros_agotados=$info_impresora["ver_numeros_agotados"];
 
-
-
-
-$id_bandera=0;
-
 //INCOMPLETOS Y AGOTADOS
 
 $sorteosenticket=array();
 $combinacionunica=array();
 $ticket_completo=array();
 
+if( $result2= $obj_modelo->GetNumerosIncompletosTransaccional($id_taquilla) ){
 
-$id_bandera=0;
-
-if( $result2= $obj_modelo->GetNumerosIncompletosTransaccionalNoZodiacal($id_taquilla) ){
-			
-	while($row= $obj_conexion->GetArrayInfo($result2)){
-		//print_r($row);
-		//exit();
-
-			if ($row['incompleto'] != '0' && $id_bandera == '0'){
-				// validacion para mostrar o no incompletos
-				if ($ver_numeros_incompletos == '1') {
-					$data.="<br><br><br>";
-					$data.="INCOMPLETOS";
-				}
-				$id_bandera=$row['incompleto'];
-			}
-
-		
-		$combinacion=$row['numero']." x ".$row['monto_faltante']*(-1);	
-			
-		//Guardar todos los sorteos pero una sola vez
-		if(!in_array($row['id_sorteo'], $sorteosenticket) ) {
-			$sorteosenticket[]=$row['id_sorteo'];
-		}		
-
-		//Guardar todos las combinaciones Unicas de Numero y Monto 14-1.00
-		if(!in_array($combinacion, $combinacionunica) ) {
-			$combinacionunica[]=$combinacion;
-		}
-		$ticket_completo[]=$row['id_sorteo']."x".$row['numero']." x ".$row['monto_faltante']*(-1);
+	$data.=" <table width='247' cellpadding='0' cellspacing='0' border='0' >";
+	$data.="<tr height='10'><td colspan='2' align='center'></td> </tr>";
+	$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
+	$data.="Incompletos";
+	$data.=" </font></td> </tr>";
 	
-	}
+	
+	while($row= $obj_conexion->GetArrayInfo($result2)){
+		//if($row['incompleto']==1){
+		if($row['incompleto']==1)
+		$monto=($row['monto_faltante']*(-1));
+		else
+		$monto=($row['monto_faltante']);
 
+		if($row['id_zodiacal']==0){
+			$combinacion=$row['numero']." x ".$monto;	
+			$ticket_completo[]=$row['id_sorteo']."x".$row['numero']." x ".$monto;	
+		}
+		else{
+			$combinacion=$row['numero']." x ".$monto."-".$row['id_zodiacal'];
+			$ticket_completo[]=$row['id_sorteo']."x".$row['numero']." x ".$monto."-".$row['id_zodiacal'];
+		}
+		//Guardar todos los sorteos pero una sola vez
+		//$sorteoszodiac[]=$row['id_zodiacal'];
+		if(!in_array($row['id_sorteo'], $sorteosenticket)){
+			$sorteosenticket[]=$row['id_sorteo'];
+		}
+		//Guardar todos las combinaciones Unicas de Numero y Monto 14-1.00
+		if(!in_array($combinacion, $combinacionunica) )
+			$combinacionunica[]=$combinacion;
+	}// fin de while
 	// Creamos un array General $combinacion_ticket
 	// donde el key es la combinacion de ['numero x monto']
 	// y donde los valores es una cadena con los id_sorteo  [123 x 1.00] => 26-27-41-42
@@ -396,7 +324,6 @@ if( $result2= $obj_modelo->GetNumerosIncompletosTransaccionalNoZodiacal($id_taqu
 	}
 	
 	//Creando el Ticket Final
-	
 	// Invirtiendo el Arreglo
 	// Ahora los keys sera la cadena de los Id_sorteos [4-5-6-11-12-13-15-16-79-80] => Array
 	// y los valores sera un subarray con todos las combinaciones de ['numero x monto']
@@ -404,142 +331,63 @@ if( $result2= $obj_modelo->GetNumerosIncompletosTransaccionalNoZodiacal($id_taqu
 	foreach ($combinacion_ticket as $comb_numMonto => $todoslossorteos){
 		$ticket_final[$todoslossorteos][]=$comb_numMonto;
 	}
-	
 	$nombre_sorteo=array();
 	$i=0;
 	foreach ($ticket_final as $todoslossorteos => $comb_numMonto){
-	
-		//Convertir en array todos los sorteos
+		//Convertir en array todos los sorteos 
 		$todoslossorteos2 = preg_split('/-/', $todoslossorteos);
-	
+		$g=0;
 		foreach ($todoslossorteos2 as $ts){
-			if (!isset($nombre_sorteo[$ts])) {
+			$sw=0;
+			if (!isset($nombre_sorteo[$ts])){
 				$nombre_sorteo[$ts]=$obj_modelo->GetNombreSorteo($ts);
 			}
-			$data.="<br>"; //para cada nombre de sorteo aparte
-			$data.="-".$nombre_sorteo[$ts];
+			if($g==2 OR $g==0){
+				if($obj_generico->SizeText($obj_generico->ToTitle($nombre_sorteo[$ts])) <= 18){
+					$data.="<tr><td align='left' ><font face='Times New Roman' size='3'  ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td>";
+					$sw=1;
+				}					
+				else
+					$data.="<tr><td colspan='2' align='left'><font face='Times New Roman' size='3'><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
+				$g=0;
+			}					
+			else{
+				if($obj_generico->SizeText($obj_generico->ToTitle($nombre_sorteo[$ts])) <= 18)
+					$data.="<td align='left' ><font face='Times New Roman' size='3' ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
+				else
+					$data.="<td></td><tr><td colspan='2' align='left' ><font face='Times New Roman' size='3' ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
+			}					
+			$g++;
 		}
-	
+		if($sw==1)
+		$data.="<td align='left'></td></tr>";
+		$data.="<tr  height='10'><td colspan='2'><table width='247' cellpadding='1' cellspacing='4' border='0' >";
+		$g=0;
 		foreach($comb_numMonto as $cn){
-			$data.="<br>"; //para cada nombre de sorteo aparte
-			$data.=$cn;
+			$array_sorteo=preg_split('/-/',$cn);
+			if(count($array_sorteo)>2)
+				$cn=$array_sorteo[0]." - ".$pre_zod[$array_sorteo[1]];
+			if($g==0){
+				$data.="<tr><td align='left'><font face='Arial' size='2' > ".$cn."</td>";
+				$g++;
+			}
+			elseif($g==1){
+				$data.="<td align='center'><font face='Arial' size='2' >".$cn."</td>";
+				$g++;
+			}
+			elseif($g==2){
+				$data.="<td align='left'><font face='Arial' size='2' >".$cn."</td></tr>";
+				$g=0;
+			}	
 		}
-		$data.="<br>";// para separar bloques
-	
+		if($g==1)
+		$data.="<td colspan='2'align='left'></td></tr>";
+		elseif($g==2)
+		$data.="<td align='left'></td></tr>";
+		$data.="</td></tr></table>";
 	}
 
 }
-
-$sorteosenticket=array();
-$combinacionunica=array();
-$ticket_completo=array();
-//INCOMPLETOS Y AGOTADOS
-
-if( $result2= $obj_modelo->GetNumerosIncompletosTransaccionalZodiacal($id_taquilla) ){
-
-	while($row= $obj_conexion->GetArrayInfo($result2)){
-
-		if ($row['incompleto'] != '0' && $id_bandera == '0'){
-			// validacion para mostrar o no incompletos
-			if ($ver_numeros_incompletos == '1') {
-				$data.="<br><br><br>";
-				$data.="INCOMPLETOS";
-			}
-			$id_bandera=$row['incompleto'];
-		}
-
-
-
-		$combinacion=$row['numero']." x ".$row['monto_faltante']*(-1)."-".$row['id_zodiacal'];
-			
-		//Guardar todos los sorteos pero una sola vez
-		if(!in_array($row['id_sorteo'], $sorteosenticket) ) {
-			$sorteosenticket[]=$row['id_sorteo'];
-		}
-
-		//Guardar todos las combinaciones Unicas de Numero,Monto y IdZodiacal 14x1.00x9
-		if(!in_array($combinacion, $combinacionunica) ) {
-			$combinacionunica[]=$combinacion;
-		}
-		$ticket_completo[]=$row['id_sorteo']."x".$row['numero']." x ".$row['monto_faltante']*(-1)."-".$row['id_zodiacal'];
-
-	}
-		
-	// Creamos un array General $combinacion_ticket
-	// donde el key es la combinacion de ['numero x monto']
-	// y donde los valores es una cadena con los id_sorteo  [123 x 1.00] => 26-27-41-42
-	$combinacion_ticket=array();
-	$i=0;
-	for($i;$i<count($combinacionunica);$i++){
-		$j=0;
-		for($j;$j<count($sorteosenticket);$j++){
-	
-			//verificar si esta combinacion existe
-			foreach ($ticket_completo as $tc){
-				$combinacion_creada= $sorteosenticket[$j]."x".$combinacionunica[$i];
-				if ($tc == $combinacion_creada){
-					//$combinacion_ticket[$combinacionunica[$i]][]= $sorteosenticket[$j];
-	
-					if (isset($combinacion_ticket[$combinacionunica[$i]])) {
-						$combinacion_ticket[$combinacionunica[$i]].= "-".$sorteosenticket[$j];
-					}else{
-						$combinacion_ticket[$combinacionunica[$i]]= $sorteosenticket[$j];
-					}
-	
-				}
-			}
-		}
-	}
-	//print_r($combinacion_ticket);
-	//Creando el Ticket Final
-	
-	// Invirtiendo el Arreglo
-	// Ahora los keys sera la cadena de los Id_sorteos [4-5-6-11-12-13-15-16-79-80] => Array
-	// y los valores sera un subarray con todos las combinaciones de ['numero x monto']
-	$ticket_final=array();
-	foreach ($combinacion_ticket as $comb_numMonto => $todoslossorteos){
-		$ticket_final[$todoslossorteos][]=$comb_numMonto;
-	}
-	
-	$nombre_sorteo=array();
-	$nombre_prezodiacal=array();
-	$i=0;
-	foreach ($ticket_final as $todoslossorteos => $comb_numMonto){
-	
-		//Convertir en array todos los sorteos
-		$todoslossorteos2 = preg_split('/-/', $todoslossorteos);
-	
-		foreach ($todoslossorteos2 as $ts){
-			if (!isset($nombre_sorteo[$ts])) {
-				$nombre_sorteo[$ts]=$obj_modelo->GetNombreSorteo($ts);
-			}
-			$data.="<br>"; //para cada nombre de sorteo aparte
-			$data.="-".$nombre_sorteo[$ts];
-		}
-			
-	
-		foreach($comb_numMonto as $cn){
-				
-			// para separar combNumxMonto-Idzodi por "-"
-			$resulto= explode('-', $cn);
-			//print_r($resulto);
-			$numxMonto=$resulto[0];
-			$id_zod=$resulto[1];
-			if (!isset($nombre_prezodiacal[$id_zod])) {
-				$prenombre_signo[$id_zod]=$obj_modelo->GetPreNombreSigno($id_zod);
-			}
-				
-			$data.="<br>"; //para cada nombre de sorteo aparte
-			$data.=$numxMonto." ".$prenombre_signo[$id_zod];
-		}
-		$data.="<br>";// para separar bloques
-	
-	}
-
-}
-
-
-
 
 
 
@@ -559,9 +407,9 @@ echo $data;
 
 ?>
 
-<script type="text/javascript"> 
+<!-- <script type="text/javascript"> 
 window.print();
 </script>
 <script language='javascript'>setTimeout('self.close();',5000)</script>
 </body>
-</html>
+</html> -->
