@@ -63,15 +63,12 @@ $data="";
 				// ENCABEZADO DEL TICKET
 				$data.="SISTEMA LOTTOMAX";
 				$data.="<br>";
-				$data.="CUADRE TAQUILLA";
-				$data.="<br>";
- 	
-            	//Cambio de tamano fuenta a 10 cpi
-				$data1="\\x1B\\x50";
-				$data1.="SISTEMA LOTTOMAX";
-				$data1.="\\n";
-				$data1.="CUADRE CON BANCA";
-				$data1.="\\n";										            
+                if(!empty ($id_taquilla)){
+                	$data.="CUADRE TAQUILLA: $id_taquilla";
+                }else{
+                	$data.="VENTAS DE TAQUILLAS";
+                } 				
+				$data.="<br>";								            
               
                 while($row= $obj_conexion->GetArrayInfo($result)){
                         
@@ -79,15 +76,7 @@ $data="";
 					$data.="<br>Total Ventas: ".$row['total_ventas'];					                									
 					$data.="<br>";
 					$data.="-----------------------------";
-					$data.="<br>";
-
-					
-					$data1.="\\nFECHA: ".$row['fecha'];
-					$data1.="\\nTotal Ventas: ".$row['total_ventas'];					                									
-					$data1.="\\n";
-					$data1.="-----------------------------";
-					$data1.="\\n";					
-				                        
+					$data.="<br>";  
                     
                 }
  				

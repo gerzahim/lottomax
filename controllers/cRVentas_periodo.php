@@ -80,7 +80,12 @@ switch (ACCION){
 
                     
                 }
-
+                if(!Empty($taquilla)){
+                    $obj_xtpl->assign('taquilla_info', ' Listado de Ventas de Taquilla: '.$taquilla);
+                }else{
+                	$obj_xtpl->assign('taquilla_info', ' Listado de Ventas de Todas Las Taquillas:');
+                }                
+                
                 $obj_xtpl->assign('total_ventas', ' El total de ventas fue: Bs. F. '.$total_ventas);
                 $obj_xtpl->assign('ticket_anulados', ' Cantidad de tickets anulados: '.$cantidad_anulados);
                 
