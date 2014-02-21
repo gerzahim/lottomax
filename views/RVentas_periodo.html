@@ -106,13 +106,16 @@
                         <input style="border: hidden" type="hidden" name="sorteo" id="idaccion" value="{sorteo}"/>
 			<table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1">
 				<caption>Tickets desde {fechadesde} hasta {fechahasta}</caption>
-
+							<div class="paginas">{taquilla_info}</div>
+                            <div class="paginas">{total_ventas}</div>
+                            <div class="paginas">{ticket_anulados}</div>
+                            
 				<thead>
 					<tr>
 						<th class="title header" scope="col">Fecha Hora</th>
-                                                <th class="title header" scope="col">Numero Ticket</th>
+                        <th class="title header" scope="col">Numero Ticket</th>
 						<th class="title header" scope="col">Monto</th>
-                                                <th class="title header" scope="col">Detalle Ticket</th>
+                        <th class="title header" scope="col">Detalle Ticket</th>
 					</tr>
 				</thead>
 
@@ -123,7 +126,7 @@
 						<td align="center">&nbsp;{fecha_hora}</td>
 						<td align="center">{id_ticket}</td>
    						<td align="center">{total}</td>                                         
-                                                <td align="center"><a href="{link_detalle}" target="_blank">Ver Detalle</a></td>
+                        <td align="center"><a href="{link_detalle}" target="_blank">Ver Detalle</a></td>
 					</tr>
 					<!-- END: lista -->
 
@@ -139,9 +142,8 @@
                                     </tfoot>
 			</table>
                             <div class="paginas">{paginacion}</div>
-
+							<div class="paginas">{taquilla_info}</div>
                             <div class="paginas">{total_ventas}</div>
-
                             <div class="paginas">{ticket_anulados}</div>
 
                             
