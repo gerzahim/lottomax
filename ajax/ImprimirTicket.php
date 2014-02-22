@@ -105,7 +105,7 @@ $data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3'
 $data.="Serial: ".$serial;
 $data.="</font></td> </tr>";
 $data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
-$data.=$dias[3]." ".$fecha_hora." ".$hora;
+$data.=$dias[3]." ".$fecha_hora."  ".$hora;
 $data.="</font></td> </tr>";
 $data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
 $data.="Taquilla: ".$id_taquilla;
