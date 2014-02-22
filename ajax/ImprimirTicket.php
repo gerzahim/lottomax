@@ -88,7 +88,7 @@ $tiempo_vigencia_ticket=$info_agencia["tiempo_vigencia_ticket"];
 
 
 // ENCABEZADO DEL TICKET
-$data=" <table width='247' cellpadding='0' cellspacing='0' border='0' >";
+$data=" <table width='260' cellpadding='0' cellspacing='0' border='0' >";
 $data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
 $data.="SISTEMA LOTTOMAX";
 $data.=" </font></td> </tr>";
@@ -267,7 +267,7 @@ $ticket_completo=array();
 
 if( $result2= $obj_modelo->GetNumerosIncompletosTransaccional($id_taquilla) ){
 
-	$data.=" <table width='247' cellpadding='0' cellspacing='0' border='0' >";
+	$data.=" <table width='260' cellpadding='0' cellspacing='0' border='0' >";
 	$data.="<tr height='10'><td colspan='2' align='center'></td> </tr>";
 	$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
 	$data.="Incompletos";
