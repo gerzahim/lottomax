@@ -88,26 +88,26 @@ $tiempo_vigencia_ticket=$info_agencia["tiempo_vigencia_ticket"];
 
 
 // ENCABEZADO DEL TICKET
-$data=" <table width='240' cellpadding='0' cellspacing='0' border='0' >";
-$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='2' >";
+$data=" <table width='300' cellpadding='0' cellspacing='0' border='0' >";
+$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
 $data.="SISTEMA LOTTOMAX";
 $data.=" </font></td> </tr>";
-$data.="<tr> <td colspan='2' align='center'><font face='Times New Roman' size='2' >";
+$data.="<tr> <td colspan='2' align='center'><font face='Times New Roman' size='3' >";
 $data.="Agencia: ".$nombre_agencia;
 $data.="</font></td> </tr>";
-$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='2' >";
+$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
 $data.="Ticket: ".$id_ticket;
 $data.="</font></td> </tr>";
-$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='2' >";
+$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
 $data.="Serial: ".$serial;
 $data.="</font></td> </tr>";
-$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='2' >";
+$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
 $data.="Fecha: ".$fecha_hora." ".$hora;
 $data.="</font></td> </tr>";
-$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='2' >";
+$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
 $data.="Taquilla: ".$id_taquilla;
 $data.="</font></td> </tr>";
-$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='2' >";
+$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
 $data.="Vendedor: ".$nombre;
 $data.="</font></td> </tr>";
 
@@ -187,39 +187,39 @@ if( $result= $obj_modelo->GetDetalleTicketByIdticket($id_ticket) ){
 			}
 			if($g==2 OR $g==0){
 				if($obj_generico->SizeText($obj_generico->ToTitle($nombre_sorteo[$ts])) <= 18){
-					$data.="<tr><td align='left' ><font face='Times New Roman' size='2'  ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td>";
+					$data.="<tr><td align='left' ><font face='Times New Roman' size='3'  ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td>";
 					$sw=1;
 				}					
 				else
-					$data.="<tr><td colspan='2' align='left'><font face='Times New Roman' size='2'><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
+					$data.="<tr><td colspan='2' align='left'><font face='Times New Roman' size='3'><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
 				$g=0;
 			}					
 			else{
 				if($obj_generico->SizeText($obj_generico->ToTitle($nombre_sorteo[$ts])) <= 18)
-					$data.="<td align='left' ><font face='Times New Roman' size='2' ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
+					$data.="<td align='left' ><font face='Times New Roman' size='3' ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
 				else
-					$data.="<td></td><tr><td colspan='2' align='left' ><font face='Times New Roman' size='2' ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
+					$data.="<td></td><tr><td colspan='2' align='left' ><font face='Times New Roman' size='3' ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
 			}					
 			$g++;
 		}
 		if($sw==1)
 		$data.="<td align='left'></td></tr>";
-		$data.="<tr  height='10'><td colspan='2'><table width='240' cellpadding='1' cellspacing='4' border='0' >";
+		$data.="<tr  height='10'><td colspan='2'><table width='300' cellpadding='1' cellspacing='4' border='0' >";
 		$g=0;
 		foreach($comb_numMonto as $cn){
 			$array_sorteo=preg_split('/-/',$cn);
 			if(count($array_sorteo)>1)
 				$cn=$array_sorteo[0]." - ".$pre_zod[$array_sorteo[1]];
 			if($g==0){
-				$data.="<tr><td align='left'><font face='Arial' size='1' > ".$cn."</td>";
+				$data.="<tr><td align='left'><font face='Arial' size='2' > ".$cn."</td>";
 				$g++;
 			}
 			elseif($g==1){
-				$data.="<td align='center'><font face='Arial' size='1' >".$cn."</td>";
+				$data.="<td align='center'><font face='Arial' size='2' >".$cn."</td>";
 				$g++;
 			}
 			elseif($g==2){
-				$data.="<td align='left'><font face='Arial' size='1' >".$cn."</td></tr>";
+				$data.="<td align='left'><font face='Arial' size='2' >".$cn."</td></tr>";
 				$g=0;
 			}	
 		}
@@ -232,16 +232,16 @@ if( $result= $obj_modelo->GetDetalleTicketByIdticket($id_ticket) ){
 }
 // FOOTER
 $data.="<tr  height='10'><td colspan='2'></td></tr>";
-$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='2' >";
+$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
 $data.="BUENA SUERTE";
 $data.=" </font></td> </tr>";
-$data.="<tr> <td colspan='2' align='center'><font face='Times New Roman' size='2' >";
+$data.="<tr> <td colspan='2' align='center'><font face='Times New Roman' size='3' >";
 $data.="Numeros Jugados: ".$numero_jugadas;
 $data.=" </font></td> </tr>";
-$data.="<tr> <td colspan='2' align='center'><font face='Times New Roman' size='2' >";
+$data.="<tr> <td colspan='2' align='center'><font face='Times New Roman' size='3' >";
 $data.="TOTAL: ".$total_ticket;
 $data.=" </font></td> </tr>";
-$data.="<tr> <td colspan='2' align='center'><font face='Times New Roman' size='2' >";
+$data.="<tr> <td colspan='2' align='center'><font face='Times New Roman' size='3' >";
 $data.="Caduca en: ".$tiempo_vigencia_ticket." dias el Premio";
 $data.=" </font></td> </tr>";
 $data.="</table>";
@@ -269,7 +269,7 @@ $total_incompletos=$obj_conexion->GetNumberRows($result2);
 if($total_incompletos>0){
 	$data.=" <table width='260' cellpadding='0' cellspacing='0' border='0' >";
 	$data.="<tr height='10'><td colspan='2' align='center'></td> </tr>";
-	$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='2' >";
+	$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
 	$data.="Incompletos";
 	$data.=" </font></td> </tr>";
 	while($row= $obj_conexion->GetArrayInfo($result2)){
@@ -342,18 +342,18 @@ if($total_incompletos>0){
 			}
 			if($g==2 OR $g==0){
 				if($obj_generico->SizeText($obj_generico->ToTitle($nombre_sorteo[$ts])) <= 18){
-					$data.="<tr><td align='left' ><font face='Times New Roman' size='2'  ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td>";
+					$data.="<tr><td align='left' ><font face='Times New Roman' size='3'  ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td>";
 					$sw=1;
 				}					
 				else
-					$data.="<tr><td colspan='2' align='left'><font face='Times New Roman' size='2'><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
+					$data.="<tr><td colspan='2' align='left'><font face='Times New Roman' size='3'><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
 				$g=0;
 			}					
 			else{
 				if($obj_generico->SizeText($obj_generico->ToTitle($nombre_sorteo[$ts])) <= 18)
-					$data.="<td align='left' ><font face='Times New Roman' size='2' ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
+					$data.="<td align='left' ><font face='Times New Roman' size='3' ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
 				else
-					$data.="<td></td><tr><td colspan='2' align='left' ><font face='Times New Roman' size='2' ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
+					$data.="<td></td><tr><td colspan='2' align='left' ><font face='Times New Roman' size='3' ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
 			}					
 			$g++;
 		}
@@ -366,15 +366,15 @@ if($total_incompletos>0){
 			if(count($array_sorteo)>2)
 				$cn=$array_sorteo[0]." - ".$pre_zod[$array_sorteo[1]];
 			if($g==0){
-				$data.="<tr><td align='left'><font face='Arial' size='1' > ".$cn."</td>";
+				$data.="<tr><td align='left'><font face='Arial' size='2' > ".$cn."</td>";
 				$g++;
 			}
 			elseif($g==1){
-				$data.="<td align='center'><font face='Arial' size='1' >".$cn."</td>";
+				$data.="<td align='center'><font face='Arial' size='2' >".$cn."</td>";
 				$g++;
 			}
 			elseif($g==2){
-				$data.="<td align='left'><font face='Arial' size='1' >".$cn."</td></tr>";
+				$data.="<td align='left'><font face='Arial' size='2' >".$cn."</td></tr>";
 				$g=0;
 			}	
 		}
