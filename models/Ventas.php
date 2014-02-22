@@ -278,8 +278,10 @@ class Ventas{
 	public function GetNumerosIncompletosTransaccional($id_taquilla){
 		//echo "PASa";
 		//Preparacion del query
-		$sql = "SELECT * FROM ticket_transaccional WHERE id_taquilla = '".$id_taquilla."' AND incompleto ='1' OR incompleto ='2'  ORDER BY id_ticket_transaccional DESC ";
+		$sql = "SELECT * FROM ticket_transaccional WHERE id_taquilla = '".$id_taquilla."' AND (incompleto ='1' OR incompleto ='2')  ORDER BY id_ticket_transaccional DESC ";
 		//$sql.= "ORDER BY incompleto, numero, id_sorteo ASC";	
+		//echo $sql;
+
 		return $this->vConexion->ExecuteQuery($sql);
 	}
 	
