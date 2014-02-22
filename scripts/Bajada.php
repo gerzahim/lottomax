@@ -4,12 +4,14 @@
 //require('../models/Pagar_Ganador.php');
 
 //// BAJADO = 0 Significa que el resultado no ha sido copiado en la BD local, BAJADO=1 significa que el resultado fue bajado a la BD, cuando BAJADO=2 significa que se hizo un cambio el resultado del servidor de arriba y este tiene que ser actualizado en la BD local
+require_once('BajadaController.php');
 
 $conexion_abajo = mysql_connect("localhost" , "root" , "secreta");
 mysql_select_db("lottomax",$conexion_abajo);
 
-$conexion_arriba = mysql_connect("sql3.freesqldatabase.com:3306" , "sql329054" , "gA5!tM4*",true);
-mysql_select_db("sql329054",$conexion_arriba);
+$conexion_arriba = mysql_connect("sql3.freesqldatabase.com:3306" , "sql330819" , "wJ7%mP9%",true);
+mysql_select_db("sql330819",$conexion_arriba);
+$obj_modelo= new BajadaController();
 
 
 /*$conexion_arriba = mysql_connect("www.db4free.net:3306" , "lottomaxuser" , "secreta7");
@@ -97,7 +99,7 @@ else
 	mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
 	mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
 //	echo "PASA";
-	BuscarTicketGanadores($fecha_hora);
+	PremiarGanadores($conexion_abajo, $fecha_hora);
 	//shell_exec("curl http://localhost/scripts/BuscarTicketsGanadores.php?fecha_hora=".$fecha_hora);
 	//header ("Location: );
 }
@@ -108,6 +110,7 @@ else
 $sql = "SELECT * FROM resultados WHERE bajado = 2";  
 if($result= mysql_query($sql,$conexion_arriba))
 {
+	
 	$numero_registros = mysql_num_rows($result);
 	//Creamos la cadena para insertar los resultados que no han sido bajados.
 	while ($row = mysql_fetch_array($result))
@@ -122,8 +125,8 @@ if($result= mysql_query($sql,$conexion_arriba))
 				{	
 					mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
 					mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
-					
-					BuscarTicketGanadores($fecha_hora);
+					$obj_modelo->DespremiarTicket($fecha_hora, $conexion_abajo);						
+					PremiarGanadores($conexion_abajo,$fecha_hora);
 					//shell_exec("curl http://localhost/scripts/BuscarTicketsGanadores.php?fecha_hora=".$fecha_hora);
 					//header ("Location: BuscarTicketsGanadores.php?fecha_hora=".$fecha_hora);
 				}
@@ -133,154 +136,91 @@ if($result= mysql_query($sql,$conexion_arriba))
 
 }
 
-function BuscarTicketGanadores($fecha_hora)
-{
 
-	// Archivo de variables de configuracion
-	require_once('../config/config.php');
-	$obj_config= new ConfigVars();
+function PremiarGanadores($conexion_abajo,$fecha_hora){
 	
-	// Archivo de mensajes
-	require_once('.'.$obj_config->GetVar('ruta_config').'mensajes.php');
-	
-	// Clase Generica
-	require('.'.$obj_config->GetVar('ruta_libreria').'Generica.php');
-	$obj_generico= new Generica();
-	
-	// Conexion a la bases de datos
-	require('.'.$obj_config->GetVar('ruta_libreria').'Bd.php');
-	$obj_conexion= new Bd();
-	if( !$obj_conexion->ConnectDataBase($obj_config->GetVar('host'), $obj_config->GetVar('data_base'), $obj_config->GetVar('usuario_db'), $obj_config->GetVar('clave_db')) ){
-		echo "sin_conexion_bd";
-	}
-	
-	// Modelo asignado
-	require('.'.$obj_config->GetVar('ruta_modelo').'Pagar_Ganador.php');
-	$obj_modelo= new Pagar_Ganador($obj_conexion);
-	
+	$obj_modelo= new BajadaController();
 	$id_detalle_ticket[]="";
 	$id_tickets[]="";
 	$totales[]="";
-	
-	
-	//STR_REPLACE
-	//echo "FECH".$fecha_hora;
-	$aprox_abajo= $obj_modelo->GetAprox_abajo();
-	$aprox_arriba= $obj_modelo->GetAprox_arriba();
-	
-	$obj_modelo->DespremiarTicket($fecha_hora);
-	
-	
+	$aprox= GetAprox($conexion_abajo);
 	//$where = " fecha_hora LIKE '%".date('Y-m-d')."%'";
 	//$result= $obj_modelo->GetListadosegunVariable($where);
-	
-	$result= $obj_modelo->GetListadosegunVariable($fecha_hora);
-	
-	
-	If ($obj_conexion->GetNumberRows($result)>0){
+	$resultados=array();
+	$id_sorteo=array();
+	$id_zodiacal=array();
+	$result=$obj_modelo->GetResultados($fecha_hora,$conexion_abajo);
+	while($row=mysql_fetch_array($result,$conexion_abajo)){
+		$resultados[]=$row['numero'];
+		$id_sorteo[]=$row['id_sorteo'];
+		$id_zodiacal[]=$row['zodiacal'];
+	}
+	$relacion_pago=array();
+	//$id_tipo_jugada[]=array();
+	$result=$obj_modelo->GetRelacionPagos($fecha_hora,$conexion_abajo);
+	while($row=mysql_fetch_array($result,$conexion_abajo)){
+		$relacion_pago[$row['id_tipo_jugada']]=$row['monto'];
+		//	$id_tipo_jugada[]=$row['id_tipo_jugada'];
+	}
+	//print_r($relacion_pago);
+	$result= $obj_modelo->GetListadosegunVariable($fecha_hora,$conexion_abajo);
+	If (mysql_num_rows($result,$conexion_abajo)>0){
 		$i=0; $j=0;
 		$ticket_premiado=0;
 		$monto_total_ticket=0;
-		while ($roww= $obj_conexion->GetArrayInfo($result)){
-	
-			 
+		while ($roww= mysql_fetch_array($result,$conexion_abajo)){
 			$id_ticket=$roww["id_ticket"];
-			$fecha_ticket= $obj_modelo->GetFechaTicket($id_ticket);
-			$resultDT = $obj_modelo->GetAllDetalleTciket($id_ticket);
-	
+			$fecha_ticket= substr($roww["fecha_hora"],0 , -9);
+			$resultDT = $obj_modelo->GetAllDetalleTciket($id_ticket,$conexion_abajo);
 			//revisamos la tabla de detalle ticket y comparamos con los resultados
-			while($rowDT= $obj_conexion->GetArrayInfo($resultDT)){
-				$monto_total=0;
+			$monto_total=0;
+			$sw=0;
+			while($rowDT= mysql_fetch_array($resultDT,$conexion_abajo)){
 				// Verificamos si hay alguna apuesta ganadora...
-				if ($obj_modelo->GetGanador($rowDT['id_sorteo'], $rowDT['id_zodiacal'], $rowDT['numero'], substr($fecha_ticket,0,10), $rowDT['id_tipo_jugada'])){
-					 
-					$id_detalle_ticket[$j]=$rowDT['id_detalle_ticket'];
-	
-					$monto_pago = $obj_modelo->GetRelacionPagos($rowDT['id_tipo_jugada']);
-					$monto_total = $monto_total + ($monto_pago*$rowDT['monto']);
-	
-					//destacamos la jugada ganadora en detalle ticket premiado 1 y monto ganado por la jugada
-					$obj_modelo->PremiarDetalleTicket($id_detalle_ticket[$j], $monto_total);
-					$ticket_premiado=1;
-					$monto_total_ticket = $monto_total_ticket + $monto_total;
-				}
-	
-				// Verificamos las aproximaciones por arriba y por abajo...
-				if ($aprox_abajo){ // Si esta activa la aproximacion por abajo...
-					if ($rowDT['id_tipo_jugada']==2){ // Si el tipo de jugada es Terminal
-						// Verificamos si hay aproximaciones por abajo
-						if ($obj_modelo->GetAproximacion($rowDT['id_sorteo'], $rowDT['id_zodiacal'], $rowDT['numero'], substr($fecha_ticket,0,10), 'abajo')){
-							$id_detalle_ticket[$j]=$rowDT['id_detalle_ticket'];
-							 
-							$monto_pago = $obj_modelo->GetRelacionPagos('5'); // Tipo Jugada Aproximacion
-							$monto_total = $monto_total + ($monto_pago*$rowDT['monto']);
-							 
-							//destacamos la jugada ganadora en detalle ticket premiado 1 y monto ganado por la jugada
-							$obj_modelo->PremiarDetalleTicket($id_detalle_ticket[$j], $monto_total);
-							$ticket_premiado=1;
-							$monto_total_ticket = $monto_total_ticket + $monto_total;
+				for ($i=0;$i<count($resultados);$i++){
+					$terminal_abajo=0;
+					$terminal_arriba=0;
+					if($rowDT['id_tipo_jugada']==2){
+						switch ($aprox){
+							case 0:
+								$terminal_abajo=$rowDT['numero']-1;
+								break;
+							case 1:
+								$terminal_arriba=$rowDT['numero']+1;
+								$terminal_abajo=$rowDT['numero']-1;
+								break;
+							case 2:
+								$terminal_arriba=$rowDT['numero']+1;
+								break;
+						}
+						if(($terminal_abajo==substr($resultados[$i], 1, 3) OR $terminal_arriba==substr($resultados[$i], 1, 3)) AND $rowDT['id_sorteo']==$id_sorteo[$i] ){
+							$monto_pago=$relacion_pago[5]*$rowDT['monto'];
+							$monto_total+=$monto_pago;
+							$obj_modelo->PremiarDetalleTicket($rowDT['id_detalle_ticket'], $monto_pago,$conexion_abajo);
+							$sw=1;
 						}
 					}
-				}
-	
-				if ($aprox_arriba){ // Si esta activa la aproximacion por arriba...
-					if ($rowDT['id_tipo_jugada']==2){ // Si el tipo de jugada es Terminal
-						// Verificamos si hay aproximaciones por abajo
-						if ($obj_modelo->GetAproximacion($rowDT['id_sorteo'], $rowDT['id_zodiacal'], $rowDT['numero'], substr($fecha_ticket,0,10), 'arriba')){
-							$id_detalle_ticket[$j]=$rowDT['id_detalle_ticket'];
-							 
-							$monto_pago = $obj_modelo->GetRelacionPagos('5'); // Tipo Jugada Aproximacion
-							$monto_total = $monto_total + ($monto_pago*$rowDT['monto']);
-							 
-							 
-							//destacamos la jugada ganadora en detalle ticket premiado 1 y monto ganado por la jugada
-							$obj_modelo->PremiarDetalleTicket($id_detalle_ticket[$j], $monto_total);
-							$ticket_premiado=1;
-							$monto_total_ticket = $monto_total_ticket + $monto_total;
-						}
+					if((($rowDT['numero']==$resultados[$i] AND ($rowDT['id_tipo_jugada']==1 OR $rowDT['id_tipo_jugada']==3))OR ($rowDT['numero']== substr($resultados[$i], 1, 3) AND ($rowDT['id_tipo_jugada']==2 OR $rowDT['id_tipo_jugada']==4))    )      AND $rowDT['id_sorteo']==$id_sorteo[$i] ){
+						if($id_zodiacal[$i]!=0 AND $id_zodiacal[$i]==$rowDT['id_zodiacal'])
+							$monto_pago=$relacion_pago[$rowDT['id_tipo_jugada']]*$rowDT['monto'];
+						else
+							$monto_pago=$relacion_pago[$rowDT['id_tipo_jugada']]*$rowDT['monto'];
+						$monto_total+=$monto_pago;
+						$obj_modelo->PremiarDetalleTicket($rowDT['id_detalle_ticket'], $monto_pago,$conexion_abajo);
+						$sw=1;
 					}
+						
+						
+						
 				}
-	
-	
-			}// fin del subwhile
-			 
-			//Cambiar a Verficado=1 en tabla ticket independientemente si gano o no gano
-			//$id_ticket=$roww["id_ticket"];
-			$obj_modelo->MarcarVerificadoByIdTicket($id_ticket);
-			 
-			//contadores
-			$id_tickets[$j]=$id_ticket;$j++;
-			$totales[$i]=$monto_total; $i++; //total en Bs premiados,
-	
-			//verificando que estemos pasando por un ticket premiado
-			// vamos a destacar el ticket premiado 1 y monto total ganado
-			if($ticket_premiado==1){
-	
-				$obj_modelo->PremiarTicket($id_ticket,$monto_total_ticket);
-				$ticket_premiado=0;
-				$monto_total_ticket=0;
 			}
-	
-		}// fin del while mayor
-	
-		/*
-		 // Premiamos los tickets
-		for ($i = 0; $i < count($id_tickets); $i++){
-		if( $obj_modelo->PremiarTicket($id_tickets[$i],$totales[$i])){
-	
+			if($sw==1)
+				$obj_modelo->PremiarTicket($id_ticket,$monto_total,$conexion_abajo);
 		}
-		}
-	
-		if (count($id_detalle_ticket)>0){
-		for ($i = 0; $i < count($id_detalle_ticket); $i++){
-		if( $obj_modelo->PagarDetalleTicket($id_detalle_ticket[$i])){}
-		}
-		}
-		*/
 	}
-	
-}
 
+
+}
 
 
 ?>
