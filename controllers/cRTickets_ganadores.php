@@ -165,8 +165,7 @@ switch (ACCION){
 
         // Creamos el PDF
 
-
-
+        
         //Creación del objeto de la clase heredada
         $pdf=new FPDF();
 
@@ -192,8 +191,8 @@ switch (ACCION){
             $pdf->SetY(60);
             $pdf->SetFillColor(224,235,255);
             $pdf->SetTextColor(0);
-            $pdf->SetDrawColor(128,0,0);
-            $pdf->SetLineWidth(.3);
+            $pdf->SetDrawColor(0,0,0);
+            $pdf->SetLineWidth(.1);
             $pdf->SetFont('','B');
 
 
@@ -213,19 +212,22 @@ switch (ACCION){
                 while($row= $obj_conexion->GetArrayInfo($result)){
                 	$hora_sorteo= $obj_modelo->GetHoraSorteo($row['id_sorteo']);
                     $pdf->Ln();
-                    $pdf->SetTextColor(0);
+                    if ($row['premiado'] == '1'){
+                    	$pdf->SetFont('Arial','B',10);
+                    	$pdf->SetTextColor(128,0,0);
+                    	$premiado='Si';
+                    	$monto=$row['total_premiado'];
+                    }else{
+              			$pdf->SetFont('Arial','',8);
+                    	$pdf->SetTextColor(0,0,0);
+                    	$premiado='No';
+                    	$monto=0;
+                    }
                     $pdf->Cell(20,7,$row['numero'],1,0,'C');
                     $pdf->Cell(40,7,$row['nombre_sorteo'],1,0,'C');
                     $pdf->Cell(30,7,$row['nombre_zodiacal'],1,0,'C');
                     $pdf->Cell(30,7,$row['monto'],1,0,'C');
-                    if ($row['premiado'] == '1'){
-                        $premiado='Si';
-                        $monto=$row['total_premiado'];
-                    }else{
-                        $premiado='No';
-                        $monto=0;
-                    }
-                    $pdf->Cell(30,7,$monto,1,0,'C');
+                     $pdf->Cell(30,7,$monto,1,0,'C');
                     
                     $pdf->Cell(35,7,$premiado,1,0,'C');
                 }
