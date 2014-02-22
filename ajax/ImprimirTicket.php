@@ -88,7 +88,7 @@ $tiempo_vigencia_ticket=$info_agencia["tiempo_vigencia_ticket"];
 
 
 // ENCABEZADO DEL TICKET
-$data=" <table width='400' cellpadding='0' cellspacing='0' border='0' >";
+$data=" <table width='100%' cellpadding='0' cellspacing='0' border='0' >";
 $data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
 $data.="SISTEMA LOTTOMAX";
 $data.=" </font></td> </tr>";
@@ -204,7 +204,7 @@ if( $result= $obj_modelo->GetDetalleTicketByIdticket($id_ticket) ){
 		}
 		if($sw==1)
 		$data.="<td align='left'></td></tr>";
-		$data.="<tr  height='10'><td colspan='2'><table width='400' cellpadding='1' cellspacing='4' border='0' >";
+		$data.="<tr  height='10'><td colspan='2'><table width='100%' cellpadding='1' cellspacing='4' border='0' >";
 		$g=0;
 		foreach($comb_numMonto as $cn){
 			$array_sorteo=preg_split('/-/',$cn);
