@@ -407,9 +407,9 @@ echo $data;
 
 ?>
 
-<!-- <script type="text/javascript"> 
+<script type="text/javascript"> 
 window.print();
 </script>
 <script language='javascript'>setTimeout('self.close();',5000)</script>
 </body>
-</html> -->
+</html>
