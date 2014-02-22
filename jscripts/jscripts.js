@@ -37,22 +37,6 @@ $(document).ready(function(){
 });
 
 
-function DetectarUrlVentas(){
-	//var pathname = window.location.pathname;
-	//var url = 'http://'+host'/lottomax/index.php?op=ventas#final';
-
-	var url = window.location.href;
-	var host = window.location.host;
-	
-	if(url.indexOf('http://' + host + '/lottomax/index.php?op=ventas#final') != -1) {
-		 //match
-		return true;  
-	}else{
-		 //NO match
-		return false;  
-	}	
-}
-
 function aunEstoyVivo(){
 
 	$.get('scripts/Updatestatus.php', function(str) {
@@ -823,44 +807,42 @@ function simulateSubmitting(event)
 var Atl_down = false;  //Declaramos que la tecla Atl no ha sido presionada
 var Atl_key = 18;  // Id de la tecla Alt
 
-/*
+
 $(document).keydown(function(e) {
 //$(document).keyup(function(e){	
     if (e.keyCode == Atl_key) Atl_down = true;
 }).keyup(function(e) {
     if (e.keyCode == Atl_key) Atl_down = false;
 });
-*/
 
 // Abrevituras de teclado
 //$(document).keydown(function(tecla){
 $(document).keyup(function(tecla){
 
-    if (DetectarUrlVentas() && tecla.keyCode == 107) {
+    if (tecla.keyCode == 107) {
     	// tecla +
 		agregar_ticket(); //para agregar al ticket
 		//CargarReset1(); //Limpiar el campo numero 
 		calcula_total();
 		
-    }else if(DetectarUrlVentas() && (tecla.keyCode == 65)){
+    }else if(Atl_down && (tecla.keyCode == 65)){
     	// tecla A    	
     	//$('#op_juego').val('1');// hace focus en el campo de tipo de juego y selecciona Triple
     	$('input:radio[name=op_juego]')[0].checked = true;
     	borra_txtNumero();
     	
-    }else if(DetectarUrlVentas() && (tecla.keyCode == 66)){
+    }else if(Atl_down && (tecla.keyCode == 66)){
     	// tecla B    	
-    	//if(Atl_down && (tecla.keyCode == 66))
 		$("#txt_monto").focus(); // hace focus en el campo de monto Bs
-    }else if(DetectarUrlVentas() && (tecla.keyCode == 67)){
+    }else if(Atl_down && (tecla.keyCode == 67)){
     	// tecla C    	
 		//$('#op_juego').val('4');// hace focus en el campo de tipo de juego y selecciona Permuta
     	$('input:radio[name=op_juego]')[3].checked = true;
     	borra_txtNumero();
-    }else if(DetectarUrlVentas() && (tecla.keyCode == 69)){
+    }else if(Atl_down && (tecla.keyCode == 69)){
     	// tecla E
      	DetalleTicket();
-    }else if(DetectarUrlVentas() && (tecla.keyCode == 70)){
+    }else if(Atl_down && (tecla.keyCode == 70)){
     	// tecla F
     	
     	var myRadio = $("input[name='turno']:checked").val();
@@ -904,30 +886,29 @@ $(document).keyup(function(tecla){
             }else{
             	$('input.t_noche').prop('checked', true); //seleccionar el turno de la Noche
             }	        	
-    	}    	 	
-    }else if(DetectarUrlVentas() && tecla.keyCode == 71){    	
-    	// tecla G
+    	}    	
 
-    	//DetectarUrlVentas();
+    }else if(Atl_down && (tecla.keyCode == 71)){
+    	// tecla G    	
         //Preguntamos monto de los terminales y Generamos los Terminales
         agregarTerminales();
         calcula_total();
-    }else if(DetectarUrlVentas() && (tecla.keyCode == 72)){
+    }else if(Atl_down && (tecla.keyCode == 72)){
     	// tecla H    	
         //Preguntamos monto de los terminales y Generamos los Terminales        
         agregarTerminalazo();
         calcula_total();
-    }else if(DetectarUrlVentas() && (tecla.keyCode == 73)){
+    }else if(Atl_down && (tecla.keyCode == 73)){
         // Tecla I
         //procesarticket(); //para procesar y generar el ticket
 		//CargarReset();
-    }else if(DetectarUrlVentas() && (tecla.keyCode == 74)){
+    }else if(Atl_down && (tecla.keyCode == 74)){
     	// tecla J    	
     	AjustarMontos(); //Ajustar los montos de todas las apuestas a un prorrateado del total
-    }else if(DetectarUrlVentas() && (tecla.keyCode == 76)) {
+    }else if(Atl_down && (tecla.keyCode == 76)) {
     	// tecla L 
     	$("#s0").focus(); // hace focus en el campo de checkboxes Sorteos
-    }else if(DetectarUrlVentas() && (tecla.keyCode == 77)){
+    }else if(Atl_down && (tecla.keyCode == 77)){
     	// tecla M    	
         // Turno Manana
 		$("#txt_numero").focus(); // hace focus en el campo de numeros	
@@ -938,7 +919,7 @@ $(document).keyup(function(tecla){
     	$('input:radio[name=turno]')[0].checked = true;
     	
 		$("#s0").focus(); // hace focus en el campo de checkboxes Sorteos
-    }else if(DetectarUrlVentas() && (tecla.keyCode == 78)){
+    }else if(Atl_down && (tecla.keyCode == 78)){
     	// tecla N    	
         // Turno Noche
 		$("#txt_numero").focus(); // hace focus en el campo de numeros		
@@ -949,7 +930,7 @@ $(document).keyup(function(tecla){
     	$('input:radio[name=turno]')[2].checked = true;
     	
 		$("#s0").focus(); // hace focus en el campo de checkboxes Sorteos
-    }else if(DetectarUrlVentas() && (tecla.keyCode == 79)) {
+    }else if(Atl_down && (tecla.keyCode == 79)) {
     	// tecla O
 		$("#txt_numero").focus(); // hace focus en el campo de numeros			
     	$('.text-label1').show(); // Mostrar Todos los Turnos M, T, N
@@ -958,23 +939,23 @@ $(document).keyup(function(tecla){
     	
     	$('input:radio[name=turno]')[3].checked = true;    	
 		$("#s0").focus(); // hace focus en el campo de checkboxes Sorteos	   	
-    }else if(DetectarUrlVentas() && (tecla.keyCode == 80)){
+    }else if(Atl_down && (tecla.keyCode == 80)){
     	// tecla P
     	//$('#op_juego').val('2');// hace focus en el campo de tipo de juego y selecciona Permuta
     	$('input:radio[name=op_juego]')[1].checked = true;
     	borra_txtNumero();
-    }else if(DetectarUrlVentas() && (tecla.keyCode == 81)){
+    }else if(Atl_down && (tecla.keyCode == 81)){
     	// tecla Q
     	CargarReset(); //Limpiar Todos los campos
-    }else if(DetectarUrlVentas() && (tecla.keyCode == 82)) {
+    }else if(Atl_down && (tecla.keyCode == 82)) {
     	// tecla R
     	$("#recibido").focus(); // hace focus en el campo de vuelto o cambio 
-    }else if(DetectarUrlVentas() && (tecla.keyCode == 83)) {
+    }else if(Atl_down && (tecla.keyCode == 83)) {
     	// tecla S
     	//$('#op_juego').val('3');// hace focus en el campo de tipo de juego y selecciona Permuta
     	$('input:radio[name=op_juego]')[2].checked = true;
     	borra_txtNumero();
-    }else if(DetectarUrlVentas() && (tecla.keyCode == 84)){
+    }else if(Atl_down && (tecla.keyCode == 84)){
     	// tecla T
         // Turno Tarde
 		$("#txt_numero").focus(); // hace focus en el campo de numeros
@@ -985,23 +966,23 @@ $(document).keyup(function(tecla){
     	$('input:radio[name=turno]')[1].checked = true;
     	
 		$("#s0").focus(); // hace focus en el campo de checkboxes Sorteos		
-    }else if(DetectarUrlVentas() && (tecla.keyCode == 85)){
+    }else if(Atl_down && (tecla.keyCode == 85)){
         // Tecla U
     	$("#txt_numero").focus(); // hace focus en el campo de numeros    	
-    }else if(DetectarUrlVentas() && (tecla.keyCode == 88)){
+    }else if(Atl_down && (tecla.keyCode == 88)){
         // Tecla X
         //Borrar PreTicket
         BorrarPreTicket();     
-    }else if(DetectarUrlVentas() && (tecla.keyCode == 89)){
+    }else if(Atl_down && (tecla.keyCode == 89)){
         // Tecla Y
         //Quitar la ultima jugada
         BorrarUltimaJugada();        
-    }else if(DetectarUrlVentas() && (tecla.keyCode == 87)){
+    }else if(Atl_down && (tecla.keyCode == 87)){
         // Tecla W
         //Quitar los terminales
     	BorrarTerminales();        
     }
-    else if(DetectarUrlVentas() && (tecla.keyCode == 90)){
+    else if(Atl_down && (tecla.keyCode == 90)){
     	// tecla Z
     	$("#z0").focus(); // hace focus en el campo de checkboxes Zodiacales
     }else if(tecla.keyCode == 114) {
