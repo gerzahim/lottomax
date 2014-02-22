@@ -834,6 +834,14 @@ $(document).keydown(function(e) {
 
 // Abrevituras de teclado
 //$(document).keydown(function(tecla){
+$(document).keydown(function(tecla){
+	 if ( tecla.keyCode == 44) {
+	    	// tecla +
+	    	alert('deje pegada');
+	 }
+			
+});
+
 $(document).keyup(function(tecla){
 
     if ( tecla.keyCode == 107) {
