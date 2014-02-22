@@ -96,7 +96,7 @@ class ConfigVars{
 	 *
 	 * @var string $vHost
 	 */
-	private $vHost= "sql3.freesqldatabase.com";
+	private $vHost= "locahost";
 	//private $vHost= "www.db4free.net";
 	/**
 	 * Puerto de conexion a la base de datos.
@@ -110,14 +110,14 @@ class ConfigVars{
 	 *
 	 * @var string $vDataBase
 	 */
-	private $vDataBase= "sql330819";
+	private $vDataBase= "lottomax";
 	//private $vDataBase= "lottomaxdb";
 	/**
 	 * Usuario para conexion a la base de datos.
 	 *
 	 * @var string $vUsuario
 	 */
-	private $vUsuario= "sql330819";	
+	private $vUsuario= "root";	
 	//private $vUsuario= "lottomaxuser";
 	
 	/**
@@ -125,7 +125,7 @@ class ConfigVars{
 	 *
 	 * @var string $vClave
 	 */
-	private $vClave= "wJ7%mP9%";	
+	private $vClave= "secreta";	
 	//private $vClave= "secreta7";
 	
 	/**
