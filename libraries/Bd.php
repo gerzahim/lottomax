@@ -113,7 +113,7 @@ class Bd{
 		// Conecta al servidor
 		if(!$this->vIdConexion= mysql_connect($this->vServidor, $this->vUsuario, $this->vClave)){
 			echo "Servidor".$this->vServidor;
-			echo "<br>Usuario".$this->vServidor;
+			echo "<br>Usuario".$this->vUsuario;
 			echo "<br>Clave".$this->vClave;
 				
 			$this->vTextError= "Imposible conexi&oacute;n a la base de datos. Por favor reintente m&aacute;s tarde...";
