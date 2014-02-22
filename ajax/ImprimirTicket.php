@@ -14,6 +14,8 @@
   
 <?php
 date_default_timezone_set("America/Caracas");
+//setLocale(LC_ALL, 'America/Caracas');
+
 // Archivo de variables de configuracion
 require_once('../config/config.php');
 $obj_config= new ConfigVars();
@@ -55,6 +57,7 @@ $month = substr($string,5,2);
 $day = substr($string,8,2);
 $hour = substr($string,11,2);
 $minute = substr($string,14,2);
+$dias = array("Dom","Lun","Mar","Miercoles","Jue","Vie","Sab");
 //$fecha_hora=$day."-".$month."-".$year." ".$hour.":".$minute;
 $fecha_hora=$day."-".$month."-".$year;
 
@@ -102,7 +105,7 @@ $data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3'
 $data.="Serial: ".$serial;
 $data.="</font></td> </tr>";
 $data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
-$data.="Fecha: ".$fecha_hora." ".$hora;
+$data.=$dias[3]." ".$fecha_hora." ".$hora;
 $data.="</font></td> </tr>";
 $data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
 $data.="Taquilla: ".$id_taquilla;
