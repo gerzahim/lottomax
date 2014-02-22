@@ -35,9 +35,7 @@
                                                                 </tr>
 
                                                                 <tr><td colspan="2">&nbsp;</td></tr>
-
                                                         </table>
-
                                                 </fieldset>
 
                                                 <div class="botones">
@@ -45,13 +43,9 @@
                                                         <input  id="btnok" name="btnentrar" value="Buscar" type="submit" class="boton"/>&nbsp;&nbsp;&nbsp;
 
                                                         <input  id="btncancel" name="btncancelar" value="Cancelar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
-
                                                 </div>
-
                                         </form>
-
-                                    </div>
-                                </td>
+                                    </div>                                </td>
                             </tr>
                         </table>
                         
@@ -63,54 +57,42 @@
                             <input style="border: hidden" type="hidden" name="accion" id="idaccion" value="looking_serial"/>
                             <input style="border: hidden" type="hidden" name="id_ticket" id="id_ticket" value="{id_ticket}"/>
                             <input style="border: hidden" type="hidden" name="total_premiado" id="total_premiado" value="{total_premiado}"/>
-                            
-                        <table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1" style="font-size:9.0px;">
-                                    <caption>Detalle Ticket {id_ticket}</caption>
-                                    <thead>
-                                            <tr>
-                                                    <th class="title header" scope="col">Sorteo</th>
-                                                    <th class="title header" scope="col">Hora Sorteo</th>
-                                                    <th class="title header" scope="col">Numero</th>
-                                                    <th class="title header" scope="col">Tipo de jugada</th>
-                                                    <th class="title header" scope="col">Signo</th>
-                                                    <th class="title header" scope="col">Apuesta Bs. F.</th>
-                                                    <th class="title header" scope="col">Premio Triple Bs. F.</th>
-                                                    <th class="title header" scope="col">Premio Aprox. Arriba Bs. F.</th>
-                                                    <th class="title header" scope="col">Premio Aprox. Abajo Bs. F.</th>
-                                            </tr>
-                                    </thead>
-
-                                    <tbody>
-
-                                            <!-- BEGIN: lista -->
-
-                                            <tr class="{estilo_fila}">
-
-                                                    <td align="left">&nbsp;{sorteo}</td>
-                                                    <td align="left">&nbsp;{hora_sorteo}</td>
-                                                    <td align="left">&nbsp;{numero}</td>
-                                                    <td align="left">&nbsp;{tipo_jugada}</td>
-                                                    <td align="left">&nbsp;{zodiacal}</td>
-                                                    <td align="left">&nbsp;{monto}</td>
-                                                    <td align="left">&nbsp;<span class="home-bottom-new" style="text-align:left; color:#FF0000; font-size:14px " >{monto_ganado}</span></td>
-                                                    <td align="left">&nbsp;<span class="home-bottom-new" style="text-align:left; color:#FF0000; font-size:14px " >{aprox_arriba}</span></td>
-                                                    <td align="left">&nbsp;<span class="home-bottom-new" style="text-align:left; color:#FF0000; font-size:14px " >{aprox_abajo}</span></td>
-                                            </tr>
-                                            <!-- END: lista -->
-
-
-                                    </tbody>
-                                    <tfoot>
-                                </tfoot>
+                            <table width="649" align="center" cellpadding="1" cellspacing="1" class="table_list" id="tb1" style="font-size:9.0px;">
+                              <caption>
+                                Detalle Ticket {id_ticket}
+                              </caption>
+                              <thead>
+                                <tr>
+                                  <th width="161" class="title header" scope="col">Sorteo</th>
+                                  <th width="41" class="title header" scope="col">Numero</th>
+                                  <th width="90" class="title header" scope="col">Tipo de jugada</th>
+                                  <th width="80" class="title header" scope="col">Signo</th>
+                                  <th width="117" class="title header" scope="col">Apuesta Bs.</th>
+                                  <th width="139" class="title header" scope="col">Premio Bs.</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <!-- BEGIN: lista -->
+                                <tr class="{estilo_fila}">
+                                  <td align="left">&nbsp;{sorteo}</td>
+                                  <td align="left">&nbsp;{numero}</td>
+                                  <td align="left">&nbsp;{tipo_jugada}</td>
+                                  <td align="left">&nbsp;{zodiacal}</td>
+                                  <td align="left">&nbsp;{monto}</td>
+                                  <td align="left">&nbsp;<span class="home-bottom-new" style="text-align:left; color:#FF0000; font-size:14px " >{monto_ganado}</span></td>
+                                </tr>
+                                <!-- END: lista -->
+                              </tbody>
+                              <tfoot>
+                              </tfoot>
                             </table>
-                        <div class="paginas">{paginacion}</div>
+                            <div class="paginas">{paginacion}</div>
 
                         <div class="botones">
                                 <!-- BEGIN: boton_pagar -->
                                 <input  id="btnok" name="btnentrar" value="Pagar" type="submit" class="boton"/>&nbsp;&nbsp;&nbsp;
                                 <!-- END: boton_pagar -->
                                 <input  id="btncancel" name="btncancelar" value="Regresar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
-
                         </div>
                         </form>
                         <!-- END: detalle_ticket -->
@@ -147,9 +129,7 @@
                                                                 </tr>
 
                                                                 <tr><td colspan="2">&nbsp;</td></tr>
-
                                                         </table>
-
                                                 </fieldset>
 
                                                 <div class="botones">
@@ -157,22 +137,15 @@
                                                         <input  id="btnok" name="btnentrar" value="Pagar" type="submit" class="boton"/>&nbsp;&nbsp;&nbsp;
 
                                                         <input  id="btncancel" name="btncancelar" value="Cancelar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
-
                                                 </div>
-
                                         </form>
-
-                                    </div>
-                                </td>
+                                    </div>                                </td>
                             </tr>
                         </table>
 
                         <!-- END: busqueda_serial -->
-<br />	<br />	 
-		
-		</td>	
+<br />	<br />		</td>	
 	</tr>
-
 </table>
      
 <!-- END: contenido -->       
