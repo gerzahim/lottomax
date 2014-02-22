@@ -86,12 +86,13 @@ if($result= mysql_query($sql,$conexion_abajo))
 		{
 			//echo $consulta_arriba_detalle;
 			if (mysql_query($consulta_arriba_ticket,$conexion_arriba))
-				if (mysql_query($consulta_arriba_detalle,$conexion_arriba)){
-					echo "PASA";	
+			{
+				echo $consulta_arriba_detalle;
+				if (mysql_query($consulta_arriba_detalle,$conexion_arriba))
 					$error=0;//mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
-			}
 				else
 				$error=1;
+			}
 			else
 			$error=1;
 		}
