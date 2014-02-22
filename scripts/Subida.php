@@ -19,7 +19,7 @@ $sql = "SELECT * FROM ticket WHERE subido=0";
 
 if($result= mysql_query($sql,$conexion_abajo))
 {
-
+	echo "PASA";
 	$numero_registros = mysql_num_rows($result);
 	
 	//Creamos la cadena para insertar los ticket y detalle_ticket que no han sido subidos.
@@ -84,7 +84,7 @@ if($result= mysql_query($sql,$conexion_abajo))
 	if (mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
 		if (mysql_query("BEGIN;",$conexion_arriba)) //dar inicio a la transacción
 		{
-		//	echo $consulta_arriba_detalle;
+			echo $consulta_arriba_detalle;
 			if (mysql_query($consulta_arriba_ticket,$conexion_arriba))
 				if (mysql_query($consulta_arriba_detalle,$conexion_arriba))
 					$error=0;//mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);

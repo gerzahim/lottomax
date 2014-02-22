@@ -143,7 +143,7 @@ function PremiarGanadores($conexion_abajo,$fecha_hora){
 	$id_detalle_ticket[]="";
 	$id_tickets[]="";
 	$totales[]="";
-	$aprox= GetAprox($conexion_abajo);
+	$aprox=$obj_modelo->GetAprox($conexion_abajo);
 	//$where = " fecha_hora LIKE '%".date('Y-m-d')."%'";
 	//$result= $obj_modelo->GetListadosegunVariable($where);
 	$resultados=array();
