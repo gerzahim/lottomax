@@ -57,7 +57,7 @@ $month = substr($string,5,2);
 $day = substr($string,8,2);
 $hour = substr($string,11,2);
 $minute = substr($string,14,2);
-$dias = array("Dom","Lun","Mar","Miercoles","Jue","Vie","Sab");
+$dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado");
 //$fecha_hora=$day."-".$month."-".$year." ".$hour.":".$minute;
 $fecha_hora=$day."-".$month."-".$year;
 
@@ -105,7 +105,7 @@ $data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3'
 $data.="Serial: ".$serial;
 $data.="</font></td> </tr>";
 $data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
-$data.=$dias[3]." ".$fecha_hora."&nbsp;&nbsp;".$hora;
+$data.=$dias[date('w')]." ".$fecha_hora."&nbsp;&nbsp;".$hora;
 $data.="</font></td> </tr>";
 $data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
 $data.="Taquilla: ".$id_taquilla;
