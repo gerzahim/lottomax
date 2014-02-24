@@ -96,12 +96,8 @@ if($error==1)
 }
 else 
 {
-	//mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
-	//mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
-	
-	mysql_query("ROLLBACK;",$conexion_arriba);
-	mysql_query("ROLLBACK;",$conexion_abajo); //garantizo que se haga el retroceso de las operaciones
-	
+	mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
+	mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
 //	echo "PASA";
 	PremiarGanadores($conexion_abajo, $fecha_hora);
 	//shell_exec("curl http://localhost/scripts/BuscarTicketsGanadores.php?fecha_hora=".$fecha_hora);
@@ -148,7 +144,6 @@ function PremiarGanadores($conexion_abajo,$fecha_hora){
 	$id_tickets[]="";
 	$totales[]="";
 	$aprox=$obj_modelo->GetAprox($conexion_abajo);
-	echo "pasa";
 	//$where = " fecha_hora LIKE '%".date('Y-m-d')."%'";
 	//$result= $obj_modelo->GetListadosegunVariable($where);
 	$resultados=array();
@@ -170,11 +165,9 @@ function PremiarGanadores($conexion_abajo,$fecha_hora){
 	//print_r($relacion_pago);
 	$result= $obj_modelo->GetListadosegunVariable($fecha_hora,$conexion_abajo);
 	If (mysql_num_rows($result,$conexion_abajo)>0){
-		echo "pasa2";
 		$i=0; $j=0;
 		$ticket_premiado=0;
 		$monto_total_ticket=0;
-		while ($roww= mysql_fetch_array($result)){
 			echo "pasa3";
 			$id_ticket=$roww["id_ticket"];
 			$fecha_ticket= substr($roww["fecha_hora"],0 , -9);
