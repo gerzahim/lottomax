@@ -17,7 +17,7 @@ class BajadaController{
         $sql = "SELECT aprox_abajo, aprox_arriba FROM parametros";
 		$result= mysql_query($sql,$conexion_abajo);
 		
-		$roww = mysql_fetch_array($result,$conexion_abajo);
+		$roww = mysql_fetch_array($result);
 		if ($roww["aprox_abajo"]==0 AND $roww["aprox_arriba"]==0)
 		return -1;
 		else		
