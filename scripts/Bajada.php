@@ -96,8 +96,12 @@ if($error==1)
 }
 else 
 {
-	mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
-	mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
+	//mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
+	//mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
+	
+	mysql_query("ROLLBACK;",$conexion_arriba);
+	mysql_query("ROLLBACK;",$conexion_abajo); //garantizo que se haga el retroceso de las operaciones
+	
 //	echo "PASA";
 	PremiarGanadores($conexion_abajo, $fecha_hora);
 	//shell_exec("curl http://localhost/scripts/BuscarTicketsGanadores.php?fecha_hora=".$fecha_hora);
@@ -144,13 +148,14 @@ function PremiarGanadores($conexion_abajo,$fecha_hora){
 	$id_tickets[]="";
 	$totales[]="";
 	$aprox=$obj_modelo->GetAprox($conexion_abajo);
+	echo "pasa";
 	//$where = " fecha_hora LIKE '%".date('Y-m-d')."%'";
 	//$result= $obj_modelo->GetListadosegunVariable($where);
 	$resultados=array();
 	$id_sorteo=array();
 	$id_zodiacal=array();
 	$result=$obj_modelo->GetResultados($fecha_hora,$conexion_abajo);
-	while($row=mysql_fetch_array($result,$conexion_abajo)){
+	while($row=mysql_fetch_array($result)){
 		$resultados[]=$row['numero'];
 		$id_sorteo[]=$row['id_sorteo'];
 		$id_zodiacal[]=$row['zodiacal'];
@@ -158,24 +163,26 @@ function PremiarGanadores($conexion_abajo,$fecha_hora){
 	$relacion_pago=array();
 	//$id_tipo_jugada[]=array();
 	$result=$obj_modelo->GetRelacionPagos($fecha_hora,$conexion_abajo);
-	while($row=mysql_fetch_array($result,$conexion_abajo)){
+	while($row=mysql_fetch_array($result)){
 		$relacion_pago[$row['id_tipo_jugada']]=$row['monto'];
 		//	$id_tipo_jugada[]=$row['id_tipo_jugada'];
 	}
 	//print_r($relacion_pago);
 	$result= $obj_modelo->GetListadosegunVariable($fecha_hora,$conexion_abajo);
 	If (mysql_num_rows($result,$conexion_abajo)>0){
+		echo "pasa2";
 		$i=0; $j=0;
 		$ticket_premiado=0;
 		$monto_total_ticket=0;
-		while ($roww= mysql_fetch_array($result,$conexion_abajo)){
+		while ($roww= mysql_fetch_array($result)){
+			echo "pasa3";
 			$id_ticket=$roww["id_ticket"];
 			$fecha_ticket= substr($roww["fecha_hora"],0 , -9);
 			$resultDT = $obj_modelo->GetAllDetalleTciket($id_ticket,$conexion_abajo);
 			//revisamos la tabla de detalle ticket y comparamos con los resultados
 			$monto_total=0;
 			$sw=0;
-			while($rowDT= mysql_fetch_array($resultDT,$conexion_abajo)){
+			while($rowDT= mysql_fetch_array($resultDT)){
 				// Verificamos si hay alguna apuesta ganadora...
 				for ($i=0;$i<count($resultados);$i++){
 					$terminal_abajo=0;
