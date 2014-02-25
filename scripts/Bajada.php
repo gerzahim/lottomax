@@ -2,7 +2,7 @@
 //Creamos la conexión a las distintas base de datos, la de arriba y las de abajo.
 // Archivo de variables de configuracion
 //require('../models/Pagar_Ganador.php');
-
+error_reporting(E_ALL);
 //// BAJADO = 0 Significa que el resultado no ha sido copiado en la BD local, BAJADO=1 significa que el resultado fue bajado a la BD, cuando BAJADO=2 significa que se hizo un cambio el resultado del servidor de arriba y este tiene que ser actualizado en la BD local
 require_once('BajadaController.php');
 
