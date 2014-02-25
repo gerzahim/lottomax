@@ -57,25 +57,17 @@ while ($row = mysql_fetch_row($result))
 }
 $consulta_abajo.=";";
 $error=0;
-echo $consulta_abajo;
-
 if (mysql_query("SET AUTOCOMMIT=0;",$conexion_abajo))//desactivar el modo de autoguardado
 	if (mysql_query("BEGIN;",$conexion_abajo)) //dar inicio a la transacción
-{
-	
 		if (mysql_query($consulta_abajo,$conexion_abajo))
-{	
 			$error=0;//mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);	
-}
 		else
 		$error=1;
-}
 	else
 	$error=1;
 else
 $error=1;
-
-echo "Error".$error;
+//echo "Error".$error;
 if($error==0)
 	// Busco los resultados arriba que acabo de bajar.
 	if (mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
