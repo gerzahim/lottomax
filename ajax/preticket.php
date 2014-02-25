@@ -479,8 +479,12 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 		{
 			if ($num_ticket_inc == '0')
 			{
-				if ($txt_monto <= 0){
+				if ($txt_monto < 0){
 					echo "<div id='mensaje' class='mensaje' >El monto debe ser mayor a 0 Bs !!!</div>";
+					exit();
+				}else if($txt_monto == 0){
+					$obj_modelo->EliminarTicketTransaccionalByTicket($id_ticket_transaccional);
+					echo "<div id='mensaje' class='mensaje' >La jugada fue Eliminada !!!</div>";
 					exit();
 				}
 				
