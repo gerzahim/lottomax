@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 //// BAJADO = 0 Significa que el resultado no ha sido copiado en la BD local, BAJADO=1 significa que el resultado fue bajado a la BD, cuando BAJADO=2 significa que se hizo un cambio el resultado del servidor de arriba y este tiene que ser actualizado en la BD local
 require_once('BajadaController.php');
 
-$conexion_abajo = mysql_connect("localhost" , "root" , "secreta");
+$conexion_abajo = mysql_connect("lottomax" , "root" , "secreta");
 mysql_select_db("lottomax",$conexion_abajo);
 
 $conexion_arriba = mysql_connect("sql3.freesqldatabase.com:3306" , "sql330819" , "wJ7%mP9%",true);
