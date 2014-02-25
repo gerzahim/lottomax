@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 //// BAJADO = 0 Significa que el resultado no ha sido copiado en la BD local, BAJADO=1 significa que el resultado fue bajado a la BD, cuando BAJADO=2 significa que se hizo un cambio el resultado del servidor de arriba y este tiene que ser actualizado en la BD local
 require_once('BajadaController.php');
 
-$conexion_abajo = mysql_connect("lottomax" , "root" , "secreta");
+$conexion_abajo = mysql_connect("localhost" , "root" , "secreta");
 mysql_select_db("lottomax",$conexion_abajo);
 
 $conexion_arriba = mysql_connect("sql3.freesqldatabase.com:3306" , "sql330819" , "wJ7%mP9%",true);
@@ -22,10 +22,8 @@ mysql_select_db("lottomaxdb",$conexion_arriba);
 */
 
 $sql = "SELECT * FROM resultados WHERE bajado = 0";
-echo "pas";
 if($result= mysql_query($sql,$conexion_arriba))
 {
-echo "pasa1";
 	$numero_registros = mysql_num_rows($result);
 //echo $numero_registros ;
 //Creamos la cadena para insertar los resultados que no han sido bajados.
@@ -38,7 +36,6 @@ $jj=0;
 
 while ($row = mysql_fetch_row($result)) 
 {
-	print_r($row);
 	$fecha_hora=$row[4];
 	// Creamos la consulta para insertar los datos de los premios
 	for ($i = 0; $i < mysql_num_fields($result); $i++)
@@ -64,7 +61,10 @@ $error=0;
 if (mysql_query("SET AUTOCOMMIT=0;",$conexion_abajo))//desactivar el modo de autoguardado
 	if (mysql_query("BEGIN;",$conexion_abajo)) //dar inicio a la transacción
 		if (mysql_query($consulta_abajo,$conexion_abajo))
+{	
+			echo "pasa";
 			$error=0;//mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);	
+}
 		else
 		$error=1;
 	else
