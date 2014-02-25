@@ -160,7 +160,8 @@ tr.odde td	{
 
 	
 tr.evene td	{
-	color:#678197;
+	/*color:#678197;*/
+	color:#3E4D5A;
 	border-bottom:1px solid #e5eff8;
 	border-left:1px solid #e5eff8 ;
 	border-right:1px solid #e5eff8 ;
@@ -168,19 +169,37 @@ tr.evene td	{
 	}
 
 tr.eveni td	{
-	color:#678197;
+	
+	color:#3E4D5A;
+	background:#fdfef0;
+	border-bottom:1px solid #fdfef0;
+	border-left:1px solid #fdfef0;
+	border-right:1px solid #fdfef0;
+	border-top:1px solid #fdfef0s;
+	font-size:12px;
+	/*	
+	color:#3E4D5A;
+	background:#fdfef0;
 	border-bottom:1px solid #FFFFFF;
 	border-left:1px solid #FFFFFF;
 	border-right:1px solid #FFFFFF;
 	border-top:1px solid #FFFFFF;
-	font-size:12px;
+	font-size:12px;	*/
 	}	
 
 tr.eveno td	{
+	color:#404046;
+	border-bottom:1px solid #fdfef0;
+	border-left:1px solid #fdfef0;
+	border-right:1px solid #fdfef0;
+	border-top:1px solid #fdfef0;
+	font-size:14px;	
+	
+	/*	
 	color:#678197;
 	border-bottom:1px solid #FFFFFF;
 	border-left:1px solid #FFFFFF;
 	border-right:1px solid #FFFFFF;
 	border-top:1px solid #FFFFFF;
-	font-size:14px;
+	font-size:14px;*/
 	}	
