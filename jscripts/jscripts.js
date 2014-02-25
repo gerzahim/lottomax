@@ -43,15 +43,15 @@ function DetectarUrlVentas(){
 
 	var url = window.location.href;
 	var host = window.location.host;
-	alert(host);
-	if(url.indexOf(host) != -1) {
+	//alert(host);
+	if(url.indexOf(host + '/lottomax/index.php?op=ventas#final') != -1) {
 		 //match
 		
 		return true;  
 	}else{
 		 //NO match
 		return false;  
-	}	
+	}
 	//return true;
 }
 
