@@ -684,34 +684,38 @@ function Permutar($txt_numero){
 	// Uniendo el array principal y el array con los repetidos en caso de que alla repetidos
 	$letras = array_merge($arr1, $addarr);
 
-
-
+	/*
+	echo "<pre>";
+	print_r($letras);
+	echo "</pre>";
+	exit();
+	*/
+	
 	$arr = array(); //Array de combinaciones
 
 	// Creando array bidimensional para las combinaciones
 	// Foreach Ciclico para hacer todas las combinaciones posibles en grupo de 3
 	// resultado de combinaciones en un arreglo bidimensional
+
 	foreach ($letras as $l) {
 		$letra1 = $l;
 		foreach ($letras as $l2) {
-			if ($l2!=$letra1){
+			if ( strcmp($l2,$letra1)!= 0){
 				$letra2 = $l2;
 				foreach ($letras as $l3) {
-					if ($l3!=$letra2 && $l3!=$letra1){
+					if (strcmp($l3,$letra2)!= 0 && strcmp($l3,$letra1)!= 0){
 						$letra3 = $l3;
 						$arr[] = array($l,$l2,$l3);
-
+	
 					}
-
+	
 				}
-
+	
 			}
-
+	
 		}
-	}
-
-
-
+	}	
+	
 	// resultado bidimensional convertirlo a array unidimensional
 	foreach ($arr as $l) {
 		$duro =$l[0].$l[1].$l[2];
