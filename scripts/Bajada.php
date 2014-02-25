@@ -220,7 +220,4 @@ function PremiarGanadores($conexion_abajo,$fecha_hora){
 	}
 
 
-}
-
-
 ?>
