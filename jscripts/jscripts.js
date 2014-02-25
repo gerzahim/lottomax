@@ -43,14 +43,16 @@ function DetectarUrlVentas(){
 
 	var url = window.location.href;
 	var host = window.location.host;
-	
-	if(url.indexOf('http://' + host + '/lottomax/index.php?op=ventas#final') != -1) {
+	alert('http://' + host + '/lottomax/index.php?op=ventas#final');
+	/*if(url.indexOf('http://' + host + '/lottomax/index.php?op=ventas#final') != -1) {
 		 //match
+		
 		return true;  
 	}else{
 		 //NO match
 		return false;  
-	}	
+	}*/	
+//	return true;
 }
 
 function aunEstoyVivo(){
