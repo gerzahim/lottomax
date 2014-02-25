@@ -479,6 +479,11 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 		{
 			if ($num_ticket_inc == '0')
 			{
+				if ($txt_monto <= 0){
+					echo "<div id='mensaje' class='mensaje' >El monto debe ser mayor a 0 Bs !!!</div>";
+					exit();
+				}
+				
 				//Proceso CONFIRM: Elimina la apuesta existente en ticket transaccional, y para que no este repetida, la registra
 				// con el nuevo monto ingresado.
 				$id_ticket_transaccional= $obj_modelo->GetIDTicketTransaccional($txt_numero,$sorteo,$zodiacal);
