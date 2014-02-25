@@ -51,7 +51,19 @@ switch (ACCION){
 			while($row= $obj_conexion->GetArrayInfo($lista)){
 								$fecha_ticket= $row['fecha_hora'];
                                 $fecha_actual =strtotime(date('Y-m-d'));
-                                $fecha_vencido_ticket = strtotime("+$tiempo_vigencia days", strtotime($fecha_ticket));
+                                
+                                //Detectando el Proximo Domingo
+                                $proximo_domingo=strtotime("next Sunday",$fecha_ticket);
+                                
+                                if($proximo_domingo < $fecha_actual){
+                                	//quiere decir que hay un domingo de por medio
+                                	$tiempo_vigencia=$tiempo_vigencia+1;
+                                	$fecha_vencido_ticket = strtotime("+$tiempo_vigencia days", strtotime($fecha_ticket));
+                                }else{
+                                	//No hay Domingo de por medio
+                                	$fecha_vencido_ticket = strtotime("+$tiempo_vigencia days", strtotime($fecha_ticket));
+                                }                                
+                                
                                 // Verificamos que el ticket no este vencido...
                                 if ($fecha_vencido_ticket >= $fecha_actual) {
                                     $resultDT = $obj_modelo->GetDetalleTciket($row['id_ticket'], 300,$pag);
