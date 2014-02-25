@@ -60,9 +60,10 @@ $error=0;
 //echo $consulta_abajo;
 
 if (mysql_query("SET AUTOCOMMIT=0;",$conexion_abajo))//desactivar el modo de autoguardado
-{
-	echo "pasa primero";
 	if (mysql_query("BEGIN;",$conexion_abajo)) //dar inicio a la transacción
+{
+	echo "pasa segunda";
+	
 		if (mysql_query($consulta_abajo,$conexion_abajo))
 {	
 			echo "pasa";
@@ -70,9 +71,9 @@ if (mysql_query("SET AUTOCOMMIT=0;",$conexion_abajo))//desactivar el modo de aut
 }
 		else
 		$error=1;
+}
 	else
 	$error=1;
-}
 else
 $error=1;
 
