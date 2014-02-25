@@ -22,10 +22,10 @@ mysql_select_db("lottomaxdb",$conexion_arriba);
 */
 
 $sql = "SELECT * FROM resultados WHERE bajado = 0";
-
+echo "pas";
 if($result= mysql_query($sql,$conexion_arriba))
 {
-
+echo "pasa1";
 	$numero_registros = mysql_num_rows($result);
 //echo $numero_registros ;
 //Creamos la cadena para insertar los resultados que no han sido bajados.
@@ -38,7 +38,7 @@ $jj=0;
 
 while ($row = mysql_fetch_row($result)) 
 {
-	//print_r($row);
+	print_r($row);
 	$fecha_hora=$row[4];
 	// Creamos la consulta para insertar los datos de los premios
 	for ($i = 0; $i < mysql_num_fields($result); $i++)
