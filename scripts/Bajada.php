@@ -184,10 +184,16 @@ function ExisteResultado ($id_sorteo, $zodiacal, $numero, $fecha_hora,$conexion_
 		//print_r($relacion_pago);
 		$result= $obj_modelo->GetListadosegunVariable($fecha_hora,$conexion_abajo);
 		If (mysql_num_rows($result)>0){
+			
+			 
+			
 			$i=0; $j=0;
 			$ticket_premiado=0;
 			$monto_total_ticket=0;
-			echo "pasa3";
+			//echo "pasa3";
+			while ($roww= $obj_conexion->GetArrayInfo($result)){
+				
+			
 			$id_ticket=$roww["id_ticket"];
 			$fecha_ticket= substr($roww["fecha_hora"],0 , -9);
 			$resultDT = $obj_modelo->GetAllDetalleTciket($id_ticket,$conexion_abajo);
@@ -235,6 +241,7 @@ function ExisteResultado ($id_sorteo, $zodiacal, $numero, $fecha_hora,$conexion_
 			}
 			if($sw==1)
 				$obj_modelo->PremiarTicket($id_ticket,$monto_total,$conexion_abajo);
+			}
 		}
 	}
 
