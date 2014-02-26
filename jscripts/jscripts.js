@@ -40,19 +40,22 @@ $(document).ready(function(){
 function DetectarUrlVentas(){
 	//var pathname = window.location.pathname;
 	//var url = 'http://'+host'/lottomax/index.php?op=ventas#final';
-
+	
 	var url = window.location.href;
 	var host = window.location.host;
-//	alert(host + '/lottomax/index.php?op=ventas#final');
+	//alert(host);
+	//alert(host + '/index.php?op=ventas#final');
 	if(url.indexOf(host + '/index.php?op=ventas#final') != -1) {
 		 //match
-		
+		return true;  
+	}else if(url.indexOf(host + '/lottomax/index.php?op=ventas#final') != -1) {
+		 //match
 		return true;  
 	}else{
 		 //NO match
 		return false;  
 	}
-	//return true;
+
 }
 
 function aunEstoyVivo(){
@@ -802,7 +805,7 @@ function ajustarMontoApuestas(monto)
 
 // ESTA Funcion es para poder hacer tab like enter
 //<![CDATA[
-
+/*
 JoelPurra.PlusAsTab.setOptions({
 	// Use enter instead of plus
 	// Number 13 found through demo at
@@ -823,6 +826,7 @@ function simulateSubmitting(event)
 
 	return false;
 }
+*/
 //]]>
 
 
@@ -843,6 +847,7 @@ $(document).keydown(function(e) {
 
 $(document).keyup(function(tecla){
 
+	//alert(tecla.keyCode);
     if ( tecla.keyCode == 107) {
     	// tecla +
     	if(DetectarUrlVentas()){
@@ -1133,6 +1138,20 @@ $(document).keyup(function(tecla){
     	}else{
     		$("#z0").focus();
     	}
+    }else if(tecla.keyCode == 13) {
+    	// tecla ENTER 
+    	if(DetectarUrlVentas()){
+            //Detectar Si esta en Txt_Numero
+    		//alert($(":input").index(document.activeElement));
+        	if( $(":input").index(document.activeElement) == '6' ){
+        		$(":input")[$(":input").index(document.activeElement) + 1].focus();
+        	}else if( $(":input").index(document.activeElement) == '7' ){
+        		$("#s0").focus();
+        	}else{
+        		$(":input")[$(":input").index(document.activeElement) + 1].focus();
+        	}   		
+    	}      	
+
     }
 
     
