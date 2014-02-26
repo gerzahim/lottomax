@@ -20,7 +20,7 @@ $(document).ready(function(){
 	ValidateFormSell();
 	 
     datetime = $('#clock');
-    update();
+    //update();
     setInterval(update, 1000);	 
 	
     //Cambio de Turno al seleccionar por radio
@@ -56,6 +56,56 @@ function DetectarUrlVentas(){
 		return false;  
 	}
 
+}
+
+var tid = 0;
+function toggleOnAbajo(){
+    if(tid==0){
+        tid=setInterval(saltarSigCampo, 100); // 2000 ms = start after 2sec
+    }	
+	//interval = setInterval(saltarSigCampo, 2000); // 2000 ms = start after 2sec 
+	
+}
+
+
+function toggleOffAbajo(){
+    if(tid!=0){
+        clearInterval(tid);
+        tid=0;
+    }		
+	//interval = 0;
+	//clearInterval(interval);
+}
+
+function saltarSigCampo() {
+	
+	$(":input")[$(":input").index(document.activeElement) + 1].focus();	  
+}
+
+
+
+var ted = 0;
+function toggleOnArriba(){
+    if(ted==0){
+    	ted=setInterval(retrocederSigCampo, 100); // 2000 ms = start after 2sec
+    }	
+	//interval = setInterval(saltarSigCampo, 2000); // 2000 ms = start after 2sec 
+	
+}
+
+
+function toggleOffArriba(){
+    if(ted!=0){
+        clearInterval(ted);
+        ted=0;
+    }		
+	//interval = 0;
+	//clearInterval(interval);
+}
+
+function retrocederSigCampo() {
+	
+	$(":input")[$(":input").index(document.activeElement) - 1].focus();	  
 }
 
 function aunEstoyVivo(){
@@ -1080,39 +1130,30 @@ $(document).keyup(function(tecla){
 
     }else if(tecla.keyCode == 40) {
     	// tecla Flecha Abajo
-	 	//Anular Ticket
-    	//alert("HOlaaaaaa");
-    	//alert($("*:focus").attr("id"));
- 
-    	//$(this).next().focus();
-    	 //var inputs = $(this).closest('frm1').find(':focusable');
+    	
+    	toggleOffAbajo();
     	/*
-    	 var inputs = $("*:focus").attr("id");
-    	     	 
-    	 var next_idx = $('input[type=text]').index(this);
-    	 
-    	 var tot_idx = $('body').find('input[type=checkbox]').length;
-    	 
-    	 jquery.next('input').focus();
-    	 
-    	 alert(tot_idx);
-    	 */
+
     	//alert($(":input").index(document.activeElement));
     	if( $(":input").index(document.activeElement) == '7' ){
     		$(":input")[$(":input").index(document.activeElement) + 7].focus();
     	}else{
+    		
     		$(":input")[$(":input").index(document.activeElement) + 1].focus();
     	}
     	
     	return false;
     	
-    	 /*
+    	 
 
     	 $(":focus").each(function() {
     		    alert("Focused Elem_id = "+ this.id );
     		}); */
     }else if(tecla.keyCode == 38) {
     	// tecla Flecha Arriba
+    	
+    	toggleOffArriba();
+    	/*
     	//alert($(":input").index(document.activeElement));    	
     	if( $(":input").index(document.activeElement) == '14' ){
     		$(":input")[$(":input").index(document.activeElement) - 7].focus();
@@ -1120,8 +1161,7 @@ $(document).keyup(function(tecla){
     		$(":input")[$(":input").index(document.activeElement) - 1].focus();
     	}    	
     	//$(":input")[$(":input").index(document.activeElement) - 1].focus();
-
-     	return false;
+    	 */
     }else if(tecla.keyCode == 37) {
     	// tecla Flecha Izquierda   
     	if($("*:focus").attr("id") == 'z0'){
@@ -1157,6 +1197,32 @@ $(document).keyup(function(tecla){
     
 });
 
+$(document).keydown(function(tecla){
+	
+	if(tecla.keyCode == 40) {
+    	// tecla Flecha Abajo
+    	//alert($(":input").index(document.activeElement));
+    	if( $(":input").index(document.activeElement) == '7' ){
+    		$(":input")[$(":input").index(document.activeElement) + 7].focus();
+    	}else{
+    		toggleOnAbajo();
+    		//$(":input")[$(":input").index(document.activeElement) + 1].focus();
+    	}
+
+    }
+	else if(tecla.keyCode == 38) {
+    	// tecla Flecha Arriba
+    	//alert($(":input").index(document.activeElement));    	
+    	if( $(":input").index(document.activeElement) == '14' ){
+    		$(":input")[$(":input").index(document.activeElement) - 7].focus();
+    	}else{
+    		toggleOnArriba();
+    		//$(":input")[$(":input").index(document.activeElement) - 1].focus();
+    	}    	
+
+    }	
+	
+});
 
 //Para validar Form de Ventas
 function ValidateFormSell(){
