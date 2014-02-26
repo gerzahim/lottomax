@@ -106,7 +106,7 @@ else
 {
 	mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
 	mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
-//	echo "PASA";
+	//echo "PASA ANTES";
 	PremiarGanadores($conexion_abajo, $fecha_hora);
 	//shell_exec("curl http://localhost/scripts/BuscarTicketsGanadores.php?fecha_hora=".$fecha_hora);
 	//header ("Location: );
@@ -177,7 +177,7 @@ function ExisteResultado ($id_sorteo, $zodiacal, $numero, $fecha_hora,$conexion_
 		$relacion_pago=array();
 		//$id_tipo_jugada[]=array();
 		$result=$obj_modelo->GetRelacionPagos($fecha_hora,$conexion_abajo);
-		echo "pasa";
+	//	echo "pasa";
 		while($row=mysql_fetch_array($result)){
 			$relacion_pago[$row['id_tipo_jugada']]=$row['monto'];
 			//	$id_tipo_jugada[]=$row['id_tipo_jugada'];
@@ -186,15 +186,15 @@ function ExisteResultado ($id_sorteo, $zodiacal, $numero, $fecha_hora,$conexion_
 		$result= $obj_modelo->GetListadosegunVariable($fecha_hora,$conexion_abajo);
 		If (mysql_num_rows($result)>0){
 			
-			echo "pasa2";
+		//	echo "pasa2";
 			
 			$i=0; $j=0;
 			$ticket_premiado=0;
 			$monto_total_ticket=0;
 			//echo "pasa3";
-			while ($roww= $obj_conexion->GetArrayInfo($result)){
+				while ($roww= mysql_fetch_array($result)){
 				
-				echo "pasa3";
+	//			echo "pasa3";
 			$id_ticket=$roww["id_ticket"];
 			$fecha_ticket= substr($roww["fecha_hora"],0 , -9);
 			$resultDT = $obj_modelo->GetAllDetalleTciket($id_ticket,$conexion_abajo);
