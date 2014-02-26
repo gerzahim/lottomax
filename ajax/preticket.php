@@ -467,6 +467,28 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 		$num_ticket_monto = $numero_jugadoticket['monto'];
 		$num_ticket_inc = $numero_jugadoticket['incompleto'];
 		//Verificando que si esta incompleto
+		if ($txt_monto < 0){
+			echo "<div id='mensaje' class='mensaje' >El monto debe ser mayor a 0 Bs !!!</div>";
+			exit();
+		}else if($txt_monto == 0){
+			$obj_modelo->EliminarTicketTransaccionalByTicket($numero_jugadoticket['id_ticket_transaccional']);
+			echo "<div id='mensaje' class='mensaje' >La jugada fue Eliminada !!!</div>";
+			//exit();
+		}else
+		if ($num_ticket_inc == '0')
+		{
+			
+			
+		
+				//Proceso CONFIRM: Elimina la apuesta existente en ticket transaccional, y para que no este repetida, la registra
+				// con el nuevo monto ingresado.
+				$id_ticket_transaccional= $obj_modelo->GetIDTicketTransaccional($txt_numero,$sorteo,$zodiacal);
+				//echo "<input id='txt_id_ticket_transaccional' name='txt_id_ticket_transaccional' type='text' value='".$id_ticket_transaccional."'/>";
+				$obj_modelo->EliminarTicketTransaccionalByTicket($id_ticket_transaccional);
+				$result = ProcesoCupos($txt_numero, $txt_monto, $sorteo, $zodiacal, $esZodiacal,$id_insert_taquilla);
+				echo "--";
+		}
+		else
 		if ($num_ticket_inc == '1'|| $num_ticket_inc == '3')
 		{
 			// ya no se puede anadir, mas bien le falto por jugar
@@ -475,29 +497,6 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 			//	echo "PAASA";
 			echo "<div id='mensaje' class='mensaje' >El numero ya esta jugado y tiene su cupo completo !!!</div>";
 		}
-		else
-		{
-			if ($num_ticket_inc == '0')
-			{
-				if ($txt_monto < 0){
-					echo "<div id='mensaje' class='mensaje' >El monto debe ser mayor a 0 Bs !!!</div>";
-					exit();
-				}else if($txt_monto == 0){
-					$obj_modelo->EliminarTicketTransaccionalByTicket($id_ticket_transaccional);
-					echo "<div id='mensaje' class='mensaje' >La jugada fue Eliminada !!!</div>";
-					exit();
-				}
-				
-				//Proceso CONFIRM: Elimina la apuesta existente en ticket transaccional, y para que no este repetida, la registra
-				// con el nuevo monto ingresado.
-				$id_ticket_transaccional= $obj_modelo->GetIDTicketTransaccional($txt_numero,$sorteo,$zodiacal);
-				//echo "<input id='txt_id_ticket_transaccional' name='txt_id_ticket_transaccional' type='text' value='".$id_ticket_transaccional."'/>";
-				$obj_modelo->EliminarTicketTransaccionalByTicket($id_ticket_transaccional);
-				$result = ProcesoCupos($txt_numero, $txt_monto, $sorteo, $zodiacal, $esZodiacal,$id_insert_taquilla);
-				echo "--";
-			}
-		}
-
 	}else{
 
 		//revisar tabla de numeros_jugados

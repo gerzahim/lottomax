@@ -2,6 +2,7 @@
 //Creamos la conexión a las distintas base de datos, la de arriba y las de abajo.
 // Archivo de variables de configuracion
 //require('../models/Pagar_Ganador.php');
+set_time_limit(120);
 error_reporting(E_ALL);
 //// BAJADO = 0 Significa que el resultado no ha sido copiado en la BD local, BAJADO=1 significa que el resultado fue bajado a la BD, cuando BAJADO=2 significa que se hizo un cambio el resultado del servidor de arriba y este tiene que ser actualizado en la BD local
 require_once('BajadaController.php');
@@ -20,14 +21,16 @@ mysql_select_db("lottomaxdb",$conexion_arriba);
 
 //Buscamos los resultados que no han sido bajados.
 */
+//$sql1 = "SELECT * FROM resultados";
 
 $sql = "SELECT * FROM resultados WHERE bajado = 0";
+
 if($result= mysql_query($sql,$conexion_arriba))
 {
 	$numero_registros = mysql_num_rows($result);
 //echo $numero_registros ;
 //Creamos la cadena para insertar los resultados que no han sido bajados.
-$consulta_abajo="INSERT INTO resultados (id_resultados, id_sorteo, zodiacal, numero, fecha_hora, bajado) VALUES ( ";
+$consulta_abajo="INSERT INTO resultados ( id_sorteo, zodiacal, numero, fecha_hora, bajado) VALUES ( ";
 
 $h=0;
 $sw=0;
@@ -36,11 +39,16 @@ $jj=0;
 
 while ($row = mysql_fetch_row($result)) 
 {
+	//echo "pasa";
 	$fecha_hora=$row[4];
+	if(ExisteResultado($row[1],$row[2],$row[3],$row[4],$conexion_abajo)){
 	// Creamos la consulta para insertar los datos de los premios
+	if($h<$numero_registros && $h>0)
+		$consulta_abajo.=",(";
 	for ($i = 0; $i < mysql_num_fields($result); $i++)
 	{
-		if ($i!=mysql_num_fields($result)-1)
+		if($i!=0)
+		if ($i!=mysql_num_fields($result)-1 )
 		{
 			if($i==4 OR $i==3)
 				$consulta_abajo.=" '".$row[$i]."', ";
@@ -50,15 +58,18 @@ while ($row = mysql_fetch_row($result))
 		else
 		$consulta_abajo.=" 1 )";
 	}
-	$h++;
-	if($h<$numero_registros)
-	$consulta_abajo.=",(";
+		$h++;
+	}
 	$arreglo[]=$row[0];	
 }
 $consulta_abajo.=";";
+//echo $consulta_abajo;
 $error=0;
+//exit;
+
 if (mysql_query("SET AUTOCOMMIT=0;",$conexion_abajo))//desactivar el modo de autoguardado
 	if (mysql_query("BEGIN;",$conexion_abajo)) //dar inicio a la transacción
+
 		if (mysql_query($consulta_abajo,$conexion_abajo))
 			$error=0;//mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);	
 		else
@@ -67,7 +78,6 @@ if (mysql_query("SET AUTOCOMMIT=0;",$conexion_abajo))//desactivar el modo de aut
 	$error=1;
 else
 $error=1;
-//echo "Error".$error;
 if($error==0)
 	// Busco los resultados arriba que acabo de bajar.
 	if (mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
@@ -75,6 +85,8 @@ if($error==0)
 			foreach ($arreglo as $id)
 			{
 				$sql="UPDATE resultados SET bajado=1 WHERE bajado=0 AND id_resultados=".$id;
+//				echo "<br>".$sql;
+	//			exit;	
 				if (mysql_query($sql,$conexion_arriba)){}
 				else
 				$error=1;
@@ -83,6 +95,7 @@ if($error==0)
 		$error=1;
 	else
 	$error=1;
+	
 if($error==1)
 {
 	//echo "pasa";
@@ -131,38 +144,49 @@ if($result= mysql_query($sql,$conexion_arriba))
 
 }
 
-
-function PremiarGanadores($conexion_abajo,$fecha_hora){
-	
+function ExisteResultado ($id_sorteo, $zodiacal, $numero, $fecha_hora,$conexion_abajo){
 	$obj_modelo= new BajadaController();
-	$id_detalle_ticket[]="";
-	$id_tickets[]="";
-	$totales[]="";
-	$aprox=$obj_modelo->GetAprox($conexion_abajo);
-	//$where = " fecha_hora LIKE '%".date('Y-m-d')."%'";
-	//$result= $obj_modelo->GetListadosegunVariable($where);
-	$resultados=array();
-	$id_sorteo=array();
-	$id_zodiacal=array();
-	$result=$obj_modelo->GetResultados($fecha_hora,$conexion_abajo);
-	while($row=mysql_fetch_array($result)){
-		$resultados[]=$row['numero'];
-		$id_sorteo[]=$row['id_sorteo'];
-		$id_zodiacal[]=$row['zodiacal'];
-	}
-	$relacion_pago=array();
-	//$id_tipo_jugada[]=array();
-	$result=$obj_modelo->GetRelacionPagos($fecha_hora,$conexion_abajo);
-	while($row=mysql_fetch_array($result)){
-		$relacion_pago[$row['id_tipo_jugada']]=$row['monto'];
-		//	$id_tipo_jugada[]=$row['id_tipo_jugada'];
-	}
-	//print_r($relacion_pago);
-	$result= $obj_modelo->GetListadosegunVariable($fecha_hora,$conexion_abajo);
-	If (mysql_num_rows($result,$conexion_abajo)>0){
-		$i=0; $j=0;
-		$ticket_premiado=0;
-		$monto_total_ticket=0;
+	$result1=$obj_modelo->GetResultadosRepetidos($id_sorteo, $zodiacal, $numero, $fecha_hora,$conexion_abajo);
+	if(mysql_num_rows($result1)>0)
+	return false;
+	else
+	return true;
+	
+}
+
+	
+
+	function PremiarGanadores($conexion_abajo,$fecha_hora){
+	
+		$obj_modelo= new BajadaController();
+		$id_detalle_ticket[]="";
+		$id_tickets[]="";
+		$totales[]="";
+		$aprox=$obj_modelo->GetAprox($conexion_abajo);
+		//$where = " fecha_hora LIKE '%".date('Y-m-d')."%'";
+		//$result= $obj_modelo->GetListadosegunVariable($where);
+		$resultados=array();
+		$id_sorteo=array();
+		$id_zodiacal=array();
+		$result=$obj_modelo->GetResultados($fecha_hora,$conexion_abajo);
+		while($row=mysql_fetch_array($result)){
+			$resultados[]=$row['numero'];
+			$id_sorteo[]=$row['id_sorteo'];
+			$id_zodiacal[]=$row['zodiacal'];
+		}
+		$relacion_pago=array();
+		//$id_tipo_jugada[]=array();
+		$result=$obj_modelo->GetRelacionPagos($fecha_hora,$conexion_abajo);
+		while($row=mysql_fetch_array($result)){
+			$relacion_pago[$row['id_tipo_jugada']]=$row['monto'];
+			//	$id_tipo_jugada[]=$row['id_tipo_jugada'];
+		}
+		//print_r($relacion_pago);
+		$result= $obj_modelo->GetListadosegunVariable($fecha_hora,$conexion_abajo);
+		If (mysql_num_rows($result)>0){
+			$i=0; $j=0;
+			$ticket_premiado=0;
+			$monto_total_ticket=0;
 			echo "pasa3";
 			$id_ticket=$roww["id_ticket"];
 			$fecha_ticket= substr($roww["fecha_hora"],0 , -9);
@@ -204,15 +228,14 @@ function PremiarGanadores($conexion_abajo,$fecha_hora){
 						$obj_modelo->PremiarDetalleTicket($rowDT['id_detalle_ticket'], $monto_pago,$conexion_abajo);
 						$sw=1;
 					}
-						
-						
-						
+	
+	
+	
 				}
 			}
 			if($sw==1)
 				$obj_modelo->PremiarTicket($id_ticket,$monto_total,$conexion_abajo);
 		}
 	}
-
 
 ?>

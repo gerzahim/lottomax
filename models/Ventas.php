@@ -482,7 +482,7 @@ class Ventas{
 		
 		$roww= $this->vConexion->GetArrayInfo($result);
 		
-		return array('total_registros'=>$total_registros,'monto_faltante'=>$roww["monto_faltante"], 'monto'=>$roww["monto"], 'incompleto'=>$roww["incompleto"]);
+		return array('total_registros'=>$total_registros,'monto_faltante'=>$roww["monto_faltante"], 'monto'=>$roww["monto"], 'incompleto'=>$roww["incompleto"], 'id_ticket_transaccional'=>$roww["id_ticket_transaccional"]);
 		
 	}
 	
@@ -1039,6 +1039,7 @@ class Ventas{
 	public function EliminarTicketTransaccionalByTicket($id_ticket_transaccional){
 		//Preparacion del query
 		$sql = "DELETE FROM `ticket_transaccional` WHERE id_ticket_transaccional='".$id_ticket_transaccional."'";
+		//echo $sql;
 		return $this->vConexion->ExecuteQuery($sql);
 
 	}
