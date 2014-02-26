@@ -96,6 +96,8 @@ class BajadaController{
 		// premiado cambia cuando se premia un ticket
 		// verificado cambia cuando ya se reviso y no esta premiado verificado=1
 		$sql = "SELECT * FROM ticket WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'";
+		//echo $sql;
+		
 		$result= mysql_query($sql,$conexion_abajo);
 		return  $result;
 	
