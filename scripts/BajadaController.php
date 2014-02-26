@@ -52,6 +52,22 @@ class BajadaController{
 	}
 	
 	/**
+	 * Obtiene los resultados de acuerdo a una fecha
+	 *
+	 * @param string $fecha_hora
+	 * @return boolean, array
+	 */
+	public function GetResultadosRepetidos($id_sorteo, $zodiacal, $numero, $fecha_hora,$conexion_abajo){
+	
+		//Preparacion del query
+		$sql = "SELECT id_sorteo, zodiacal, numero FROM resultados WHERE fecha_hora LIKE '%".$fecha_hora."%' AND id_sorteo=".$id_sorteo." AND zodiacal=".$zodiacal." AND numero=".$numero;
+		//echo $sql;
+		$result= mysql_query($sql,$conexion_abajo);
+	
+		return $result;
+	}
+	
+	/**
 	 * Busqueda de relacion de pagos
 	 *
 	 * @return boolean, array
