@@ -74,14 +74,63 @@ class AnularTicket{
 	public function EliminarTicket($id_ticket){
 		//Preparacion del query
 		//$sql = "DELETE FROM `ticket` WHERE id_ticket='".$id_ticket."'";
-                $sql = "UPDATE ticket SET status='0', fecha_hora_anulacion='".Date('Y-m-d H:i:s')."', taquilla_anulacion='".$_SESSION['taquilla']."' WHERE id_ticket='".$id_ticket."'";
+        $sql = "UPDATE ticket SET status='0', fecha_hora_anulacion='".Date('Y-m-d H:i:s')."', taquilla_anulacion='".$_SESSION['taquilla']."' WHERE id_ticket='".$id_ticket."'";
             
 		return $this->vConexion->ExecuteQuery($sql);
-
+		
 	}
 
 	
-
+	/**
+	 * Reestablecer Imcompletos y Numeros Jugados
+	 *
+	 * @param string $id_ticket
+	 * @return boolean, array
+	 */
+	public function ReestablecerImcompletosyJugados($id_ticket){
+		//Preparacion del query
+        $sql = "SELECT * FROM detalle_ticket WHERE id_ticket='".$id_ticket."'";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		while($row= $this->vConexion->GetArrayInfo($result)){
+			$numero=$row['numero'];
+			$id_sorteo=$row['id_sorteo'];
+			$id_zodiacal=$row['id_zodiacal'];
+			$monto=$row['monto'];
+			$id_tipo_jugada=$row['id_tipo_jugada'];
+			
+			$sql = "SELECT monto_cupo FROM cupo_general WHERE id_tipo_jugada  = ".$id_tipo_jugada."";
+			$result= $this->vConexion->ExecuteQuery($sql);
+			$roww= $this->vConexion->GetArrayInfo($result);
+			$monto_cupo=$roww["monto_cupo"];			
+			
+			
+			//Buscando en Imcopletos y Agotados
+			$sql = "DELETE FROM incompletos_agotados WHERE numero='".$numero."' AND id_sorteo='".$id_sorteo."' AND id_zodiacal='".$id_zodiacal."' AND id_ticket='".$id_ticket."'";
+			$resulta= $this->vConexion->ExecuteQuery($sql);
+			
+			//Buscamos en Numeros Jugados Directamente para Actualizar
+			$sql = "SELECT * FROM numeros_jugados WHERE numero='".$numero."' AND id_sorteo='".$id_sorteo."' AND id_zodiacal='".$id_zodiacal."'";
+			$resulte= $this->vConexion->ExecuteQuery($sql);
+			$rowww= $this->vConexion->GetArrayInfo($resulte);
+			$monto_restante=$rowww['monto_restante'];
+		
+			$monto_restante_ant= $monto+$monto_restante;
+			
+			if ($monto == $monto_cupo || $monto_restante_ant == $monto_cupo){
+				//Borrar porque con esta se agoto el numero
+				$sql = "DELETE FROM numeros_jugados WHERE numero='".$numero."' AND id_sorteo='".$id_sorteo."' AND id_zodiacal='".$id_zodiacal."'";
+			}else{
+				//Modificar el monto 			
+				$sql = "UPDATE `numeros_jugados` SET `monto_restante`='".$monto_restante_ant."' WHERE numero='".$numero."' AND id_sorteo='".$id_sorteo."' AND id_zodiacal='".$id_zodiacal."'";
+			}
+			$this->vConexion->ExecuteQuery($sql);
+						
+			
+		}
+		
+		//return $this->vConexion->ExecuteQuery($sql);
+	
+	}
 
         /**
 	 * Busqueda de Tickets Segun parametro.

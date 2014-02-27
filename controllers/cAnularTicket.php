@@ -102,7 +102,7 @@ switch (ACCION){
                 $minutos_anulacion=$obj_modelo->MinutosAnulacion();
                 $fecha_hora_actual= strtotime(date('Y-m-d H:i:s'));
                 $fecha_actual=date('Y-m-d');
-                
+
 
                 // Validamos que no haya transcurrido, desde la generacion del ticket, un tiempo superior al configurado como limite para anulacion de tickets
                 if (($fecha_hora_actual-$fecha_ticket)<=($minutos_anulacion*60) ){
@@ -112,6 +112,8 @@ switch (ACCION){
 
                         // Eliminamos el ticket
                         if( $obj_modelo->EliminarTicket($id_ticket)){
+                        	//Reestablecer Incompletos y Agotados
+                        	$obj_modelo->ReestablecerImcompletosyJugados($id_ticket);
                                 $_SESSION['mensaje']= $mensajes['ticket_anulado'];
                         }
                         else{
@@ -126,9 +128,9 @@ switch (ACCION){
                 }else{
                     $obj_xtpl->assign('id_ticket',$id_ticket );
                     $obj_xtpl->parse('main.contenido.busqueda_serial');
-                }
-		
+                }		
 		break;
+		
           case 'looking_serial':
 
 		// Ruta regreso
@@ -160,6 +162,8 @@ switch (ACCION){
 
                          // Eliminamos el ticket
                         if( $obj_modelo->EliminarTicket($row['id_ticket'])){
+                        	//Reestablecer Incompletos y Agotados
+                        	$obj_modelo->ReestablecerImcompletosyJugados($id_ticket);
                             $_SESSION['mensaje']= $mensajes['info_eliminada'];
                         }
                         else{

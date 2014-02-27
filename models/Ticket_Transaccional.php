@@ -113,10 +113,9 @@ class Ticket_Transaccional{
 	
 
 	/**
-	 * Desactivar Sorteo
+	 * Eliminar por id_ticket_transaccional
 	 *
-	 * @param string $usuario
-	 * @param string $clave
+	 * @param string $id_jugada
 	 * @return boolean, array
 	 */
 	public function EliminarDatosJugada($id_jugada){		
@@ -124,6 +123,19 @@ class Ticket_Transaccional{
 		$sql = "DELETE FROM ticket_transaccional WHERE id_ticket_transaccional='".$id_jugada."'";
 		return $this->vConexion->ExecuteQuery($sql);
 		
+	}	
+	
+	/**
+	 * Eliminar por id_sorteo
+	 *
+	 * @param string $id_sorteo
+	 * @return boolean, array
+	 */
+	public function EliminarporSorteo($id_sorteo){
+		//Preparacion del query
+		$sql = "DELETE FROM ticket_transaccional WHERE id_sorteo='".$id_sorteo."'";
+		return $this->vConexion->ExecuteQuery($sql);
+	
 	}	
 	
 	
@@ -138,6 +150,24 @@ class Ticket_Transaccional{
 		//Preparacion del query
 		$sql = "SELECT * FROM ticket_transaccional WHERE id_taquilla=".$id_taquilla." ORDER BY numero, id_sorteo, id_zodiacal";
 		return $this->vConexion->ExecuteQuery($sql);
+	}	
+	
+
+	/**
+	 * Obtiene el nombre del Sorteo Segun ID
+	 *
+	 * @param string $id
+	 * @return boolean, array
+	 */
+	public function GetNombreSorteo($id){
+	
+		//Preparacion del query
+		$sql = "SELECT nombre_sorteo FROM sorteos WHERE status = 1 AND id_sorteo  = ".$id."";
+		//echo $sql;
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["nombre_sorteo"];
+	
 	}	
 	
 	

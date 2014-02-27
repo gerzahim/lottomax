@@ -108,6 +108,19 @@ class Loteria{
 	}
 
 	/**
+	 * Actualiza los Sorteos asociados a la Loteria
+	 * @param string $id_loteria
+	 * @param string $status
+	 * @return boolean, array
+	 */
+	public function ActualizaStatusSorteo($id_loteria,$status){
+	
+		//Preparacion del query
+		$sql = "UPDATE `sorteos` SET `status`='".$status."' WHERE id_loteria='".$id_loteria."'";
+		return $this->vConexion->ExecuteQuery($sql);
+	
+	}	
+	/**
 	 * Desactivar Loteria
 	 *
 	 * @param string $usuario
