@@ -96,6 +96,63 @@
                 <div class="paginas">{paginacion}</div>	
 					
 			<!-- END: lista_usuario -->
+			<!-- BEGIN: lista_sorteos -->
+			<div id="enlaces_accion">
+				<span>[ <a class="enlaces" href="{pagina_principal}?op=ventas#final">Regresar a Ventas</a> ]</span>	
+			</div>              
+			<table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1">
+				<caption>
+				Listado de Sorteos del Ticket Actual
+				</caption>			
+
+				<thead>		
+					<tr>		
+						<th class="title header" scope="col"  width="20">&nbsp;</th>		
+						<th class="title header" scope="col">Sorteo</th>		
+					</tr>		
+				</thead>
+		
+				<tbody>
+					<form  name="frm1" id="frm1" method="post" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es">
+		
+					<input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
+		
+					<input style="border: hidden" type="hidden" name="accion" id="idaccion" value="upd"/>
+		
+					<!-- BEGIN: lista -->
+					<tr class="{estilo_fila}">
+
+						<td scope="row" align="center">
+							<a href="{pagina_principal}?op={opcion_sistema}&amp;accion=borrarporsorteos&amp;id={id_sorteo}" title="Eliminar">
+                            	<img src="./images/delete.png" border="0"/>
+                            </a>
+						</td>	
+						<td align="left">{Nombre_Sorteo}</td>			
+					</tr>
+					<!-- END: lista -->
+		
+					<!-- BEGIN: no_lista -->
+		
+					<tr class="even">		
+						<td align="center" colspan="6" class="odd"><br />{sin_listado}<br />&nbsp;</td>		
+					</tr>		
+					<!-- END: no_lista -->
+					<tr>
+					<td align="center" colspan="6" class="odd"><br />
+                    <div class="botones">
+                            <input  id="btncancel" name="btncancelar" value="Regresar a Ventas" type="button" class="boton" onclick="location='index.php?op=ventas#final'"/>
+                    </div>	                  			
+					</td>
+					</tr>
+					
+	
+ 				</form>	                    	
+				</tbody>				
+				<tfoot>
+                </tfoot>
+			</table>
+					
+			<!-- END: lista_sorteos -->			
 
 <br />	<br />	 
 		

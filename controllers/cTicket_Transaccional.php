@@ -71,7 +71,59 @@ switch (ACCION){
 		}
 		header('location:'.$_SESSION['Ruta_Lista']);	
 				
-		break;			
+		break;
+			
+		case 'borrarporsorteos':
+		
+			// Ruta regreso
+			$obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Lista']);
+		
+			$id = $_GET['id'];
+			// Actualiza el estatus como eliminado
+			if( $obj_modelo->EliminarporSorteo($id)){
+				$_SESSION['mensaje']= $mensajes['info_eliminada'];
+			}
+			else{
+				$_SESSION['mensaje']= $mensajes['fallo_eliminar'];
+			}
+			header('location:'.$_SESSION['Ruta_ListaBorrar']);
+		
+			break;		
+
+		case 'listarporsorteos':
+		
+			// Ruta actual
+			$_SESSION['Ruta_ListaBorrar']= $obj_generico->RutaRegreso();
+			
+			// Busca el listado de la informacion.
+			$id_taquilla = $obj_modelo->GetIdTaquilla();
+			$sorteosenticket=array();
+			
+			if( $result= $obj_modelo->GetListadoTicketTransaccional($id_taquilla) ){
+	        	while($row= $obj_conexion->GetArrayInfo($result)){
+	        		if(!in_array($row['id_sorteo'], $sorteosenticket)){
+	        			$sorteosenticket[]=$row['id_sorteo'];
+	        		}
+	            }
+			}
+			$i=1;
+			foreach ($sorteosenticket as $st){
+				if( ($i % 2) >0){
+					$obj_xtpl->assign('estilo_fila', 'even');
+				}
+				else{
+					$obj_xtpl->assign('estilo_fila', 'odd');
+				}				
+				$obj_xtpl->assign('id_sorteo', $st);
+				$obj_xtpl->assign('Nombre_Sorteo', $obj_modelo->GetNombreSorteo($st));
+				// Parseo del bloque de la fila
+				$obj_xtpl->parse('main.contenido.lista_sorteos.lista');
+				$i++;
+			}
+			
+
+			$obj_xtpl->parse('main.contenido.lista_sorteos');
+			break;		
 		
 	// Muestra el listado		
 	default:

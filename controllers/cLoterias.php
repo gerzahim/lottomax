@@ -115,8 +115,8 @@ switch (ACCION){
 			// Modifica la cuenta
 			if( $obj_modelo->ActualizaDatosLoteria($id_loteria,$nombre,$status) ){
 				
-				// Correo al usuario
-				//$obj_correo->sendMailUsuario($obj_generico->CleanTextDb($nombre),$email,$login,$clave);
+				// Actualiza el status de los sorteos Asociados
+				$obj_modelo->ActualizaStatusSorteo($id_loteria,$status);
 				
 				$_SESSION['mensaje']= $mensajes['info_modificada'];
 				header('location:'.$_SESSION['Ruta_Lista']);					

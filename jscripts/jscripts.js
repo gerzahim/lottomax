@@ -45,10 +45,10 @@ function DetectarUrlVentas(){
 	var host = window.location.host;
 	//alert(host);
 	//alert(host + '/index.php?op=ventas#final');
-	if(url.indexOf(host + '/index.php?op=ventas#final') != -1) {
+	if(url.indexOf(host + '/index.php?op=ventas') != -1) {
 		 //match
 		return true;  
-	}else if(url.indexOf(host + '/lottomax/index.php?op=ventas#final') != -1) {
+	}else if(url.indexOf(host + '/lottomax/index.php?op=ventas') != -1) {
 		 //match
 		return true;  
 	}else{
@@ -819,6 +819,12 @@ function verDetallaTicket()
 {
     window.location='index.php?op=ticket_transaccional';
  } 
+
+//Funcion para llamar al formulario de anular ticket
+function verBorrarSorteoTicket()
+{
+    window.location='index.php?op=ticket_transaccional&accion=listarporsorteos';
+ } 
  
 // Funcion para llamar al formulario de Modificar detalle ticket
 function verResultados()
@@ -924,7 +930,7 @@ $(document).keyup(function(tecla){
     }else if((tecla.keyCode == 69)){
     	// tecla E
     	if(DetectarUrlVentas()){
-    		DetalleTicket(); 		
+    		verDetallaTicket(); 		
     	}       	
     }else if((tecla.keyCode == 70)){
     	// tecla F    	
@@ -986,7 +992,9 @@ $(document).keyup(function(tecla){
     	}       	
     }else if((tecla.keyCode == 73)){
         // Tecla I
-    	// DISPONIBLE
+    	if(DetectarUrlVentas()){
+    		verBorrarSorteoTicket(); 		
+    	} 
     }else if((tecla.keyCode == 74)){
     	// tecla J
     	if(DetectarUrlVentas()){
