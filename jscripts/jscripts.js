@@ -61,7 +61,7 @@ function DetectarUrlVentas(){
 var tid = 0;
 function toggleOnAbajo(){
     if(tid==0){
-        tid=setInterval(saltarSigCampo, 100); // 2000 ms = start after 2sec
+        tid=setInterval(saltarSigCampo, 50); // 2000 ms = start after 2sec
     }	
 	//interval = setInterval(saltarSigCampo, 2000); // 2000 ms = start after 2sec 
 	
@@ -87,7 +87,7 @@ function saltarSigCampo() {
 var ted = 0;
 function toggleOnArriba(){
     if(ted==0){
-    	ted=setInterval(retrocederSigCampo, 100); // 2000 ms = start after 2sec
+    	ted=setInterval(retrocederSigCampo, 50); // 2000 ms = start after 2sec
     }	
 	//interval = setInterval(saltarSigCampo, 2000); // 2000 ms = start after 2sec 
 	
@@ -170,6 +170,13 @@ function cambioTurno(){
 function BorderFooter(){
 	$("#container #footer").corner("6px");
 }
+
+function seleccionar_monto(){
+	$("#txt_monto").select();
+}
+
+
+
 
 // Para los sub-modulos
 function act_mod(valor,cantidad,nivel,id,num){
@@ -918,7 +925,8 @@ $(document).keyup(function(tecla){
     	borra_txtNumero();
     }else if( (tecla.keyCode == 66)){
     	// tecla B    	
-    	$("#txt_monto").focus(); // hace focus en el campo de monto Bs    		
+    	$("#txt_monto").focus(); // hace focus en el campo de monto Bs
+    	//$("#txt_monto").select();
     }else if( (tecla.keyCode == 67)){
     	// tecla C 
 		//$('#op_juego').val('4');// hace focus en el campo de tipo de juego y selecciona Corrida
@@ -1280,14 +1288,22 @@ function ValidateFormSell(){
 	});
 	
 	jQuery('#txt_numero').keyup(function (event) {
+		var juego = $("input[name='op_juego']:checked").val();
+		
 		count = jQuery('#txt_numero').val().length;
-        
+        		
         //Para hacer focus en txt_monto si txt_numero es igual a 3
         // si el modo de juego es triple
         // hace focus en el campo de monto Bs 
-        if (count == 3){ 
-       	 $("#txt_monto").focus();  
-        }		
+        if (count == 3 && juego == 1){ 
+       	 $("#txt_monto").focus();
+       	 //$("#txt_monto").select();
+        }
+        
+        if (count == 2 && juego == 3){ 
+          	 $("#txt_monto").focus();
+          	 //$("#txt_monto").select();
+           }        
 		
 	});	
 	
