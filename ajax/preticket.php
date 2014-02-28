@@ -502,7 +502,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 		//revisar tabla de numeros_jugados
 		$numero_jugado= $obj_modelo->GetNumerosJugados($txt_numero,$sorteo,$zodiacal);
 		echo "NUMJUG";
-		echo $numero_jugado;
+		echo $monto_restante;
 		exit;
 		//significa que ya existe y debemos ver el monto que queda
 		$monto_restante = $numero_jugado['monto_restante'];
