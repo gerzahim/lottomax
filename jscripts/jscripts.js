@@ -724,7 +724,7 @@ function agregarTerminales(){
         }else if (str == "NotOk"){
             alert("Debe hacer por lo menos una apuesta de triple para generar los terminales en el ticket!");
         }      
-        //calcula_total();   
+        calcula_total();   
      });
 }
 
