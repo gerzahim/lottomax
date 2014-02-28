@@ -38,7 +38,7 @@ switch (ACCION){
        	$fecha_desde=$obj_date->changeFormatDateII($fecha_desde);
        	$fecha_hasta=$obj_date->changeFormatDateII($fecha_hasta);
        	
-        $i=0; 
+        $i=0; $total_cuadre=0;
         if( $result= $obj_modelo->GetBalance($fecha_desde, $fecha_hasta,$comision) ){
             if ($obj_conexion->GetNumberRows($result)>0 ){
                 
@@ -67,10 +67,11 @@ switch (ACCION){
 
                     // Parseo del bloque de la fila
                     $obj_xtpl->parse('main.contenido.lista_resultados.lista');
+                    $total_cuadre= $total_cuadre + $row['balance'];
                     $i++;
                    
                 }
-
+                $obj_xtpl->assign('total_cuadre', ' El Total de Cuadre en Balance es: Bs. '.round($total_cuadre, 2));
                 
                  // Parseo del bloque de la fila
                 $obj_xtpl->parse('main.contenido.lista_resultados');

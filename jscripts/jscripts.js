@@ -61,7 +61,7 @@ function DetectarUrlVentas(){
 var tid = 0;
 function toggleOnAbajo(){
     if(tid==0){
-        tid=setInterval(saltarSigCampo, 50); // 2000 ms = start after 2sec
+        tid=setInterval(saltarSigCampo, 75); // 2000 ms = start after 2sec
     }	
 	//interval = setInterval(saltarSigCampo, 2000); // 2000 ms = start after 2sec 
 	
@@ -87,7 +87,7 @@ function saltarSigCampo() {
 var ted = 0;
 function toggleOnArriba(){
     if(ted==0){
-    	ted=setInterval(retrocederSigCampo, 50); // 2000 ms = start after 2sec
+    	ted=setInterval(retrocederSigCampo, 75); // 2000 ms = start after 2sec
     }	
 	//interval = setInterval(saltarSigCampo, 2000); // 2000 ms = start after 2sec 
 	
@@ -104,8 +104,10 @@ function toggleOffArriba(){
 }
 
 function retrocederSigCampo() {
-	
-	$(":input")[$(":input").index(document.activeElement) - 1].focus();	  
+	if($(":input").index(document.activeElement) > '13'){
+		$(":input")[$(":input").index(document.activeElement) - 1].focus();	
+	}
+		  
 }
 
 function aunEstoyVivo(){
@@ -1167,7 +1169,10 @@ $(document).keyup(function(tecla){
     		}); */
     }else if(tecla.keyCode == 38) {
     	// tecla Flecha Arriba
-    	
+		if( $(":input").index(document.activeElement) == '7' ){
+    		$(":input")[$(":input").index(document.activeElement) - 1].focus();
+    	}
+		    	
     	toggleOffArriba();
     	/*
     	//alert($(":input").index(document.activeElement));    	
@@ -1219,10 +1224,11 @@ $(document).keydown(function(tecla){
     	// tecla Flecha Abajo
     	//alert($(":input").index(document.activeElement));
 		if( $(":input").index(document.activeElement) == '6' ){
-			$(":input")[$(":input").index(document.activeElement) + 1].focus();
-    	}else if( $(":input").index(document.activeElement) == '7' ){
+    		$(":input")[$(":input").index(document.activeElement) + 1].focus();
+    	}		
+		else if( $(":input").index(document.activeElement) == '7' ){
     		$(":input")[$(":input").index(document.activeElement) + 7].focus();
-    	}else{
+    	}else if($(":input").index(document.activeElement) > '13'){
     		toggleOnAbajo();
     		//$(":input")[$(":input").index(document.activeElement) + 1].focus();
     	}
@@ -1231,14 +1237,16 @@ $(document).keydown(function(tecla){
 	else if(tecla.keyCode == 38) {
     	// tecla Flecha Arriba
     	//alert($(":input").index(document.activeElement));
-		if( $(":input").index(document.activeElement) == '7' ){
-			$(":input")[$(":input").index(document.activeElement) - 1].focus();
-    	}else if( $(":input").index(document.activeElement) == '14' ){
+		if( $(":input").index(document.activeElement) == '6' ){
+    		$(":input")[$(":input").index(document.activeElement)].focus();
+    	}		
+		else if( $(":input").index(document.activeElement) == '14' ){
     		$(":input")[$(":input").index(document.activeElement) - 7].focus();
-    	}else{
-    		toggleOnArriba();
-    		//$(":input")[$(":input").index(document.activeElement) - 1].focus();
-    	}    	
+    	}
+		else if($(":input").index(document.activeElement) > '13'){
+			toggleOnArriba();
+    		//$(":input")[$(":input").index(document.activeElement) + 1].focus();
+    	}   	
 
     }	
 	
