@@ -64,7 +64,7 @@ switch (ACCION){
                 }
                 
                 $obj_xtpl->assign('fecha', $fecha);
-                $obj_xtpl->assign('total_ganadores', ' El Total de Ganadores fue: Bs. F. '.$total_ganadores);
+                $obj_xtpl->assign('total_ganadores', ' El Total de Ganadores fue: Bs. '.$total_ganadores);
                 //echo $total_ganadores;
                 
                  // Parseo del bloque de la fila
