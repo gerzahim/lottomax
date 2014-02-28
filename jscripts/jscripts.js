@@ -1218,7 +1218,9 @@ $(document).keydown(function(tecla){
 	if(tecla.keyCode == 40) {
     	// tecla Flecha Abajo
     	//alert($(":input").index(document.activeElement));
-    	if( $(":input").index(document.activeElement) == '7' ){
+		if( $(":input").index(document.activeElement) == '6' ){
+			$(":input")[$(":input").index(document.activeElement) + 1].focus();
+    	}else if( $(":input").index(document.activeElement) == '7' ){
     		$(":input")[$(":input").index(document.activeElement) + 7].focus();
     	}else{
     		toggleOnAbajo();
@@ -1228,8 +1230,10 @@ $(document).keydown(function(tecla){
     }
 	else if(tecla.keyCode == 38) {
     	// tecla Flecha Arriba
-    	//alert($(":input").index(document.activeElement));    	
-    	if( $(":input").index(document.activeElement) == '14' ){
+    	//alert($(":input").index(document.activeElement));
+		if( $(":input").index(document.activeElement) == '7' ){
+			$(":input")[$(":input").index(document.activeElement) - 1].focus();
+    	}else if( $(":input").index(document.activeElement) == '14' ){
     		$(":input")[$(":input").index(document.activeElement) - 7].focus();
     	}else{
     		toggleOnArriba();
