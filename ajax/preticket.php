@@ -537,9 +537,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 			//No existe aun
 			//revisar tabla de cupo_especial
 			$cupo_especial= $obj_modelo->GetCuposEspeciales($txt_numero,$sorteo,$zodiacal);
-
 			if( $cupo_especial['total_registros']>0 ){
-					
 				while($row= $obj_conexion->GetArrayInfo($cupo_especial['result'])){
 
 					//recortando el formato 2013-02-26 00:00:00 a 2013-02-26
@@ -591,7 +589,9 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 
 						//determinando monto_cupo segun id tipo de jugada
 						$cupo_general= $obj_modelo->GetCuposGenerales($id_tipo_jugada);
-
+						echo "PP";
+						echo $cupo_general;
+						exit;
 						// Asignamos al monto restante el monto de apuesta para efectos de la funcion CalculaIncompletoYnuevoMonto
 						// $monto_restante= $txt_monto;
 
@@ -619,11 +619,11 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 				//No posee cupo especial, ni esta en tabla numeros_jugados
 				//revisar tabla de cupo_general
 				//procesa A
-
+				
 				//echo "PASA";
 				//determinando monto_cupo segun id tipo de jugada
 				$cupo_general= $obj_modelo->GetCuposGenerales($id_tipo_jugada);
-
+				
 				// Asignamos al monto restante el monto de apuesta para efectos de la funcion CalculaIncompletoYnuevoMonto
 				$monto_restante= $txt_monto;
 
@@ -634,7 +634,10 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 				$matriz2= CalculaIncompletoYnuevoMonto($cupo_general, $monto_restante);
 
 				 
-
+			/*	echo "este".$cupo_general;
+				echo "sisi";
+				echo "monto".$matriz2[2];
+				exit;*/
 				// Guardar ticket a tabla transaccional
 				if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$matriz2[0],$matriz2[1],$matriz2[2],$taquilla,$id_insert_taquilla) ){
 
