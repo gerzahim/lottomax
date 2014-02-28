@@ -366,7 +366,7 @@ if($total_incompletos>0){
 		$g=0;
 		foreach($comb_numMonto as $cn){
 			$array_sorteo=preg_split('/-/',$cn);
-			if(count($array_sorteo)>2)
+			if(count($array_sorteo)>=2)
 				$cn=$array_sorteo[0]." - ".$pre_zod[$array_sorteo[1]];
 			if($g==0){
 				$data.="<tr><td align='left'><font face='Arial' size='2' > ".$cn."</td>";
