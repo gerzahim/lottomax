@@ -536,7 +536,10 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 
 			//No existe aun
 			//revisar tabla de cupo_especial
-			$cupo_especial= $obj_modelo->GetCuposEspeciales($txt_numero,$sorteo,$zodiacal);
+			$cupo_especial= $obj_modelo->GetCuposEspeciales($txt_numero,$sorteo,$zodiacal);.
+			echo "CE";
+			echo $cupo_especial;
+			exit;
 			if( $cupo_especial['total_registros']>0 ){
 				while($row= $obj_conexion->GetArrayInfo($cupo_especial['result'])){
 
