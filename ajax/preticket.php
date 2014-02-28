@@ -501,9 +501,6 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 
 		//revisar tabla de numeros_jugados
 		$numero_jugado= $obj_modelo->GetNumerosJugados($txt_numero,$sorteo,$zodiacal);
-		echo "NUMJUG";
-		echo $numero_jugado['monto_restante'];
-		exit;
 		//significa que ya existe y debemos ver el monto que queda
 		$monto_restante = $numero_jugado['monto_restante'];
 		if( $numero_jugado['total_registros']>0 ){
@@ -539,9 +536,6 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 			//No existe aun
 			//revisar tabla de cupo_especial
 			$cupo_especial= $obj_modelo->GetCuposEspeciales($txt_numero,$sorteo,$zodiacal);
-			echo "CEeee";
-			echo $cupo_especial;
-			exit;
 			if( $cupo_especial['total_registros']>0 ){
 				while($row= $obj_conexion->GetArrayInfo($cupo_especial['result'])){
 
@@ -594,9 +588,6 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 
 						//determinando monto_cupo segun id tipo de jugada
 						$cupo_general= $obj_modelo->GetCuposGenerales($id_tipo_jugada);
-						echo "PPeee";
-						echo $cupo_general;
-						exit;
 						// Asignamos al monto restante el monto de apuesta para efectos de la funcion CalculaIncompletoYnuevoMonto
 						// $monto_restante= $txt_monto;
 
