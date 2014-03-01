@@ -156,107 +156,106 @@ function ExisteResultado ($id_sorteo, $zodiacal, $numero, $fecha_hora,$conexion_
 
 	
 
-	function PremiarGanadores($conexion_abajo,$fecha_hora){
-	
-		$obj_modelo= new BajadaController();
-		$id_detalle_ticket[]="";
-		$id_tickets[]="";
-		$totales[]="";
-		$aprox=$obj_modelo->GetAprox($conexion_abajo);
-		//$where = " fecha_hora LIKE '%".date('Y-m-d')."%'";
-		//$result= $obj_modelo->GetListadosegunVariable($where);
-		$resultados=array();
-		$id_sorteo=array();
-		$id_zodiacal=array();
-		$result=$obj_modelo->GetResultados($fecha_hora,$conexion_abajo);
-		while($row=mysql_fetch_array($result)){
-			$resultados[]=$row['numero'];
-			$id_sorteo[]=$row['id_sorteo'];
-			$id_zodiacal[]=$row['zodiacal'];
-		}
-		$relacion_pago=array();
-		//$id_tipo_jugada[]=array();
-		$result=$obj_modelo->GetRelacionPagos($fecha_hora,$conexion_abajo);
-	//	echo "pasa";
-		while($row=mysql_fetch_array($result)){
-			$relacion_pago[$row['id_tipo_jugada']]=$row['monto'];
-			//	$id_tipo_jugada[]=$row['id_tipo_jugada'];
-		}
-		//print_r($relacion_pago);
-		$result= $obj_modelo->GetListadosegunVariable($fecha_hora,$conexion_abajo);
-		If (mysql_num_rows($result)>0){
+function PremiarGanadores($conexion_abajo,$fecha_hora){
+
+	$obj_modelo= new BajadaController();
+	$id_detalle_ticket[]="";
+	$id_tickets[]="";
+	$totales[]="";
+	$aprox=$obj_modelo->GetAprox($conexion_abajo);
+	//$where = " fecha_hora LIKE '%".date('Y-m-d')."%'";
+	//$result= $obj_modelo->GetListadosegunVariable($where);
+	$resultados=array();
+	$id_sorteo=array();
+	$id_zodiacal=array();
+	$result=$obj_modelo->GetResultados($fecha_hora,$conexion_abajo);
+	while($row=mysql_fetch_array($result)){
+		$resultados[]=$row['numero'];
+		$id_sorteo[]=$row['id_sorteo'];
+		$id_zodiacal[]=$row['zodiacal'];
+	}
+	$relacion_pago=array();
+	//$id_tipo_jugada[]=array();
+	$result=$obj_modelo->GetRelacionPagos($fecha_hora,$conexion_abajo);
+//	echo "pasa";
+	while($row=mysql_fetch_array($result)){
+		$relacion_pago[$row['id_tipo_jugada']]=$row['monto'];
+		//	$id_tipo_jugada[]=$row['id_tipo_jugada'];
+	}
+	//print_r($relacion_pago);
+	$result= $obj_modelo->GetListadosegunVariable($fecha_hora,$conexion_abajo);
+	If (mysql_num_rows($result)>0){
+		
+	//	echo "pasa2";
+		
+		$i=0; $j=0;
+		$ticket_premiado=0;
+		$monto_total_ticket=0;
+		//echo "pasa3";
+			while ($roww= mysql_fetch_array($result)){
 			
-		//	echo "pasa2";
-			
-			$i=0; $j=0;
-			$ticket_premiado=0;
-			$monto_total_ticket=0;
-			//echo "pasa3";
-				while ($roww= mysql_fetch_array($result)){
-				
-	//			echo "pasa3";
-			$id_ticket=$roww["id_ticket"];
-			$fecha_ticket= substr($roww["fecha_hora"],0 , -9);
-			$resultDT = $obj_modelo->GetAllDetalleTciket($id_ticket,$conexion_abajo);
-			//revisamos la tabla de detalle ticket y comparamos con los resultados
-			$monto_total=0;
-			$sw=0;
-			while($rowDT= mysql_fetch_array($resultDT)){
-				// Verificamos si hay alguna apuesta ganadora...
-				for ($i=0;$i<count($resultados);$i++){
-					$swz=0;
-					$terminal_abajo=0;
-					$terminal_arriba=0;
-					if($rowDT['id_tipo_jugada']==2){
-						switch ($aprox){
-							case 0:
-								$terminal_abajo=$rowDT['numero']-1;
-								break;
-							case 1:
-								$terminal_arriba=$rowDT['numero']+1;
-								$terminal_abajo=$rowDT['numero']-1;
-								break;
-							case 2:
-								$terminal_arriba=$rowDT['numero']+1;
-								break;
-						}
-						if(($terminal_abajo==substr($resultados[$i], 1, 3) OR $terminal_arriba==substr($resultados[$i], 1, 3)) AND $rowDT['id_sorteo']==$id_sorteo[$i] ){
-							$monto_pago=$relacion_pago[5]*$rowDT['monto'];
-							$monto_total+=$monto_pago;
-							$obj_modelo->PremiarDetalleTicket($rowDT['id_detalle_ticket'], $monto_pago,$conexion_abajo);
-							$sw=1;
-						}
+//			echo "pasa3";
+		$id_ticket=$roww["id_ticket"];
+		$fecha_ticket= substr($roww["fecha_hora"],0 , -9);
+		$resultDT = $obj_modelo->GetAllDetalleTciket($id_ticket,$conexion_abajo);
+		//revisamos la tabla de detalle ticket y comparamos con los resultados
+		$monto_total=0;
+		$sw=0;
+		while($rowDT= mysql_fetch_array($resultDT)){
+			// Verificamos si hay alguna apuesta ganadora...
+			for ($i=0;$i<count($resultados);$i++){
+				$swz=0;
+				$terminal_abajo=0;
+				$terminal_arriba=0;
+				if($rowDT['id_tipo_jugada']==2){
+					switch ($aprox){
+						case 0:
+							$terminal_abajo=$rowDT['numero']-1;
+							break;
+						case 1:
+							$terminal_arriba=$rowDT['numero']+1;
+							$terminal_abajo=$rowDT['numero']-1;
+							break;
+						case 2:
+							$terminal_arriba=$rowDT['numero']+1;
+							break;
 					}
-					if((($rowDT['numero']==$resultados[$i] AND ($rowDT['id_tipo_jugada']==1 OR $rowDT['id_tipo_jugada']==3))OR ($rowDT['numero']== substr($resultados[$i], 1, 3) AND ($rowDT['id_tipo_jugada']==2 OR $rowDT['id_tipo_jugada']==4))    )      AND $rowDT['id_sorteo']==$id_sorteo[$i] ){
-						if($id_zodiacal[$i]!=0 AND $id_zodiacal[$i]==$rowDT['id_zodiacal'])
-						{
-							$monto_pago=$relacion_pago[$rowDT['id_tipo_jugada']]*$rowDT['monto'];
-							$swz=1;
-						}
-						else
-							$monto_pago=$relacion_pago[$rowDT['id_tipo_jugada']]*$rowDT['monto'];
+					if(($terminal_abajo==substr($resultados[$i], 1, 3) OR $terminal_arriba==substr($resultados[$i], 1, 3)) AND $rowDT['id_sorteo']==$id_sorteo[$i] ){
+						$monto_pago=$relacion_pago[5]*$rowDT['monto'];
 						$monto_total+=$monto_pago;
-						if($id_zodiacal[$i]!=0 )
-						{
-							if($swz==1)
-							{
-								$monto_total+=$monto_pago;
-								$sw=1;
-								$obj_modelo->PremiarDetalleTicket($rowDT['id_detalle_ticket'], $monto_pago,$conexion_abajo);
-							}
-						}
-						else
-						{
-							$sw=1;
-							$monto_total+=$monto_pago;
-							$obj_modelo->PremiarDetalleTicket($rowDT['id_detalle_ticket'], $monto_pago,$conexion_abajo);
-						}	
+						$obj_modelo->PremiarDetalleTicket($rowDT['id_detalle_ticket'], $monto_pago,$conexion_abajo);
+						$sw=1;
 					}
 				}
-			}
-			if($sw==1)
-				$obj_modelo->PremiarTicket($id_ticket,$monto_total,$conexion_abajo);
+				if((($rowDT['numero']==$resultados[$i] AND ($rowDT['id_tipo_jugada']==1 OR $rowDT['id_tipo_jugada']==3))OR ($rowDT['numero']== substr($resultados[$i], 1, 3) AND ($rowDT['id_tipo_jugada']==2 OR $rowDT['id_tipo_jugada']==4))    )      AND $rowDT['id_sorteo']==$id_sorteo[$i] ){
+					if($id_zodiacal[$i]!=0 AND $id_zodiacal[$i]==$rowDT['id_zodiacal'])
+					{
+						$monto_pago=$relacion_pago[$rowDT['id_tipo_jugada']]*$rowDT['monto'];
+						$swz=1;
+					}
+					else
+					$monto_pago=$relacion_pago[$rowDT['id_tipo_jugada']]*$rowDT['monto'];
+					if($id_zodiacal[$i]!=0 )
+					{
+						if($swz==1)
+						{
+							$monto_total+=$monto_pago;
+							$sw=1;
+							$obj_modelo->PremiarDetalleTicket($rowDT['id_detalle_ticket'], $monto_pago,$conexion_abajo);
+						}
+					}
+					else
+					{
+						$sw=1;
+						$monto_total+=$monto_pago;
+						$obj_modelo->PremiarDetalleTicket($rowDT['id_detalle_ticket'], $monto_pago,$conexion_abajo);
+					}	
+				}
 			}
 		}
+		if($sw==1)
+			$obj_modelo->PremiarTicket($id_ticket,$monto_total,$conexion_abajo);
+		}
 	}
+}
 ?>
