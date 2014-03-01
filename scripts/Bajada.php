@@ -204,7 +204,7 @@ function ExisteResultado ($id_sorteo, $zodiacal, $numero, $fecha_hora,$conexion_
 			while($rowDT= mysql_fetch_array($resultDT)){
 				// Verificamos si hay alguna apuesta ganadora...
 				for ($i=0;$i<count($resultados);$i++){
-					swz=0;
+					$swz=0;
 					$terminal_abajo=0;
 					$terminal_arriba=0;
 					if($rowDT['id_tipo_jugada']==2){
