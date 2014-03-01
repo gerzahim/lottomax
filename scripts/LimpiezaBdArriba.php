@@ -15,8 +15,8 @@ $conexion_abajo = mysql_connect("localhost" , "root" , "secreta");
 mysql_select_db("lottomax",$conexion_abajo);
 
 
-$conexion_arriba = mysql_connect("sql3.freesqldatabase.com:3306" , "sql330819" , "wJ7%mP9%",true);
-mysql_select_db("sql330819",$conexion_arriba);
+$conexion_arriba = mysql_connect("sql3.freesqldatabase.com:3306" , "sql331522" , "gI4%hG8%",true);
+mysql_select_db("sql331522",$conexion_arriba);
 
 $ano=date('Y');
 $mes=date('m');
@@ -30,7 +30,7 @@ $fecha_antesayr=$ano."-".$mes."-".$dia_antesayr;
 
 //Sql para borrar la tabla de ticket y por estar relacionados borra los detalles_ticket asociados
 // Borra Todo los  tickets que no sean de hoy, ayer ni antes de ayer.
-$sql = "DELETE FROM `ticket` WHERE fecha_hora NOT LIKE '%".$fecha_hoy."%' AND fecha_hora NOT LIKE '%".$fecha_ayer."%' AND fecha_hora NOT LIKE '%".$fecha_antesayr."%' ";
+$sql = "DELETE FROM `ticket` WHERE fecha_hora NOT LIKE '%".$fecha_hoy."%' AND fecha_hora NOT LIKE '%".$fecha_ayer."%' ";
 mysql_query($sql,$conexion_arriba);
 
 //Sql para borrar la tabla de resultados 
