@@ -89,6 +89,24 @@ class RCuadre_banca{
 	}	
 	
 	/**
+	 * Devuelve el listado de Jugadas Ganadoras
+	 *
+	 * @param string $fecha
+	 * @return boolean, array
+	 */
+	public function GetDetalleTicketPremiados($id_ticket){
+	
+		//Preparacion del query
+		$sql = "SELECT * FROM  detalle_ticket WHERE premiado='1' AND id_ticket = '".$id_ticket."'";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		return $result;
+	
+	
+	}	
+	
+		
+	
+	/**
 	 * Devuelve el listado de balance por dia entre dos fechas
 	 *
 	 * @param string $fecha_desde
@@ -111,7 +129,42 @@ class RCuadre_banca{
 		return $result;
 	
 	
-	}	
+	}
+
+	/**
+	 * Obtiene el nombre del Sorteo Segun ID
+	 *
+	 * @param string $id
+	 * @return boolean, array
+	 */
+	public function GetNombreSorteo($id){
+	
+		//Preparacion del query
+		$sql = "SELECT nombre_sorteo FROM sorteos WHERE status = 1 AND id_sorteo  = ".$id."";
+		//echo $sql;
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["nombre_sorteo"];
+	
+	}
+	
+	/**
+	 * Busqueda de Id de Taquilla.
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetPreNombreSigno($id){
+		
+		//Preparacion del query
+		$sql = "SELECT pre_zodiacal FROM zodiacal WHERE Id_zodiacal = ".$id."";
+		//echo $sql;
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["pre_zodiacal"];
+	}		
+
+	
 	/**
 	 * Busqueda de Id de Taquilla.
 	 *

@@ -30,29 +30,30 @@ $dia_antesayr=str_pad($dia_antesayr, 2, "0", STR_PAD_LEFT);
 
 if($dia_hoy == '01'){
 	if($mes == '01'){
-		$mes='12';
+		$mes1='12';
 	}else{
-		$mes=$mes-1;
+		$mes1=$mes-1;
 		//completando con Cero a la Izquierda
-		$mes=str_pad($mes, 2, "0", STR_PAD_LEFT);
+		$mes1=str_pad($mes1, 2, "0", STR_PAD_LEFT);
 	}
-
-	if($mes=='01' || $mes=='03' || $mes=='05' || $mes=='07' || $mes=='08' || $mes=='10' || $mes=='12'){
+	
+	if($mes1=='01' || $mes1=='03' || $mes1=='05' || $mes1=='07' || $mes1=='08' || $mes1=='10' || $mes1=='12'){
 		$dia_ayer='31';
-		$dia_antesayr='30';
-	}else if($mes=='04' || $mes=='06' || $mes=='09' || $mes=='11'){
+	}else if($mes1=='04' || $mes1=='06' || $mes1=='09' || $mes1=='11'){
 		$dia_ayer='30';
-		$dia_antesayr='29';
 	}else{
 		//Es Febrero
 		$dia_ayer='28';
-		$dia_antesayr='27';
 	}
+	
+	
+}else{
+	$mes1=$mes;
 }
 
 $fecha_hoy=$ano."-".$mes."-".$dia_hoy;
-$fecha_ayer=$ano."-".$mes."-".$dia_ayer;
-$fecha_antesayr=$ano."-".$mes."-".$dia_antesayr;
+$fecha_ayer=$ano."-".$mes1."-".$dia_ayer;
+$fecha_antesayr=$ano."-".$mes1."-".$dia_antesayr;
 
 
 //Sql para borrar la tabla de ticket y por estar relacionados borra los detalles_ticket asociados
