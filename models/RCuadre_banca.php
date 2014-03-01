@@ -57,7 +57,7 @@ class RCuadre_banca{
 
 		//Preparacion del query
                
-               
+        //echo $fecha_desde, $fecha_hasta,$comision;      
 
 		$sql = "SELECT LEFT(fecha_hora,10) AS fecha, SUM(total_ticket) AS total_ventas, SUM(total_ticket)* ".$comision." /100 AS comision, SUM(total_premiado) AS total_premiado, SUM(total_ticket)- ((SUM(total_ticket)* ".$comision." /100) + SUM(total_premiado)) AS balance
                         FROM ticket
@@ -70,6 +70,23 @@ class RCuadre_banca{
 		
 		
 	} 
+	
+	/**
+	 * Devuelve el listado de Tickets Ganadores
+	 *
+	 * @param string $fecha
+	 * @return boolean, array
+	 */
+	public function GetTicketsGanadores($fecha){
+	
+		//Preparacion del query
+		$sql = "SELECT * FROM  ticket WHERE premiado='1' AND fecha_hora LIKE '%".$fecha."%'";
+		//echo $sql;
+		$result= $this->vConexion->ExecuteQuery($sql);
+		return $result;
+	
+	
+	}	
 	
 	/**
 	 * Devuelve el listado de balance por dia entre dos fechas

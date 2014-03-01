@@ -83,7 +83,7 @@ $data="";
 				$total_pagado=0;
 				$data.="<tr><td width='40' align='center'><font face='arial' size='2' ></font> </td> <td align='center' width='73' ><font face='arial' size='2' > </font></td><td align='center' width='49' ><font face='arial' size='2' ></font></td></tr>";
 				
-				$data.="<tr><td width='40' align='center'><font face='arial' size='2' >ID</font> </td> <td align='center' width='73' ><font face='arial' size='2' >Monto </font></td><td align='center' width='49' ><font face='arial' size='2' >Pagado</font></td></tr>";
+				$data.="<tr><td width='40' align='center'><font face='arial' size='2' >ID</font> </td> <td align='center' width='73' ><font face='arial' size='2' >Monto Premiado</font></td><td align='center' width='49' ><font face='arial' size='2' >Pagado</font></td></tr>";
 				
 					
                 while($row= $obj_conexion->GetArrayInfo($result)){
