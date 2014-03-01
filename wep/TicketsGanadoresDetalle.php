@@ -46,79 +46,10 @@ $obj_modelo= new RCuadre_banca($obj_conexion);
 $ano=date('Y');
 $mes=date('m');
 $dia_hoy=date('d');
-$dia_ayer=$dia_hoy-1;
-
-//completando con Cero a la Izquierda
-$dia_ayer=str_pad($dia_ayer, 2, "0", STR_PAD_LEFT);
-
-if($dia_hoy == '01'){
-	if($mes == '01'){
-		$mes1='12';
-	}else{
-		$mes1=$mes-1;
-		//completando con Cero a la Izquierda
-		$mes1=str_pad($mes1, 2, "0", STR_PAD_LEFT);
-	}
-	
-	if($mes1=='01' || $mes1=='03' || $mes1=='05' || $mes1=='07' || $mes1=='08' || $mes1=='10' || $mes1=='12'){
-		$dia_ayer='31';
-	}else if($mes1=='04' || $mes1=='06' || $mes1=='09' || $mes1=='11'){
-		$dia_ayer='30';
-	}else{
-		//Es Febrero
-		$dia_ayer='28';
-	}
-	
-	
-}else{
-	$mes1=$mes;
-}
-
 
 $fecha_hoy=$ano."-".$mes."-".$dia_hoy;
-$fecha_ayer=$ano."-".$mes1."-".$dia_ayer;
 
-$fecha_desde= $obj_generico->CleanText($fecha_ayer);
-$fecha_hasta= $obj_generico->CleanText($fecha_hoy);
-
-/*
-$fecha_desde=$obj_date->changeFormatDateII($fecha_desde);
-$fecha_hasta=$obj_date->changeFormatDateII($fecha_hasta);
-
-//echo $fecha_desde, $fecha_hasta;
-*/
-
-$comision=$obj_modelo->GetComision();
 $data="";
-         if( $result= $obj_modelo->GetBalance($fecha_desde, $fecha_hasta,$comision)){
-            if ($obj_conexion->GetNumberRows($result)>0 ){
-            	
-				// ENCABEZADO DEL TICKET
-				$data.="SISTEMA LOTTOMAX";
-				$data.="<br>";
-				$data.="CUADRE CON BANCA";
-				$data.="<br>";
-				$data.="Ayer y Hoy";
-				$data.="<br>";				
- 							            
-              
-                while($row= $obj_conexion->GetArrayInfo($result)){
-                        
-					$data.="<br>FECHA: ".$row['fecha'];
-					$data.="<br>Total Ventas: ".round($row['total_ventas'], 2);					                									
-					$data.="<br>Comision: ".round($row['comision'], 2);
-					$data.="<br>Total Premios: ".round($row['total_premiado'], 2);					                									
-					$data.="<br>Balance: ".round($row['balance'], 2);
-					$data.="<br>";
-					$data.="-----------------------------";
-					$data.="<br>";
-
-                }
- 				
-                //echo $data;               
-            } 
-
-         }
          
          
          $data.="<br><br>";
@@ -128,7 +59,7 @@ $data="";
          		// ENCABEZADO DEL TICKET
          
          		 
-         		$data.=" <table width='200' border='0' ><tr><td colspan='3' align='center'><font face='arial' size='2' >";
+         		$data.=" <table width='200' border='2' ><tr><td colspan='3' align='center'><font face='arial' size='2' >";
          		$data.=" SISTEMA LOTTOMAX";
          		$data.=" </font></td> </tr>";
          		$data.="<tr> <td colspan='3' align='center'><font face='arial' size='2' >";
@@ -140,8 +71,7 @@ $data="";
          
          		$total_premios=0;
          		$total_pagado=0;
-         		//$data.="<tr><td width='40' align='center'><font face='arial' size='2' ></font> </td> <td align='center' width='73' ><font face='arial' size='2' > </font></td><td align='center' width='49' ><font face='arial' size='2' ></font></td></tr>";
-         
+         		
          		$data.="<tr><td width='40' align='center'><font face='arial' size='2' >ID</font> </td> <td align='center' width='73' ><font face='arial' size='2' >Monto Premiado</font></td></tr>";
          
          			
@@ -149,7 +79,23 @@ $data="";
          			//	$data.="SISTEMA LOTTOMAX";
          			$data.="<tr><td width='40' align='left'> <font face='times' size='2' >".$row['id_ticket']."</font></td> ";
          			$data.="<td width='73' align='center'><font face='times' size='2' >".$row['total_premiado']."</font></td> ";
-         			         			         			
+         			
+         			$data.="<tr><td colspan='2' width='40' align='center'><font face='arial' size='2' >";
+         			$data.="Detalle Jugada Ganadora: ".$row['id_ticket'];
+         			$resulta= $obj_modelo->GetDetalleTicketPremiados($row['id_ticket']);
+         			
+         			while($rowa= $obj_conexion->GetArrayInfo($resulta)){
+         				$data.="<br><br>Numero: ".$rowa['numero'];
+         				$data.="<br>Sorteo: ".$obj_modelo->GetNombreSorteo($rowa['id_sorteo']);
+         				if($rowa['id_zodiacal'] != '0'){
+         					$data.="<br>Zodiacal: ".$obj_modelo->GetPreNombreSigno($rowa['id_zodiacal']);
+         				}
+         				$data.="<br>Premiado Bs : ".$rowa['total_premiado'];
+         			
+         			}        			
+         			$data."</font></td></tr>";
+         			$data.="<tr><td colspan='2' width='40' align='center'><font face='arial' size='2' ></font>.</td></tr>";
+         			$data.="<tr><td colspan='2' width='40' align='center'><font face='arial' size='2' ></font>.</td></tr>";
          			$total_premios=$total_premios+$row['total_premiado'];
          		}
          		$data.="<tr><td colspan='2' width='40' align='center'><font face='arial' size='2' > Total Premios: ".round($total_premios, 2)."</font> </td></tr>";
