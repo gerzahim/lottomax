@@ -516,8 +516,8 @@ class Ventas{
 		
 			
 		//Preparacion del query
-		$sql = "SELECT monto_restante FROM numeros_jugados WHERE numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal."";
-		
+		$sql = "SELECT monto_restante FROM numeros_jugados WHERE numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal." AND fecha LIKE '".date('Y-m-d')."'";
+		//echo $sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
 		
 		//numeros_jugados

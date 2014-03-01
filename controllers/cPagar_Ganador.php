@@ -70,29 +70,33 @@ switch (ACCION){
 
                                     $i=1; $j=0; $monto_total=0;
                                     while($rowDT= $obj_conexion->GetArrayInfo($resultDT['result'])){
-                                        if( ($i % 2) >0){
-                                            $obj_xtpl->assign('estilo_fila', 'even');
-                                        }
-                                        else{
-                                            $obj_xtpl->assign('estilo_fila', 'odd');
-                                        }
-
-                                        // Asignacion de los datos
-                                        $obj_xtpl->assign('sorteo', $obj_generico->CleanTextDb($rowDT["nombre_sorteo"]));
                                         
-                                        $hora_sorteo= $obj_modelo->GetHoraSorteo($rowDT['id_sorteo']);
-                                        
-                                        
-                                       // $obj_xtpl->assign('hora_sorteo', $obj_generico->CleanTextDb($hora_sorteo));
-                                        $obj_xtpl->assign('numero', $obj_generico->CleanTextDb($rowDT["numero"]));
-                                        $obj_xtpl->assign('tipo_jugada', $obj_generico->CleanTextDb($rowDT["nombre_jugada"]));
-                                        $obj_xtpl->assign('zodiacal', $obj_generico->CleanTextDb($rowDT["nombre_zodiacal"]));
-                                        $obj_xtpl->assign('monto', $obj_generico->CleanTextDb($rowDT["monto"]));
-										$monto_total = $monto_total + $rowDT['total_premiado'];
-										$obj_xtpl->assign('monto_ganado', $rowDT['total_premiado']);
-                                        // Parseo del bloque de la fila
-                                        $obj_xtpl->parse('main.contenido.detalle_ticket.lista');
-                                        $i++;
+                                    	if($rowDT['total_premiado']>0)
+                                    	{
+	                                    	if( ($i % 2) >0){
+	                                            $obj_xtpl->assign('estilo_fila', 'even');
+	                                        }
+	                                        else{
+	                                            $obj_xtpl->assign('estilo_fila', 'odd');
+	                                        }
+	
+	                                        // Asignacion de los datos
+	                                        $obj_xtpl->assign('sorteo', $obj_generico->CleanTextDb($rowDT["nombre_sorteo"]));
+	                                        
+	                                        $hora_sorteo= $obj_modelo->GetHoraSorteo($rowDT['id_sorteo']);
+	                                        
+	                                        
+	                                       // $obj_xtpl->assign('hora_sorteo', $obj_generico->CleanTextDb($hora_sorteo));
+	                                        $obj_xtpl->assign('numero', $obj_generico->CleanTextDb($rowDT["numero"]));
+	                                        $obj_xtpl->assign('tipo_jugada', $obj_generico->CleanTextDb($rowDT["nombre_jugada"]));
+	                                        $obj_xtpl->assign('zodiacal', $obj_generico->CleanTextDb($rowDT["nombre_zodiacal"]));
+	                                        $obj_xtpl->assign('monto', $obj_generico->CleanTextDb($rowDT["monto"]));
+											$monto_total = $monto_total + $rowDT['total_premiado'];
+											$obj_xtpl->assign('monto_ganado', $rowDT['total_premiado']);
+	                                        // Parseo del bloque de la fila
+	                                        $obj_xtpl->parse('main.contenido.detalle_ticket.lista');
+	                                        $i++;
+                                    	}
                                     }
 
 									$_SESSION['mensaje']= "Total a pagar :  Bs. ".$monto_total;
