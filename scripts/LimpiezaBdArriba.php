@@ -22,11 +22,38 @@ $ano=date('Y');
 $mes=date('m');
 $dia_hoy=date('d');
 $dia_ayer=$dia_hoy-1;
+//completando con Cero a la Izquierda
+$dia_ayer=str_pad($dia_ayer, 2, "0", STR_PAD_LEFT);
 $dia_antesayr=$dia_hoy-2;
+//completando con Cero a la Izquierda
+$dia_antesayr=str_pad($dia_antesayr, 2, "0", STR_PAD_LEFT);
+
+if($dia_hoy == '01'){
+	if($mes == '01'){
+		$mes='12';
+	}else{
+		$mes=$mes-1;
+		//completando con Cero a la Izquierda
+		$mes=str_pad($mes, 2, "0", STR_PAD_LEFT);
+	}
+
+	if($mes=='01' || $mes=='03' || $mes=='05' || $mes=='07' || $mes=='08' || $mes=='10' || $mes=='12'){
+		$dia_ayer='31';
+		$dia_antesayr='30';
+	}else if($mes=='04' || $mes=='06' || $mes=='09' || $mes=='11'){
+		$dia_ayer='30';
+		$dia_antesayr='29';
+	}else{
+		//Es Febrero
+		$dia_ayer='28';
+		$dia_antesayr='27';
+	}
+}
 
 $fecha_hoy=$ano."-".$mes."-".$dia_hoy;
 $fecha_ayer=$ano."-".$mes."-".$dia_ayer;
 $fecha_antesayr=$ano."-".$mes."-".$dia_antesayr;
+
 
 //Sql para borrar la tabla de ticket y por estar relacionados borra los detalles_ticket asociados
 // Borra Todo los  tickets que no sean de hoy, ayer ni antes de ayer.

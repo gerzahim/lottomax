@@ -110,14 +110,14 @@ class ConfigVars{
 	 *
 	 * @var string $vDataBase
 	 */
-	private $vDataBase= "sql329054";
+	private $vDataBase= "sql331522";
 	//private $vDataBase= "lottomaxdb";
 	/**
 	 * Usuario para conexion a la base de datos.
 	 *
 	 * @var string $vUsuario
 	 */
-	private $vUsuario= "sql329054";	
+	private $vUsuario= "sql331522";	
 	//private $vUsuario= "lottomaxuser";
 	
 	/**
@@ -125,7 +125,7 @@ class ConfigVars{
 	 *
 	 * @var string $vClave
 	 */
-	private $vClave= "gA5!tM4*";	
+	private $vClave= "gI4%hG8%";	
 	//private $vClave= "secreta7";
 	
 	/**
