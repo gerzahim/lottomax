@@ -451,7 +451,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 	global $taquilla;
 	global $obj_modelo;
 	global $obj_conexion;
-
+	$fecha_hoy=date('Y-m-d');
 	//determinando el tipo de jugada
 	$id_tipo_jugada= $obj_modelo->GetTipoJugada($esZodiacal,$txt_numero);
 
