@@ -1,5 +1,5 @@
 <html>
-   <head><title>Impresion de Reporte Banca</title>
+   <head><title>Cuadre Banca Hoy</title>
 <!--   
    <script language="javascript" type="text/javascript" src="../jscripts/jquery-latest.js"></script>
    <script language="javascript" type="text/javascript" src="../jscripts/PluginPrint.js"></script>        

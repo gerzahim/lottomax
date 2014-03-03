@@ -64,7 +64,7 @@ class Cargar_Resultados{
                     INNER JOIN  sorteos S ON S.id_sorteo=R.id_sorteo
                     WHERE ".$sql_periodo. " AND S.status = 1 AND R.fecha_hora LIKE '%".$fecha."%'  ORDER BY  `id_loteria` ASC , id_sorteo ASC  
                     ";
-		
+		//echo $sql;
 		return $this->vConexion->ExecuteQuery($sql);
 	}
 	
