@@ -896,6 +896,29 @@ class Ventas{
 
                 return $this->vConexion->ExecuteQuery($sql);
          }
+         
+         
+         /**
+          * Existe Ticket no impreso
+          *
+          * @param string $fecha_hora
+          * @param string $taquilla
+          * @param string $total_ticket
+          * @param string $id_usuario
+          * @return boolean, array
+          */
+         public function ExisteTicketNoImpreso($taquilla){
+         
+         	//Preparacion del query
+         	$sql = "SELECT * FROM ticket WHERE status='1' AND taquilla  = ".$taquilla." ORDER BY `id_ticket` DESC LIMIT 1 ";
+         	$result= $this->vConexion->ExecuteQuery($sql);
+         	$roww= $this->vConexion->GetArrayInfo($result);
+         	return $roww['impreso'];
+         	/*$sql = "SELECT FROM `ticket` WHERE `fecha_hora` LIKE '%".$fecha_hora."%' , `taquilla`, `total_ticket` , `id_usuario` , `premiado`, `pagado`)
+                    VALUES ('".$id_ticket."', '".$serial."', '".."', '".$taquilla."', '".$total_ticket."', '".$id_usuario."', '0', '0')";
+         
+         	return $this->vConexion->ExecuteQuery($sql);*/
+         }
 
         /**
 	 * Guardar Datos de Detalle Ticket
