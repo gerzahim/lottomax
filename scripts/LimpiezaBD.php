@@ -28,12 +28,20 @@ $obj_modelo= new Limpieza_BD($obj_conexion);
 //Borra los numeros que no sean del dia de hoy
 
 $where = "'".date('Y-m-d')."'";
-$obj_modelo->EliminarNumerosJugados($where);
+
+$ano=date('Y');
+$mes=date('m');
+$dia_hoy=date('d');
+
+
+$fecha_hoy=$ano."-".$mes."-".$dia_hoy;
+//Borra los numeros_jugados que no sean del dia de hoy
+$obj_modelo->EliminarNumerosJugados($fecha_hoy);
 
 
 //Script Para Mantenimiento IncompletosAgotados
-//Borra los numeros que no sean del dia de hoy
-$obj_modelo->EliminarIncompletosAgotados($where);
+//Borra los IncompletosAgotados que no sean del dia de hoy
+$obj_modelo->EliminarIncompletosAgotados($fecha_hoy);
 
 
 //Script Para Mantenimiento Resultados

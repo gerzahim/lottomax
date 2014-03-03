@@ -1,5 +1,5 @@
 <html>
-   <head><title>Impresion de Reporte Banca</title>
+   <head><title>Detalle Tickets Ganadores Hoy</title>
 <!--   
    <script language="javascript" type="text/javascript" src="../jscripts/jquery-latest.js"></script>
    <script language="javascript" type="text/javascript" src="../jscripts/PluginPrint.js"></script>        
@@ -86,6 +86,7 @@ $data="";
          			
          			while($rowa= $obj_conexion->GetArrayInfo($resulta)){
          				$data.="<br><br>Numero: ".$rowa['numero'];
+         				$data.="<br>Monto Jugado Bs : ".$rowa['monto'];
          				$data.="<br>Sorteo: ".$obj_modelo->GetNombreSorteo($rowa['id_sorteo']);
          				if($rowa['id_zodiacal'] != '0'){
          					$data.="<br>Zodiacal: ".$obj_modelo->GetPreNombreSigno($rowa['id_zodiacal']);
