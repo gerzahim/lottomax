@@ -104,11 +104,11 @@ class Sorteo{
 	 * @param string $clave
 	 * @return boolean, array
 	 */
-	public function GuardarDatosSorteo($id_loteria,$nombre,$time, $turno, $zodiacal,$tradicional){
+	public function GuardarDatosSorteo($id_loteria,$nombre,$time, $turno, $zodiacal,$tradicional,$tipoc){
 		
 		// id_sorteo  id_loteria nombre_sorteo	hora_sorteo	zodiacal status
 		//Preparacion del query
-		$sql = "INSERT INTO `sorteos` (`id_loteria` , `nombre_sorteo` , `hora_sorteo`, `id_turno` , `zodiacal`, `tradicional` , `status`) VALUES ('".$id_loteria."', '".$nombre."', '".$time."', '".$turno."', '".$zodiacal."', '".$tradicional."', 1)";
+		$sql = "INSERT INTO `sorteos` (`id_loteria` , `nombre_sorteo` , `hora_sorteo`, `id_turno` , `zodiacal`, `tradicional` , `status`, `tipoc`) VALUES ('".$id_loteria."', '".$nombre."', '".$time."', '".$turno."', '".$zodiacal."', '".$tradicional."', 1 , '".$tipoc."')";
 		return $this->vConexion->ExecuteQuery($sql);
 		
 	}	
@@ -141,11 +141,11 @@ class Sorteo{
 	 * @param string $clave
 	 * @return boolean, array
 	 */
-	public function ActualizaDatosSorteo($id_sorteo,$id_loteria,$nombre,$hora,$minutos,$turno,$zodiacal,$tradicional,$status){
+	public function ActualizaDatosSorteo($id_sorteo,$id_loteria,$nombre,$hora,$minutos,$turno,$zodiacal,$tradicional,$status,$tipoc){
 		
 		$time= $hora.":".$minutos.":00";
 		//Preparacion del query
-		$sql = "UPDATE `sorteos` SET `id_loteria`='".$id_loteria."',  `nombre_sorteo`='".$nombre."', `hora_sorteo`='".$time."', `id_turno`='".$turno."', `zodiacal`='".$zodiacal."', `tradicional`='".$tradicional."', `status`='".$status."' WHERE id_sorteo='".$id_sorteo."'";
+		$sql = "UPDATE `sorteos` SET `id_loteria`='".$id_loteria."',  `nombre_sorteo`='".$nombre."', `hora_sorteo`='".$time."', `id_turno`='".$turno."', `zodiacal`='".$zodiacal."', `tradicional`='".$tradicional."', `status`='".$status."', `tipoc`='".$tipoc."' WHERE id_sorteo='".$id_sorteo."'";
 		return $this->vConexion->ExecuteQuery($sql);
 		
 	}
