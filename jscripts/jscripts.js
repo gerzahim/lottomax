@@ -684,7 +684,7 @@ function procesarticket()
 {
     var TicketGenerado = "";
 
-    if (confirm("Esta seguro que desea generar el ticket?")){
+    //if (confirm("Esta seguro que desea generar el ticket?")){
         
         $.get('ajax/ProcesarTicket.php', function(str) {
 		 //TicketGenerado.val(str);
@@ -706,7 +706,7 @@ function procesarticket()
                  }
                  //alert(str);
 	});
-    }
+  //  }
     
 
 }
