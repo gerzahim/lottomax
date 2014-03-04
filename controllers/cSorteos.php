@@ -71,6 +71,7 @@ switch (ACCION){
 		$zodiacal= $obj_generico->CleanText($_POST['op_zodiacal']);
 		$tradicional= $obj_generico->CleanText($_POST['op_tradicional']);
 		$status= $obj_generico->CleanText($_POST['op_status']);	
+		$tipoc= $obj_generico->CleanText($_POST['op_tipoc']);
 
 		// Verifica que los datos requeridos no este vacios
 		if(!$obj_generico->IsEmpty($nombre) && !$obj_generico->IsEmpty($id_loteria) && !$obj_generico->IsEmpty($hora) && !$obj_generico->IsEmpty($minutos) && !$obj_generico->IsEmpty($zodiacal)){
@@ -78,7 +79,7 @@ switch (ACCION){
 				$time= $hora.":".$minutos.":00";
 
 				// Crea la cuenta de acceso
-				if( $obj_modelo->GuardarDatosSorteo($id_loteria,$nombre,$time,$turno,$zodiacal,$tradicional) ){
+				if( $obj_modelo->GuardarDatosSorteo($id_loteria,$nombre,$time,$turno,$zodiacal,$tradicional,$tipoc) ){
 					
 					$_SESSION['mensaje']= $mensajes['info_agregada'];
 					header('location:'.$_SESSION['Ruta_Lista']);					
@@ -196,7 +197,16 @@ switch (ACCION){
 			}
 			else{
 				$obj_xtpl->assign('seleccionu','selected="selected"');
-			}			
+			}	
+
+			
+			if ($row_datos['tipoc'] == '1'){
+				$obj_xtpl->assign('seleccionticn','selected="selected"');
+			}
+			else{
+				$obj_xtpl->assign('selecciontic','selected="selected"');
+			}
+				
 			
 			
 			// Lista los datos del usuario obtenidos de la BD
@@ -229,13 +239,14 @@ switch (ACCION){
 		$tradicional= $obj_generico->CleanText($_POST['op_tradicional']);
 		$status= $obj_generico->CleanText($_POST['op_status']);		
 		$id_sorteo= $_REQUEST['idreferencia'];
-
+		$tipoc= $obj_generico->CleanText($_POST['op_tipoc']);
+			
 		// Verifica que los datos requeridos no este vacios
 		if(!$obj_generico->IsEmpty($nombre) && !$obj_generico->IsEmpty($hora) && !$obj_generico->IsEmpty($minutos) && !$obj_generico->IsEmpty($zodiacal) && !$obj_generico->IsEmpty($id_sorteo)){
 				
 
 			// Modifica la cuenta
-			if( $obj_modelo->ActualizaDatosSorteo($id_sorteo,$id_loteria,$nombre,$hora,$minutos,$turno,$zodiacal,$tradicional,$status) ){
+			if( $obj_modelo->ActualizaDatosSorteo($id_sorteo,$id_loteria,$nombre,$hora,$minutos,$turno,$zodiacal,$tradicional,$status,$tipoc) ){
 				
 				$_SESSION['mensaje']= $mensajes['info_modificada'];
 				header('location:'.$_SESSION['Ruta_Lista']);					
