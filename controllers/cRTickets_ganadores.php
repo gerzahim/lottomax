@@ -32,6 +32,10 @@ switch (ACCION){
         // Ruta regreso
         $obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Form']);
         
+        $obj_xtpl->assign('fecha_busca', $fecha);
+        
+        
+        
         $i=0;$total_ganadores=0;
         if( $result= $obj_modelo->GetTicketsGanadores($fecha) ){
             if ($obj_conexion->GetNumberRows($result)>0 ){
@@ -110,6 +114,8 @@ switch (ACCION){
             $pdf->SetY(45);
             //$pdf->Cell(50,10,'Tickets Ganadores a la fecha '.$_GET['fecha']);
             $pdf->Cell(50,10,'Tickets Ganadores a la fecha '.$obj_date->changeFormatDateI($fecha,0));
+            
+
 
 
             
