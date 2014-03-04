@@ -717,12 +717,11 @@ function agregarTerminales(){
     $.get('ajax/ValidarTerminales.php', function(str) {
     	//alert(str);
         if (str == "Ok"){
-            var monto = prompt("Digite el monto de apuesta para los terminales:", "");
-             if (monto != null && monto != 0){
-                agregarMontoTerminales(monto);
-             }else{
-                 alert("Debe ingresar un monto de apuesta para los terminales!");
-             }
+           
+        	$.get('ajax/AgregarTerminales.php', function(str) {
+        	       document.getElementById("ticket").innerHTML = str;
+        	            $("#txt_numero").focus();
+        	    });	
         }else if (str == "NotOk"){
             alert("Debe hacer por lo menos una apuesta de triple para generar los terminales en el ticket!");
         }      
