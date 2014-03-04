@@ -441,6 +441,22 @@ class Ventas{
 		return $roww["pre_zodiacal"];*/
 		
 	}	
+	
+	
+	/**
+	 * Devuelve si el sorteo es Zodiacal o No
+	 *
+	 * @param string $id
+	 * @return boolean
+	 */
+	public function EsZodiacal(){
+	
+		//Preparacion del query
+		$sql = "SELECT id_sorteo FROM sorteos WHERE zodiacal = 1 OR tipoc=1";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		//$row= $this->vConexion->GetArrayInfo($result);
+		return $result;	
+	}
 
 	/**
 	 * Listar Preticket
