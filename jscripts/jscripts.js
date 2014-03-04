@@ -1364,25 +1364,29 @@ function ValidateFormSell(){
 
 var flag = 1;
 function checkAllsorteos(chk){
-	for (i = 0; i < chk.length; i++)
-		if (flag == 1)
-		{
-			//alert('A');
-			chk[i].checked = true ;
-			
+	if (flag == 1)
+	checkear=true;
+	else
+	checkear=false;
+	$.get('ajax/ValidarZodiacal.php', function(str) {
+		//alert(str);	
+		var arr = str.split('-');
+		for (i = 0; i < chk.length; i++){
+			sw=0;
+			for(h=0;h< arr.length; h++){
+				if(chk[i].value==arr[h])
+				sw=1;
+			}
+			if(sw==0)
+			chk[i].checked = checkear;	
 		}
-		else 
-		{
-			//alert('B');
-			chk[i].checked = false;				
-		}
+	});
 	if (flag == 1){
 		flag=0;
 	}else{
 		flag=1;
 	}
 }
-
 
 var flags = 1;
 function checkAllZodiacales(chk){
