@@ -34,7 +34,11 @@ If ($obj_conexion->GetNumberRows($resultTT)>0){
       while($row= $obj_conexion->GetArrayInfo($resultTT)){
           if ($row['incompleto']== 0 || $row['incompleto']== 1){
               $txt_terminal = substr($row['numero'],1,2);
+              if($_GET['monto']!=0)
+              $txt_monto = $_GET['monto'];
+              else
               $txt_monto = $row['monto'];
+              	
               $combinacion_actual=$txt_terminal."-".$row['id_sorteo'];
               
               // Si ya esta no lo vuelvas a ingresar              
