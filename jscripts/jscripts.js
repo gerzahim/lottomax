@@ -1022,6 +1022,7 @@ $(document).keyup(function(tecla){
     	// DISPONIBLE
     }else if((tecla.keyCode == 76)) {
     	// tecla L
+    	checkAllsorteos(document.getElementsByName('ss[]'));
     	$("#s0").focus(); // hace focus en el campo de checkboxes Sorteos	      	
     }else if((tecla.keyCode == 77)){
     	// tecla M    	     	
