@@ -186,7 +186,7 @@ switch (ACCION){
              $ayer= date('d/m/Y', strtotime('-1 day')) ;
             if( date ( 'l' , strtotime($ayer ))=='Sunday')
             $ayer= date('d/m/Y', strtotime('-1 day')) ;
-            $obj_xtpl->assign('ruta_ayer', $obj_generico->RutaRegreso()."&accion=listar_resultados&fechadesde=".$ayer."&fechahasta=".$ayer;
+            $obj_xtpl->assign('ruta_ayer', $obj_generico->RutaRegreso()."&accion=listar_resultados&fechadesde=".$ayer."&fechahasta=".$ayer);
             // Parseo del bloque
             $obj_xtpl->parse('main.contenido.buscar_tickets');
 
