@@ -1130,8 +1130,8 @@ $(document).keyup(function(tecla){
     	// tecla F10
 	 	//Reimprimir Ticket
     	ReImprimirticket();
-    }else if(tecla.keyCode == 123) {
-    	// tecla F12
+    }else if(tecla.keyCode == 27) {
+    	// tecla ESC
     	//Procesar Ticket
         procesarticket(); //para procesar y generar el ticket
 		CargarReset();
