@@ -62,7 +62,7 @@ $data="";
             	
 				// ENCABEZADO DEL TICKET
 				
-            	$data.=" <table width='200' border='0' ><tr><td colspan='3' align='center'><font face='arial' size='2' >";
+            	$data.=" <table width='100%' border='0' ><tr><td colspan='3' align='center'><font face='arial' size='2' >";
             	$data.=" SISTEMA LOTTOMAX";
             	$data.=" </font></td> </tr>";
 

@@ -59,7 +59,7 @@ $data="";
 				// ENCABEZADO DEL TICKET
 				
             	
-				$data.=" <table width='200' border='0' ><tr><td colspan='3' align='center'><font face='arial' size='2' >";
+				$data.=" <table width='100%' border='0' ><tr><td colspan='3' align='center'><font face='arial' size='2' >";
 				$data.=" SISTEMA LOTTOMAX";
 				$data.=" </font></td> </tr>";
 				$data.="<tr> <td colspan='3' align='center'><font face='arial' size='2' >";
@@ -88,8 +88,8 @@ $data="";
 					
                 while($row= $obj_conexion->GetArrayInfo($result)){
                 //	$data.="SISTEMA LOTTOMAX";
-                	$data.="<tr><td width='40' align='left'> <font face='times' size='2' >".$row['id_ticket']."</font></td> ";
-                	$data.="<td width='73' align='center'><font face='times' size='2' >".$row['total_premiado']."</font></td> ";
+                	$data.="<tr><td width='25%' align='left'> <font face='times' size='2' >".$row['id_ticket']."</font></td> ";
+                	$data.="<td width='50%' align='center'><font face='times' size='2' >".$row['total_premiado']."</font></td> ";
                 	
                 	 
 					//$data.="<br>Taquilla: ".$obj_modelo->GetNumeroTaquillabyId($row['taquilla']);
@@ -115,7 +115,7 @@ $data="";
 					}
 					
 					
-					$data.="<td width='49' align='center'><font face='times' size='2' >".$pagado."</font></td></tr> ";
+					$data.="<td width='25%' align='center'><font face='times' size='2' >".$pagado."</font></td></tr> ";
 				//	$data.="<br>";
 				//	$data.="<br>";
 					//$data.="-----------------------------";
