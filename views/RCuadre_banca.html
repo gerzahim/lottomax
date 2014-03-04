@@ -19,6 +19,7 @@
                                             <input style="border: hidden" type="hidden" name="accion" id="idaccion" value="listar_resultados"/>
                                              <fieldset>
                                                    <table align="center" border="0" cellpadding="2" cellspacing="0" width="80%">
+												 
                                                         <tr>
                                                             <td><span class="requerido">*</span> Fecha desde:</td>
                                                             <td><input type="text" id="fechadesde" name="fechadesde" value="{fecha}"></td>
@@ -50,12 +51,17 @@
                                                                 </script>
 
                                                         </tr>
+														<tr>
+														 <                                                         
+														 <td align="center" colspan="4"></td>
+															
+<tr>
 
                                                     </table>
                                                 </fieldset>
 
                                             <div class="botones">
-
+<input  id="btayer" name="btayer" value="Ayer"  type="button" class="boton" onclick="location='{ruta_ayer}'"/>
                                                     <input  id="btnok" name="btnentrar" value="Ver"  type="submit" class="boton"/>&nbsp;&nbsp;&nbsp;
 
                                                     <input  id="btncancel" name="btncancelar" value="Cancelar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
