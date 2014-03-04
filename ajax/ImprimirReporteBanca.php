@@ -61,31 +61,57 @@ $data="";
             if ($obj_conexion->GetNumberRows($result)>0 ){
             	
 				// ENCABEZADO DEL TICKET
-				$data.="SISTEMA LOTTOMAX";
+				
+            	$data.=" <table width='200' border='0' ><tr><td colspan='3' align='center'><font face='arial' size='2' >";
+            	$data.=" SISTEMA LOTTOMAX";
+            	$data.=" </font></td> </tr>";
+
+            	$data.="<tr height='2'><td colspan='2' align='center'></td></tr>";
+            	 
+            	$data.="<tr> <td colspan='2' align='center'><font face='arial' size='2' >";
+            	$data.="Cuadre con Banca";
+            	$data.="</font></td> </tr>";
+
+            	$data.="<tr height='10'><td colspan='2' align='center'></td></tr>";
+            	 
+            	
+				/*$data.="SISTEMA LOTTOMAX";
 				$data.="<br>";
 				$data.="CUADRE CON BANCA";
 				$data.="<br>";
- 	
+ 	*/
             	//Cambio de tamano fuenta a 10 cpi
-				$data1="\\x1B\\x50";
+			/*	$data1="\\x1B\\x50";
 				$data1.="SISTEMA LOTTOMAX";
 				$data1.="\\n";
 				$data1.="CUADRE CON BANCA";
 				$data1.="\\n";										            
-              
+              */
                 while($row= $obj_conexion->GetArrayInfo($result)){
                         
-					$data.="<br>FECHA: ".$row['fecha'];
-					$data.="<br>Total Ventas: ".round($row['total_ventas'], 2);					                									
-					$data.="<br>Comision: ".round($row['comision'], 2);
-					$data.="<br>Total Premios: ".round($row['total_premiado'], 2);					                									
-					$data.="<br>Balance: ".round($row['balance'], 2);
-					$data.="<br>";
-					$data.="-----------------------------";
-					$data.="<br>";
-
 					
-					$data1.="\\nFECHA: ".$row['fecha'];
+                	$data.="<tr><td width='50%' align='left'> <font face='Times News Roman' size='2' > Fecha: </font></td> ";
+                	$data.="<td width='50%' align='center'><font face='Times' size='2' > ".$obj_date->changeFormatDateI($row['fecha'],0)."</font></td></tr>";
+                	
+                	$data.="<tr><td width='50%' align='left' > <font face='times' size='2' > Total de Ventas: </font></td> ";
+                	$data.="<td width='50%' align='center'><font face='times' size='2' > ".round($row['total_ventas'], 2)." Bs.</font></td></tr>";
+                	 
+
+                	$data.="<tr><td width='50%' align='left'> <font face='times' size='2' > Comisi&oacute;n: </font></td> ";
+                	$data.="<td width='50%' align='center'><font face='times' size='2' > ".round($row['comision'], 2)." Bs.</font></td></tr>";
+                	
+
+                	$data.="<tr><td width='50%' align='left'> <font face='times' size='2' > Total Premios: </font></td> ";
+                	$data.="<td width='50%' align='center'><font face='times' size='2' > ".round($row['total_premiado'], 2)." Bs.</font></td></tr>";
+                	
+                	$data.="<tr height='2'><td colspan='2' align='center'></td></tr>";
+                	 
+                	$data.="<tr><td width='40' align='left'> <font face='times' size='2' > Balance: </font></td> ";
+                	$data.="<td width='50%' align='center'><font face='times' size='4' > ".round($row['balance'], 2)." Bs.</font></td></tr>";
+                	 
+					
+					
+					/*$data1.="\\nFECHA: ".$row['fecha'];
 					$data1.="\\nTotal Ventas: ".$row['total_ventas'];					                									
 					$data1.="\\nComision: ".$row['comision'];
 					$data1.="\\nTotal Premios: ".$row['total_premiado'];					                									
@@ -93,7 +119,7 @@ $data="";
 					$data1.="\\n";
 					$data1.="-----------------------------";
 					$data1.="\\n";					
-				                        
+				      */                  
                     
                 }
  				
@@ -101,7 +127,7 @@ $data="";
             } 
 
          }
-
+         $data.="</table>";
 // Obtenemos los datos de la taquilla
 $ida_taquilla= $obj_modelo->GetIdTaquillabyNumero($id_taquilla);
 //Determinar si va a imprimir incompletos y Agotados
@@ -134,4 +160,4 @@ window.print();
 </script>
 <script language='javascript'>setTimeout('self.close();',5000)</script>
    </body>
-</html>
+</html> 
