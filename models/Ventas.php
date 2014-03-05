@@ -929,7 +929,12 @@ class Ventas{
          	$sql = "SELECT * FROM ticket WHERE status='1' AND taquilla  = ".$taquilla." ORDER BY `id_ticket` DESC LIMIT 1 ";
          	$result= $this->vConexion->ExecuteQuery($sql);
          	$roww= $this->vConexion->GetArrayInfo($result);
-         	return $roww['impreso'];
+         	if($this->vConexion->GetNumberRows($result)== 0){
+         		return 1;
+         	}else{
+         		return $roww['impreso'];
+         	}
+         	
          	/*$sql = "SELECT FROM `ticket` WHERE `fecha_hora` LIKE '%".$fecha_hora."%' , `taquilla`, `total_ticket` , `id_usuario` , `premiado`, `pagado`)
                     VALUES ('".$id_ticket."', '".$serial."', '".."', '".$taquilla."', '".$total_ticket."', '".$id_usuario."', '0', '0')";
          

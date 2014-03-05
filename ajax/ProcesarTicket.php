@@ -24,8 +24,8 @@ session_start();
 require('.'.$obj_config->GetVar('ruta_modelo').'Ventas.php');
 $obj_modelo= new Ventas($obj_conexion);
 $taquilla= $obj_modelo->GetIdTaquilla();
-
-if($obj_modelo->ExisteTicketNoImpreso($taquilla)){
+$impreso=$obj_modelo->ExisteTicketNoImpreso($taquilla);
+if($impreso == 1 || $impreso == 2){
 	$resultTT= $obj_modelo->GetDatosTicketTransaccional();
 	If ($obj_conexion->GetNumberRows($resultTT)>0){
 	
