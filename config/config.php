@@ -96,7 +96,7 @@ class ConfigVars{
 	 *
 	 * @var string $vHost
 	 */
-	private $vHost= "lottomax";
+	private $vHost= "localhost";
 	//private $vHost= "www.db4free.net";
 	/**
 	 * Puerto de conexion a la base de datos.
