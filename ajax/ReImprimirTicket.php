@@ -71,6 +71,7 @@ $month = substr($string,5,2);
 $day = substr($string,8,2);
 $hour = substr($string,11,2);
 $minute = substr($string,14,2);
+$dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado");
 //$fecha_hora=$day."-".$month."-".$year." ".$hour.":".$minute;
 $fecha_hora=$day."-".$month."-".$year;
 
