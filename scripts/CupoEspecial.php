@@ -51,7 +51,7 @@ while($row= $obj_conexion->GetArrayInfo($result))
 }
 $sql = trim($sql, ',');
 $sql.=";";
-echo $sql;
+//echo $sql;
 if($obj_modelo->insertarCupoEspecial($sql))
 	echo "OK";
 else
