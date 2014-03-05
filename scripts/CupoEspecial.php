@@ -1,5 +1,5 @@
 <?php
-
+///scripts/CupoEspecial.php?num=05&monto=5&fechadesde=2014-05-03&fechahasta=2014-05-03
 // Archivo de variables de configuracion
 require_once('../config/config.php');
 $obj_config= new ConfigVars();
@@ -29,18 +29,12 @@ $obj_modelo= new CupoEspecial($obj_conexion);
 
 $terminal= $_GET['num'];
 $monto= $_GET['monto'];
-
 $fechadesde= $_GET['fechadesde'];
 $fechahasta= $_GET['fechahasta'];
 $sql="INSERT INTO `cupo_especial`( `numero`, `id_sorteo`, `monto_cupo`, `id_tipo_jugada`, `id_zodiacal`, `fecha_desde`, `fecha_hasta`) VALUES "; 
 
-
-
 $serie= $obj_modelo->Serializar($terminal);
-
-
 $result=$obj_modelo->getSorteos();
-
 while($row= $obj_conexion->GetArrayInfo($result))
 {
 	for($i=0;$i<count($serie);$i++){
