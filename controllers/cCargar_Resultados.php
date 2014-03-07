@@ -159,15 +159,14 @@ switch (ACCION){
 					
 					//print_r($row);
 					//Saca la hora del sorteo
-					$hora_sorteo= $fecha." ".$row['hora_sorteo'];
+					$hora_sorteo=$fecha." ".$row['hora_sorteo'];
 						
 					//Valor que viene de la base de datos
 					// Obtiene el parametros de los minutos para no listar el sorteo
-					$minutos_bloqueo= $obj_modelo->MinutosBloqueo();
+					$minutos_bloqueo=$obj_modelo->MinutosBloqueo();
 					//echo "Hora".$hora_sorteo."<br>";
 					
 					$fecha_hora_actual=date("Y-m-d H:i:s");
-					
 			
 					// Restando la fecha actual con la fecha y hora del sorteo.
 					$resta=strtotime($fecha_hora_actual)-strtotime($hora_sorteo);
@@ -175,7 +174,6 @@ switch (ACCION){
 					// Si la resta es negativo quiere decir que todavia los sorteos no han cerrado
 					if ($resta>0)
 					{
-					
 					if (($i % 2) > 0) {
 						$obj_xtpl->assign ( 'estilo_fila', 'even' );
 					} else {
@@ -185,8 +183,6 @@ switch (ACCION){
 					$obj_xtpl->assign ( 'sorteo', $row ['nombre_sorteo'] );
 					if ($row ['numero'] == 'numero') {
 						$j ++;
-						
-						
 						$obj_xtpl->assign ( 'estilo_fila', 'evenred' );
 						$obj_xtpl->assign ( 'id_Sorteo', $row ['id_sorteo']);
 						$obj_xtpl->assign ( 'id_resultado', '' );

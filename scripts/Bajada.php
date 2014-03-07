@@ -124,11 +124,12 @@ if($result= mysql_query($sql,$conexion_arriba))
 	while ($row = mysql_fetch_array($result))
 	{
 		$fecha_hora=$row['fecha_hora'];
-		$consulta_abajo="UPDATE resultados SET numero='".$row['numero']."' WHERE id_resultados=".$row['id_resultados'];
+		$consulta_abajo="UPDATE resultados SET numero='".$row['numero']."', zodiacal='".$row['zodiacal']."' WHERE id_sorteo=".$row['id_sorteo']." AND fecha_hora LIKE '%".$row['fecha_hora']."%'";
 		$consulta_arriba="UPDATE resultados SET bajado=1 WHERE id_resultados=".$row['id_resultados']; // volvemos a setear bajado=1 para que el sistema sepa que este resultado ya fue actualizado.
 		if (mysql_query("SET AUTOCOMMIT=0;",$conexion_abajo) AND mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
-		if (mysql_query("BEGIN;",$conexion_abajo) AND mysql_query("BEGIN;",$conexion_arriba)) //dar inicio a la transacción
-			if (mysql_query($consulta_abajo,$conexion_abajo)) //EJECUTA EL QUERY
+		if (mysql_query("BEGIN;",$conexion_abajo) AND mysql_query("BEGIN;",$conexion_arriba)){ //dar inicio a la transacción
+			if(mysql_query($consulta_abajo,$conexion_abajo))//EJECUTA EL QUERY
+			{
 				if (mysql_query($consulta_arriba,$conexion_arriba)) //EJECUTA EL QUERY
 				{	
 					mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
@@ -140,8 +141,9 @@ if($result= mysql_query($sql,$conexion_arriba))
 				}
 				else 
 				mysql_query("ROLLBACK;",$conexion_abajo);
+			}
+		}
 	}
-
 }
 
 function ExisteResultado ($id_sorteo, $zodiacal, $numero, $fecha_hora,$conexion_abajo){
