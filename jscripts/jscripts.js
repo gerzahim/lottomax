@@ -7,8 +7,7 @@ var update = function () {
     datetime.html(date.format('hh:mm:ss A'));
 };
 
-
-$(document).ready(function(){
+	$(document).ready(function(){
 	//BorderFooter();
 	//auditoria();
 	//segDate();
@@ -67,7 +66,6 @@ function toggleOnAbajo(){
 	
 }
 
-
 function toggleOffAbajo(){
     if(tid!=0){
         clearInterval(tid);
@@ -81,8 +79,6 @@ function saltarSigCampo() {
 	
 	$(":input")[$(":input").index(document.activeElement) + 1].focus();	  
 }
-
-
 
 var ted = 0;
 function toggleOnArriba(){
@@ -131,6 +127,7 @@ function deshabilitarTeclasFechas(){
 	      return true;
 	});	
 }
+
 function cambioTurno(){
 
 	$("input[name='turno']").change(function() {
@@ -1142,6 +1139,8 @@ $(document).keyup(function(tecla){
     	//Procesar Ticket
         procesarticket(); //para procesar y generar el ticket
 		CargarReset();
+        //calcula_total();   
+
     }else if(tecla.keyCode == 32) {
     	// tecla SPACE
     	
