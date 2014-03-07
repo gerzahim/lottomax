@@ -1111,19 +1111,25 @@ $(document).keyup(function(tecla){
     	// DISPONIBLE
     }else if(tecla.keyCode == 115) {
     	// tecla F4
-    	PagarTicket(); //Limpiar Todos los campos
+    	if(DetectarUrlVentas()){    	
+    		PagarTicket(); //Limpiar Todos los campos
+    	}
     }else if(tecla.keyCode == 116) {
     	// tecla F5
     	location.reload();
     	//CargarReset();//Refresh
     }else if(tecla.keyCode == 117) {
     	// tecla F6
-	 	//Anular Ticket
-        AnularTicket();
+    	if(DetectarUrlVentas()){    	
+		 	//Anular Ticket
+	        AnularTicket();
+    	}
     }else if(tecla.keyCode == 118) {
     	// tecla F7
-	 	//Repetir Ticket
-        RepetirTicket();
+    	if(DetectarUrlVentas()){
+		 	//Repetir Ticket
+	        RepetirTicket();
+    	}
     }else if(tecla.keyCode == 119) {
     	// tecla F8
     	// DISPONIBLE
@@ -1132,13 +1138,19 @@ $(document).keyup(function(tecla){
     	// DISPONIBLE
     }else if(tecla.keyCode == 121) {
     	// tecla F10
-	 	//Reimprimir Ticket
-    	ReImprimirticket();
+    	if(DetectarUrlVentas()){
+    	 	//Reimprimir Ticket
+        	ReImprimirticket();
+    	}    	
+
     }else if(tecla.keyCode == 27) {
     	// tecla ESC
-    	//Procesar Ticket
-        procesarticket(); //para procesar y generar el ticket
-		CargarReset();
+    	if(DetectarUrlVentas()){
+        	//Procesar Ticket
+            procesarticket(); //para procesar y generar el ticket
+    		CargarReset();
+    	}     	
+
         //calcula_total();   
 
     }else if(tecla.keyCode == 32) {
