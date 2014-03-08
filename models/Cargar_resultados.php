@@ -251,7 +251,6 @@ class Cargar_Resultados{
 	
 		//Preparacion del query
 		$sql = "UPDATE `ticket` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_ticket='".$id_ticket."'";
-	
 		return $this->vConexion->ExecuteQuery($sql);
 	
 	}
@@ -322,6 +321,20 @@ class Cargar_Resultados{
 		return $this->vConexion->ExecuteQuery($sql);
                 
 	}
+	
+	
+	/**
+	 * Guardar Datos de los Resultados Masivos
+	 *
+	 * @param string $sql
+	 * @return boolean, array
+	 */
+	public function GuardarDatosResultadosMasivo($sql){
+	
+		//Preparacion del query
+		return $this->vConexion->ExecuteQuery($sql);
+	
+	}
 
        	/**
 	 * Actualiza Datos de Resultados
@@ -343,17 +356,30 @@ class Cargar_Resultados{
 	
 	/**
 	 * Quitar Premios a Ticket
-	 * @param string $fecha_hora
+	 * @param string $fecha_hora, $id_sorteo
 	 * @return boolean, array
 	 */
-	public function DespremiarTicket($fecha_hora){
+	public function DespremiarTicket($fecha_hora,$id_sorteo){
 	
 		//Preparacion del query
-		$sql = "UPDATE `ticket` SET `premiado`=0 WHERE `fecha_hora` LIKE '%".$fecha_hora."%'";
-		$this->vConexion->ExecuteQuery($sql);
-		$sql = "UPDATE `detalle_ticket` SET `premiado`='0' WHERE `fecha_sorteo` LIKE '%".$fecha_hora."%'";
-	//	echo $sql;
-		return $this->vConexion->ExecuteQuery($sql);
+		$sql = "SELECT * FROM `detalle_ticket` WHERE `premiado`=1 AND `fecha_sorteo` LIKE '%".$fecha_hora."%' AND id_sorteo=".$id_sorteo;
+		$result=$this->vConexion->ExecuteQuery($sql);
+		while($row=$this->vConexion->GetArrayInfo($result)){
+			$sql = "SELECT * FROM `ticket` WHERE `id_ticket` = ".$row['id_ticket'];
+				$result2=$this->vConexion->ExecuteQuery($sql);
+				while($row2=$this->vConexion->GetArrayInfo($result2)){
+					$total_premiado=$row2['total_premiado']-$row['total_premiado'];
+					if($total_premiado==0)
+					$premiado=0;
+					else
+					$premiado=1;
+					$sql = "UPDATE `ticket` SET `premiado`=".$premiado.", `total_premiado`=".$total_premiado." WHERE `id_ticket`=".$row['id_ticket'];
+					$this->vConexion->ExecuteQuery($sql);
+					$sql = "UPDATE `detalle_ticket` SET `premiado`=0, `total_premiado`=0 WHERE `id_detalle_ticket`=".$row['id_detalle_ticket'];
+					$this->vConexion->ExecuteQuery($sql);
+				}		
+		}
+		return true;
 	}
 		
 	/**
