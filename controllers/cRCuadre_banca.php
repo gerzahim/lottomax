@@ -183,7 +183,7 @@ switch (ACCION){
             // Ruta actual
             $_SESSION['Ruta_Form']= $obj_generico->RutaRegreso();
             $obj_xtpl->assign('fecha', $obj_date->FechaHoy2());
-             $ayer= date('d/m/Y', strtotime('-1 day')) ;
+            $ayer= date('d/m/Y', strtotime('-1 day')) ;
             if( date ( 'l' , strtotime($ayer ))=='Sunday')
             $ayer= date('d/m/Y', strtotime('-1 day')) ;
             $obj_xtpl->assign('ruta_ayer', $obj_generico->RutaRegreso()."&accion=listar_resultados&fechadesde=".$ayer."&fechahasta=".$ayer);
