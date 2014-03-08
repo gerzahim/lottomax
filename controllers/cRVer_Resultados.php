@@ -143,10 +143,12 @@ switch (ACCION){
 		
             $obj_xtpl->assign('fecha', $obj_date->FechaHoy2());
             
-            $ayer = strtotime ( '-1 day' , strtotime ( $obj_date->FechaHoy2()) ) ;
-            if( date ( 'l' , $ayer )=='Sunday')
-            $ayer = strtotime ( '-2 day' , strtotime ( $obj_date->FechaHoy2()) ) ;
-            $obj_xtpl->assign('ruta_ayer', $obj_generico->RutaRegreso()."&btnentrar=Ver&accion=listar_resultados&txt_fecha=".date ( 'd-m-Y' , $ayer ));
+            
+            
+            $ayer= date('d/m/Y', strtotime('-1 day')) ;
+            if( date ( 'l' , strtotime($ayer ))=='Sunday')
+            $ayer= date('d/m/Y', strtotime('-1 day')) ;
+            $obj_xtpl->assign('ruta_ayer', $obj_generico->RutaRegreso()."&btnentrar=Ver&accion=listar_resultados&txt_fecha=".$ayer);
              
             // Parseo del bloque
             $obj_xtpl->parse('main.contenido.buscar_resultados');

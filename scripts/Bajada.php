@@ -2,7 +2,7 @@
 //Creamos la conexión a las distintas base de datos, la de arriba y las de abajo.
 // Archivo de variables de configuracion
 //require('../models/Pagar_Ganador.php');
-set_time_limit(120);
+set_time_limit(360);
 error_reporting(E_ALL);
 //// BAJADO = 0 Significa que el resultado no ha sido copiado en la BD local, BAJADO=1 significa que el resultado fue bajado a la BD, cuando BAJADO=2 significa que se hizo un cambio el resultado del servidor de arriba y este tiene que ser actualizado en la BD local
 require_once('BajadaController.php');
@@ -58,11 +58,10 @@ $consulta_abajo.=";";
 $error=0;
 if (mysql_query("SET AUTOCOMMIT=0;",$conexion_abajo))//desactivar el modo de autoguardado
 	if (mysql_query("BEGIN;",$conexion_abajo)) //dar inicio a la transacción
-		{}
-		/*if (mysql_query($consulta_abajo,$conexion_abajo))
+		if (mysql_query($consulta_abajo,$conexion_abajo))
 			$error=0;//mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);	
 		else
-		$error=1;*/
+		$error=1;
 	else
 	$error=1;
 else
@@ -71,12 +70,14 @@ if($error==0)
 	// Busco los resultados arriba que acabo de bajar.
 	if (mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
 		if (mysql_query("BEGIN;",$conexion_arriba)) //dar inicio a la transacción
-//			foreach ($arreglo as $id)
+			foreach ($arreglo as $id)
 			{
-			/*	$sql="UPDATE resultados SET bajado=1 WHERE bajado=0";
-				if (mysql_query($sql,$conexion_arriba)){}
+				$sql="UPDATE resultados SET bajado=1 WHERE bajado=0 AND id_resultados=".$id;
+				if (mysql_query($sql,$conexion_arriba)){
+					
+				}
 				else
-				$error=1;*/
+				$error=1;
 			}
 		else
 		$error=1;
