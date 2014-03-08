@@ -47,6 +47,7 @@ while ($row = mysql_fetch_array($result))
 	}
 	// Si no existe el resultado Creamos la consulta para insertar los datos de los premios
 	if(ExisteResultado($row['id_sorteo'],$row['zodiacal'],$row['numero'],$row['fecha_hora'],$conexion_abajo)){
+		$h=1;
 		$consulta_abajo.=" ( ".$row['id_sorteo'].", ".$row['zodiacal'].", ".$row['numero'].",'".$row['fecha_hora']."', 1 ),";
 		$resultados[$row['id_sorteo']."/".$row['fecha_hora']]=$row['numero'];
 		$zodiacales[$row['id_sorteo']."/".$row['fecha_hora']]=$row['zodiacal'];
@@ -58,7 +59,7 @@ $consulta_abajo.=";";
 $error=0;
 if (mysql_query("SET AUTOCOMMIT=0;",$conexion_abajo))//desactivar el modo de autoguardado
 	if (mysql_query("BEGIN;",$conexion_abajo)) //dar inicio a la transacción
-		if (mysql_query($consulta_abajo,$conexion_abajo))
+		if (mysql_query($consulta_abajo,$conexion_abajo) AND $h==1)
 			$error=0;//mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);	
 		else
 		$error=1;
@@ -66,6 +67,7 @@ if (mysql_query("SET AUTOCOMMIT=0;",$conexion_abajo))//desactivar el modo de aut
 	$error=1;
 else
 $error=1;
+
 if($error==0)
 	// Busco los resultados arriba que acabo de bajar.
 	if (mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
@@ -105,16 +107,21 @@ else
 }
 
 // COMIENZA LAS INSTRUCCIONES PARA CUANDO UN RESULTADO FUE MODIFICADO Y REQUIERE SER ACTUALIZADO EN LA BD LOCAL
-
+$fecha_hora2=array();
+$id_sorteo=array();
 $sql = "SELECT * FROM resultados WHERE bajado = 2";  
 if($result= mysql_query($sql,$conexion_arriba))
-{
+{	
+	//echo "pasas";
 	
 	$numero_registros = mysql_num_rows($result);
 	//Creamos la cadena para insertar los resultados que no han sido bajados.
 	while ($row = mysql_fetch_array($result))
 	{
-		$fecha_hora=$row['fecha_hora'];
+		if(!in_array($row['fecha_hora'], $fecha_hora2)){
+			$fecha_hora2[]=$row['fecha_hora'];
+		}
+		$id_sorteo[]=$row['id_sorteo'];
 		$consulta_abajo="UPDATE resultados SET numero='".$row['numero']."', zodiacal='".$row['zodiacal']."' WHERE id_sorteo=".$row['id_sorteo']." AND fecha_hora LIKE '%".$row['fecha_hora']."%'";
 		$consulta_arriba="UPDATE resultados SET bajado=1 WHERE id_resultados=".$row['id_resultados']; // volvemos a setear bajado=1 para que el sistema sepa que este resultado ya fue actualizado.
 		if (mysql_query("SET AUTOCOMMIT=0;",$conexion_abajo) AND mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
@@ -122,11 +129,14 @@ if($result= mysql_query($sql,$conexion_arriba))
 			if(mysql_query($consulta_abajo,$conexion_abajo))//EJECUTA EL QUERY
 			{
 				if (mysql_query($consulta_arriba,$conexion_arriba)) //EJECUTA EL QUERY
-				{	
+				{
 					mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
 					mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
-					$obj_modelo->DespremiarTicket($fecha_hora, $conexion_abajo);						
-					PremiarGanadores($conexion_abajo,$fecha_hora);
+					$obj_modelo->DespremiarTicket($fecha_hora2,$id_sorteo, $conexion_abajo);
+					$resultados[$row['id_sorteo']."/".$row['fecha_hora']]=$row['numero'];
+					$zodiacales[$row['id_sorteo']."/".$row['fecha_hora']]=$row['zodiacal'];
+					
+					PremiarGanadores($conexion_abajo,$obj_modelo,$resultados,$zodiacales,$fecha_hora2);
 					//shell_exec("curl http://localhost/scripts/BuscarTicketsGanadores.php?fecha_hora=".$fecha_hora);
 					//header ("Location: BuscarTicketsGanadores.php?fecha_hora=".$fecha_hora);
 				}
@@ -158,6 +168,8 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 	while($row=mysql_fetch_array($result)){
 		$relacion_pago[$row['id_tipo_jugada']]=$row['monto'];
 	}
+	//echo "pasa";
+	//print_r($fecha_hora);
 	foreach ($fecha_hora as $fh){
 		$result= $obj_modelo->GetListadosegunVariable($fh,$obj_conexion);
 		If(mysql_num_rows($result)>0){

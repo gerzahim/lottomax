@@ -138,14 +138,33 @@ class BajadaController{
 	 * @param string $fecha_hora
 	 * @return boolean, array
 	 */
-	public function DespremiarTicket($fecha_hora,$conexion_abajo){
+	public function DespremiarTicket($fecha_hora,$id_sorteo,$conexion_abajo){
 	
 		//Preparacion del query
-		$sql = "UPDATE `ticket` SET `premiado`=0 WHERE `fecha_hora` LIKE '%".$fecha_hora."%'";
-		$result= mysql_query($sql,$conexion_abajo);
-		$sql = "UPDATE `detalle_ticket` SET `premiado`='0', WHERE `fecha_sorteo` LIKE '%".$fecha_hora."%'";
-		$result= mysql_query($sql,$conexion_abajo);
-		return $result;
+		foreach ($fecha_hora as $fh)
+		{
+			foreach ($id_sorteo as $is)
+			{
+				$sql = "SELECT * FROM `detalle_ticket` WHERE `premiado`=1 AND `fecha_sorteo` LIKE '%".$fh."%' AND id_sorteo=".$is;
+				$result=mysql_query($sql,$conexion_abajo);
+				while($row=mysql_fetch_array($result)){
+					$sql = "SELECT * FROM `ticket` WHERE `id_ticket` = ".$row['id_ticket'];
+					$result2=mysql_query($sql,$conexion_abajo);
+					while($row2=mysql_fetch_array($result2)){
+						$total_premiado=$row2['total_premiado']-$row['total_premiado'];
+						if($total_premiado==0)
+							$premiado=0;
+						else
+							$premiado=1;
+						$sql = "UPDATE `ticket` SET `premiado`=".$premiado.", `total_premiado`=".$total_premiado." WHERE `id_ticket`=".$row['id_ticket'];
+						mysql_query($sql,$conexion_abajo);
+						$sql = "UPDATE `detalle_ticket` SET `premiado`=0, `total_premiado`=0 WHERE `id_detalle_ticket`=".$row['id_detalle_ticket'];
+						mysql_query($sql,$conexion_abajo);
+					}
+				}
+			}
+		}
+		return true;
 	}
 	
 	/**
