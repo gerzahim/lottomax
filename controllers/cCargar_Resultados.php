@@ -99,27 +99,25 @@ switch (ACCION){
 		break;
 
 		case 'upd':
-			
-	/*		echo "<pre>";
-			print_r($_POST);
-			echo "</pre>";
-		*/	
 			$id_resultados;
 			$id_sorteo = $_POST['idreferencia'];
 			$numero = $_POST['txt_numero'];
 			$zodiacal = $_POST['zodiacal'];
 			$id_resultado = $_POST['id_resultado'];
+			$resultados=array();
+			$zodiacales=array();
+			$resultados[$id_sorteo]=$numero;
+			$zodiacales[$id_sorteo]=$zodiacal;
 			$bajado= $_POST['bajado'];
 			if($bajado==0)
 			$bajado=0;
 			else
 			$bajado=2;
-					
 			$fecha_hora = $obj_date->changeFormatDateII($_POST['fecha']);
 			if ($obj_modelo->ActualizaDatosResultados($id_resultado, $id_sorteo, $zodiacal, $numero, $fecha_hora,$bajado)){
 				
-				$obj_modelo->DespremiarTicket($fecha_hora);
-				PremiarGanadores($obj_conexion,$obj_modelo,$fecha_hora); // Premiamos los tickets ganadores
+				$obj_modelo->DespremiarTicket($fecha_hora,$id_sorteo);
+				PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fecha_hora); // Premiamos los tickets ganadores
 				$_SESSION['mensaje']= $mensajes['info_agregada'];
 				header('location:'.$_SESSION['Ruta_Lista']);
 			}
@@ -150,6 +148,8 @@ switch (ACCION){
 		$obj_xtpl->assign ( 'fecha', $obj_date->changeFormatDateI ( $fecha, 0 ) );
 		$periodo = $_GET ['radio_periodo'];
 		// Listado de Sorteos
+		$sorteosassign='';
+		$sorteosnocargados='';
 		if ($result = $obj_modelo->GetSorteos ( $fecha, $periodo )) {
 			
 			if ($obj_conexion->GetNumberRows ( $result ) > 0) {
@@ -160,6 +160,7 @@ switch (ACCION){
 					//print_r($row);
 					//Saca la hora del sorteo
 					$hora_sorteo=$fecha." ".$row['hora_sorteo'];
+					$sorteosassign.=$row['id_sorteo']."-";
 						
 					//Valor que viene de la base de datos
 					// Obtiene el parametros de los minutos para no listar el sorteo
@@ -183,6 +184,7 @@ switch (ACCION){
 					$obj_xtpl->assign ( 'sorteo', $row ['nombre_sorteo'] );
 					if ($row ['numero'] == 'numero') {
 						$j ++;
+						$sorteosnocargados.=$row ['id_sorteo'].'-';
 						$obj_xtpl->assign ( 'estilo_fila', 'evenred' );
 						$obj_xtpl->assign ( 'id_Sorteo', $row ['id_sorteo']);
 						$obj_xtpl->assign ( 'id_resultado', '' );
@@ -209,6 +211,7 @@ switch (ACCION){
 						$obj_xtpl->assign ( 'aprox_arriba', '' );
 						$obj_xtpl->assign ( 'aprox_abajo', '' );
 					} else {
+						
 						$obj_xtpl->assign ( 'id_Sorteo', $row ['id_sorteo']);
 						$obj_xtpl->assign ( 'id_resultado', $row ['id_resultado'] );
 						$obj_xtpl->assign ( 'id_sorteo', $row ['id_sorteo'] );
@@ -282,65 +285,136 @@ switch (ACCION){
 			}
 			$obj_xtpl->assign ( 'faltantes', '<span class="requerido">Faltan <b>' . $j . '</b> de <b>' . ($i - 1) . ' Sorteos</b> por ingresar resultados...</span>' );
 		}
+		$sorteosassign = trim($sorteosassign, '-');
+		$sorteosnocargados= trim($sorteosnocargados, '-');
+		$obj_xtpl->assign ('sorteos', $sorteosassign);
+		$obj_xtpl->assign ('sorteosnocargados', $sorteosnocargados);
 		
 		// Parseo del bloque
 		$obj_xtpl->parse ( 'main.contenido.lista_cargar_resultados' );
 		break;
-
         case 'save':
-//        	print_r($_GET);
-  //      	exit();
   		$sw=0; // PARA PREMIAR TICKETS LUEGO
-		$fecha_hora = $obj_date->changeFormatDateII ( $_GET ['fecha'] );
-		if ($result = $obj_modelo->GetAllSorteos ()) {
-			while ( $row = $obj_conexion->GetArrayInfo ( $result ) ) {
-				$numero = $_GET ['txt_numero-' . $row ['id_sorteo']];
-				$id_sorteo = $row ['id_sorteo'];
-				if (!$obj_generico->IsEmpty ( $numero )) {
-					if (strlen ( $numero ) == 3) {
-						if($obj_modelo->GetResultadoSorteo($row ['id_sorteo'],$fecha_hora)==""){
-							if (isset( $_GET ['zodiacal-' . $row ['id_sorteo']] )) {
-								$zodiacal = $_GET ['zodiacal-' . $row ['id_sorteo']];
-								if ($obj_modelo->GuardarDatosResultados ( $id_sorteo, $zodiacal, $numero, $fecha_hora )) {
-									$sw=1;
-									$_SESSION ['mensaje'] = $mensajes ['info_agregada'];
-								}		
-							} 
-							else { // NO ES ZODIACAL
-								$zodiacal = 0;
-								if ($obj_modelo->GuardarDatosResultados ( $id_sorteo, $zodiacal, $numero, $fecha_hora )) {
-									$sw=1;
-									$_SESSION ['mensaje'] = $mensajes ['info_agregada'];
-								}
-							}
-						}
-					} else {
-						$_SESSION ['mensaje'] = 'Los numeros ingresados deben ser de tres digitos! ';
-						header ( 'location:' . $_SESSION ['Ruta_Lista'] );
-					}
+  		$mensaje='';
+		$fecha_hora = $obj_date->changeFormatDateII ( $_GET['fecha'] );
+		$sorteos=preg_split('/-/',$_GET ['sorteosnocargados']);
+		$sql="INSERT INTO `resultados` (`id_sorteo` , `zodiacal`, `numero`, `fecha_hora`) VALUES ";
+		$resultados=array();
+		$zodiacales=array();
+		foreach($sorteos as $st)
+		{
+			$numero = $_GET['txt_numero-' .$st];
+			if (isset( $_GET ['zodiacal-' . $st] )){
+				$zodiacal = $_GET ['zodiacal-' . $st];
+				$zodiacales[$st]=$zodiacal;
+			}
+			else{
+				$zodiacales[$st]=0;
+				$zodiacal =0;
+			}
+			if(!empty($numero)){
+				if (strlen ( $numero ) == 3){
+					$resultados[$st]=$numero;
+					$sql.="('".$st."', '".$zodiacal."', '".$numero."', '".$fecha_hora."'),";
+					$sw=1;
 				}
 			}
-			if($sw==1)
-			PremiarGanadores ($obj_conexion, $obj_modelo,$fecha_hora ); // Premiamos los tickets ganadores
-			else
-			$_SESSION ['mensaje'] = "No se ingresaron nuevos resultados";
-			header ( 'location:' . $_SESSION ['Ruta_Lista'] );
+			else {
+				$_SESSION ['mensaje'] = 'Los numeros ingresados deben ser de tres digitos! ';
+				header ( 'location:' . $_SESSION ['Ruta_Lista'] );
+			}
 		}
+		if($sw==1){
+			$sql=trim($sql,',');
+			$sql.=";";
+			if($obj_modelo->GuardarDatosResultadosMasivo($sql)){
+			$mensaje=$mensajes['info_agregada'];
+			PremiarGanadores ($obj_conexion, $obj_modelo,$resultados,$zodiacales,$fecha_hora); // Premiamos los tickets ganadores
+			}
+			else
+			$mensaje= "No se ingresaron nuevos resultados";
+		}	
+		else
+		$mensaje= "No se ingresaron nuevos resultados";
+		$_SESSION ['mensaje'] = $mensaje;
+		header ( 'location:' . $_SESSION ['Ruta_Lista'] );
 		break;
 	default:
-		
 		// Ruta actual
 		$_SESSION['Ruta_Fecha']=$obj_generico->RutaRegreso();
 	    $obj_xtpl->assign('fecha', $obj_date->FechaHoy2());
-                
 		// Parseo del bloque
 		$obj_xtpl->parse('main.contenido.buscar_resultados');
-		
 		break;
-	
 }
+$obj_xtpl->parse('main.contenido');
+
 // Funcion para premiar los tickets ganadores
-function PremiarGanadores($obj_conexion,$obj_modelo,$fecha_hora){
+function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fecha_hora){
+	$id_detalle_ticket[]="";
+	$id_tickets[]="";
+	$totales[]="";
+	//print_r($resultados);
+	$aprox= $obj_modelo->GetAprox();
+	$relacion_pago=array();
+	$result=$obj_modelo->GetRelacionPagos($fecha_hora);
+	while($row=$obj_conexion->GetArrayInfo($result)){
+		$relacion_pago[$row['id_tipo_jugada']]=$row['monto'];
+	}
+	$result= $obj_modelo->GetListadosegunVariable($fecha_hora);
+	If($obj_conexion->GetNumberRows($result)>0){
+		$i=0; $j=0;
+		$ticket_premiado=0;
+		while ($roww= $obj_conexion->GetArrayInfo($result)){
+			$id_ticket=$roww["id_ticket"];
+			$fecha_ticket= substr($roww["fecha_hora"],0 , -9);
+			$resultDT = $obj_modelo->GetAllDetalleTciket($id_ticket);
+			//revisamos la tabla de detalle ticket y comparamos con los resultados
+			$monto_total=$roww['total_premiado'];
+			$sw=0;
+			// SE RECORRE CADA TICKET VENDIDO EL DIA DE LA CARGA DE RESULTADO
+			while($rowDT= $obj_conexion->GetArrayInfo($resultDT)){
+				// Verificamos si hay alguna apuesta ganadora...
+				$terminal_abajo=0;
+				$terminal_arriba=0;
+				if($rowDT['id_tipo_jugada']==2){
+					switch ($aprox){
+						case 0:
+							$terminal_abajo=$rowDT['numero']-1;
+							break;
+						case 1:
+							$terminal_arriba=$rowDT['numero']+1;
+							$terminal_abajo=$rowDT['numero']-1;
+							break;
+						case 2:
+							$terminal_arriba=$rowDT['numero']+1;
+							break;
+					}
+					if(isset($resultados[$rowDT['id_sorteo']]))
+					if(($terminal_abajo==substr($resultados[$rowDT['id_sorteo']], 1, 3) OR $terminal_arriba==substr($resultados[$rowDT['id_sorteo']], 1, 3)) ){
+						$monto_pago=$relacion_pago[5]*$rowDT['monto'];
+						$monto_total+=$monto_pago;
+						$obj_modelo->PremiarDetalleTicket($rowDT['id_detalle_ticket'], $monto_pago);
+						$sw=1;
+					}
+				}
+				if(isset($resultados[$rowDT['id_sorteo']]))
+				if(($rowDT['numero']==$resultados[$rowDT['id_sorteo']] AND ($rowDT['id_zodiacal']==$zodiacales[$rowDT['id_sorteo']])) OR ( ($rowDT['numero']== substr($resultados[$rowDT['id_sorteo']], 1, 3)  AND $rowDT['id_zodiacal']==$zodiacales[$rowDT['id_sorteo']]) AND ($rowDT['id_tipo_jugada']==2 OR $rowDT['id_tipo_jugada']==4)) ){
+					$monto_pago=$relacion_pago[$rowDT['id_tipo_jugada']]*$rowDT['monto'];
+					$monto_total+=$monto_pago;
+					$sw=1;
+					$obj_modelo->PremiarDetalleTicket($rowDT['id_detalle_ticket'], $monto_pago);
+				}
+			}
+			if($sw==1)
+				$obj_modelo->PremiarTicket($id_ticket,$monto_total);
+		}
+	}
+}
+
+
+// Funcion para premiar los tickets ganadores OLD
+/*function PremiarGanadores($obj_conexion,$obj_modelo,$fecha_hora){
 	$id_detalle_ticket[]="";
 	$id_tickets[]="";
 	$totales[]="";
@@ -438,8 +512,8 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$fecha_hora){
 	}
 	
 	
-}
+}*/
 
-$obj_xtpl->parse('main.contenido');
+
 
 ?>

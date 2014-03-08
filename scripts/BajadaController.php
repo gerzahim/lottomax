@@ -72,7 +72,7 @@ class BajadaController{
 	 *
 	 * @return boolean, array
 	 */
-	public function GetRelacionPagos($id_tipo_jugada,$conexion_abajo){
+	public function GetRelacionPagos($conexion_abajo){
 	
 		//Preparacion del query
 		$sql = "SELECT monto,id_tipo_jugada FROM relacion_pagos ";
@@ -97,7 +97,6 @@ class BajadaController{
 		// verificado cambia cuando ya se reviso y no esta premiado verificado=1
 		$sql = "SELECT * FROM ticket WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'";
 		//echo $sql;
-		
 		$result= mysql_query($sql,$conexion_abajo);
 		return  $result;
 	
@@ -128,7 +127,6 @@ class BajadaController{
 	public function PremiarDetalleTicket($id_detalle_ticket, $total_premiado,$conexion_abajo){
 	
 		//Preparacion del query
-	
 		$sql = "UPDATE `detalle_ticket` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_detalle_ticket='".$id_detalle_ticket."'";
 		//echo $sql;
 		$result= mysql_query($sql,$conexion_abajo);

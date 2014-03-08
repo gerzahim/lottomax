@@ -41,8 +41,11 @@ $ano=date('Y');
 $mes=date('m');
 $dia_hoy=date('d');
 
+if(isset($_GET ['fecha']))
+$fecha=	$_GET ['fecha'];
+else
 $fecha=$ano."-".$mes."-".$dia_hoy;
-$fecha_hoy=$dia_hoy."-".$mes."-".$ano;
+
 
 
 // Accion a realizar
@@ -51,11 +54,13 @@ $obj_xtpl->assign ( 'tag_boton', 'Guardar' );
 
 $obj_xtpl->assign ( 'pagina_principal', 'save_result.php' );
 $obj_xtpl->assign ( 'opcion_sistema', 'cargar_resultados' );
-$obj_xtpl->assign ( 'fecha', $fecha_hoy);
+$obj_xtpl->assign ( 'fecha', $obj_date->changeFormatDateI ($fecha,0));
 
 
 $periodo='Todos';
 // Listado de Sorteos
+$sorteosassign='';
+$sorteosnocargados='';
 if ($result = $obj_modelo->GetSorteos( $fecha, $periodo )) {
 		
 	if ($obj_conexion->GetNumberRows( $result ) > 0) {
@@ -66,7 +71,7 @@ if ($result = $obj_modelo->GetSorteos( $fecha, $periodo )) {
 			//print_r($row);
 			//Saca la hora del sorteo
 			$hora_sorteo= $fecha." ".$row['hora_sorteo'];
-
+			$sorteosassign.=$row['id_sorteo']."-";
 			//Valor que viene de la base de datos
 			// Obtiene el parametros de los minutos para no listar el sorteo
 			$minutos_bloqueo= $obj_modelo->MinutosBloqueo();
@@ -95,7 +100,7 @@ if ($result = $obj_modelo->GetSorteos( $fecha, $periodo )) {
 				$obj_xtpl->assign ( 'sorteo', $row ['nombre_sorteo'] );
 				if ($row ['numero'] == 'numero') {
 					$j ++;
-					
+					$sorteosnocargados.=$row ['id_sorteo'].'-';
 					$obj_xtpl->assign ( 'estilo_fila', 'evenred' );
 					$obj_xtpl->assign ( 'id_Sorteo', $row ['id_sorteo']);
 					$obj_xtpl->assign ( 'id_resultado', '' );
@@ -168,7 +173,7 @@ if ($result = $obj_modelo->GetSorteos( $fecha, $periodo )) {
 					$obj_xtpl->assign ( 'aprox_arriba', $preceroa );
 					$obj_xtpl->assign ( 'aprox_abajo', $preceroo );
 				}
-					
+				
 				// Parseo del bloque de la fila
 				$obj_xtpl->parse ( 'contenido.lista_cargar_resultados.lista' );
 				$i ++;
@@ -183,7 +188,10 @@ if ($result = $obj_modelo->GetSorteos( $fecha, $periodo )) {
 	}
 	$obj_xtpl->assign ( 'faltantes', '<span class="requerido">Faltan <b>' . $j . '</b> de <b>' . ($i - 1) . ' Sorteos</b> por ingresar resultados...</span>' );
 }
-
+$sorteosassign = trim($sorteosassign, '-');
+$sorteosnocargados= trim($sorteosnocargados, '-');
+$obj_xtpl->assign ('sorteos', $sorteosassign);
+$obj_xtpl->assign ('sorteosnocargados', $sorteosnocargados);
 // Parseo del bloque
 $obj_xtpl->parse('contenido.lista_cargar_resultados');
 

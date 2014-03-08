@@ -10,8 +10,8 @@ require_once('BajadaController.php');
 $conexion_abajo = mysql_connect("localhost" , "root" , "secreta");
 mysql_select_db("lottomax",$conexion_abajo);
 
-$conexion_arriba = mysql_connect("sql3.freesqldatabase.com:3306" , "sql331522" , "gI4%hG8%",true);
-mysql_select_db("sql331522",$conexion_arriba);
+$conexion_arriba = mysql_connect("www.db4free.net" , "lottomaxuser" , "secreta7",true);
+mysql_select_db("lottomaxdb",$conexion_arriba);
 $obj_modelo= new BajadaController();
 
 
@@ -30,50 +30,39 @@ if($result= mysql_query($sql,$conexion_arriba))
 	$numero_registros = mysql_num_rows($result);
 //echo $numero_registros ;
 //Creamos la cadena para insertar los resultados que no han sido bajados.
-$consulta_abajo="INSERT INTO resultados ( id_sorteo, zodiacal, numero, fecha_hora, bajado) VALUES ( ";
+$consulta_abajo="INSERT INTO resultados ( id_sorteo, zodiacal, numero, fecha_hora, bajado) VALUES  ";
 
 $h=0;
 $sw=0;
 $id_ultimo=0;
 $jj=0;
-
-while ($row = mysql_fetch_row($result)) 
+$resultados=array();
+$zodiacales=array();
+$fecha_hora=array();
+while ($row = mysql_fetch_array($result)) 
 {
 	//echo "pasa";
-	$fecha_hora=$row[4];
-	if(ExisteResultado($row[1],$row[2],$row[3],$row[4],$conexion_abajo)){
-	// Creamos la consulta para insertar los datos de los premios
-	if($h<$numero_registros && $h>0)
-		$consulta_abajo.=",(";
-	for ($i = 0; $i < mysql_num_fields($result); $i++)
-	{
-		if($i!=0)
-		if ($i!=mysql_num_fields($result)-1 )
-		{
-			if($i==4 OR $i==3)
-				$consulta_abajo.=" '".$row[$i]."', ";
-			else
-			$consulta_abajo.=" ".$row[$i].", ";
-		}
-		else
-		$consulta_abajo.=" 1 )";
+	if(!in_array($row['fecha_hora'], $fecha_hora)){
+		$fecha_hora[]=$row['fecha_hora'];
 	}
-		$h++;
+	// Si no existe el resultado Creamos la consulta para insertar los datos de los premios
+	if(ExisteResultado($row['id_sorteo'],$row['zodiacal'],$row['numero'],$row['fecha_hora'],$conexion_abajo)){
+		$consulta_abajo.=" ( ".$row['id_sorteo'].", ".$row['zodiacal'].", ".$row['numero'].",'".$row['fecha_hora']."', 1 ),";
+		$resultados[$row['id_sorteo']."/".$row['fecha_hora']]=$row['numero'];
+		$zodiacales[$row['id_sorteo']."/".$row['fecha_hora']]=$row['zodiacal'];
 	}
-	$arreglo[]=$row[0];	
+	$arreglo[]=$row['id_resultados'];	
 }
+$consulta_abajo=trim($consulta_abajo,",");
 $consulta_abajo.=";";
-//echo $consulta_abajo;
 $error=0;
-//exit;
-
 if (mysql_query("SET AUTOCOMMIT=0;",$conexion_abajo))//desactivar el modo de autoguardado
 	if (mysql_query("BEGIN;",$conexion_abajo)) //dar inicio a la transacción
-
-		if (mysql_query($consulta_abajo,$conexion_abajo))
+		{}
+		/*if (mysql_query($consulta_abajo,$conexion_abajo))
 			$error=0;//mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);	
 		else
-		$error=1;
+		$error=1;*/
 	else
 	$error=1;
 else
@@ -82,20 +71,18 @@ if($error==0)
 	// Busco los resultados arriba que acabo de bajar.
 	if (mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
 		if (mysql_query("BEGIN;",$conexion_arriba)) //dar inicio a la transacción
-			foreach ($arreglo as $id)
+//			foreach ($arreglo as $id)
 			{
-				$sql="UPDATE resultados SET bajado=1 WHERE bajado=0 AND id_resultados=".$id;
-//				echo "<br>".$sql;
-	//			exit;	
+			/*	$sql="UPDATE resultados SET bajado=1 WHERE bajado=0";
 				if (mysql_query($sql,$conexion_arriba)){}
 				else
-				$error=1;
+				$error=1;*/
 			}
 		else
 		$error=1;
 	else
 	$error=1;
-	
+//	echo "error".$error;
 if($error==1)
 {
 	//echo "pasa";
@@ -107,7 +94,10 @@ else
 	mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
 	mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
 	//echo "PASA ANTES";
-	PremiarGanadores($conexion_abajo, $fecha_hora);
+	/*print_r($fecha_hora);
+	exit;*/
+	PremiarGanadores($conexion_abajo,$obj_modelo,$resultados,$zodiacales,$fecha_hora);
+	
 	//shell_exec("curl http://localhost/scripts/BuscarTicketsGanadores.php?fecha_hora=".$fecha_hora);
 	//header ("Location: );
 }
@@ -155,109 +145,69 @@ function ExisteResultado ($id_sorteo, $zodiacal, $numero, $fecha_hora,$conexion_
 	return true;
 	
 }
-
-	
-
-function PremiarGanadores($conexion_abajo,$fecha_hora){
-
-	$obj_modelo= new BajadaController();
+// Funcion para premiar los tickets ganadores
+function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fecha_hora){
 	$id_detalle_ticket[]="";
 	$id_tickets[]="";
 	$totales[]="";
-	$aprox=$obj_modelo->GetAprox($conexion_abajo);
-	//$where = " fecha_hora LIKE '%".date('Y-m-d')."%'";
-	//$result= $obj_modelo->GetListadosegunVariable($where);
-	$resultados=array();
-	$id_sorteo=array();
-	$id_zodiacal=array();
-	$result=$obj_modelo->GetResultados($fecha_hora,$conexion_abajo);
-	while($row=mysql_fetch_array($result)){
-		$resultados[]=$row['numero'];
-		$id_sorteo[]=$row['id_sorteo'];
-		$id_zodiacal[]=$row['zodiacal'];
-	}
+	//print_r($resultados);
+	$aprox= $obj_modelo->GetAprox($obj_conexion);
 	$relacion_pago=array();
-	//$id_tipo_jugada[]=array();
-	$result=$obj_modelo->GetRelacionPagos($fecha_hora,$conexion_abajo);
-//	echo "pasa";
+	$result=$obj_modelo->GetRelacionPagos($obj_conexion);
 	while($row=mysql_fetch_array($result)){
 		$relacion_pago[$row['id_tipo_jugada']]=$row['monto'];
-		//	$id_tipo_jugada[]=$row['id_tipo_jugada'];
 	}
-	//print_r($relacion_pago);
-	$result= $obj_modelo->GetListadosegunVariable($fecha_hora,$conexion_abajo);
-	If (mysql_num_rows($result)>0){
-		
-	//	echo "pasa2";
-		
-		$i=0; $j=0;
-		$ticket_premiado=0;
-		$monto_total_ticket=0;
-		//echo "pasa3";
+	foreach ($fecha_hora as $fh){
+		$result= $obj_modelo->GetListadosegunVariable($fh,$obj_conexion);
+		If(mysql_num_rows($result)>0){
+			$i=0; $j=0;
+			$ticket_premiado=0;
 			while ($roww= mysql_fetch_array($result)){
-			
-//			echo "pasa3";
-		$id_ticket=$roww["id_ticket"];
-		$fecha_ticket= substr($roww["fecha_hora"],0 , -9);
-		$resultDT = $obj_modelo->GetAllDetalleTciket($id_ticket,$conexion_abajo);
-		//revisamos la tabla de detalle ticket y comparamos con los resultados
-		$monto_total=0;
-		$sw=0;
-		while($rowDT= mysql_fetch_array($resultDT)){
-			// Verificamos si hay alguna apuesta ganadora...
-			for ($i=0;$i<count($resultados);$i++){
-				$swz=0;
-				$terminal_abajo=0;
-				$terminal_arriba=0;
-				if($rowDT['id_tipo_jugada']==2){
-					switch ($aprox){
-						case 0:
-							$terminal_abajo=$rowDT['numero']-1;
-							break;
-						case 1:
-							$terminal_arriba=$rowDT['numero']+1;
-							$terminal_abajo=$rowDT['numero']-1;
-							break;
-						case 2:
-							$terminal_arriba=$rowDT['numero']+1;
-							break;
-					}
-					if(($terminal_abajo==substr($resultados[$i], 1, 3) OR $terminal_arriba==substr($resultados[$i], 1, 3)) AND $rowDT['id_sorteo']==$id_sorteo[$i] ){
-						$monto_pago=$relacion_pago[5]*$rowDT['monto'];
-						$monto_total+=$monto_pago;
-						$obj_modelo->PremiarDetalleTicket($rowDT['id_detalle_ticket'], $monto_pago,$conexion_abajo);
-						$sw=1;
-					}
-				}
-				if((($rowDT['numero']==$resultados[$i] AND ($rowDT['id_tipo_jugada']==1 OR $rowDT['id_tipo_jugada']==3))OR ($rowDT['numero']== substr($resultados[$i], 1, 3) AND ($rowDT['id_tipo_jugada']==2 OR $rowDT['id_tipo_jugada']==4))    )      AND $rowDT['id_sorteo']==$id_sorteo[$i] ){
-					if($id_zodiacal[$i]!=0 AND $id_zodiacal[$i]==$rowDT['id_zodiacal'])
-					{
-						$monto_pago=$relacion_pago[$rowDT['id_tipo_jugada']]*$rowDT['monto'];
-						$swz=1;
-					}
-					else
-					$monto_pago=$relacion_pago[$rowDT['id_tipo_jugada']]*$rowDT['monto'];
-					if($id_zodiacal[$i]!=0 )
-					{
-						if($swz==1)
-						{
+				$id_ticket=$roww["id_ticket"];
+		//		$fecha_ticket= substr($roww["fecha_hora"],0 , -9);
+				$resultDT = $obj_modelo->GetAllDetalleTciket($id_ticket,$obj_conexion);
+				//revisamos la tabla de detalle ticket y comparamos con los resultados
+				$monto_total=$roww['total_premiado'];
+				$sw=0;
+				// SE RECORRE CADA TICKET VENDIDO EL DIA DE LA CARGA DE RESULTADO
+				while($rowDT= mysql_fetch_array($resultDT)){
+					// Verificamos si hay alguna apuesta ganadora...
+					$terminal_abajo=0;
+					$terminal_arriba=0;
+					if($rowDT['id_tipo_jugada']==2){
+						switch ($aprox){
+							case 0:
+								$terminal_abajo=$rowDT['numero']-1;
+								break;
+							case 1:
+								$terminal_arriba=$rowDT['numero']+1;
+								$terminal_abajo=$rowDT['numero']-1;
+								break;
+							case 2:
+								$terminal_arriba=$rowDT['numero']+1;
+								break;
+						}
+						if(isset($resultados[$rowDT['id_sorteo']."/".$rowDT['fecha_sorteo']]))
+						if(($terminal_abajo==substr($resultados[$rowDT['id_sorteo']."/".$rowDT['fecha_sorteo']], 1, 3) OR $terminal_arriba==substr($resultados[$rowDT['id_sorteo']."/".$rowDT['fecha_sorteo']], 1, 3)) ){	
+							$monto_pago=$relacion_pago[5]*$rowDT['monto'];
 							$monto_total+=$monto_pago;
+							$obj_modelo->PremiarDetalleTicket($rowDT['id_detalle_ticket'], $monto_pago,$obj_conexion);
 							$sw=1;
-							$obj_modelo->PremiarDetalleTicket($rowDT['id_detalle_ticket'], $monto_pago,$conexion_abajo);
 						}
 					}
-					else
-					{
-						$sw=1;
+					if(isset($resultados[$rowDT['id_sorteo']."/".$rowDT['fecha_sorteo']]))
+					if(($rowDT['numero']==$resultados[$rowDT['id_sorteo']."/".$rowDT['fecha_sorteo']] AND ($rowDT['id_zodiacal']==$zodiacales[$rowDT['id_sorteo']."/".$rowDT['fecha_sorteo']])) OR ( ($rowDT['numero']== substr($resultados[$rowDT['id_sorteo']."/".$rowDT['fecha_sorteo']], 1, 3)  AND $rowDT['id_zodiacal']==$zodiacales[$rowDT['id_sorteo']."/".$rowDT['fecha_sorteo']]) AND ($rowDT['id_tipo_jugada']==2 OR $rowDT['id_tipo_jugada']==4)) ){
+						$monto_pago=$relacion_pago[$rowDT['id_tipo_jugada']]*$rowDT['monto'];
 						$monto_total+=$monto_pago;
-						$obj_modelo->PremiarDetalleTicket($rowDT['id_detalle_ticket'], $monto_pago,$conexion_abajo);
-					}	
+						$sw=1;
+						$obj_modelo->PremiarDetalleTicket($rowDT['id_detalle_ticket'], $monto_pago,$obj_conexion);
+					}
 				}
+				if($sw==1)
+					$obj_modelo->PremiarTicket($id_ticket,$monto_total,$obj_conexion);
 			}
-		}
-		if($sw==1)
-			$obj_modelo->PremiarTicket($id_ticket,$monto_total,$conexion_abajo);
 		}
 	}
 }
+
 ?>
