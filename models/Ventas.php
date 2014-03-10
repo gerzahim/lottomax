@@ -452,7 +452,9 @@ class Ventas{
 	public function EsZodiacal(){
 	
 		//Preparacion del query
-		$sql = "SELECT id_sorteo FROM sorteos WHERE zodiacal = 1 OR tipoc=1";
+		//$sql = "SELECT id_sorteo FROM sorteos WHERE zodiacal = 1 OR tipoc=1";
+		$sql = "SELECT id_sorteo FROM sorteos WHERE zodiacal = 1 OR id_tipo_sorteo=3";
+		
 		$result= $this->vConexion->ExecuteQuery($sql);
 		//$row= $this->vConexion->GetArrayInfo($result);
 		return $result;	

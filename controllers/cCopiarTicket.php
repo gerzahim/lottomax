@@ -27,7 +27,7 @@ switch (ACCION){
 
 		// Ruta actual
 		$_SESSION['Ruta_Search']= $obj_generico->RutaRegreso();
-
+		
 		// Ruta regreso
 		$obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Lista']);
 
@@ -44,13 +44,14 @@ switch (ACCION){
 
 		$id_ticket= $obj_generico->CleanText($_GET['id_ticket']);
                 
-                $where = "";
+        $where = "";
 		if(!$obj_generico->IsEmpty($id_ticket)){
-                    $where = $where. " id_ticket='".$id_ticket."' AND " ;
-                }
+			$where = $where. " id_ticket='".$id_ticket."' AND " ;
+		}
 
-                $where = substr($where, 0,strlen($where) - 5);
-                
+		$where = substr($where, 0,strlen($where) - 5);
+
+
 		// Busca el listado de la informacion.
 		$lista= $obj_modelo->GetListadosegunVariable($where);
 		$total_registros= $obj_conexion->GetNumberRows($lista);
@@ -89,88 +90,144 @@ switch (ACCION){
 
 	case 'copy':
 		$_SESSION['mensaje_errorcopia']="";
-		// Ruta regreso
-		$obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Lista']);
-                
-		$id_ticket = $_GET['id'];
+		
+		// Validando que id ticket no este Vacio
+		if(!empty($_GET['id_ticket'])){
+			$id_ticket=$_GET['id_ticket'];
+		}else{
+			echo "<script type='text/javascript'>";
+            echo "alert('ID ticket esta Vacio !!!')";
+            echo "</script>";
+			echo "<script type='text/javascript'>";
+            echo "window.location.href = '".$_SESSION['Ruta_Search']."'";
+            echo "</script>";
+		}		
 
-        $datos= $obj_modelo->GetDetalleTicket($id_ticket);
-        
-        $id_insert_taquilla=$obj_modelo->GetUltimoIdInsert($taquilla)+1;
-        
-		$total_registros= $obj_conexion->GetNumberRows($datos);
-		//print_r($total_registros);
-		//exit();
-		if( $total_registros >0 ){
-			while($row= $obj_conexion->GetArrayInfo($datos)){
 
-                            //Proceso de copiar el ticket
+		// Validando que el array de op_duplicar no este vacio
+		if(!empty($_GET['duplicar'])){
+			$op_duplicar=$_GET['duplicar'];
+		}else{
+			echo "<script type='text/javascript'>";
+			echo "alert('No selecciono Opcion de Duplicar !!!')";
+			echo "</script>";
+			echo "<script type='text/javascript'>";
+			echo "window.location.href = '".$_SESSION['Ruta_Search']."'";
+			echo "</script>";
+		}		
 
-                            // Verificamos que el sorteo este activo
-                                $hora_sorteo= $obj_modelo->GetHoraSorteo($row['id_sorteo']);
-                                $hora_sorteo= strtotime($hora_sorteo);
+		//Guardando $txt_monto_triple y $txt_monto_terminal si existe sino le asigna 0
+		if (empty($_GET['txt_monto_triple'])) { $txt_monto_triple=0;} else { $txt_monto_triple=$_GET['txt_monto_triple'];}
+		if (empty($_GET['txt_monto_terminal'])) { $txt_monto_terminal=0;} else { $txt_monto_terminal=$_GET['txt_monto_terminal'];}
+	
+		// Obtenemos los datos de la taquilla
+		$taquilla= $obj_modelo->GetIdTaquilla();
 
-                                //Valor que debe venir de la base de datos
-                                $minutos_bloqueo= $obj_modelo->MinutosBloqueo();
+		
+		//Valor que debe venir de la base de datos
+		$minutos_bloqueo= $obj_modelo->MinutosBloqueo();
+		//hora actual mas los minutos de bloqueo
+		$hora_actualMas= strtotime("+$minutos_bloqueo minutes");		
+		
+		//recorrer entre todas las opciones de duplicar
+		foreach ( $op_duplicar as $op_dp) {
+			//echo "<br>op_duplicar", $op_dp;
 
-                                //Valor que debe venir de la base de datos
-                                $hora_actualMas= strtotime("+$minutos_bloqueo minutes");
+			$datos= $obj_modelo->GetDetalleTicket($id_ticket);
+			$total_registros= $obj_conexion->GetNumberRows($datos);
+			
+			if( $total_registros >0 ){
+				$bandera=0;
+				while($row= $obj_conexion->GetArrayInfo($datos)){
 
-                                if ($hora_actualMas < $hora_sorteo){
-                                    // Verifica si el sorteo es Zodiacal
-                                    if($obj_modelo->GetTrueZodiacal($row['id_sorteo'])){
+					$id_insert_taquilla=$obj_modelo->GetUltimoIdInsert($taquilla)+1;
+					
+					//Proceso de copiar el ticket
 
-                                            //El sorteo si es zodiacal !
-                                            $eszodiacal=1;
-											
-                                            //Proceso_Cupo() funcion para determinar los cupos
-                                            //echo $row['numero'], $row['monto'], $row['id_sorteo'], $row['id_zodiacal'];
+					//Determina $id_sorteo a cambiar segun seleccion
+					$id_sorteo_new= $obj_modelo->GetSorteobyHorarioCambiar($op_dp, $row['id_sorteo']);
+					
+					//Determinando los nuevo montos de triple y terminales si lo cambiaron
+					$tamano_numero = strlen($row['numero']);
+					if ($tamano_numero == 2){
+						// Es terminal
+						if($txt_monto_terminal != 0){
+							$txt_monto = $txt_monto_terminal;
+						}else{
+							$txt_monto = $row['monto'];
+						}	
+					}
+					if ($tamano_numero == 3){
+						// Es Triple
+						if($txt_monto_triple != 0){
+							$txt_monto = $txt_monto_triple;
+						}else{
+							$txt_monto = $row['monto'];
+						}						
+					}
+					
+					// Verificamos que el sorteo este activo
+					$hora_sorteo= $obj_modelo->GetHoraSorteo($id_sorteo_new);
+					$hora_sorteo= strtotime($hora_sorteo);					
+										
+					//Verificando si el sorteo ya esta cerrado
+					if ($hora_actualMas < $hora_sorteo){
+						// Verifica si el sorteo es Zodiacal
+						if($obj_modelo->GetTrueZodiacal($id_sorteo_new)){
+							//echo "PASA";
+							//El sorteo si es zodiacal !
+							$eszodiacal=1;
+			
+							//Proceso_Cupo() funcion para determinar los cupos
+							$result = ProcesoCupos($row['numero'], $txt_monto, $id_sorteo_new, $row['id_zodiacal'], $eszodiacal, $id_taquilla, $id_insert_taquilla);
+			
+						}else{
+							//El sorteo no es zodiacal !
+							$eszodiacal=0;
+							$zodiacal=0;
+			
+							//Proceso_Cupo() funcion para determinar los cupos
+							$result = ProcesoCupos($row['numero'], $txt_monto, $id_sorteo_new, $row['id_zodiacal'], $eszodiacal, $id_taquilla, $id_insert_taquilla);
+			
+						}
+			
+					}
+					else{
+						//Quiere decir que al menos un sorteo ya estaba cerrado
+						$bandera=1;
+					}
+			
+				}// fin de while
+				
+				if($bandera==1){
+					echo "<script type='text/javascript'>";
+					echo "alert('Algunos de los sorteos han sido cerrados')";
+					echo "</script>";
+					echo "<script type='text/javascript'>";
+					echo "window.location.href = 'index.php?op=ventas#final'";
+					echo "</script>";
+				}else if ($_SESSION['mensaje_errorcopia']!=""){
+					//$bodytag ="Existen Numeros Agotados...\\n";
+					//$bodytag.= str_replace("<br>", "\\n", $_SESSION['mensaje_errorcopia']);
+					echo "<script type='text/javascript'>";
+					//echo "alert('$bodytag')";
+					echo "alert('Existen Numeros Agotados...')";
+					echo "</script>";
+					echo "<script type='text/javascript'>";
+					echo "window.location.href = 'index.php?op=ventas#final'";
+					echo "</script>";
+				}else{
+					//sleep(3);
+					header('location:index.php?op=ventas#final');					
+				}
+				
 
-                                            $result = ProcesoCupos($row['numero'], $row['monto'], $row['id_sorteo'], $row['id_zodiacal'], $eszodiacal,$id_taquilla,$id_insert_taquilla);
+			}// fin if total_registro > 0			
+		}// fin foreach		
 
-                                     }else{
-
-                                            //El sorteo no es zodiacal !
-                                            $eszodiacal=0;
-                                            $zodiacal=0;
-
-                                            //Proceso_Cupo() funcion para determinar los cupos
-
-                                            $result = ProcesoCupos($row['numero'], $row['monto'], $row['id_sorteo'], $row['id_zodiacal'], $eszodiacal,$id_taquilla.$id_insert_taquilla);
-
-                                    }
-                                    header('location:index.php?op=ventas');
-
-                                }
-                                else
-                                {
-                                	echo "<script type='text/javascript'>";
-                                	echo "alert('Algunos de los sorteos han sido cerrados')";
-                                	echo "</script>";
-                                	echo "<script type='text/javascript'>";
-                                	echo "window.location.href = 'index.php?op=ventas'";
-                                	echo "</script>";
-                                }
-                            
-                        }
-                        if ($_SESSION['mensaje_errorcopia']!=""){
-                        	$bodytag ="Existen Numeros Agotados...\\n"; 
-                        	$bodytag.= str_replace("<br>", "\\n", $_SESSION['mensaje_errorcopia']);
-                        	//la variable existe
-                        	echo "<script type='text/javascript'>";
-                        	echo "alert('$bodytag')";
-                        	echo "</script>";
-                        	echo "<script type='text/javascript'>";
-                        	echo "window.location.href = 'index.php?op=ventas'";
-                        	echo "</script>";
-
-                        }
-                        //sleep(3);
-                        //header('location:index.php?op=ventas');
-                }
-		//echo $id_ticket;exit();
 		break;
-          case 'looking_serial':
+		
+	case 'looking_serial':
 
 		// Ruta regreso
 		$obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Search']);
@@ -279,6 +336,15 @@ switch (ACCION){
 	
 }
 
+//Funciones
+
+/**
+ * Calcula el monto real en que podra jugar el numero
+ *
+ * @param integer $monto_disponible
+ * @param integer $monto_jugado
+ * @return array
+ */
 
 function CalculaIncompletoYnuevoMonto($monto_disponible, $monto_jugado){
 
@@ -315,7 +381,7 @@ function CalculaIncompletoYnuevoMonto($monto_disponible, $monto_jugado){
 			$matriz[1] = 0;
 			$matriz[2] = $monto_jugado;
 		}
-		 
+			
 		// $matriz2=CalculaIncompletoYnuevoMonto();
 		// echo $matriz2[0]; // nuevomontodisponible o faltante
 		// echo $matriz2[1]; // incompleto
@@ -325,215 +391,219 @@ function CalculaIncompletoYnuevoMonto($monto_disponible, $monto_jugado){
 
 }
 
+function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$id_insert_taquilla){
 
-function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$id_taquilla,$id_insert_taquilla){
-    
 	global $taquilla;
 	global $obj_modelo;
 	global $obj_conexion;
-	
-	
+	$fecha_hoy=date('Y-m-d');
 	//determinando el tipo de jugada
-	$id_tipo_jugada= $obj_modelo->GetTipoJugada($esZodiacal,$txt_numero); 
-	
+	$id_tipo_jugada= $obj_modelo->GetTipoJugada($esZodiacal,$txt_numero);
+
 	//revisar tabla de ticket_transaccional
 	$numero_jugadoticket= $obj_modelo->GetTicketTransaccional($txt_numero,$sorteo,$zodiacal, $id_tipo_jugada);
-	
-	if ( $numero_jugadoticket['total_registros']>0 ){
-		
+
+	if ( $numero_jugadoticket['total_registros']>0 )
+	{
+		$txt_monto=$numero_jugadoticket['monto'];
 		//adicionar y dar mensaje de confirm (adicionar al ticket u obviar)
-		
 		//significa que ya existe y debemos ver el monto que queda
 		$num_ticket_faltante = $numero_jugadoticket['monto_faltante'];
-		$txt_monto += $numero_jugadoticket['monto'];		
+		$num_ticket_monto = $numero_jugadoticket['monto'];
 		$num_ticket_inc = $numero_jugadoticket['incompleto'];
-		
 		//Verificando que si esta incompleto
-		if ($num_ticket_inc == '1'){
-			
-			// ya no se puede anadir, mas bien le falto por jugar
-			//echo "El numero ya esta jugado y tiene su cupo completo";			
-			
-			//$_SESSION['mensaje']= $mensajes['numero_repetido_eincompleto'];
-			
-			
-			echo "<div id='mensaje' class='mensaje' >El numero ya esta jugado y tiene su cupo completo !!!</div>";			
-			
-		}else{
-		if ($num_ticket_inc == '0')
-        	{
-                //Proceso CONFIRM: Elimina la apuesta existente en ticket transaccional, y para que no este repetida, la registra
-                // con el nuevo monto ingresado.
-                $id_ticket_transaccional= $obj_modelo->GetIDTicketTransaccional($txt_numero,$sorteo,$zodiacal);
+		if ($txt_monto < 0){
+			echo "<div id='mensaje' class='mensaje' >El monto debe ser mayor a 0 Bs !!!</div>";
+			exit();
+		}else if($txt_monto == 0){
+			$obj_modelo->EliminarTicketTransaccionalByTicket($numero_jugadoticket['id_ticket_transaccional']);
+			echo "<div id='mensaje' class='mensaje' >La jugada fue Eliminada !!!</div>";
+			//exit();
+		}else
+			if ($num_ticket_inc == '0')
+			{
+				//Proceso CONFIRM: Elimina la apuesta existente en ticket transaccional, y para que no este repetida, la registra
+				// con el nuevo monto ingresado.
+				$id_ticket_transaccional= $obj_modelo->GetIDTicketTransaccional($txt_numero,$sorteo,$zodiacal);
 				//echo "<input id='txt_id_ticket_transaccional' name='txt_id_ticket_transaccional' type='text' value='".$id_ticket_transaccional."'/>";
-                $obj_modelo->EliminarTicketTransaccionalByTicket($id_ticket_transaccional);
-                $result = ProcesoCupos($txt_numero, $txt_monto, $sorteo, $zodiacal, $esZodiacal,$id_taquilla,$id_insert_taquilla);
-                echo "--";
-        	}
-		}
-		
+				$obj_modelo->EliminarTicketTransaccionalByTicket($id_ticket_transaccional);
+				$result = ProcesoCupos($txt_numero, $txt_monto, $sorteo, $zodiacal, $esZodiacal,$id_insert_taquilla);
+				echo "--";
+			}
+			else
+				if ($num_ticket_inc == '1'|| $num_ticket_inc == '3')
+				{
+					// ya no se puede anadir, mas bien le falto por jugar
+					//echo "El numero ya esta jugado y tiene su cupo completo";
+					//$_SESSION['mensaje']= $mensajes['numero_repetido_eincompleto'];
+					//	echo "PAASA";
+					$id_ticket_transaccional= $obj_modelo->GetIDTicketTransaccional($txt_numero,$sorteo,$zodiacal);
+					//echo "<input id='txt_id_ticket_transaccional' name='txt_id_ticket_transaccional' type='text' value='".$id_ticket_transaccional."'/>";
+					$obj_modelo->EliminarTicketTransaccionalByTicket($id_ticket_transaccional);
+					$result = ProcesoCupos($txt_numero, $txt_monto, $sorteo, $zodiacal, $esZodiacal,$id_insert_taquilla);
+					echo "<div id='mensaje' class='mensaje' >El numero ya esta jugado y tiene su cupo completo !!!</div>";
+				}
 	}else{
-	
-	//revisar tabla de numeros_jugados
+
+		//revisar tabla de numeros_jugados
 		$numero_jugado= $obj_modelo->GetNumerosJugados($txt_numero,$sorteo,$zodiacal);
-	
-        //significa que ya existe y debemos ver el monto que queda
+		//significa que ya existe y debemos ver el monto que queda
 		$monto_restante = $numero_jugado['monto_restante'];
-        if( $numero_jugado['total_registros']>0 ){
-		//echo $num_jug;
-		//print_r($numero_jugado);
-		
-		//si queda por un monto mayor que 0
-		if ($monto_restante >0){
-			$matriz2= CalculaIncompletoYnuevoMonto($monto_restante,$txt_monto);
-			// Guardar ticket a tabla transaccional
-			if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$matriz2[0],$matriz2[1],$matriz2[2],$id_taquilla,$id_insert_taquilla) ){
-																		
+		if( $numero_jugado['total_registros']>0 ){
+			//echo $num_jug;
+			//print_r($numero_jugado);
+
+			//si queda por un monto mayor que 0
+			if ($monto_restante >0){
+				$matriz2= CalculaIncompletoYnuevoMonto($monto_restante,$txt_monto);
+				// Guardar ticket a tabla transaccional
+				if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$matriz2[0],$matriz2[1],$matriz2[2],$taquilla,$id_insert_taquilla) ){
+
+
+				}else{
+
+					$_SESSION['mensaje']= $mensajes['fallo_agregar_ticket'];
+					echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";
+				}
+
 			}else{
-				
-				$_SESSION['mensaje']= $mensajes['fallo_agregar_ticket'];
+					
+				//Mensaje de ERROR -- NUMERO AGOTADO PARA ESTE SORTEO
+				//Se registra el numero como agotado
+				$obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$txt_monto,2,0,$taquilla,$id_insert_taquilla);
+				$_SESSION['mensaje']= $txt_numero." AGOTADO para sorteo ".$obj_modelo->GetNombreSorteo($sorteo)."  ".$obj_modelo->GetPreNombreSigno($zodiacal);
+				$_SESSION['mensaje_errorcopia'].= $txt_numero." AGOTADO para sorteo ".$obj_modelo->GetNombreSorteo($sorteo)."  ".$obj_modelo->GetPreNombreSigno($zodiacal)."<br>";
 				echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";
-			}									
-						
+
+			}
+
 		}else{
-			//Mensaje de ERROR -- NUMERO AGOTADO PARA ESTE SORTEO
-			
-            //Se registra el numero como agotado
-            $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$txt_monto,2,0,$taquilla,$id_insert_taquilla);
-			$_SESSION['mensaje']= $txt_numero." AGOTADO para sorteo ".$obj_modelo->GetNombreSorteo($sorteo)."  ".$obj_modelo->GetPreNombreSigno($zodiacal);
-			$_SESSION['mensaje_errorcopia'].= $txt_numero." AGOTADO para sorteo ".$obj_modelo->GetNombreSorteo($sorteo)."  ".$obj_modelo->GetPreNombreSigno($zodiacal)."<br>";					
-			//echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";			
-						
-		}
-					
-	}else{
-            
-		//No existe aun
-		//revisar tabla de cupo_especial
-		$cupo_especial= $obj_modelo->GetCuposEspeciales($txt_numero,$sorteo,$zodiacal);
-		
-		if( $cupo_especial['total_registros']>0 ){
-			
-			while($row= $obj_conexion->GetArrayInfo($cupo_especial['result'])){
-				
-				//recortando el formato 2013-02-26 00:00:00 a 2013-02-26	
-				$fecha_desde = substr($row["fecha_desde"], 0, 10);
-				$fecha_hasta = substr($row["fecha_hasta"], 0, 10);
-				
-				//funcion para saber si hoy esta entre dos fechas dadas
-				// regresa 1 si esta entre las fechas; 0 de lo contrario
-				$fecha_efectiva= $obj_modelo->entreFechasYhoy($fecha_desde,$fecha_hasta);
-				
-				//si esta entre las fechas del bloqueo
-				if ($fecha_efectiva == 1){
-					
-					//significa que ya existe y debemos ver el monto que queda									
-					$monto_cupoespecial= $row["monto_cupo"];
 
-					//si queda por un monto mayor que 0
-					if ($monto_cupoespecial >0){
+			//No existe aun
+			//revisar tabla de cupo_especial
+			$cupo_especial= $obj_modelo->GetCuposEspeciales($txt_numero,$sorteo,$zodiacal);
+			if( $cupo_especial['total_registros']>0 ){
+				while($row= $obj_conexion->GetArrayInfo($cupo_especial['result'])){
 
-                                              //  $monto_restante= $txt_monto;
+					//recortando el formato 2013-02-26 00:00:00 a 2013-02-26
+					$fecha_desde = substr($row["fecha_desde"], 0, 10);
+					$fecha_hasta = substr($row["fecha_hasta"], 0, 10);
 
-                                               
+					//funcion para saber si hoy esta entre dos fechas dadas
+					// regresa 1 si esta entre las fechas; 0 de lo contrario
+					$fecha_efectiva= $obj_modelo->entreFechasYhoy($fecha_desde,$fecha_hasta);
 
-						//registrar $num_jug_nuevodisponible, $incompleto						
-						$matriz2= CalculaIncompletoYnuevoMonto($monto_cupoespecial, $txt_monto);
-			
-					if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$matriz2[0],$matriz2[1],$matriz2[2],$taquilla,$id_insert_taquilla) ){
-																		
+					//si esta entre las fechas del bloqueo
+					if ($fecha_efectiva == 1){
+							
+						//significa que ya existe y debemos ver el monto que queda
+						$monto_cupoespecial= $row["monto_cupo"];
+
+						//si queda por un monto mayor que 0
+						if ($monto_cupoespecial >0){
+
+							//  $monto_restante= $txt_monto;
+
+
+
+							//registrar $num_jug_nuevodisponible, $incompleto
+							$matriz2= CalculaIncompletoYnuevoMonto($monto_cupoespecial, $txt_monto);
+
+							if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$matriz2[0],$matriz2[1],$matriz2[2],$taquilla,$id_insert_taquilla) ){
+
+							}
+							else{
+								$_SESSION['mensaje']= $mensajes['fallo_agregar_ticket'];
+								echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";
+							}
+
+						}else{
+							//Mensaje de ERROR -- NUMERO BLOQUEADO PARA ESTE SORTEO
+
+							//Se registra el numero como agotado
+							$obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$txt_monto,2,0,$taquilla,$id_insert_taquilla);
+
+							$_SESSION['mensaje']= $txt_numero." AGOTADO para sorteo ".$obj_modelo->GetNombreSorteo($sorteo)."  ".$obj_modelo->GetPreNombreSigno($zodiacal);
+							$_SESSION['mensaje_errorcopia'].= $txt_numero." AGOTADO para sorteo ".$obj_modelo->GetNombreSorteo($sorteo)."  ".$obj_modelo->GetPreNombreSigno($zodiacal)."<br>";
+							echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";
+						}
+
+					}else{
+						//No posee cupo especial, ni esta en tabla numeros_jugados
+						//revisar tabla de cupo_general
+						//procesa A
+
+						//determinando monto_cupo segun id tipo de jugada
+						$cupo_general= $obj_modelo->GetCuposGenerales($id_tipo_jugada);
+						// Asignamos al monto restante el monto de apuesta para efectos de la funcion CalculaIncompletoYnuevoMonto
+						// $monto_restante= $txt_monto;
+
+						// Calculamos el valor de incompleto
+
+
+						// Calculando $num_jug_nuevodisponible,$incompleto
+						$matriz2= CalculaIncompletoYnuevoMonto($cupo_general, $txt_monto);
+							
+						if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$matriz2[0],$matriz2[1],$matriz2[2],$taquilla,$id_insert_taquilla) ){
+
 						}
 						else{
 							$_SESSION['mensaje']= $mensajes['fallo_agregar_ticket'];
 							echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";
-						}							
-						
-					}else{
-						//Mensaje de ERROR -- NUMERO BLOQUEADO PARA ESTE SORTEO
+						}
+							
+							
+					}
 
-                        //Se registra el numero como agotado
-						$obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$txt_monto,2,0,$taquilla,$id_insert_taquilla);
-                                                
-						$_SESSION['mensaje']= $txt_numero." AGOTADO para sorteo ".$obj_modelo->GetNombreSorteo($sorteo)."  ".$obj_modelo->GetPreNombreSigno($zodiacal);
-						$_SESSION['mensaje_errorcopia'].= $txt_numero." AGOTADO para sorteo ".$obj_modelo->GetNombreSorteo($sorteo)."  ".$obj_modelo->GetPreNombreSigno($zodiacal)."<br>";
-						
-						//echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";							
-					}									
-						
-				}else{
-					//No posee cupo especial, ni esta en tabla numeros_jugados
-					//revisar tabla de cupo_general							
-					//procesa A				
-														
-					//determinando monto_cupo segun id tipo de jugada									
-					$cupo_general= $obj_modelo->GetCuposGenerales($id_tipo_jugada);
 
-					// Asignamos al monto restante el monto de apuesta para efectos de la funcion CalculaIncompletoYnuevoMonto
-                                      // $monto_restante= $txt_monto;
-
-                                       // Calculamos el valor de incompleto
-                                        
-                                        
-					// Calculando $num_jug_nuevodisponible,$incompleto
-					$matriz2= CalculaIncompletoYnuevoMonto($cupo_general, $txt_monto);
-					
-				if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$matriz2[0],$matriz2[1],$matriz2[2],$taquilla,$id_insert_taquilla) ){
-																		
-			}
-					else{
-						$_SESSION['mensaje']= $mensajes['fallo_agregar_ticket'];
-						echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";
-					}									
-					
-					
 				}
-				
-				
-			}							
-			
-		}else{
-			//No posee cupo especial, ni esta en tabla numeros_jugados
-			//revisar tabla de cupo_general							
-			//procesa A
-		
-						//echo "PASA";											
-                        //determinando monto_cupo segun id tipo de jugada
-			 $cupo_general= $obj_modelo->GetCuposGenerales($id_tipo_jugada);
+					
+			}else{
+				//No posee cupo especial, ni esta en tabla numeros_jugados
+				//revisar tabla de cupo_general
+				//procesa A
 
-                        // Asignamos al monto restante el monto de apuesta para efectos de la funcion CalculaIncompletoYnuevoMonto
-                        $monto_restante= $txt_monto;
+				//echo "PASA";
+				//determinando monto_cupo segun id tipo de jugada
+				$cupo_general= $obj_modelo->GetCuposGenerales($id_tipo_jugada);
 
-                         // Calculamos el valor de incompleto
-                       
+				// Asignamos al monto restante el monto de apuesta para efectos de la funcion CalculaIncompletoYnuevoMonto
+				$monto_restante= $txt_monto;
 
-                        // Calculando $num_jug_nuevodisponible,$incompleto
-                        $matriz2= CalculaIncompletoYnuevoMonto($cupo_general, $monto_restante);
-
-                                         
-                        
-                        // Guardar ticket a tabla transaccional
-			if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$matriz2[0],$matriz2[1],$matriz2[2],$taquilla,$id_insert_taquilla) ){
-																		
-			}
-                        else{
-                                //$_SESSION['mensaje']= $mensajes['fallo_agregar_ticket'];
-                                $_SESSION['mensaje']= "Error No se logro ingresar la jugada al ticket!!!";
-                                echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";
-                        }
-			
-		}
-		
-		
-		
-	}
+				// Calculamos el valor de incompleto
 					
 
-	
-	return 1;
-	
+				// Calculando $num_jug_nuevodisponible,$incompleto
+				$matriz2= CalculaIncompletoYnuevoMonto($cupo_general, $monto_restante);
+
+					
+				/*	echo "este".$cupo_general;
+				 echo "sisi";
+				echo "monto".$matriz2[2];
+				exit;*/
+				// Guardar ticket a tabla transaccional
+				if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$matriz2[0],$matriz2[1],$matriz2[2],$taquilla,$id_insert_taquilla) ){
+
+				}
+				else{
+					//$_SESSION['mensaje']= $mensajes['fallo_agregar_ticket'];
+					$_SESSION['mensaje']= "Error No se logro ingresar la jugada al ticket!!!";
+					echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";
+				}
+					
+			}
+
+
+
+		}
+			
+
+
+		return 1;
+
 	}
-	
 }
+
 
 
 $obj_xtpl->parse('main.contenido');

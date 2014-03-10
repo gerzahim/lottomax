@@ -544,8 +544,8 @@ function agregar_ticket(){
             	  //$("#txt_monto").val(''); // en caso que quieras borrar tambien el monto
             	  $("#txt_numero").focus();            	
             }else{
-            	$("#txt_numero").val('');
-            	$("#txt_monto").val('');
+            	//$("#txt_numero").val('');
+            	//$("#txt_monto").val('');
             	$("#txt_numero").focus();  
             	
             }
@@ -749,17 +749,24 @@ function agregarTerminalazo(){
 	//alert('Holaaaa');
  $.get('ajax/ValidarTerminalazo.php', function(str) {
  	//alert(str);
+	 
      if (str == "Ok"){
-         var monto = prompt("Digite el monto de apuesta para los terminalazos:", "");
-          if (monto != null && monto != 0){
-    	  agregarMontoTerminalazo(monto);
-          }else{
-              alert("Debe ingresar un monto de apuesta para los terminalazos!");
-          }
+     	if(confirm("Mismo monto que los triples?")){
+     		agregarMontoTerminalazo(0)
+     	}
+     	else
+     	{
+     		var monto = prompt("Digite el monto de apuesta para los terminalazos:", "");
+             if (monto != null && monto != 0){
+            	 agregarMontoTerminalazo(monto)
+             }else{
+                 alert("Debe ingresar un monto de apuesta para los terminalazos!");
+             }
+     	}
      }else if (str == "NotOk"){
-         alert("Debe hacer por lo menos una apuesta de Astral para generar los Terminalazos en el ticket!");
+         alert("Debe hacer por lo menos una apuesta de Astral para generar los terminales en el ticket!");
      }
-     
+    
      calcula_total();
       
   });
@@ -767,7 +774,7 @@ function agregarTerminalazo(){
 
 function agregarMontoTerminalazo(monto)
 {
- //alert(monto);	
+ //alert('ajax/AgregarTerminalazo.php?monto=' + monto);	
  $.get('ajax/AgregarTerminalazo.php?monto=' + monto, function(str) {
     document.getElementById("ticket").innerHTML = str;
          $("#txt_numero").focus();
@@ -1442,4 +1449,16 @@ function checkAllTipoJugada(chk){
 	}else{
 		flags_1=1;
 	}
+}
+
+
+function checkCopysinHorario(chk){
+
+	for (i = 1; i < chk.length; i++){
+		chk[i].checked = false;
+	}
+}
+
+function checkCopyconHorario(chk){
+	chk[0].checked = false;
 }

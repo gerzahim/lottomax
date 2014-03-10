@@ -1,27 +1,12 @@
 <html>
 <body>
-<table width="205" border="0">
+<table border="0">
   <tr>
-    <th width="195" scope="col">Lottomax Movil</th>
+    <th scope="col"><h1>Lottomax Movil</h1></th>
   </tr>
   <tr>
     <td>&nbsp;</td>
   </tr>
-  </tr>
-  <tr>
-    <td>&nbsp;</td>
-  </tr>
-  </tr>
-  <tr>
-    <td>&nbsp;</td>
-  </tr>    
-  <tr>
-    <td ><a href="CargarResultados.php" target="_blank">Cargar Resultados</a></td>
-  </tr>
-  <tr>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
   </tr>
   <tr>
     <td>&nbsp;</td>
@@ -30,7 +15,27 @@
   <tr>
     <td>&nbsp;</td>
   </tr>    
-    <td><a href="ReporteBanca.php" target="_blank">Reporte Banca</a></td>
+  <tr>
+    <td ><a href="CargarResultados.php" target="_blank"><h1>CARGAR RESULTADOS</h1></a></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>  
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr> 
+     
+    <td><a href="ReporteBanca.php" target="_blank"><h1>REPORTE BANCA</h1></a></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
@@ -43,8 +48,12 @@
   </tr>
   <tr>
     <td>&nbsp;</td>
-  </tr>  
-    <td><a href="TicketsGanadoresDetalle.php" target="_blank">Detalle Tickets Ganadores</a></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>    
+    <td><a href="TicketsGanadoresDetalle.php" target="_blank"><h1>DETALLE TICKETS GANADORES</h1></a></td>
   </tr>  
 </table>
 
