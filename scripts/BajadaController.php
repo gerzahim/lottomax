@@ -135,15 +135,13 @@ class BajadaController{
 	
 	/**
 	 * Quitar Premios a Ticket
-	 * @param string $fecha_hora
+	 * @param array $resultados, $conexion_abajo
 	 * @return boolean, array
 	 */
 	public function DespremiarTicket($resultados,$conexion_abajo){
 		$fecha_ante='';
-		foreach ($resultados as $key => $rs)
-		{
+		foreach ($resultados as $key => $rs){
 			$aux=preg_split("/\//",$key);
-			
 			if($fecha_ante=='')
 			$sql = "SELECT * FROM `detalle_ticket` WHERE `premiado`=1 AND (`fecha_sorteo` LIKE '%".$aux[1]."%' AND (`id_sorteo` =".$aux[0];
 			else
@@ -154,8 +152,6 @@ class BajadaController{
 			$fecha_ante=$aux[1];
 		}
 		$sql.="))";
-		//$sql="SELECT * FROM `detalle_ticket` WHERE 1 ";
-		mysql_select_db("lottomax",$conexion_abajo);
 		$result=mysql_query($sql,$conexion_abajo);
 		while($row=mysql_fetch_array($result)){
 			$sql = "SELECT * FROM `ticket` WHERE `id_ticket` = ".$row['id_ticket'];
