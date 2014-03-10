@@ -138,33 +138,40 @@ class BajadaController{
 	 * @param string $fecha_hora
 	 * @return boolean, array
 	 */
-	public function DespremiarTicket($fecha_hora,$id_sorteo,$conexion_abajo){
-	
-		//Preparacion del query
-		foreach ($fecha_hora as $fh)
+	public function DespremiarTicket($resultados,$conexion_abajo){
+		$fecha_ante='';
+		foreach ($resultados as $key => $rs)
 		{
-			foreach ($id_sorteo as $is)
-			{
-				$sql = "SELECT * FROM `detalle_ticket` WHERE `premiado`=1 AND `fecha_sorteo` LIKE '%".$fh."%' AND id_sorteo=".$is;
-				$result=mysql_query($sql,$conexion_abajo);
-				while($row=mysql_fetch_array($result)){
-					$sql = "SELECT * FROM `ticket` WHERE `id_ticket` = ".$row['id_ticket'];
-					$result2=mysql_query($sql,$conexion_abajo);
-					while($row2=mysql_fetch_array($result2)){
-						$total_premiado=$row2['total_premiado']-$row['total_premiado'];
-						if($total_premiado==0)
-							$premiado=0;
-						else
-							$premiado=1;
-						$sql = "UPDATE `ticket` SET `premiado`=".$premiado.", `total_premiado`=".$total_premiado." WHERE `id_ticket`=".$row['id_ticket'];
-						mysql_query($sql,$conexion_abajo);
-						$sql = "UPDATE `detalle_ticket` SET `premiado`=0, `total_premiado`=0 WHERE `id_detalle_ticket`=".$row['id_detalle_ticket'];
-						mysql_query($sql,$conexion_abajo);
-					}
-				}
+			$aux=preg_split("/\//",$key);
+			
+			if($fecha_ante=='')
+			$sql = "SELECT * FROM `detalle_ticket` WHERE `premiado`=1 AND (`fecha_sorteo` LIKE '%".$aux[1]."%' AND (`id_sorteo` =".$aux[0];
+			else
+			if($aux[1]==$fecha_ante)
+			$sql.=" OR `id_sorteo` = ".$aux[0];
+			else
+			$sql.=") OR (`fecha_sorteo` LIKE '%".$aux[1]."%' AND `id_sorteo` =".$aux[0];
+			$fecha_ante=$aux[1];
+		}
+		$sql.="))";
+		//$sql="SELECT * FROM `detalle_ticket` WHERE 1 ";
+		mysql_select_db("lottomax",$conexion_abajo);
+		$result=mysql_query($sql,$conexion_abajo);
+		while($row=mysql_fetch_array($result)){
+			$sql = "SELECT * FROM `ticket` WHERE `id_ticket` = ".$row['id_ticket'];
+			$result2=mysql_query($sql,$conexion_abajo);
+			while($row2=mysql_fetch_array($result2)){
+				$total_premiado=$row2['total_premiado']-$row['total_premiado'];
+				if($total_premiado==0)
+					$premiado=0;
+				else
+					$premiado=1;
+				$sql = "UPDATE `ticket` SET `premiado`=".$premiado.", `total_premiado`=".$total_premiado." WHERE `id_ticket`=".$row['id_ticket'];
+				mysql_query($sql,$conexion_abajo);
+				$sql = "UPDATE `detalle_ticket` SET `premiado`=0, `total_premiado`=0 WHERE `id_detalle_ticket`=".$row['id_detalle_ticket'];
+				mysql_query($sql,$conexion_abajo);
 			}
 		}
-		return true;
 	}
 	
 	/**
