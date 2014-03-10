@@ -108,7 +108,7 @@ class Sorteo{
 		
 		// id_sorteo  id_loteria nombre_sorteo	hora_sorteo	zodiacal status
 		//Preparacion del query
-		$sql = "INSERT INTO `sorteos` (`id_loteria` , `nombre_sorteo` , `hora_sorteo`, `id_turno` , `zodiacal`, `tradicional` , `status`, `tipoc`) VALUES ('".$id_loteria."', '".$nombre."', '".$time."', '".$turno."', '".$zodiacal."', '".$tradicional."', 1 , '".$tipoc."')";
+		$sql = "INSERT INTO `sorteos` (`id_loteria` , `nombre_sorteo` , `hora_sorteo`, `id_turno` , `zodiacal`, `tradicional` , `status`, `id_tipo_sorteo`) VALUES ('".$id_loteria."', '".$nombre."', '".$time."', '".$turno."', '".$zodiacal."', '".$tradicional."', 1 , '".$tipoc."')";
 		return $this->vConexion->ExecuteQuery($sql);
 		
 	}	
@@ -145,7 +145,7 @@ class Sorteo{
 		
 		$time= $hora.":".$minutos.":00";
 		//Preparacion del query
-		$sql = "UPDATE `sorteos` SET `id_loteria`='".$id_loteria."',  `nombre_sorteo`='".$nombre."', `hora_sorteo`='".$time."', `id_turno`='".$turno."', `zodiacal`='".$zodiacal."', `tradicional`='".$tradicional."', `status`='".$status."', `tipoc`='".$tipoc."' WHERE id_sorteo='".$id_sorteo."'";
+		$sql = "UPDATE `sorteos` SET `id_loteria`='".$id_loteria."',  `nombre_sorteo`='".$nombre."', `hora_sorteo`='".$time."', `id_turno`='".$turno."', `zodiacal`='".$zodiacal."', `tradicional`='".$tradicional."', `status`='".$status."', `id_tipo_sorteo`='".$tipoc."' WHERE id_sorteo='".$id_sorteo."'";
 		return $this->vConexion->ExecuteQuery($sql);
 		
 	}

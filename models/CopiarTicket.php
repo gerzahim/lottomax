@@ -445,6 +445,60 @@ class CopiarTicket{
 
 	}
 	
+	/**
+	 * Busqueda de Id de Taquilla.
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetIdTaquilla(){
+	
+		//Preparacion del query
+		//		$sql = "SELECT * FROM parametros";
+		//		$result= $this->vConexion->ExecuteQuery($sql);
+		//		$roww= $this->vConexion->GetArrayInfo($result);
+		//		return $roww["taquilla"];
+		 
+		return $_SESSION['taquilla'];
+	}
+
+	/**
+	 * Retorna el Sorteo Segun la opcion de horario que desea Cambiar
+	 *
+	 * @param integer $op_horario
+	 * @param integer $id_sorteo
+	 * @return integer $id_sorteo_new
+	 */
+	
+	function GetSorteobyHorarioCambiar($op_horario, $id_sorteo){
+		/* $op_duplicar;
+		* 4 = Duplicar Igual
+		* 1 = Duplicar y Cambiar Horario a Mañana
+		* 2 = Duplicar y Cambiar Horario a Tarde
+		* 3 = Duplicar y Cambiar Horario a Noche
+		*/
+		
+		if($op_horario == 4){
+			return $id_sorteo;
+		}else{
+			$id_turno= $op_horario;
+			$sql = "SELECT id_loteria, id_tipo_sorteo FROM sorteos WHERE id_sorteo = ".$id_sorteo."";
+			$result= $this->vConexion->ExecuteQuery($sql);
+			$row= $this->vConexion->GetArrayInfo($result);
+			$id_loteria= $row["id_loteria"];
+			$id_tipo_sorteo= $row["id_tipo_sorteo"];
+			
+			//id_turno 
+			$sql = "SELECT id_sorteo FROM sorteos WHERE id_turno = ".$id_turno." AND id_loteria = ".$id_loteria." AND id_tipo_sorteo = ".$id_tipo_sorteo."";
+			$resulta= $this->vConexion->ExecuteQuery($sql);
+			$roww= $this->vConexion->GetArrayInfo($resulta);
+			$id_sorteo_new= $roww["id_sorteo"];
+			return $id_sorteo_new;
+		}
+		
+	
+	}	
+	
 	
 }		
 ?>

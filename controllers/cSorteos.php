@@ -71,7 +71,7 @@ switch (ACCION){
 		$zodiacal= $obj_generico->CleanText($_POST['op_zodiacal']);
 		$tradicional= $obj_generico->CleanText($_POST['op_tradicional']);
 		$status= $obj_generico->CleanText($_POST['op_status']);	
-		$tipoc= $obj_generico->CleanText($_POST['op_tipoc']);
+		$tipoc= $obj_generico->CleanText($_POST['op_tipo']);
 
 		// Verifica que los datos requeridos no este vacios
 		if(!$obj_generico->IsEmpty($nombre) && !$obj_generico->IsEmpty($id_loteria) && !$obj_generico->IsEmpty($hora) && !$obj_generico->IsEmpty($minutos) && !$obj_generico->IsEmpty($zodiacal)){
@@ -199,16 +199,17 @@ switch (ACCION){
 				$obj_xtpl->assign('seleccionu','selected="selected"');
 			}	
 
-			
-			if ($row_datos['tipoc'] == '1'){
-				$obj_xtpl->assign('seleccionticn','selected="selected"');
-			}
-			else{
-				$obj_xtpl->assign('selecciontic','selected="selected"');
-			}
-				
-			
-			
+			//Selecciona el tipo de sorteo A,B,C,Z
+			if ($row_datos['id_tipo_sorteo'] == '1'){
+				$obj_xtpl->assign('selecciona_a','selected="selected"');
+			}else if ($row_datos['id_tipo_sorteo'] == '2'){
+				$obj_xtpl->assign('selecciona_b','selected="selected"');
+			}else if ($row_datos['id_tipo_sorteo'] == '3'){
+				$obj_xtpl->assign('selecciona_c','selected="selected"');
+			}else if ($row_datos['id_tipo_sorteo'] == '4'){
+				$obj_xtpl->assign('selecciona_z','selected="selected"');
+			}			
+							
 			// Lista los datos del usuario obtenidos de la BD
 			$obj_xtpl->assign('txt_name', $row_datos['nombre_sorteo']);
 			$obj_xtpl->assign('id_Sorteo', $_GET['id']);
@@ -239,7 +240,7 @@ switch (ACCION){
 		$tradicional= $obj_generico->CleanText($_POST['op_tradicional']);
 		$status= $obj_generico->CleanText($_POST['op_status']);		
 		$id_sorteo= $_REQUEST['idreferencia'];
-		$tipoc= $obj_generico->CleanText($_POST['op_tipoc']);
+		$tipoc= $obj_generico->CleanText($_POST['op_tipo']);
 			
 		// Verifica que los datos requeridos no este vacios
 		if(!$obj_generico->IsEmpty($nombre) && !$obj_generico->IsEmpty($hora) && !$obj_generico->IsEmpty($minutos) && !$obj_generico->IsEmpty($zodiacal) && !$obj_generico->IsEmpty($id_sorteo)){

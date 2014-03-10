@@ -82,6 +82,8 @@ $data="";
          			
          			$data.="<tr><td colspan='2' width='40' align='center'><font face='arial' size='2' >";
          			$data.="Detalle Jugada Ganadora: ".$row['id_ticket'];
+         			$data.="<br>Monto del Ticket: ".$row['total_ticket'];
+         			
          			$resulta= $obj_modelo->GetDetalleTicketPremiados($row['id_ticket']);
          			
          			while($rowa= $obj_conexion->GetArrayInfo($resulta)){

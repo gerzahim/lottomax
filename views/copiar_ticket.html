@@ -63,25 +63,48 @@
 		<form id="frm1" method="get" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es">
 
 			<input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
-			<input style="border: hidden" type="hidden" name="accion" id="idaccion" value="looking"/>
+			<input style="border: hidden" type="hidden" name="accion" id="idaccion" value="copy"/>
 
 			<fieldset>
 
 				<legend>Busqueda de Tickets</legend>
 
 				<table align="center" border="0" cellpadding="2" cellspacing="0" width="100%">
-
+					<tr>
+						<td class="tag"><input type="checkbox" name="duplicar[]" value="4" onClick="checkCopysinHorario(document.getElementsByName('duplicar[]'));"/></td>
+						<td>Duplicar Igual</td>
+					</tr>
+					<tr>
+						<td class="tag"><input type="checkbox" name="duplicar[]" value="1" onClick="checkCopyconHorario(document.getElementsByName('duplicar[]'));" /></td>
+						<td>Duplicar y Cambiar Horario a Ma&ntilde;ana</td>
+					</tr>
+					<tr>
+						<td class="tag"><input type="checkbox" name="duplicar[]" value="2" onClick="checkCopyconHorario(document.getElementsByName('duplicar[]'));" /></td>
+						<td>Duplicar y Cambiar Horario a Tarde</td>
+					</tr>
+					<tr>
+						<td class="tag"><input type="checkbox" name="duplicar[]" value="3" onClick="checkCopyconHorario(document.getElementsByName('duplicar[]'));" /></td>
+						<td>Duplicar y Cambiar Horario a Noche</td>
+					</tr>															
+										
 					<tr><td colspan="2">&nbsp;</td></tr>
-
-					<tr><td colspan="2"></td></tr>
 
 					<tr>
 
-						<td class="tag" width="200">Por Id Ticket:</td>
+						<td class="tag">ID del Ticket:</td>
 
 						<td><input id="" name="id_ticket" size="30" maxlength="45" type="text" /></td>
 
 					</tr>
+					<tr><td colspan="2">&nbsp;</td></tr>
+					<tr>
+						<td class="tag">Monto Triples:</td>
+						<td><input id="txt_monto_triple" name="txt_monto_triple" type="text" value=""/></td>
+					</tr>
+					<tr>
+						<td class="tag">Monto Terminales:</td>
+						<td><input id="txt_monto_terminal" name="txt_monto_terminal" type="text" value=""/></td>
+					</tr>											
 
 					<tr><td colspan="2"></td></tr>
 
@@ -92,7 +115,7 @@
 
 			<div class="botones">
 
-				<input  id="btnok" name="btnentrar" value="Buscar" type="submit" class="boton"/>&nbsp;&nbsp;&nbsp;
+				<input  id="btnok" name="btnentrar" value="Copiar" type="submit" class="boton"/>&nbsp;&nbsp;&nbsp;
 
 				<input  id="btncancel" name="btncancelar" value="Cancelar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
 
