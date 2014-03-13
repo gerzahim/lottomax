@@ -240,21 +240,22 @@ switch (ACCION){
 
                 $pdf->SetFont('Arial','',8);
                 while($row= $obj_conexion->GetArrayInfo($result)){
-                	
-                	$hora_sorteo= $obj_modelo->GetHoraSorteo($row['id_sorteo']);
-                    $pdf->Ln();
-                    $pdf->SetTextColor(0);
-                    $pdf->Cell(20,7,$row['numero'],1,0,'C');
-                    $pdf->Cell(40,7,$row['nombre_sorteo'],1,0,'C');
-                    //$pdf->Cell(30,7,$hora_sorteo,1,0,'C');
-                    $pdf->Cell(30,7,$row['nombre_zodiacal'],1,0,'C');
-                    $pdf->Cell(30,7,$row['monto'],1,0,'C');
-                    if ($row['premiado'] == '1'){
-                        $premiado='Si';
-                    }else{
-                        $premiado='No';
-                    }
-                    $pdf->Cell(40,7,$premiado,1,0,'C');
+                	if($row['monto']!=0){
+	                	$hora_sorteo= $obj_modelo->GetHoraSorteo($row['id_sorteo']);
+	                    $pdf->Ln();
+	                    $pdf->SetTextColor(0);
+	                    $pdf->Cell(20,7,$row['numero'],1,0,'C');
+	                    $pdf->Cell(40,7,$row['nombre_sorteo'],1,0,'C');
+	                    //$pdf->Cell(30,7,$hora_sorteo,1,0,'C');
+	                    $pdf->Cell(30,7,$row['nombre_zodiacal'],1,0,'C');
+	                    $pdf->Cell(30,7,$row['monto'],1,0,'C');
+	                    if ($row['premiado'] == '1'){
+	                        $premiado='Si';
+	                    }else{
+	                        $premiado='No';
+	                    }
+	                    $pdf->Cell(40,7,$premiado,1,0,'C');
+                	}
                 }
             }else{
                 $pdf->SetFont('Arial','B',14);

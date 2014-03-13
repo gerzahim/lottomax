@@ -59,8 +59,8 @@ class RTickets_ganadores{
                         FROM  detalle_ticket DT
                         INNER JOIN sorteos S ON S.id_sorteo=DT.id_sorteo
                         INNER JOIN zodiacal Z ON Z.Id_zodiacal=DT.id_zodiacal
-                        WHERE id_ticket='".$id_ticket."'";
-                        
+                        WHERE id_ticket='".$id_ticket."' AND monto <> 0";
+				                        
 		$result= $this->vConexion->ExecuteQuery($sql);
                 return $result;
 

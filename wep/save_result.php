@@ -30,16 +30,21 @@ require('.'.$obj_config->GetVar('ruta_modelo').'Cargar_resultados.php');
 $obj_modelo= new Cargar_resultados($obj_conexion);
 
 $sw=0; // PARA PREMIAR TICKETS LUEGO
-$fecha_hora = $obj_date->changeFormatDateII ( $_GET['fecha'] );
-$sorteos=preg_split('/-/',$_GET ['sorteosnocargados']);
+$fecha_hora = $obj_date->changeFormatDateII ( $_POST['fecha'] );
+
+$result=$obj_modelo->GetResultadosRepetidos($fecha_hora);
+$sorteosexistentes=array();
+while($row=$obj_conexion->GetArrayInfo($result))
+	$sorteosexistentes[$row['id_sorteo']]=1;
+$sorteos=preg_split('/-/',$_POST ['sorteosnocargados']);
 $sql="INSERT INTO `resultados` (`id_sorteo` , `zodiacal`, `numero`, `fecha_hora`) VALUES ";
 $resultados=array();
 $zodiacales=array();
 foreach($sorteos as $st)
 {
-	$numero = $_GET['txt_numero-' .$st];
-	if (isset( $_GET ['zodiacal-' . $st] )){
-		$zodiacal = $_GET ['zodiacal-' . $st];
+	$numero = $_POST['txt_numero-' .$st];
+	if (isset( $_POST ['zodiacal-' . $st] )){
+		$zodiacal = $_POST ['zodiacal-' . $st];
 		$zodiacales[$st]=$zodiacal;
 	}
 	else{
@@ -47,10 +52,12 @@ foreach($sorteos as $st)
 		$zodiacal =0;
 	}
 	if(!empty($numero)){
-		if (strlen ( $numero ) == 3){
-			$resultados[$st]=$numero;
-			$sql.="('".$st."', '".$zodiacal."', '".$numero."', '".$fecha_hora."'),";
-			$sw=1;
+		if(!isset($sorteosexistentes[$st])){
+			if (strlen ( $numero ) == 3){
+				$resultados[$st]=$numero;
+				$sql.="('".$st."', '".$zodiacal."', '".$numero."', '".$fecha_hora."'),";
+				$sw=1;
+			}
 		}
 	}
 	else {
@@ -62,8 +69,8 @@ if($sw==1){
 	$sql=trim($sql,',');
 	$sql.=";";
 	if($obj_modelo->GuardarDatosResultadosMasivo($sql)){
-	$mensaje=$mensajes['info_agregada'];
-	PremiarGanadores ($obj_conexion, $obj_modelo,$resultados,$zodiacales,$fecha_hora); // Premiamos los tickets ganadores
+		$mensaje=$mensajes['info_agregada'];
+		PremiarGanadores ($obj_conexion, $obj_modelo,$resultados,$zodiacales,$fecha_hora); // Premiamos los tickets ganadores
 	}
 	else
 		$mensaje= "No se ingresaron nuevos resultados";

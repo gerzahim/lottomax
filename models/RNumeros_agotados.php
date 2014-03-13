@@ -39,10 +39,10 @@ class RNumeros_agotados{
 
 		//Preparacion del query
 		$sql = "SELECT IA.numero, S.nombre_sorteo, S.hora_sorteo, Z.nombre_zodiacal
-                    FROM  incompletos_agotados IA
+                    FROM  detalle_ticket IA
                     INNER JOIN Sorteos S ON IA.id_sorteo=S.id_sorteo
                     INNER JOIN Zodiacal  Z ON IA.id_zodiacal=Z.Id_zodiacal
-                    WHERE incompleto='2' AND IA.fecha LIKE '%".$fecha."%'";
+                    WHERE monto_restante=0 AND IA.fecha_sorteo LIKE '%".$fecha."%'";
                 
 		$result= $this->vConexion->ExecuteQuery($sql);
 		//echo $sql;
@@ -51,11 +51,6 @@ class RNumeros_agotados{
                 }else{
                     return "";
                 }
-		
-		
 	}
-
-
-	
 }		
 ?>

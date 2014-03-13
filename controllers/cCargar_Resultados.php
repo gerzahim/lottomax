@@ -126,24 +126,23 @@ switch (ACCION){
 			break;		
 
         case 'cargar_resultados':
-		
+        $zodiacales=array();
+        if ($result_z = $obj_modelo->GetZodiacales ())
+        while ( $row_z = $obj_conexion->GetArrayInfo ( $result_z ) )
+        $zodiacales[$row_z['Id_zodiacal']]=$row_z ['nombre_zodiacal'];
 		// Ruta actual
 		$_SESSION ['Ruta_Lista'] = $obj_generico->RutaRegreso();
-		
 		// Ruta regreso
 		$obj_xtpl->assign ( 'ruta_regreso', $_SESSION ['Ruta_Fecha'] );
-		
 		// Accion a realizar
 		$obj_xtpl->assign ( 'tipo_accion', 'save' );
 		$obj_xtpl->assign ( 'tag_boton', 'Guardar' );
-		
 		// Para la paginacion
-		if (empty ( $_GET ['pg'] )) {
+		/*if (empty ( $_GET ['pg'] )) {
 			$pag = 1;
 		} else {
 			$pag = $_GET ['pg'];
-		}
-		
+		}*/
 		$fecha = $obj_date->changeFormatDateII ( $_GET ['txt_fecha'] );
 		$obj_xtpl->assign ( 'fecha', $obj_date->changeFormatDateI ( $fecha, 0 ) );
 		$periodo = $_GET ['radio_periodo'];
@@ -160,153 +159,118 @@ switch (ACCION){
 					//print_r($row);
 					//Saca la hora del sorteo
 					$hora_sorteo=$fecha." ".$row['hora_sorteo'];
-					$sorteosassign.=$row['id_sorteo']."-";
-						
 					//Valor que viene de la base de datos
 					// Obtiene el parametros de los minutos para no listar el sorteo
 					$minutos_bloqueo=$obj_modelo->MinutosBloqueo();
 					//echo "Hora".$hora_sorteo."<br>";
-					
 					$fecha_hora_actual=date("Y-m-d H:i:s");
-			
 					// Restando la fecha actual con la fecha y hora del sorteo.
 					$resta=strtotime($fecha_hora_actual)-strtotime($hora_sorteo);
-						
 					// Si la resta es negativo quiere decir que todavia los sorteos no han cerrado
-					if ($resta>0)
-					{
-					if (($i % 2) > 0) {
-						$obj_xtpl->assign ( 'estilo_fila', 'even' );
-					} else {
-						$obj_xtpl->assign ( 'estilo_fila', 'odd' );
-					}					
-					$obj_xtpl->assign ( $obj_generico->CleanTextDb ( $row ) );
-					$obj_xtpl->assign ( 'sorteo', $row ['nombre_sorteo'] );
-					if ($row ['numero'] == 'numero') {
-						$j ++;
-						$sorteosnocargados.=$row ['id_sorteo'].'-';
-						$obj_xtpl->assign ( 'estilo_fila', 'evenred' );
-						$obj_xtpl->assign ( 'id_Sorteo', $row ['id_sorteo']);
-						$obj_xtpl->assign ( 'id_resultado', '' );
-						$obj_xtpl->assign ( 'id_sorteo', $row ['id_sorteo'] );
-						$obj_xtpl->assign ( 'numero', '<input id="txt_numero" name="txt_numero-' . $row ['id_sorteo'] . '" size="12" type="text" maxlength="3" />' );
-						$obj_xtpl->assign ( 'terminal', '' );
-						$obj_xtpl->assign('bajado', $row['bajado']);
-						
-						if ($row ['zodiacal'] == 1) {
-							// Listado de Zodiacal
-							if ($result_z = $obj_modelo->GetZodiacales ()) {
-								while ( $row_z = $obj_conexion->GetArrayInfo ( $result_z ) ) {
-									$obj_xtpl->assign ( $obj_generico->CleanTextDb ( $row_z ) );
-									$obj_xtpl->assign ( 'Id_zodiacal', $row_z ['Id_zodiacal'] );
-									$obj_xtpl->assign ( 'nombre_zodiacal', $row_z ['nombre_zodiacal'] );
-									$obj_xtpl->assign ( 'selected', '' );
+					if ($resta>0){
+						if (($i % 2) > 0)
+							$obj_xtpl->assign ( 'estilo_fila', 'even' );
+						else
+							$obj_xtpl->assign ( 'estilo_fila', 'odd' );
+						$obj_xtpl->assign ( 'sorteo', $row ['nombre_sorteo'] );
+						if ($row ['numero'] == 'numero') {
+							$j ++;
+							$sorteosnocargados.=$row ['id_sorteo'].'-';
+							$obj_xtpl->assign ( 'estilo_fila', 'evenred' );
+							$obj_xtpl->assign ( 'id_Sorteo', $row ['id_sorteo']);
+							$obj_xtpl->assign ( 'id_resultado', '' );
+							$obj_xtpl->assign ( 'id_sorteo', $row ['id_sorteo'] );
+							$obj_xtpl->assign ( 'numero', '<input id="txt_numero" name="txt_numero-' . $row ['id_sorteo'] . '" size="12" type="text" maxlength="3" />' );
+							$obj_xtpl->assign ( 'terminal', '' );
+							$obj_xtpl->assign('bajado', $row['bajado']);
+							if ($row ['zodiacal'] == 1) {
+								foreach ($zodiacales as $key => $zd){
+									$obj_xtpl->assign ( 'Id_zodiacal', $key);
+									$obj_xtpl->assign ( 'nombre_zodiacal', $zd);
 									$obj_xtpl->parse ( 'main.contenido.lista_cargar_resultados.lista.lista_zodiacal.op_zodiacal' );
 								}
 								$obj_xtpl->parse ( 'main.contenido.lista_cargar_resultados.lista.lista_zodiacal' );
-							}
-						} else if ($row ['zodiacal'] == 0) {
+							} 
+							$obj_xtpl->assign ( 'aprox_arriba', '' );
+							$obj_xtpl->assign ( 'aprox_abajo', '' );
+							
 						}
-						
-						$obj_xtpl->assign ( 'aprox_arriba', '' );
-						$obj_xtpl->assign ( 'aprox_abajo', '' );
-					} else {
-						
-						$obj_xtpl->assign ( 'id_Sorteo', $row ['id_sorteo']);
-						$obj_xtpl->assign ( 'id_resultado', $row ['id_resultado'] );
-						$obj_xtpl->assign ( 'id_sorteo', $row ['id_sorteo'] );
-						$obj_xtpl->assign ( 'numero', '<input id="txt_numero" readonly name="txt_numero-' . $row ['id_sorteo'] . '" size="12" value="' . $row ['numero'] . '"" type="text" maxlength="3" />' );
-						$obj_xtpl->assign ( 'terminal', substr ( $row ['numero'], 1, 2 ) );
-						$obj_xtpl->assign ( 'signo', substr ( $row ['numero'], 1, 2 ) );
-						$obj_xtpl->assign('bajado', $row['bajado']);
-						$obj_xtpl->parse ( 'main.contenido.lista_cargar_resultados.lista.modificar' );
-						
-						if ($row ['zodiacal'] == 1) {
-							// Listado de Zodiacal
-							if ($result_z = $obj_modelo->GetZodiacales ()) {
-								while ( $row_z = $obj_conexion->GetArrayInfo ( $result_z ) ) {
-									
+						else {
+							$obj_xtpl->assign ( 'id_Sorteo', $row ['id_sorteo']);
+							$obj_xtpl->assign ( 'id_resultado', $row ['id_resultado'] );
+							$obj_xtpl->assign ( 'id_sorteo', $row ['id_sorteo'] );
+							$obj_xtpl->assign ( 'numero', '<input id="txt_numero" readonly name="txt_numero-' . $row ['id_sorteo'] . '" size="12" value="' . $row ['numero'] . '"" type="text" maxlength="3" />' );
+							$obj_xtpl->assign ( 'terminal', substr ( $row ['numero'], 1, 2 ) );
+							$obj_xtpl->assign ( 'signo', substr ( $row ['numero'], 1, 2 ) );
+							$obj_xtpl->assign('bajado', $row['bajado']);
+							$obj_xtpl->parse ( 'main.contenido.lista_cargar_resultados.lista.modificar' );
+							if ($row ['zodiacal'] == 1) {
+								// Listado de Zodiacal
 									$obj_xtpl->assign ( 'text_zodiacal', $row ['signo'] );
-										
-									
-									/*$obj_xtpl->assign ( $obj_generico->CleanTextDb ( $row_z ) );
-									$obj_xtpl->assign ( 'Id_zodiacal', $row_z ['Id_zodiacal'] );
-									$obj_xtpl->assign ( 'nombre_zodiacal', $row_z ['nombre_zodiacal'] );
-									if ($row_z ['nombre_zodiacal'] == $row ['signo']) {
-										$obj_xtpl->assign ( 'selected', 'selected' );
-									} else {
-										$obj_xtpl->assign ( 'selected', '' );
-									}
-									
-									$obj_xtpl->parse ( 'main.contenido.lista_cargar_resultados.lista.lista_zodiacal.op_zodiacal' );*/
+									$obj_xtpl->parse ( 'main.contenido.lista_cargar_resultados.lista.text_zodiacal' );
+							
 								}
-								$obj_xtpl->parse ( 'main.contenido.lista_cargar_resultados.lista.text_zodiacal' );
-							}
+								$term = (substr ( $row ['numero'], 1, 2 ));
+								
+								if ($term < 9 && $term > 0) {
+									$preceroa = "0" . ($term + 1);
+									$preceroo = "0" . ($term - 1);
+								} else if ($term == 9) {
+									$preceroa = "" . ($term + 1);
+									$preceroo = "0" . ($term - 1);
+								} else if ($term == 10) {
+									$preceroa = "" . ($term + 1);
+									$preceroo = "0" . ($term - 1);
+								} else if ($term == '00') {
+									$preceroa = "0" . ($term + 1);
+									$preceroo = "99";
+								} else if ($term == 99) {
+									$preceroa = "00";
+									$preceroo = "" . ($term - 1);
+									;
+								} else {
+									$preceroa = "" . ($term + 1);
+									$preceroo = "" . ($term - 1);
+								}
+								$obj_xtpl->assign ( 'aprox_arriba', $preceroa );
+								$obj_xtpl->assign ( 'aprox_abajo', $preceroo );
 						}
-						
-						$term = (substr ( $row ['numero'], 1, 2 ));
-						
-						if ($term < 9 && $term > 0) {
-							$preceroa = "0" . ($term + 1);
-							$preceroo = "0" . ($term - 1);
-						} else if ($term == 9) {
-							$preceroa = "" . ($term + 1);
-							$preceroo = "0" . ($term - 1);
-						} else if ($term == 10) {
-							$preceroa = "" . ($term + 1);
-							$preceroo = "0" . ($term - 1);
-						} else if ($term == '00') {
-							$preceroa = "0" . ($term + 1);
-							$preceroo = "99";
-						} else if ($term == 99) {
-							$preceroa = "00";
-							$preceroo = "" . ($term - 1);
-							;
-						} else {
-							$preceroa = "" . ($term + 1);
-							$preceroo = "" . ($term - 1);
-						}
-						
-						$obj_xtpl->assign ( 'aprox_arriba', $preceroa );
-						$obj_xtpl->assign ( 'aprox_abajo', $preceroo );
+						// Parseo del bloque de la fila
+						$obj_xtpl->parse ( 'main.contenido.lista_cargar_resultados.lista' );
+						$i ++;
 					}
-					
-					// Parseo del bloque de la fila
-					$obj_xtpl->parse ( 'main.contenido.lista_cargar_resultados.lista' );
-					$i ++;
-				}
-			} 
+				} 
 			}else {
 				// Mensaje
 				$obj_xtpl->assign ( 'sin_listado', $mensajes ['sin_lista'] );
-				
 				// Parseo del bloque de la fila
 				$obj_xtpl->parse ( 'main.contenido.lista_cargar_resultados.no_lista' );
 			}
 			$obj_xtpl->assign ( 'faltantes', '<span class="requerido">Faltan <b>' . $j . '</b> de <b>' . ($i - 1) . ' Sorteos</b> por ingresar resultados...</span>' );
 		}
-		$sorteosassign = trim($sorteosassign, '-');
 		$sorteosnocargados= trim($sorteosnocargados, '-');
-		$obj_xtpl->assign ('sorteos', $sorteosassign);
 		$obj_xtpl->assign ('sorteosnocargados', $sorteosnocargados);
-		
 		// Parseo del bloque
 		$obj_xtpl->parse ( 'main.contenido.lista_cargar_resultados' );
 		break;
         case 'save':
-
+		//exit;
         $sw=0; // PARA PREMIAR TICKETS LUEGO
   		$mensaje='';
-		$fecha_hora = $obj_date->changeFormatDateII ( $_GET['fecha'] );
-		$sorteos=preg_split('/-/',$_GET ['sorteosnocargados']);
+		$fecha_hora = $obj_date->changeFormatDateII ( $_POST['fecha'] );
+		$result=$obj_modelo->GetResultadosRepetidos($fecha_hora);
+		$sorteosexistentes=array();
+		while($row=$obj_conexion->GetArrayInfo($result))
+			$sorteosexistentes[$row['id_sorteo']]=1;
+		$sorteos=preg_split('/-/',$_POST ['sorteosnocargados']);
 		$sql="INSERT INTO `resultados` (`id_sorteo` , `zodiacal`, `numero`, `fecha_hora`) VALUES ";
 		$resultados=array();
 		$zodiacales=array();
 		foreach($sorteos as $st)
 		{
-			$numero = $_GET['txt_numero-' .$st];
-			if (isset( $_GET ['zodiacal-' . $st] )){
-				$zodiacal = $_GET ['zodiacal-' . $st];
+			$numero = $_POST['txt_numero-' .$st];
+			if (isset( $_POST ['zodiacal-' . $st] )){
+				$zodiacal = $_POST ['zodiacal-' . $st];
 				$zodiacales[$st]=$zodiacal;
 			}
 			else{
@@ -314,10 +278,12 @@ switch (ACCION){
 				$zodiacal =0;
 			}
 			if(!empty($numero)){
-				if (strlen ( $numero ) == 3){
-					$resultados[$st]=$numero;
-					$sql.="('".$st."', '".$zodiacal."', '".$numero."', '".$fecha_hora."'),";
-					$sw=1;
+				if(!isset($sorteosexistentes[$st])){
+					if (strlen ( $numero ) == 3){
+						$resultados[$st]=$numero;
+						$sql.="('".$st."', '".$zodiacal."', '".$numero."', '".$fecha_hora."'),";
+						$sw=1;
+					}
 				}
 			}
 			else {
@@ -329,8 +295,8 @@ switch (ACCION){
 			$sql=trim($sql,',');
 			$sql.=";";
 			if($obj_modelo->GuardarDatosResultadosMasivo($sql)){
-			$mensaje=$mensajes['info_agregada'];
-			PremiarGanadores ($obj_conexion, $obj_modelo,$resultados,$zodiacales,$fecha_hora); // Premiamos los tickets ganadores
+				$mensaje=$mensajes['info_agregada'];
+				PremiarGanadores ($obj_conexion, $obj_modelo,$resultados,$zodiacales,$fecha_hora); // Premiamos los tickets ganadores
 			}
 			else
 			$mensaje= "No se ingresaron nuevos resultados";
