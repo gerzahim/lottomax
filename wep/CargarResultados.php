@@ -62,7 +62,6 @@ $periodo='Todos';
 $sorteosassign='';
 $sorteosnocargados='';
 if ($result = $obj_modelo->GetSorteos( $fecha, $periodo )) {
-		
 	if ($obj_conexion->GetNumberRows( $result ) > 0) {
 		$i = 1;
 		$j = 0;
@@ -86,6 +85,7 @@ if ($result = $obj_modelo->GetSorteos( $fecha, $periodo )) {
 			// Si la resta es negativo quiere decir que todavia los sorteos no han cerrado
 			if ($resta>0)
 			{
+				//echo "pasaasa";
 				/*	
 				echo "<pre>";
 				print_r($row);

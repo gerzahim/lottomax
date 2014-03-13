@@ -215,26 +215,27 @@ switch (ACCION){
 
                 $pdf->SetFont('Arial','',8);
                 while($row= $obj_conexion->GetArrayInfo($result)){
-                	$hora_sorteo= $obj_modelo->GetHoraSorteo($row['id_sorteo']);
-                    $pdf->Ln();
-                    if ($row['premiado'] == '1'){
-                    	$pdf->SetFont('Arial','B',10);
-                    	$pdf->SetTextColor(128,0,0);
-                    	$premiado='Si';
-                    	$monto=$row['total_premiado'];
-                    }else{
-              			$pdf->SetFont('Arial','',8);
-                    	$pdf->SetTextColor(0,0,0);
-                    	$premiado='No';
-                    	$monto=0;
-                    }
-                    $pdf->Cell(20,7,$row['numero'],1,0,'C');
-                    $pdf->Cell(40,7,$row['nombre_sorteo'],1,0,'C');
-                    $pdf->Cell(30,7,$row['nombre_zodiacal'],1,0,'C');
-                    $pdf->Cell(30,7,$row['monto'],1,0,'C');
-                     $pdf->Cell(30,7,$monto,1,0,'C');
-                    
-                    $pdf->Cell(35,7,$premiado,1,0,'C');
+                	if($row['monto']!=0){
+	                	$hora_sorteo= $obj_modelo->GetHoraSorteo($row['id_sorteo']);
+	                    $pdf->Ln();
+	                    if ($row['premiado'] == '1'){
+	                    	$pdf->SetFont('Arial','B',10);
+	                    	$pdf->SetTextColor(128,0,0);
+	                    	$premiado='Si';
+	                    	$monto=$row['total_premiado'];
+	                    }else{
+	              			$pdf->SetFont('Arial','',8);
+	                    	$pdf->SetTextColor(0,0,0);
+	                    	$premiado='No';
+	                    	$monto=0;
+	                    }
+	                    $pdf->Cell(20,7,$row['numero'],1,0,'C');
+	                    $pdf->Cell(40,7,$row['nombre_sorteo'],1,0,'C');
+	                    $pdf->Cell(30,7,$row['nombre_zodiacal'],1,0,'C');
+	                    $pdf->Cell(30,7,$row['monto'],1,0,'C');
+	                    $pdf->Cell(30,7,$monto,1,0,'C');
+	                    $pdf->Cell(35,7,$premiado,1,0,'C');
+                	}
                 }
             }else{
                 $pdf->SetFont('Arial','B',14);

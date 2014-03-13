@@ -131,23 +131,25 @@ if( $result= $obj_modelo->GetDetalleTicketByIdticket($id_ticket) ){
 	//Numeros jugados NoZodiacal
 	$numero_jugadas=$obj_conexion->GetNumberRows($result);
 	while($row= $obj_conexion->GetArrayInfo($result)){
-		if($row['id_zodiacal']==0){
-			$combinacion=$row['numero']." x ".$row['monto'];
-			$ticket_completo[]=$row['id_sorteo']."x".$row['numero']." x ".$row['monto'];
+		if($row['monto']!=0){
+			if($row['id_zodiacal']==0){
+				$combinacion=$row['numero']." x ".$row['monto'];
+				$ticket_completo[]=$row['id_sorteo']."x".$row['numero']." x ".$row['monto'];
+			}
+			else{
+				$combinacion=$row['numero']." x ".$row['monto']."-".$row['id_zodiacal'];
+				$ticket_completo[]=$row['id_sorteo']."x".$row['numero']." x ".$row['monto']."-".$row['id_zodiacal'];
+			}
+			//Guardar todos los sorteos pero una sola vez
+			//$sorteoszodiac[]=$row['id_zodiacal'];
+			if(!in_array($row['id_sorteo'], $sorteosenticket)){
+				$sorteosenticket[]=$row['id_sorteo'];
+			}
+				
+			//Guardar todos las combinaciones Unicas de Numero y Monto 14-1.00
+			if(!in_array($combinacion, $combinacionunica) )
+				$combinacionunica[]=$combinacion;
 		}
-		else{
-			$combinacion=$row['numero']." x ".$row['monto']."-".$row['id_zodiacal'];
-			$ticket_completo[]=$row['id_sorteo']."x".$row['numero']." x ".$row['monto']."-".$row['id_zodiacal'];
-		}
-		//Guardar todos los sorteos pero una sola vez
-		//$sorteoszodiac[]=$row['id_zodiacal'];
-		if(!in_array($row['id_sorteo'], $sorteosenticket)){
-			$sorteosenticket[]=$row['id_sorteo'];
-		}
-			
-		//Guardar todos las combinaciones Unicas de Numero y Monto 14-1.00
-		if(!in_array($combinacion, $combinacionunica) )
-			$combinacionunica[]=$combinacion;
 	}// fin de while
 	// Creamos un array General $combinacion_ticket
 	// donde el key es la combinacion de ['numero x monto']
@@ -277,9 +279,9 @@ if($total_incompletos>0){
 	$data.=" </font></td> </tr>";
 	while($row= $obj_conexion->GetArrayInfo($result2)){
 		//if($row['incompleto']==1){
-		if($row['incompleto']==1)
-		$monto=($row['monto_faltante']*(-1));
-		else
+		//if($row['incompleto']==1)
+	//	$monto=($row['monto_faltante']*(-1));
+		//else
 		$monto=($row['monto_faltante']);
 
 		if($row['id_zodiacal']==0){

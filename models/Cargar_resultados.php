@@ -64,7 +64,7 @@ class Cargar_Resultados{
                     INNER JOIN  sorteos S ON S.id_sorteo=R.id_sorteo
                     WHERE ".$sql_periodo. " AND S.status = 1 AND R.fecha_hora LIKE '%".$fecha."%'  ORDER BY  `id_loteria` ASC, hora_sorteo ASC, id_tipo_sorteo ASC
                     ";
-		//echo $sql;
+	//	echo $sql;
 		return $this->vConexion->ExecuteQuery($sql);
 	}
 	
@@ -322,6 +322,22 @@ class Cargar_Resultados{
                 
 	}
 	
+	
+	/**
+	 * Obtiene los resultados de acuerdo a una fecha
+	 *
+	 * @param string $fecha_hora
+	 * @return boolean, array
+	 */
+	public function GetResultadosRepetidos($fecha_hora){
+	
+		//Preparacion del query
+		$sql = "SELECT id_sorteo FROM resultados WHERE fecha_hora LIKE '%".$fecha_hora."%' ";
+		//echo $sql;
+		$result= mysql_query($sql);
+		
+		return $result;
+	}
 	
 	/**
 	 * Guardar Datos de los Resultados Masivos

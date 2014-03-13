@@ -158,11 +158,11 @@ class Ventas{
          * @param string $id_taquilla
 	 * @return boolean, array
 	 */
-	public function GuardarTicketTransaccional($numero,$id_sorteo,$id_zodiacal,$id_tipo_jugada,$montofaltante,$incompleto,$monto, $id_taquilla,$id_insert_taquilla){
+	public function GuardarTicketTransaccional($numero,$id_sorteo,$id_zodiacal,$id_tipo_jugada,$montofaltante,$incompleto,$monto,$monto_restante,$id_taquilla,$id_insert_taquilla){
 		
 		//Preparacion del query
-		$sql = "INSERT INTO `ticket_transaccional` (`numero` , `id_sorteo` , `id_zodiacal`, `id_tipo_jugada` , `monto_faltante` , `incompleto`, `monto`, `id_taquilla`,`id_insert_jugada`)
-                    VALUES ('".$numero."', '".$id_sorteo."', '".$id_zodiacal."', '".$id_tipo_jugada."', '".$montofaltante."', '".$incompleto."', '".$monto."', '".$id_taquilla."',".$id_insert_taquilla.")";
+		$sql = "INSERT INTO `ticket_transaccional` (`numero` , `id_sorteo` , `id_zodiacal`, `id_tipo_jugada` , `monto_faltante` , `incompleto`, `monto`,`monto_restante`, `id_taquilla`,`id_insert_jugada`)
+                    VALUES ('".$numero."', '".$id_sorteo."', '".$id_zodiacal."', '".$id_tipo_jugada."', '".$montofaltante."', '".$incompleto."', '".$monto."', '".$monto_restante."', '".$id_taquilla."',".$id_insert_taquilla.")";
        // echo $sql;       
 		return $this->vConexion->ExecuteQuery($sql);
 		
@@ -491,7 +491,7 @@ class Ventas{
 	public function GetTicketTransaccional($numero, $sorteo, $id_zodiacal, $id_tipo_jugada){
 			
 		//Preparacion del query
-		$sql = "SELECT * FROM ticket_transaccional WHERE id_taquilla='".$_SESSION["taquilla"]."' AND numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal." AND id_tipo_jugada = ".$id_tipo_jugada."";
+		$sql = "SELECT * FROM ticket_transaccional WHERE numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal." AND id_tipo_jugada = ".$id_tipo_jugada."";
 
 		$result= $this->vConexion->ExecuteQuery($sql);  
 
@@ -500,7 +500,7 @@ class Ventas{
 		
 		$roww= $this->vConexion->GetArrayInfo($result);
 		
-		return array('total_registros'=>$total_registros,'monto_faltante'=>$roww["monto_faltante"], 'monto'=>$roww["monto"], 'incompleto'=>$roww["incompleto"], 'id_ticket_transaccional'=>$roww["id_ticket_transaccional"]);
+		return array('total_registros'=>$total_registros,'monto_faltante'=>$roww["monto_faltante"], 'monto'=>$roww["monto"], 'incompleto'=>$roww["incompleto"], 'id_ticket_transaccional'=>$roww["id_ticket_transaccional"],'id_taquilla'=>$roww["id_taquilla"]);
 		
 	}
 	
@@ -529,14 +529,16 @@ class Ventas{
 	 * @param string $sorteo
 	 * @return boolean, array
 	 */
-	public function GetNumerosJugados($numero, $sorteo, $id_zodiacal){
+	public function GetNumerosJugados($numero, $sorteo, $id_zodiacal,$fecha_hoy){
 		
 		
 			
 		//Preparacion del query
-		$sql = "SELECT monto_restante FROM numeros_jugados WHERE numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal." AND fecha LIKE '".date('Y-m-d')."'";
+		$sql = "SELECT monto_restante FROM detalle_ticket WHERE numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal." AND fecha_sorteo LIKE '".$fecha_hoy."' ORDER BY id_detalle_ticket DESC";
 		//echo $sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
+		
+		
 		
 		//numeros_jugados
 		//id_numero_jugados	fecha	numero	id_sorteo	id_tipo_jugada	id_zodiacal	monto_restante
@@ -955,11 +957,11 @@ class Ventas{
          * @param string $monto
 	 * @return boolean, array
 	 */
-	public function GuardarDetalleTicket($id_ticket,$numero,$id_sorteo,$fecha_sorteo,$id_zodiacal,$id_tipo_jugada,$monto){
+	public function GuardarDetalleTicket($id_ticket,$numero,$id_sorteo,$fecha_sorteo,$id_zodiacal,$id_tipo_jugada,$monto,$monto_restante,$monto_faltante){
 
 		//Preparacion del query
-		$sql = "INSERT INTO `detalle_ticket` (`id_ticket`, `numero` , `id_sorteo` , `fecha_sorteo`, `id_zodiacal` , `id_tipo_jugada` , `monto`)
-                    VALUES ('".$id_ticket."', '".$numero."', '".$id_sorteo."', '".$fecha_sorteo."', '".$id_zodiacal."', '".$id_tipo_jugada."', '".$monto."')";
+		$sql = "INSERT INTO `detalle_ticket` (`id_ticket`, `numero` , `id_sorteo` , `fecha_sorteo`, `id_zodiacal` , `id_tipo_jugada` , `monto`,`monto_restante`,`monto_faltante`)
+                    VALUES ('".$id_ticket."', '".$numero."', '".$id_sorteo."', '".$fecha_sorteo."', '".$id_zodiacal."', '".$id_tipo_jugada."', '".$monto."','".$monto_restante."','".$monto_faltante."')";
 
                 return $this->vConexion->ExecuteQuery($sql);
 	}
@@ -976,7 +978,7 @@ class Ventas{
          * @param string $incompleto
 	 * @return boolean, array
 	 */
-	public function GuardarIncompletosAgotados($id_ticket,$fecha,$numero,$id_sorteo,$id_tipo_jugada,$id_zodiacal,$monto_restante,$incompleto){
+	/*public function GuardarIncompletosAgotados($id_ticket,$fecha,$numero,$id_sorteo,$id_tipo_jugada,$id_zodiacal,$monto_restante,$incompleto){
 
 		//Preparacion del query
 		$sql = "INSERT INTO `incompletos_agotados` (`id_ticket`, `fecha`, `numero` , `id_sorteo` , `id_tipo_jugada` , `id_zodiacal`, `monto_restante`, `incompleto` )
@@ -984,7 +986,7 @@ class Ventas{
 
                 return $this->vConexion->ExecuteQuery($sql);
 		
-	}
+	}*/
 
          /**
 	 * Verificar si un numero existe dentro de la tabla de numeros jugados
