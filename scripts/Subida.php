@@ -34,14 +34,15 @@ if($result= mysql_query($sql,$conexion_abajo))
 	{
 		
 		// Creamos la consulta para extraer los datos de detalle_ticket de cada ticket extraído de la tabla ticket que no ha sido subido
+		$consulta_arriba_ticket.="(".$row['id_ticket'].",".$row['serial'].",'".$row['fecha_hora']."',".$row['taquilla'].",'".$row['total_ticket']."',".$row['id_usuario'].",".$row['premiado'].",".$row['pagado'].",".$row['total_premiado'].",".$row['status'].",'".$row['fecha_hora_anulacion']."',".$row['taquilla_anulacion'].",1,".$row['verificado'].",".$row['impreso']."),";
+		$arreglo[]=$row['id_ticket'];
+		
 		$sql1 = "SELECT * FROM detalle_ticket WHERE id_ticket=".$row[0];
 		$result1= mysql_query($sql1,$conexion_abajo);
 		$numero_registros1 = mysql_num_rows($result1);
-	//	echo $numero_registros1."<br>";
+		//	echo $numero_registros1."<br>";
 		while ($row1 = mysql_fetch_array($result1))
 		$consulta_arriba_detalle.="(".$row1['id_detalle_ticket'].",".$row1['id_ticket'].",'".$row1['numero']."',".$row1['id_sorteo'].",'".$row1['fecha_sorteo']."',".$row1['id_zodiacal'].",".$row1['id_tipo_jugada'].",".$row1['monto'].",".$row1['premiado'].",".$row1['total_premiado'].",".$row1['monto_restante'].",".$row1['monto_faltante']."),";
-		$consulta_arriba_ticket.="(".$row['id_ticket'].",".$row['serial'].",'".$row['fecha_hora']."',".$row['taquilla'].",'".$row['total_ticket']."',".$row['id_usuario'].",".$row['premiado'].",".$row['pagado'].",".$row['total_premiado'].",".$row['status'].",'".$row['fecha_hora_anulacion']."',".$row['taquilla_anulacion'].",1,".$row['verificado'].",".$row['impreso']."),"; 
-		$arreglo[]=$row[0];	
 	}
 	$consulta_arriba_detalle = trim($consulta_arriba_detalle, ',');
 	$consulta_arriba_ticket = trim($consulta_arriba_ticket, ',');
