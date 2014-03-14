@@ -38,49 +38,17 @@ if($result= mysql_query($sql,$conexion_abajo))
 		$result1= mysql_query($sql1,$conexion_abajo);
 		$numero_registros1 = mysql_num_rows($result1);
 	//	echo $numero_registros1."<br>";
-		while ($row1 = mysql_fetch_row($result1))
-		{
-			for ($g = 0; $g < mysql_num_fields($result1); $g++)
-			{
-				if ($g!=mysql_num_fields($result1)-1)
-				{
-					if($g==0 AND $jj!=0)
-					$consulta_arriba_detalle.=",(".$row1[$g].",";
-					else			
-					if($g==0 AND $jj==0)
-					$consulta_arriba_detalle.="(".$row1[$g].",";
-					else
-					if($g==4 OR $g==2)
-					$consulta_arriba_detalle.=" '".$row1[$g]."', ";			
-					else
-					$consulta_arriba_detalle.=$row1[$g].",";
-				}
-				else
-				$consulta_arriba_detalle.=" ".$row1[$g]." )";
-			}
-			$jj++;
-		} 
-		for ($i = 0; $i < mysql_num_fields($result); $i++)
-		{
-			if ($i!=mysql_num_fields($result)-1)
-			{
-				if($i==2 OR $i==10 OR $i==1)
-					$consulta_arriba_ticket.=" '".$row[$i]."', ";
-				else
-				$consulta_arriba_ticket.=" ".$row[$i].", ";
-			}
-			else
-			$consulta_arriba_ticket.="1)";
-		}
-		$h++;
-		if($h<$numero_registros)
-		$consulta_arriba_ticket.=",(";
+		while ($row1 = mysql_fetch_array($result1))
+		$consulta_arriba_detalle.="(".$row1['id_detalle_ticket'].",".$row1['id_ticket'].",'".$row1['numero']."',".$row1['id_sorteo'].",'".$row1['fecha_sorteo']."',".$row1['id_zodiacal'].",".$row1['id_tipo_jugada'].",".$row1['monto'].",".$row1['premiado'].",".$row1['total_premiado'].",".$row1['monto_restante'].",".$row1['monto_faltante']."),";
+		$consulta_arriba_ticket.="(".$row['id_ticket'].",".$row['serial'].",'".$row['fecha_hora']."',".$row['taquilla'].",'".$row['total_ticket']."',".$row['id_usuario'].",".$row['premiado'].",".$row['pagado'].",".$row['total_premiado'].",".$row['status'].",'".$row['fecha_hora_anulacion']."',".$row['taquilla_anulacion'].",1,".$row['verificado'].",".$row['impreso']."),"; 
 		$arreglo[]=$row[0];	
 	}
+	$consulta_arriba_detalle = trim($consulta_arriba_detalle, ',');
+	$consulta_arriba_ticket = trim($consulta_arriba_ticket, ',');
 	$consulta_arriba_ticket.=";";
 	$consulta_arriba_detalle.=";";
 	echo $consulta_arriba_detalle;
-		echo $consulta_arriba_ticket;
+	echo $consulta_arriba_ticket;
 	exit;
 		$error=0;
 	if (mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
