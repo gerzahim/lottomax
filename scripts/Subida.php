@@ -30,7 +30,7 @@ if($result= mysql_query($sql,$conexion_abajo))
 	$h=0;
 	$jj=0;
 	
-	while ($row = mysql_fetch_row($result)) 
+	while ($row = mysql_fetch_array($result)) 
 	{
 		
 		// Creamos la consulta para extraer los datos de detalle_ticket de cada ticket extraído de la tabla ticket que no ha sido subido
