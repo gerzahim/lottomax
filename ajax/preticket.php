@@ -531,7 +531,8 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 			}else{
 				//Mensaje de ERROR -- NUMERO AGOTADO PARA ESTE SORTEO
 				//Se registra el numero como agotado
-				$obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$txt_monto,2,0,0,$taquilla,$id_insert_taquilla);
+				$matriz2= CalculaIncompletoYnuevoMonto($monto_restante,$txt_monto);
+				$obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$matriz2[0],$matriz2[1],$matriz2[2],$matriz2[3],$taquilla,$id_insert_taquilla);
 				$_SESSION['mensaje']= $txt_numero." AGOTADO para sorteo ".$obj_modelo->GetNombreSorteo($sorteo)."  ".$obj_modelo->GetPreNombreSigno($zodiacal);
 				echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";
 			}
