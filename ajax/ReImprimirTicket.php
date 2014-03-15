@@ -115,25 +115,25 @@ $tiempo_vigencia_ticket=$info_agencia["tiempo_vigencia_ticket"];
 
 // ENCABEZADO DEL TICKET
 $data=" <table width='100%' cellpadding='0' cellspacing='0' border='0' >";
-$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
+$data.="<tr><td colspan='2' align='center'><font face='Arial' size='3' >";
 $data.="SISTEMA LOTTOMAX";
 $data.=" </font></td> </tr>";
-$data.="<tr> <td colspan='2' align='center'><font face='Times New Roman' size='3' >";
+$data.="<tr> <td colspan='2' align='center'><font face='Arial' size='3' >";
 $data.="Agencia: ".$nombre_agencia;
 $data.="</font></td> </tr>";
-$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
+$data.="<tr><td colspan='2' align='center'><font face='Arial' size='3' >";
 $data.="Ticket: ".$formato_id_ticket;
 $data.="</font></td> </tr>";
-$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
+$data.="<tr><td colspan='2' align='center'><font face='Arial' size='3' >";
 $data.="Serial: ".$formato_serial;
 $data.="</font></td> </tr>";
-$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
+$data.="<tr><td colspan='2' align='center'><font face='Arial' size='3' >";
 $data.=$dias[date('w')]." ".$fecha_hora."&nbsp;&nbsp;".$hora;
 $data.="</font></td> </tr>";
-$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
+$data.="<tr><td colspan='2' align='center'><font face='Arial' size='3' >";
 $data.="Taquilla: ".$id_taquilla;
 $data.="</font></td> </tr>";
-$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
+$data.="<tr><td colspan='2' align='center'><font face='Arial' size='3' >";
 $data.="Vendedor: ".$nombre;
 $data.="</font></td> </tr>";
 
@@ -214,18 +214,18 @@ if( $result= $obj_modelo->GetDetalleTicketByIdticket($id_ticket) ){
 			}
 			if($g==2 OR $g==0){
 				if($obj_generico->SizeText($obj_generico->ToTitle($nombre_sorteo[$ts])) <= 18){
-					$data.="<tr><td align='left' ><font face='Times New Roman' size='2'  ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td>";
+					$data.="<tr><td align='left' ><font face='Arial' size='2'  ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td>";
 					$sw=1;
 				}					
 				else
-					$data.="<tr><td colspan='2' align='left'><font face='Times New Roman' size='2'><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
+					$data.="<tr><td colspan='2' align='left'><font face='Arial' size='2'><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
 				$g=0;
 			}					
 			else{
 				if($obj_generico->SizeText($obj_generico->ToTitle($nombre_sorteo[$ts])) <= 18)
-					$data.="<td align='left' ><font face='Times New Roman' size='2' ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
+					$data.="<td align='left' ><font face='Arial' size='2' ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
 				else
-					$data.="<td></td><tr><td colspan='2' align='left' ><font face='Times New Roman' size='2' ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
+					$data.="<td></td><tr><td colspan='2' align='left' ><font face='Arial' size='2' ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
 			}					
 			$g++;
 		}
@@ -259,16 +259,16 @@ if( $result= $obj_modelo->GetDetalleTicketByIdticket($id_ticket) ){
 }
 // FOOTER
 $data.="<tr  height='10'><td colspan='2'></td></tr>";
-$data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
+$data.="<tr><td colspan='2' align='center'><font face='Arial' size='3' >";
 $data.="BUENA SUERTE";
 $data.=" </font></td> </tr>";
-$data.="<tr> <td colspan='2' align='center'><font face='Times New Roman' size='3' >";
+$data.="<tr> <td colspan='2' align='center'><font face='Arial' size='3' >";
 $data.="Numeros Jugados: ".$numero_jugadas;
 $data.=" </font></td> </tr>";
-$data.="<tr> <td colspan='2' align='center'><font face='Times New Roman' size='3' >";
+$data.="<tr> <td colspan='2' align='center'><font face='Arial' size='3' >";
 $data.="TOTAL: ".$total_ticket;
 $data.=" </font></td> </tr>";
-$data.="<tr> <td colspan='2' align='center'><font face='Times New Roman' size='3' >";
+$data.="<tr> <td colspan='2' align='center'><font face='Arial' size='3' >";
 $data.="Caduca en: ".$tiempo_vigencia_ticket." dias el Premio";
 $data.=" </font></td> </tr>";
 $data.="</table>";
