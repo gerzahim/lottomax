@@ -34,7 +34,9 @@ if($result= mysql_query($sql,$conexion_abajo)){
 	$consulta_arriba_detalle.=";";
 	
 	echo $consulta_arriba_ticket;
-	//exit;
+	echo $consulta_arriba_detalle;
+	
+	exit;
 	$error=0;
 	if (mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
 		if (mysql_query("BEGIN;",$conexion_arriba)) //dar inicio a la transacción
@@ -79,8 +81,6 @@ if($result= mysql_query($sql,$conexion_abajo)){
 	{
 		mysql_query("ROLLBACK;",$conexion_abajo); //garantizo que se haga el retroceso de las operaciones
 		mysql_query("ROLLBACK;",$conexion_arriba); //garantizo que se haga el retroceso de las operaciones	
-		mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
-		mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
 	}
 	else
 	{
