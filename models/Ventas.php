@@ -349,7 +349,7 @@ class Ventas{
 	public function GetLastTicket($id_taquilla){
 
 		//Preparacion del query
-		$sql = "SELECT MAX(id_ticket) as id_ticket FROM ticket WHERE status='1' AND taquilla  = ".$id_taquilla."";
+		$sql = "SELECT id_ticket FROM ticket WHERE status='1' AND taquilla  = ".$id_taquilla." ORDER BY fecha_hora DESC LIMIT 1";
 		//echo $sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
 		$roww= $this->vConexion->GetArrayInfo($result);
