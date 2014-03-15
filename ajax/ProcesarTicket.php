@@ -42,29 +42,46 @@ if($impreso == 1 || $impreso == 2){
 	    // Obtenemos los datos de la taquilla
 	    $fecha_hora= date('Y-m-d H:i:s');
 	    $id_usuario= $_SESSION['id_usuario'];
-	 //	$sw=0;
+	 	$sql="INSERT INTO `detalle_ticket` (`id_ticket`, `numero` , `id_sorteo` , `fecha_sorteo`, `id_zodiacal` , `id_tipo_jugada` , `monto`,`monto_restante`,`monto_faltante`) VALUES  ";
+	 	$sql_numeros_jugados="INSERT INTO `numeros_jugados` (`fecha`, `numero` , `id_sorteo` , `id_tipo_jugada` , `id_zodiacal`, `monto_restante` ) VALUES  ";
+	 	$sw=0;
+	 	$sw1=0;
 	    if ($obj_modelo->GuardarTicket($id_ticket,$serial, $fecha_hora, $taquilla, $total_ticket, $id_usuario)){
 	    	if( $result2= $obj_modelo->GetDatosAllTicketTransaccional() ){
 	            while($row= $obj_conexion->GetArrayInfo($result2)){
 	                // Guarda los datos en detalle Ticket
 	                	$fecha_sorteo= date('Y-m-d');
-	                    if ($obj_modelo->GuardarDetalleTicket($id_ticket, $row['numero'], $row['id_sorteo'], $fecha_sorteo, $row['id_zodiacal'], $row['id_tipo_jugada'], $row['monto'],$row['monto_restante'],$row['monto_faltante'])){
-	                  	}	
-	                  	$registros=$obj_modelo->GetNumerosJugados($row['numero'], $row['id_sorteo'], $row['id_zodiacal'],$fecha_sorteo);
+	                	$sql.="('".$id_ticket."', '".$row['numero']."', '".$row['id_sorteo']."', '".$fecha_sorteo."', '".$row['id_zodiacal']."', '".$row['id_tipo_jugada']."', '".$row['monto']."', '".$row['monto_restante']."', '".$row['monto_faltante']."'),";
+	                	$sw1=1;
+	                	$registros=$obj_modelo->GetNumerosJugados($row['numero'], $row['id_sorteo'], $row['id_zodiacal'],$fecha_sorteo);
 	                  	if($registros['total_registros']>0){
 	                  		$obj_modelo->ActualizaNumeroJugados($registros['id_numeros_jugados'],$row['monto_restante']);
 	                  	}
-	                  	else
-	                  	$obj_modelo->GuardarNumerosJugados($fecha_sorteo,$row['numero'],$row['id_sorteo'],$row['id_tipo_jugada'],$row['id_zodiacal'],$row['monto_restante']);
+	                  	else{
+	                  		$sql_numeros_jugados.="('".$fecha_sorteo."', '".$row['numero']."', '".$row['id_sorteo']."', '".$row['id_tipo_jugada']."', '".$row['id_zodiacal']."', '".$row['monto_restante']."'),";
+	                  		$sw=1;
+	                  	}
 	           }
+	           $sql = trim($sql, ',');
+	           $sql_numeros_jugados = trim($sql_numeros_jugados, ',');
+	           $sql.=";";
+	           $sql_numeros_jugados.=";";
+	      	   if($sw1==1){
+	           		if($result=$obj_modelo->GuardarSql($sql))
+	           		$sw1=2;
+	           }
+	           if($sw==1){
+	           	if($result=$obj_modelo->GuardarSql($sql_numeros_jugados))
+	           		$sw=2;
+	           }
+	           if($sw1==2)
+	           echo "Ok";
+	           else
+	           echo "NotOk";
 	        }
-	
-	        echo "Ok";
 	    }else{
-	    	
 	        echo "NotOk";
 	    }
-	
 	}else{
 	    echo "CeroTicketTransaccional";
 	}

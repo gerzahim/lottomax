@@ -285,6 +285,21 @@ class Ventas{
 		return $this->vConexion->ExecuteQuery($sql);
 	}
 	
+	
+	/**
+	 * Ejecuta un Query Masivo
+	 *
+	 * @access public
+	 * @param string $sql
+	 * @return boolean
+	 */
+	public function GuardarSql($sql){
+	
+	
+		return $this->vConexion->ExecuteQuery($sql);
+	}
+	
+	
 
 	
 	/**
