@@ -163,7 +163,7 @@ class Ventas{
 		//Preparacion del query
 		$sql = "INSERT INTO `ticket_transaccional` (`numero` , `id_sorteo` , `id_zodiacal`, `id_tipo_jugada` , `monto_faltante` , `incompleto`, `monto`,`monto_restante`, `id_taquilla`,`id_insert_jugada`)
                     VALUES ('".$numero."', '".$id_sorteo."', '".$id_zodiacal."', '".$id_tipo_jugada."', '".$montofaltante."', '".$incompleto."', '".$monto."', '".$monto_restante."', '".$id_taquilla."',".$id_insert_taquilla.")";
-       // echo $sql;       
+       //echo $sql;       
 		return $this->vConexion->ExecuteQuery($sql);
 		
 		
@@ -350,11 +350,13 @@ class Ventas{
 
 		//Preparacion del query
 		$sql = "SELECT MAX(id_ticket) as id_ticket FROM ticket WHERE status='1' AND taquilla  = ".$id_taquilla."";
+		//echo $sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
 		$roww= $this->vConexion->GetArrayInfo($result);
 		$id_ticket=$roww["id_ticket"];
 		//echo "<pre>".print_r($roww)."</pre>";
 		$sql = "SELECT id_ticket, serial, fecha_hora, total_ticket, id_usuario FROM ticket WHERE status='1' AND id_ticket  = ".$id_ticket."";
+		//echo $sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
 		$roww= $this->vConexion->GetArrayInfo($result);		
 		return $roww;		
@@ -836,7 +838,7 @@ class Ventas{
 	}*/
 
         public function GeneraIDTicket(){
-
+        	/*
             //Generamos el prefijo ano+mes+dia+hora+minutos+segudos+id_agencia+id_taquilla
             $fecha= date('ymdHis');
             
@@ -852,7 +854,52 @@ class Ventas{
             $prefijo=$fecha.$id_agencia.$taquilla;
             return $prefijo;
 
-            ;
+        	/**/
+        	
+        	//Generamos el prefijo ano+agencia+taquilla+correlativo
+            $fecha= date('y');
+            
+            /// CABLEADA EL ID DE LA AGENCIA ///
+            // Obtenemos el id de la agencia y taquilla
+            $sql = "SELECT id_agencia FROM parametros";
+            $result= $this->vConexion->ExecuteQuery($sql);
+            $roww= $this->vConexion->GetArrayInfo($result);
+            $id_agencia=$roww["id_agencia"];
+            $taquilla=$_SESSION["taquilla"];
+            
+            $sql = "SELECT MAX(id_ticket) as id_ticket FROM ticket WHERE status='1' AND taquilla  = ".$taquilla."";
+            //echo $sql;
+            $result= $this->vConexion->ExecuteQuery($sql);
+            
+            // Existe algun ticket en esta bd ?
+            if ($this->vConexion->GetNumberRows($result)>0){
+            	
+				$roww= $this->vConexion->GetArrayInfo($result);
+				$maximo=$roww["id_ticket"];
+            	
+				//preguntar si es de los ticket viejos o no
+	            $tamano = strlen($maximo);
+	            if($tamano < 12){
+	            	//Preguntar si el ano es diferente 
+	            	$ano = substr($maximo, 0 , 2);
+	            	if ($ano != $fecha){
+	            		$correlativo=1;
+	            	}else{
+	            		$maximo = substr($maximo, 4);
+	            		$correlativo= $maximo+1;	            		
+	            	}
+
+	            }else{
+	            	$correlativo=1;
+	            }
+            }else{
+            	$correlativo=1;
+            }            
+
+                        
+            $prefijo=$fecha.$id_agencia.$taquilla.$correlativo;
+            return $prefijo;            
+			
 
         }
 
@@ -861,7 +908,7 @@ class Ventas{
 	 *
 	 */
 	public function GeneraSerialTicket(){
-            $longitud = 10;
+            $longitud = 9;
 
 		// Caracteres a utilizar para generar el identificador numerico
 		$caracteres = str_shuffle('0123456789');
@@ -892,7 +939,7 @@ class Ventas{
 		
 		if ($this->vConexion->GetNumberRows($result)>0){
                     return true;
-                }else{
+        }else{
 			return false;
 		}
 	}

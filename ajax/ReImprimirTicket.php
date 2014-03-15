@@ -59,8 +59,17 @@ while ($obj_modelo->GetExisteSerialTicket($serial)){
 $info_ticket= $obj_modelo->GetLastTicket($id_taquilla);
 
 $id_ticket=$info_ticket["id_ticket"];
+$id_ticket1= substr($id_ticket, 0 , 3);
+$id_ticket2= substr($id_ticket, 3 , 3);
+$id_ticket3= substr($id_ticket, 6);
+$formato_id_ticket=$id_ticket1." ".$id_ticket2." ".$id_ticket3;
 
 $obj_modelo->ActualizaSerialReimpresion($id_ticket, $serial);
+
+$serial1= substr($serial, 0 , 3);
+$serial2= substr($serial, 3 , 3);
+$serial3= substr($serial, 6);
+$formato_serial=$serial1." ".$serial2." ".$serial3;
 
 //echo "<pre>".print_r($info_ticket)."</pre>";
 
@@ -113,10 +122,10 @@ $data.="<tr> <td colspan='2' align='center'><font face='Times New Roman' size='3
 $data.="Agencia: ".$nombre_agencia;
 $data.="</font></td> </tr>";
 $data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
-$data.="Ticket: ".$id_ticket;
+$data.="Ticket: ".$formato_id_ticket;
 $data.="</font></td> </tr>";
 $data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
-$data.="Serial: ".$serial;
+$data.="Serial: ".$formato_serial;
 $data.="</font></td> </tr>";
 $data.="<tr><td colspan='2' align='center'><font face='Times New Roman' size='3' >";
 $data.=$dias[date('w')]." ".$fecha_hora."&nbsp;&nbsp;".$hora;
