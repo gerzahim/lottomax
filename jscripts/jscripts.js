@@ -680,14 +680,17 @@ function llamadaAjax(){
 function procesarticket()
 {
     var TicketGenerado = "";
-
+    var total = $("#total").val();
+   // alert(total);
     //if (confirm("Esta seguro que desea generar el ticket?")){
         
-        $.get('ajax/ProcesarTicket.php', function(str) {
+        $.get('ajax/ProcesarTicket.php?monto_total='+total, function(str) {
 		 //TicketGenerado.val(str);
                  if (str== 'CeroTicketTransaccional'){
                      alert("Debe hacer por lo menos una apuesta para generar un ticket!");
                  }else{
+                	 //alert(str);
+                	 
                      if (str== 'Ok'){
                          //Imprimir el ticket
                          //alert("Imprimir el ticket");
@@ -737,7 +740,7 @@ function agregarMontoTerminales(monto)
 {
     $.get('ajax/AgregarTerminales.php?monto=' + monto, function(str) {
        document.getElementById("ticket").innerHTML = str;
-            $("#txt_numero").focus();
+           t
             
     });
     calcula_total();
