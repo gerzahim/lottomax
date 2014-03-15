@@ -32,7 +32,7 @@ if($result= mysql_query($sql,$conexion_abajo)){
 	$consulta_arriba_ticket.=";";
 	$consulta_arriba_detalle.=";";
 	
-//	echo $consulta_arriba_ticket;
+	echo $consulta_arriba_ticket;
 	//exit;
 	$error=0;
 	if (mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
