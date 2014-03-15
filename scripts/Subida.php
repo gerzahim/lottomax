@@ -16,7 +16,7 @@ mysql_select_db("lottomaxdb",$conexion_arriba);
 //Buscamos los tickets que no han sido subido abajo.
 */
 
-$sql = "SELECT * FROM ticket WHERE subido=0";
+$sql = "SELECT * FROM ticket WHERE subido=0 LIMIT 0, 30 ";
 
 if($result= mysql_query($sql,$conexion_abajo))
 {
@@ -26,7 +26,6 @@ if($result= mysql_query($sql,$conexion_abajo))
 	//Creamos la cadena para insertar los ticket y detalle_ticket que no han sido subidos.
 	$consulta_arriba_ticket="INSERT INTO ticket (id_ticket, serial, fecha_hora, taquilla, total_ticket, id_usuario, premiado, pagado, total_premiado, status, fecha_hora_anulacion, taquilla_anulacion, subido, verificado, impreso) VALUES  ";
 	$consulta_arriba_detalle="INSERT INTO detalle_ticket (id_detalle_ticket,id_ticket, numero, id_sorteo, fecha_sorteo, id_zodiacal, id_tipo_jugada, monto, premiado, total_premiado, monto_restante, monto_faltante) VALUES ";
-	
 	$h=0;
 	$jj=0;
 	
@@ -34,9 +33,8 @@ if($result= mysql_query($sql,$conexion_abajo))
 	{
 		
 		// Creamos la consulta para extraer los datos de detalle_ticket de cada ticket extraído de la tabla ticket que no ha sido subido
-		$consulta_arriba_ticket.="(".$row['id_ticket'].",".$row['serial'].",'".$row['fecha_hora']."',".$row['taquilla'].",'".$row['total_ticket']."',".$row['id_usuario'].",".$row['premiado'].",".$row['pagado'].",".$row['total_premiado'].",".$row['status'].",'".$row['fecha_hora_anulacion']."',".$row['taquilla_anulacion'].",1,".$row['verificado'].",".$row['impreso']."),";
+		$consulta_arriba_ticket.="('".$row['id_ticket']."','".$row['serial']."','".$row['fecha_hora']."',".$row['taquilla'].",'".$row['total_ticket']."',".$row['id_usuario'].",".$row['premiado'].",".$row['pagado'].",".$row['total_premiado'].",".$row['status'].",'".$row['fecha_hora_anulacion']."',".$row['taquilla_anulacion'].",1,".$row['verificado'].",".$row['impreso']."),";
 		$arreglo[]=$row['id_ticket'];
-		
 		$sql1 = "SELECT * FROM detalle_ticket WHERE id_ticket=".$row[0];
 		$result1= mysql_query($sql1,$conexion_abajo);
 		$numero_registros1 = mysql_num_rows($result1);
@@ -48,10 +46,7 @@ if($result= mysql_query($sql,$conexion_abajo))
 	$consulta_arriba_ticket = trim($consulta_arriba_ticket, ',');
 	$consulta_arriba_ticket.=";";
 	$consulta_arriba_detalle.=";";
-	echo $consulta_arriba_detalle;
-	echo $consulta_arriba_ticket;
-	exit;
-		$error=0;
+	$error=0;
 	if (mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
 		if (mysql_query("BEGIN;",$conexion_arriba)) //dar inicio a la transacción
 		{
