@@ -262,30 +262,37 @@ class CopiarTicket{
 	
 	}	
 
-        /**
+/**
 	 * Busqueda en tabla de Numeros_Jugados
 	 *
 	 * @param string $numero
 	 * @param string $sorteo
 	 * @return boolean, array
 	 */
-	public function GetNumerosJugados($numero, $sorteo, $id_zodiacal){
-
+	public function GetNumerosJugados($numero, $sorteo, $id_zodiacal,$fecha_hoy){
+		
+		
+			
 		//Preparacion del query
-		$sql = "SELECT monto_restante FROM numeros_jugados WHERE numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal." AND fecha LIKE '".date('Y-m-d')."'";
+		$sql = "SELECT id_numeros_jugados, monto_restante FROM numeros_jugados 
+							
+				WHERE numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal." AND fecha LIKE '%".$fecha_hoy."%' ";
+	//	exit;
 		$result= $this->vConexion->ExecuteQuery($sql);
-
+		
+		
+		
 		//numeros_jugados
 		//id_numero_jugados	fecha	numero	id_sorteo	id_tipo_jugada	id_zodiacal	monto_restante
 
 		// Datos para la paginacion
 		$total_registros= $this->vConexion->GetNumberRows($result);
-
+		
 		$roww= $this->vConexion->GetArrayInfo($result);
-
-		return array('total_registros'=>$total_registros,'monto_restante'=>$roww["monto_restante"]);
-
-	}
+		
+		return array('total_registros'=>$total_registros,'monto_restante'=>$roww["monto_restante"],'id_numeros_jugados'=>$roww["id_numeros_jugados"]);
+		
+	}	
 
         /**
 	 * Guardar Datos de Ticket Transaccional
