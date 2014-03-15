@@ -536,7 +536,9 @@ class Ventas{
 		
 			
 		//Preparacion del query
-		$sql = "SELECT monto_restante FROM detalle_ticket WHERE numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal." AND fecha_sorteo LIKE '".$fecha_hoy."' ORDER BY id_detalle_ticket DESC";
+		$sql = "SELECT monto_restante FROM detalle_ticket 
+				INNER JOIN ticket on ticket.id_ticket=detalle_ticket.id_ticket				
+				WHERE numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal." AND fecha_sorteo LIKE '%".$fecha_hoy."%' AND ticket.status=1 ORDER BY id_detalle_ticket DESC";
 		//echo $sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
 		
