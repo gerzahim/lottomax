@@ -54,64 +54,21 @@ if($impreso == 1 || $impreso == 2){
 	    $fecha_hora= date('Y-m-d H:i:s');
 	    $id_usuario= $_SESSION['id_usuario'];
 	
-	    // Guardamos el Ticket
-	    //if()
-	    	
+	 //	$sw=0;
 	    if ($obj_modelo->GuardarTicket($id_ticket,$serial, $fecha_hora, $taquilla, $total_ticket, $id_usuario)){
-	        if( $result2= $obj_modelo->GetDatosAllTicketTransaccional() ){
+
+	    	if( $result2= $obj_modelo->GetDatosAllTicketTransaccional() ){
 	            while($row= $obj_conexion->GetArrayInfo($result2)){
 	                // Guarda los datos en detalle Ticket
-	              //  if ($row['incompleto']<>'2'){
 	                	$fecha_sorteo= date('Y-m-d');
 	                     if ($obj_modelo->GuardarDetalleTicket($id_ticket, $row['numero'], $row['id_sorteo'], $fecha_sorteo, $row['id_zodiacal'], $row['id_tipo_jugada'], $row['monto'],$row['monto_restante'],$row['monto_faltante'])){
-	
-	                        //Verificamos los numeros incompletos  y guardamos en tabla
-	                      /*  if ($row['incompleto']=='3' OR $row['incompleto']=='1'){
-	                            $incompleto=2;
-	                            $obj_modelo->GuardarIncompletosAgotados($id_ticket, $fecha_hora, $row['numero'], $row['id_sorteo'], $row['id_tipo_jugada'],$row['id_zodiacal'], 0, $incompleto);
-	                        }*/
-	
-	                        //Actualizamos en tabla numeros jugados
-	
-	                        // Buscamos el numero en la tabla a ver si ya esta registrado
-	                        /*$result = $obj_modelo->GetExisteNumeroJugados($row['numero'],$row['id_sorteo'], $row['id_tipo_jugada'], $row['id_zodiacal']);
-	                        if ($obj_conexion->GetNumberRows($result)>0){
-	                            // Ya el numero esta registrado...
-	                            $row_nj = $obj_conexion->GetArrayInfo($result);
-	
-	                            if ($row_nj['monto_restante']>0){
-	                                $nuevo_monto=$row_nj['monto_restante']-($row['monto']);
-	                                // Actualizamos el nuevo monto disponible para jugar del numero
-	                                $obj_modelo->ActualizaNumeroJugados($row_nj['id_numero_jugados'], $nuevo_monto);
-	                            }else{
-	                                // Si el numero ya está registrado y el monto restante es igual a cero, entonces el numero ya estaba agotado en el monto disponible...
-	                            }
-	
-	                        }else{ // Si el numero no se encuentra registrado en numeros jugados debe guardarse en la tabla
-	
-	                            //Calculamos el monto_restante
-	                           
-	                            //Guardamos el numero en la tabla
-	                            if($row['monto_faltante']<=0)
-	                            $monto_faltante=0;
-	                            else
-	                            $monto_faltante=$row['monto_faltante'];
-	                            	
-	                            $obj_modelo->GuardarNumerosJugados($fecha_hora, $row['numero'], $row['id_sorteo'], $row['id_tipo_jugada'], $row['id_zodiacal'], $monto_faltante);
-	                        }*/
-	                   // }
-	                }/*else{//Verificamos los numeros agotados y guardamos en tabla
-	                     $incompleto=2;
-	                     $obj_modelo->GuardarIncompletosAgotados($id_ticket, $fecha_hora, $row['numero'], $row['id_sorteo'], $row['id_tipo_jugada'], $row['id_zodiacal'], 0, $incompleto);
-	                }*/
-	
-	                // Despues de guardado en detalle_ticket, borramos el registro de ticket transaccional...
-	             //   $obj_modelo->EliminarTicketTransaccional($row['id_ticket_transaccional']);
-	            }
+	                  	}	
+	           }
 	        }
 	
 	        echo "Ok";
 	    }else{
+	    	
 	        echo "NotOk";
 	    }
 	
