@@ -214,18 +214,18 @@ if( $result= $obj_modelo->GetDetalleTicketByIdticket($id_ticket) ){
 			}
 			if($g==2 OR $g==0){
 				if($obj_generico->SizeText($obj_generico->ToTitle($nombre_sorteo[$ts])) <= 18){
-					$data.="<tr><td align='left' ><font face='Times' size='2'  ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td>";
+					$data.="<tr><td align='left' ><font face='Times' size='2'  >".$obj_generico->ToTitle($nombre_sorteo[$ts])."</td>";
 					$sw=1;
 				}					
 				else
-					$data.="<tr><td colspan='2' align='left'><font face='Times' size='2'><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
+					$data.="<tr><td colspan='2' align='left'><font face='Times' size='2'>".$obj_generico->ToTitle($nombre_sorteo[$ts])."</td></tr>";
 				$g=0;
 			}					
 			else{
 				if($obj_generico->SizeText($obj_generico->ToTitle($nombre_sorteo[$ts])) <= 18)
-					$data.="<td align='left' ><font face='Times' size='2' ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
+					$data.="<td align='left' ><font face='Times' size='2' >".$obj_generico->ToTitle($nombre_sorteo[$ts])."</td></tr>";
 				else
-					$data.="<td></td><tr><td colspan='2' align='left' ><font face='Times' size='2' ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
+					$data.="<td></td><tr><td colspan='2' align='left' ><font face='Times' size='2' >".$obj_generico->ToTitle($nombre_sorteo[$ts])."</td></tr>";
 			}					
 			$g++;
 		}
@@ -285,6 +285,143 @@ $info_impresora= $obj_modelo->GetDatosImpresora($ida_taquilla);
 $lineas_saltar_despues=$info_impresora["lineas_saltar_despues"];
 
 
+//Determinar si va a imprimir incompletos y Agotados
+$info_impresora= $obj_modelo->GetDatosImpresora($ida_taquilla);
+
+$lineas_saltar_despues=$info_impresora["lineas_saltar_despues"];
+$ver_numeros_incompletos=$info_impresora["ver_numeros_incompletos"];
+$ver_numeros_agotados=$info_impresora["ver_numeros_agotados"];
+
+//INCOMPLETOS Y AGOTADOS
+/*
+$sorteosenticket=array();
+$combinacionunica=array();
+$ticket_completo=array();
+$result2= $obj_modelo->GetNumerosIncompletosTransaccional($id_taquilla);
+$total_incompletos=$obj_conexion->GetNumberRows($result2);
+if($total_incompletos>0){
+	$data.=" <table width='260' cellpadding='0' cellspacing='0' border='0' >";
+	$data.="<tr height='10'><td colspan='2' align='center'></td> </tr>";
+	$data.="<tr><td colspan='2' align='center'><font face='Tahoma' size='3' >";
+	$data.="Incompletos";
+	$data.=" </font></td> </tr>";
+	while($row= $obj_conexion->GetArrayInfo($result2)){
+		//if($row['incompleto']==1){
+		//if($row['incompleto']==1)
+		//	$monto=($row['monto_faltante']*(-1));
+		//else
+		$monto=($row['monto_faltante']);
+
+		if($row['id_zodiacal']==0){
+			$combinacion=$row['numero']." x ".$monto;
+			$ticket_completo[]=$row['id_sorteo']."x".$row['numero']." x ".$monto;
+		}
+		else{
+			$combinacion=$row['numero']." x ".$monto."-".$row['id_zodiacal'];
+			$ticket_completo[]=$row['id_sorteo']."x".$row['numero']." x ".$monto."-".$row['id_zodiacal'];
+		}
+		//Guardar todos los sorteos pero una sola vez
+		//$sorteoszodiac[]=$row['id_zodiacal'];
+		if(!in_array($row['id_sorteo'], $sorteosenticket)){
+			$sorteosenticket[]=$row['id_sorteo'];
+		}
+		//Guardar todos las combinaciones Unicas de Numero y Monto 14-1.00
+		if(!in_array($combinacion, $combinacionunica) )
+			$combinacionunica[]=$combinacion;
+	}// fin de while
+	// Creamos un array General $combinacion_ticket
+	// donde el key es la combinacion de ['numero x monto']
+	// y donde los valores es una cadena con los id_sorteo  [123 x 1.00] => 26-27-41-42
+	$combinacion_ticket=array();
+	$i=0;
+	for($i;$i<count($combinacionunica);$i++){
+		$j=0;
+		for($j;$j<count($sorteosenticket);$j++){
+
+			//verificar si esta combinacion existe
+			foreach ($ticket_completo as $tc){
+				$combinacion_creada= $sorteosenticket[$j]."x".$combinacionunica[$i];
+				if ($tc == $combinacion_creada){
+
+					if (isset($combinacion_ticket[$combinacionunica[$i]])) {
+						$combinacion_ticket[$combinacionunica[$i]].= "-".$sorteosenticket[$j];
+					}else{
+						$combinacion_ticket[$combinacionunica[$i]]= $sorteosenticket[$j];
+					}
+
+				}
+			}
+		}
+	}
+
+	//Creando el Ticket Final
+	// Invirtiendo el Arreglo
+	// Ahora los keys sera la cadena de los Id_sorteos [4-5-6-11-12-13-15-16-79-80] => Array
+	// y los valores sera un subarray con todos las combinaciones de ['numero x monto']
+	$ticket_final=array();
+	foreach ($combinacion_ticket as $comb_numMonto => $todoslossorteos){
+		$ticket_final[$todoslossorteos][]=$comb_numMonto;
+	}
+	$nombre_sorteo=array();
+	$i=0;
+	foreach ($ticket_final as $todoslossorteos => $comb_numMonto){
+		//Convertir en array todos los sorteos
+		$todoslossorteos2 = preg_split('/-/', $todoslossorteos);
+		$g=0;
+		foreach ($todoslossorteos2 as $ts){
+			$sw=0;
+			if (!isset($nombre_sorteo[$ts])){
+				$nombre_sorteo[$ts]=$obj_modelo->GetNombreSorteo($ts);
+			}
+			if($g==2 OR $g==0){
+				if($obj_generico->SizeText($obj_generico->ToTitle($nombre_sorteo[$ts])) <= 18){
+					$data.="<tr><td align='left' ><font face='Tahoma' size='3'  >".$obj_generico->ToTitle($nombre_sorteo[$ts])."</td>";
+					$sw=1;
+				}
+				else
+					$data.="<tr><td colspan='2' align='left'><font face='Tahoma' size='3'>".$obj_generico->ToTitle($nombre_sorteo[$ts])."</td></tr>";
+				$g=0;
+			}
+			else{
+				if($obj_generico->SizeText($obj_generico->ToTitle($nombre_sorteo[$ts])) <= 18)
+					$data.="<td align='left' ><font face='Tahoma' size='3' >".$obj_generico->ToTitle($nombre_sorteo[$ts])."</td></tr>";
+				else
+					$data.="<td></td><tr><td colspan='2' align='left' ><font face='Tahoma' size='3' >".$obj_generico->ToTitle($nombre_sorteo[$ts])."</td></tr>";
+			}
+			$g++;
+		}
+		if($sw==1)
+			$data.="<td align='left'></td></tr>";
+		$data.="<tr  height='10'><td colspan='2'><table width='247' cellpadding='1' cellspacing='4' border='0' >";
+		$g=0;
+		foreach($comb_numMonto as $cn){
+			$array_sorteo=preg_split('/-/',$cn);
+			if(count($array_sorteo)>=2)
+				$cn=$array_sorteo[0]." - ".$pre_zod[$array_sorteo[1]];
+			if($g==0){
+				$data.="<tr><td align='left'><font face='Tahoma' size='2' > ".$cn."</td>";
+				$g++;
+			}
+			elseif($g==1){
+				$data.="<td align='center'><font face='Tahoma' size='2' >".$cn."</td>";
+				$g++;
+			}
+			elseif($g==2){
+				$data.="<td align='left'><font face='Tahoma' size='2' >".$cn."</td></tr>";
+				$g=0;
+			}
+		}
+		if($g==1)
+			$data.="<td colspan='2'align='left'></td></tr>";
+		elseif($g==2)
+		$data.="<td align='left'></td></tr>";
+		$data.="</td></tr></table>";
+	}
+}
+
+
+	
+*/
 
 
 
