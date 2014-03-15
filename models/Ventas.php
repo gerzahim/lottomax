@@ -962,7 +962,7 @@ class Ventas{
 		//Preparacion del query
 		$sql = "INSERT INTO `ticket` (`id_ticket`, `serial` , `fecha_hora` , `taquilla`, `total_ticket` , `id_usuario` , `premiado`, `pagado`)
                     VALUES ('".$id_ticket."', '".$serial."', '".$fecha_hora."', '".$taquilla."', '".$total_ticket."', '".$id_usuario."', '0', '0')";
-
+			//echo $sql;
                 return $this->vConexion->ExecuteQuery($sql);
          }
          
