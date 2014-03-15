@@ -33,20 +33,18 @@ if($result= mysql_query($sql,$conexion_abajo)){
 	$consulta_arriba_detalle.=";";
 	
 //	echo $consulta_arriba_ticket;
-	echo $consulta_arriba_detalle;
 	//exit;
 	$error=0;
 	if (mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
 		if (mysql_query("BEGIN;",$conexion_arriba)) //dar inicio a la transacción
 		{
-			echo "<br>".$consulta_arriba_ticket;
 			if (mysql_query($consulta_arriba_ticket,$conexion_arriba))
 			{
-				echo "<br>pASA Ticket";
+				echo "<br>Inserto Ticket";
 				//echo $consulta_arriba_detalle;
 				if (mysql_query($consulta_arriba_detalle,$conexion_arriba))
 				{
-					echo "pASA detalle_Ticket";
+					echo "<br>Inserto Detalle Ticket";
 					$error=0;//mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
 				}
 				else
@@ -83,6 +81,7 @@ if($result= mysql_query($sql,$conexion_abajo)){
 	}
 	else
 	{
+		echo "<br>Perfecto";
 		mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
 		mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
 	}	
