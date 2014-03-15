@@ -202,18 +202,18 @@ if( $result= $obj_modelo->GetDetalleTicketByIdticket($id_ticket) ){
 			}
 			if($g==2 OR $g==0){
 				if($obj_generico->SizeText($obj_generico->ToTitle($nombre_sorteo[$ts])) <= 18){
-					$data.="<tr><td align='left' ><font face='Times' size='2'  ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td>";
+					$data.="<tr><td align='left' ><font face='Times' size='2'  >".$obj_generico->ToTitle($nombre_sorteo[$ts])."</td>";
 					$sw=1;
 				}					
 				else
-					$data.="<tr><td colspan='2' align='left'><font face='Times' size='2'><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
+					$data.="<tr><td colspan='2' align='left'><font face='Times' size='2'>".$obj_generico->ToTitle($nombre_sorteo[$ts])."</td></tr>";
 				$g=0;
 			}					
 			else{
 				if($obj_generico->SizeText($obj_generico->ToTitle($nombre_sorteo[$ts])) <= 18)
-					$data.="<td align='left' ><font face='Times' size='2' ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
+					$data.="<td align='left' ><font face='Times' size='2' >".$obj_generico->ToTitle($nombre_sorteo[$ts])."</td></tr>";
 				else
-					$data.="<td></td><tr><td colspan='2' align='left' ><font face='Times' size='2' ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
+					$data.="<td></td><tr><td colspan='2' align='left' ><font face='Times' size='2' >".$obj_generico->ToTitle($nombre_sorteo[$ts])."</td></tr>";
 			}					
 			$g++;
 		}
@@ -357,18 +357,18 @@ if($total_incompletos>0){
 			}
 			if($g==2 OR $g==0){
 				if($obj_generico->SizeText($obj_generico->ToTitle($nombre_sorteo[$ts])) <= 18){
-					$data.="<tr><td align='left' ><font face='Tahoma' size='3'  ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td>";
+					$data.="<tr><td align='left' ><font face='Tahoma' size='3'  >".$obj_generico->ToTitle($nombre_sorteo[$ts])."</td>";
 					$sw=1;
 				}					
 				else
-					$data.="<tr><td colspan='2' align='left'><font face='Tahoma' size='3'><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
+					$data.="<tr><td colspan='2' align='left'><font face='Tahoma' size='3'>".$obj_generico->ToTitle($nombre_sorteo[$ts])."</td></tr>";
 				$g=0;
 			}					
 			else{
 				if($obj_generico->SizeText($obj_generico->ToTitle($nombre_sorteo[$ts])) <= 18)
-					$data.="<td align='left' ><font face='Tahoma' size='3' ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
+					$data.="<td align='left' ><font face='Tahoma' size='3' >".$obj_generico->ToTitle($nombre_sorteo[$ts])."</td></tr>";
 				else
-					$data.="<td></td><tr><td colspan='2' align='left' ><font face='Tahoma' size='3' ><strong>".$obj_generico->ToTitle($nombre_sorteo[$ts])."<strong></td></tr>";
+					$data.="<td></td><tr><td colspan='2' align='left' ><font face='Tahoma' size='3' >".$obj_generico->ToTitle($nombre_sorteo[$ts])."</td></tr>";
 			}					
 			$g++;
 		}
