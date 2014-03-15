@@ -1,4 +1,5 @@
 <?php
+set_time_limit( 3600);
 //Creamos la conexión a las distintas base de datos, la de arriba y las de abajo.
 $conexion_abajo = mysql_connect("localhost" , "root" , "secreta");
 mysql_select_db("lottomax",$conexion_abajo);
