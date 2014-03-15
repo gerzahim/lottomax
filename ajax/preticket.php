@@ -511,6 +511,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 			$result = ProcesoCupos($txt_numero, $txt_monto, $sorteo, $zodiacal, $esZodiacal,$id_insert_taquilla);
 		}
 	}else{
+		
 		//revisar tabla de numeros_jugados
 		$numero_jugado= $obj_modelo->GetNumerosJugados($txt_numero,$sorteo,$zodiacal,$fecha_hoy);
 		//significa que ya existe y debemos ver el monto que queda
@@ -535,34 +536,25 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 				echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";
 			}
 		}else{
-
 			//No existe aun
 			//revisar tabla de cupo_especial
 			$cupo_especial= $obj_modelo->GetCuposEspeciales($txt_numero,$sorteo,$zodiacal);
 			if( $cupo_especial['total_registros']>0 ){
 				while($row= $obj_conexion->GetArrayInfo($cupo_especial['result'])){
-
 					//recortando el formato 2013-02-26 00:00:00 a 2013-02-26
 					$fecha_desde = substr($row["fecha_desde"], 0, 10);
 					$fecha_hasta = substr($row["fecha_hasta"], 0, 10);
-
 					//funcion para saber si hoy esta entre dos fechas dadas
 					// regresa 1 si esta entre las fechas; 0 de lo contrario
 					$fecha_efectiva= $obj_modelo->entreFechasYhoy($fecha_desde,$fecha_hasta);
 
 					//si esta entre las fechas del bloqueo
 					if ($fecha_efectiva == 1){
-							
 						//significa que ya existe y debemos ver el monto que queda
 						$monto_cupoespecial= $row["monto_cupo"];
-
 						//si queda por un monto mayor que 0
 						if ($monto_cupoespecial >0){
-
 							//  $monto_restante= $txt_monto;
-
-							 
-
 							//registrar $num_jug_nuevodisponible, $incompleto
 							$matriz2= CalculaIncompletoYnuevoMonto($monto_cupoespecial, $txt_monto);
 								
@@ -599,7 +591,6 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 
 						// Calculando $num_jug_nuevodisponible,$incompleto
 						$matriz2= CalculaIncompletoYnuevoMonto($cupo_general, $txt_monto);
-							
 						if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$matriz2[0],$matriz2[1],$matriz2[2],$matriz2[3],$taquilla,$id_insert_taquilla) ){
 
 						}
@@ -618,7 +609,6 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 				//No posee cupo especial, ni esta en tabla numeros_jugados
 				//revisar tabla de cupo_general
 				//procesa A
-				
 				//echo "PASA";
 				//determinando monto_cupo segun id tipo de jugada
 				$cupo_general= $obj_modelo->GetCuposGenerales($id_tipo_jugada);
@@ -648,13 +638,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 				}
 					
 			}
-
-
-
 		}
-			
-
-
 		return 1;
 
 	}

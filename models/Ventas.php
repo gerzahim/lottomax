@@ -536,10 +536,10 @@ class Ventas{
 		
 			
 		//Preparacion del query
-		$sql = "SELECT monto_restante FROM detalle_ticket 
+		$sql = "SELECT id_numeros_jugados, monto_restante FROM numeros_jugados 
 							
-				WHERE numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal." AND fecha_sorteo LIKE '%".$fecha_hoy."%' ORDER BY id_detalle_ticket DESC";
-		//echo $sql;
+				WHERE numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal." AND fecha LIKE '%".$fecha_hoy."%' ";
+	//	exit;
 		$result= $this->vConexion->ExecuteQuery($sql);
 		
 		
@@ -552,7 +552,7 @@ class Ventas{
 		
 		$roww= $this->vConexion->GetArrayInfo($result);
 		
-		return array('total_registros'=>$total_registros,'monto_restante'=>$roww["monto_restante"]);
+		return array('total_registros'=>$total_registros,'monto_restante'=>$roww["monto_restante"],'id_numeros_jugados'=>$roww["id_numeros_jugados"]);
 		
 	}	
 	

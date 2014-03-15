@@ -63,6 +63,14 @@ if($impreso == 1 || $impreso == 2){
 	                	$fecha_sorteo= date('Y-m-d');
 	                     if ($obj_modelo->GuardarDetalleTicket($id_ticket, $row['numero'], $row['id_sorteo'], $fecha_sorteo, $row['id_zodiacal'], $row['id_tipo_jugada'], $row['monto'],$row['monto_restante'],$row['monto_faltante'])){
 	                  	}	
+	                  	$registros=$obj_modelo->GetNumerosJugados($row['numero'], $row['id_sorteo'], $row['id_zodiacal'],$fecha_sorteo);
+	                  	if($registros['total_registros']>0){
+	                  		$obj_modelo->ActualizaNumeroJugados($registros['id_numero_jugados'],$registros['monto_restante']);
+	                  	}
+	                  	else
+	                  	$obj_modelo->GuardarNumerosJugados($fecha_sorteo,$row['numero'],$row['id_sorteo'],$row['id_tipo_jugada'],$row['id_zodiacal'],$row['monto_restante']);
+	                  	if ($obj_modelo->GuardarDetalleTicket($id_ticket, $row['numero'], $row['id_sorteo'], $fecha_sorteo, $row['id_zodiacal'], $row['id_tipo_jugada'], $row['monto'],$row['monto_restante'],$row['monto_faltante'])){
+	                  	}
 	           }
 	        }
 	
