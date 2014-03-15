@@ -43,26 +43,12 @@ session_start();
 $id_taquilla= $obj_modelo->GetIdTaquilla();
 
 
-// Generacion del Id del Ticket
-$id_ticket= $obj_modelo->GeneraIDTicket();
-
-
-// Generacion del serial del ticket
-$serial="";
-$serial = $obj_modelo->GeneraSerialTicket();
-while ($obj_modelo->GetExisteSerialTicket($serial)){
-	$serial = $obj_modelo->GeneraSerialTicket();
-}
-
-
 /************* CABLEADO **********************/
 //id_taquilla debe venir de una variable de sesion
 
 $info_ticket= $obj_modelo->GetLastTicket($id_taquilla);
 
 $id_ticket=$info_ticket["id_ticket"];
-
-$obj_modelo->ActualizaSerialReimpresion($id_ticket, $serial);
 
 //echo "<pre>".print_r($info_ticket)."</pre>";
 
