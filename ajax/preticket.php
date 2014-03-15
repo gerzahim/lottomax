@@ -518,7 +518,6 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 		if( $numero_jugado['total_registros']>0 ){
 			//echo $num_jug;
 			//print_r($numero_jugado);
-
 			//si queda por un monto mayor que 0
 			if ($monto_restante >0){
 				$matriz2= CalculaIncompletoYnuevoMonto($monto_restante,$txt_monto);
