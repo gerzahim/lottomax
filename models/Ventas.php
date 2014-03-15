@@ -536,7 +536,7 @@ class Ventas{
 		
 			
 		//Preparacion del query
-		$sql = "SELECT id_numeros_jugados, monto_restante FROM numeros_jugados 
+		$sql = "SELECT id_numero_jugados, monto_restante FROM numeros_jugados 
 							
 				WHERE numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal." AND fecha LIKE '%".$fecha_hoy."%' ";
 	//	exit;
@@ -552,7 +552,23 @@ class Ventas{
 		
 		$roww= $this->vConexion->GetArrayInfo($result);
 		
-		return array('total_registros'=>$total_registros,'monto_restante'=>$roww["monto_restante"],'id_numeros_jugados'=>$roww["id_numeros_jugados"]);
+		if($total_registros>0)
+		{
+			$id_numeros_jugados=$roww["id_numero_jugados"];
+			$monto_restante=$roww["monto_restante"];
+		}
+		else
+		{
+			$id_numeros_jugados=0;
+			$monto_restante=0;
+		}
+		
+	/*	echo $sql;		
+		echo $id_numeros_jugados;
+		echo $monto_restante;
+		exit;
+		*/
+		return array('total_registros'=>$total_registros,'monto_restante'=>$monto_restante,'id_numeros_jugados'=>$id_numeros_jugados);
 		
 	}	
 	
@@ -869,8 +885,9 @@ class Ventas{
             $id_agencia=$roww["id_agencia"];
             $taquilla=$_SESSION["taquilla"];
             
-            $sql = "SELECT MAX(id_ticket) as id_ticket FROM ticket WHERE status='1' AND taquilla  = ".$taquilla."";
-            //echo $sql;
+            $sql = "SELECT id_ticket FROM ticket WHERE taquilla  = ".$taquilla." ORDER BY fecha_hora DESC limit 1";
+           /* echo $sql;
+            exit;*/
             $result= $this->vConexion->ExecuteQuery($sql);
             
             // Existe algun ticket en esta bd ?
@@ -962,8 +979,9 @@ class Ventas{
 		//Preparacion del query
 		$sql = "INSERT INTO `ticket` (`id_ticket`, `serial` , `fecha_hora` , `taquilla`, `total_ticket` , `id_usuario` , `premiado`, `pagado`)
                     VALUES ('".$id_ticket."', '".$serial."', '".$fecha_hora."', '".$taquilla."', '".$total_ticket."', '".$id_usuario."', '0', '0')";
-			//echo $sql;
-                return $this->vConexion->ExecuteQuery($sql);
+			/*echo $sql;
+			exit;*/
+    return $this->vConexion->ExecuteQuery($sql);
          }
          
          
@@ -1062,6 +1080,9 @@ class Ventas{
 
 		//Preparacion del query
 		$sql = "UPDATE `numeros_jugados` SET `monto_restante`='".$monto_restante."' WHERE id_numero_jugados='".$id_numero_jugados."'";
+		
+	/*	echo $sql;
+		exit;*/
 		return $this->vConexion->ExecuteQuery($sql);
 
 	}
