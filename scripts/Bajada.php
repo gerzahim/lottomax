@@ -149,14 +149,26 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 					if($rowDT['id_tipo_jugada']==2){
 						switch ($aprox){
 							case 0:
+								if($rowDT['numero']=='00')
+								$terminal_abajo='99';
+								else
 								$terminal_abajo=$rowDT['numero']-1;
 								break;
 							case 1:
-								$terminal_arriba=$rowDT['numero']+1;
+								if($rowDT['numero']=='00')
+									$terminal_abajo='99';
+								else
 								$terminal_abajo=$rowDT['numero']-1;
+								if($rowDT['numero']=='99')
+									$terminal_arriba='00';
+								else
+									$terminal_arriba=$rowDT['numero']+1;
 								break;
 							case 2:
-								$terminal_arriba=$rowDT['numero']+1;
+								if($rowDT['numero']=='99')
+								$terminal_arriba='00';
+								else
+								$terminal_arriba=$rowDT['numero']+1;								
 								break;
 						}
 						if(isset($resultados[$rowDT['id_sorteo']."/".$rowDT['fecha_sorteo']]))
