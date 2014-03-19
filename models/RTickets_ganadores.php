@@ -45,6 +45,23 @@ class RTickets_ganadores{
 		
 		
 	}
+	
+	/**
+	 * Obtiene el nombre del Sorteo Segun ID
+	 *
+	 * @param string $id
+	 * @return boolean, array
+	 */
+	public function GetNombreSorteo($id){
+	
+		//Preparacion del query
+		$sql = "SELECT nombre_sorteo FROM sorteos WHERE status = 1 AND id_sorteo  = ".$id."";
+		//echo $sql;
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["nombre_sorteo"];
+	
+	}	
 
         /**
 	 * Devuelve el detalle de jugadas de algun ticket
