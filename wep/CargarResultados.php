@@ -46,7 +46,7 @@ $fecha=	$_GET ['fecha'];
 else
 $fecha=$ano."-".$mes."-".$dia_hoy;
 
-
+echo "URL ?fecha=".$fecha."<br>";
 
 // Accion a realizar
 $obj_xtpl->assign ( 'tipo_accion', 'save' );

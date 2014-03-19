@@ -90,6 +90,55 @@ class RVentas_periodo{
 		
 		
 	}
+	
+	
+	/**
+	 * Devuelve el listado de Tickets en determinado rango de  fechas
+	 *
+	 * @param string $fecha_desde
+	 * @param string $fecha_hasta
+	 * @param string $taquilla
+	 * @param string $sorteo
+	 * @return boolean, array
+	 */
+	public function GetTicketsbyFecha($fecha){
+	
+		//Preparacion del query
+		$where = "";
+	
+		if(!Empty($fecha)){
+			$where = $where." fecha_hora LIKE '%".$fecha."%'";
+		}
+	
+		$sql = "SELECT * FROM  ticket WHERE ".$where. " ORDER BY fecha_hora DESC";
+		
+		$result= $this->vConexion->ExecuteQuery($sql);
+		return $result;
+	}	
+	
+	/**
+	 * Devuelve el listado de Tickets en determinado rango de  fechas
+	 *
+	 * @param string $fecha_desde
+	 * @param string $fecha_hasta
+	 * @param string $taquilla
+	 * @param string $sorteo
+	 * @return boolean, array
+	 */
+	public function GetTicketsbyId($id_ticket){
+	
+		//Preparacion del query
+		$where = "";
+	
+		if(!Empty($id_ticket)){
+			$where = $where." id_ticket = '".$id_ticket."'";
+		}
+	
+		$sql = "SELECT * FROM  ticket WHERE ".$where;
+	
+		$result= $this->vConexion->ExecuteQuery($sql);
+		return $result;
+	}	
 
         /**
 	 * Devuelve el detalle de jugadas de algun ticket
@@ -156,6 +205,36 @@ class RVentas_periodo{
 	
 	}
 
+	
+	/**
+	 * Devuelve el listado de balance Anulados por dia entre dos fechas
+	 *
+	 * @param string $fecha_desde
+	 * @param string $fecha_hasta
+	 * @return boolean, array
+	 */
+	
+	public function GetBalancebyTaquillaAnulados($fecha_desde, $fecha_hasta, $num_taquilla){
+	
+		//Preparacion del query
+		$where = "";
+		if(!Empty($num_taquilla)){
+			$where = "taquilla='".$num_taquilla."' AND" ;
+		}
+			
+	
+		$sql = "SELECT id_ticket, LEFT(fecha_hora,10) AS fecha, taquilla, fecha_hora_anulacion, total_ticket
+                        FROM ticket
+                        WHERE ".$where." fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."  23:59:59' AND status='0'
+                        ORDER BY `fecha` ASC, taquilla ASC";
+	
+		//echo $sql;
+		
+		$result= $this->vConexion->ExecuteQuery($sql);
+		return $result;
+	
+	
+	}	
 	/**
 	 * Busqueda de Id de Taquilla.
 	 *
@@ -200,6 +279,33 @@ class RVentas_periodo{
 		$roww= $this->vConexion->GetArrayInfo($result);
 		return $roww;
 	}	
+	
+	/**
+	 * Devuelve el listado de Tickets Pagados segun fecha de Pagados y Taquilla
+	 *
+	 * @param string $fecha
+	 * @return boolean, array
+	 */
+	public function GetTicketsPagadosbyFechaPagados($fecha, $num_taquilla){
+	
+		//Preparacion del query
+		$where = "";
+		if(!Empty($num_taquilla)){
+			$where = "taquilla='".$num_taquilla."' AND" ;
+		}
+	
+		//Preparacion del query
+		$sql = "SELECT total_premiado FROM  ticket WHERE ".$where." premiado='1' AND pagado='1' AND fecha_hora_pagado LIKE '%".$fecha."%'";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		
+		$total_premiado=0;
+		while($row= $this->vConexion->GetArrayInfo($result)){
+			$total_premiado= $total_premiado+$row["total_premiado"];
+		}
+		
+		return $total_premiado;
+
+	}
     	
 }		
 ?>

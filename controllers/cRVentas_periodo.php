@@ -47,7 +47,7 @@ switch (ACCION){
         $fecha_desde= $obj_date->changeFormatDateII($obj_generico->CleanText($_GET['fechadesde']));
         $fecha_hasta= $obj_date->changeFormatDateII($obj_generico->CleanText($_GET['fechahasta']));
         
-        $i=0; $total_ventas=0; $cantidad_anulados=0;
+        $i=0; $total_ventas=0; $cantidad_anulados=0; $total_anulados=0;
 
         if( $result= $obj_modelo->GetTickets($fecha_desde, $fecha_hasta, $taquilla, $sorteo) ){
             if ($obj_conexion->GetNumberRows($result)>0 ){
@@ -57,6 +57,7 @@ switch (ACCION){
 
                     if ($row['status']=='0'){
                         $cantidad_anulados++;
+                        $total_anulados= $total_anulados + $row['total_ticket'];
                     }else{
                         if( ($i % 2) >0){
                             $obj_xtpl->assign('estilo_fila', 'even');
@@ -86,25 +87,122 @@ switch (ACCION){
                 	$obj_xtpl->assign('taquilla_info', ' Listado de Ventas de Todas Las Taquillas:');
                 }                
                 
-                $obj_xtpl->assign('total_ventas', ' El total de ventas fue: Bs. F. '.$total_ventas);
+                $obj_xtpl->assign('total_ventas', ' El Total de ventas fue: Bs. F. '.$total_ventas);
                 $obj_xtpl->assign('ticket_anulados', ' Cantidad de tickets anulados: '.$cantidad_anulados);
+                $obj_xtpl->assign('total_anulados', ' El Total de Tickets anulados fue: Bs. F. '.$total_anulados);
                 
                  // Parseo del bloque de la fila
                 $obj_xtpl->parse('main.contenido.lista_resultados');
             }else{
                 // Mensaje
                 $obj_xtpl->assign('no_info',$mensajes['sin_lista']);
-//                        // Mensaje
-//                        $obj_xtpl->assign('sin_listado',$mensajes['sin_lista']);
-//
-//                        // Parseo del bloque de la fila
-//                        $obj_xtpl->parse('main.contenido.lista_resultados.no_lista');
-                }
+                
+				// Parseo del bloque de la fila
+                $obj_xtpl->parse('main.contenido.lista_resultados.no_lista');
+            }
 
            
         }
         
         break;
+        
+        case 'search':
+        
+        	// Ruta actual
+        	$_SESSION['Ruta_Form']= $obj_generico->RutaRegreso();
+        	
+        	// Ruta regreso
+        	$obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Lista']);
+        
+        	// Parseo del bloque de la fila
+        	$obj_xtpl->parse('main.contenido.search_tickets');
+        	break;
+
+        case 'looking':
+        	
+        		// Ruta actual
+        		$_SESSION['Ruta_Look']= $obj_generico->RutaRegreso();
+        	
+        		// Ruta regreso
+        		$obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Form']);
+        		
+		        $op_buscar = $_GET['radio_buscar'];
+		        $fecha = $_GET['fecha'];
+		        $id_ticket = $_GET['id_ticket'];
+		        
+		        
+		        if($op_buscar == '1'){
+		        	// Selecciono Buscar Por Fecha Emision de Ticket
+		        	$fecha= $obj_date->changeFormatDateII($obj_generico->CleanText($_GET['fecha']));
+		        	$result= $obj_modelo->GetTicketsbyFecha($fecha);
+		        	
+		        }else{
+		        	// Selecciono Por ID del Ticket
+		        	$result= $obj_modelo->GetTicketsbyId($id_ticket);
+		        }
+        	
+		        
+		        $i=0;
+		        if( $result ){
+		        	if ($obj_conexion->GetNumberRows($result)>0 ){
+		        
+		        		while($row= $obj_conexion->GetArrayInfo($result)){
+		        			if( ($i % 2) >0){
+		        				$obj_xtpl->assign('estilo_fila', 'even');
+		        			}
+		        			else{
+		        				$obj_xtpl->assign('estilo_fila', 'odd');
+		        			}
+		        
+		        			$obj_xtpl->assign('fecha_hora', $obj_date->GetFechaHoraNoMilitar($row['fecha_hora']));
+		        			$obj_xtpl->assign('id_ticket', $row['id_ticket']);
+		        			$obj_xtpl->assign('total', $row['total_ticket']);
+		        			$premiado= $row['premiado'];
+		        			$pagado= $row['pagado'];
+		        			$status= $row['status'];		        					        			
+		        			if($premiado == '0'){
+		        				$premiado = 'Si';
+		        			}else{
+		        				$premiado = 'No';
+		        			}
+		        			if($pagado == '0'){
+		        				$pagado = 'Si';
+		        			}else{
+		        				$pagado = 'No';
+		        			}
+		        			if($status == '0'){
+		        				$status = 'Anulado';
+		        			}else{
+		        				$status = 'Activo';
+		        			}		        					        			
+		        			$obj_xtpl->assign('premiado', $premiado);
+		        			$obj_xtpl->assign('pagado', $pagado);
+		        			$obj_xtpl->assign('status', $status);
+		        			 
+		        			// Parseo del bloque de la fila
+		        			$obj_xtpl->parse('main.contenido.lista_buscar.listado');
+		        			$i++;
+		        		}
+		        		// Parseo del bloque de la fila
+		        		$obj_xtpl->parse('main.contenido.lista_buscar');
+		        	}else{
+		        		// Mensaje
+		        		$obj_xtpl->assign('no_info',$mensajes['sin_lista']);
+		        		$obj_xtpl->parse('main.contenido.lista_buscar.no_listado');
+		        		
+		        		//                        // Mensaje
+		        		//                        $obj_xtpl->assign('sin_listado',$mensajes['sin_lista']);
+		        		//
+		        		//                        // Parseo del bloque de la fila
+		        		//                        $obj_xtpl->parse('main.contenido.lista_resultados.no_lista');
+		        	}
+		        
+		        	 
+		        }		        
+		        
+
+        	
+        		break;        	
 
     case 'ver_resultados':
 

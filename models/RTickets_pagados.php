@@ -30,20 +30,32 @@ class RTickets_pagados{
 
         
          /**
-	 * Devuelve el listado de Tickets Ganadores
+	 * Devuelve el listado de Tickets Pagados segun fecha emitidos
 	 *
          * @param string $fecha
 	 * @return boolean, array
 	 */
-	public function GetTicketsGanadores($fecha){
+	public function GetTicketsPagadosbyFechaEmitidos($fecha){
 
 		//Preparacion del query
 		$sql = "SELECT * FROM  ticket WHERE premiado='1' AND pagado='1' AND fecha_hora LIKE '%".$fecha."%'";        
 		$result= $this->vConexion->ExecuteQuery($sql);
-                return $result;
-		
-		
+        return $result;
 	}
+	
+	/**
+	 * Devuelve el listado de Tickets Pagados segun fecha de Pagados
+	 *
+	 * @param string $fecha
+	 * @return boolean, array
+	 */
+	public function GetTicketsPagadosbyFechaPagados($fecha){
+	
+		//Preparacion del query
+		$sql = "SELECT * FROM  ticket WHERE premiado='1' AND pagado='1' AND fecha_hora_pagado LIKE '%".$fecha."%'";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		return $result;
+	}	
 
         /**
 	 * Devuelve el detalle de jugadas de algun ticket
@@ -80,6 +92,25 @@ class RTickets_pagados{
 		return $roww["hora_sorteo"];
 	
 	}
+	
+	/**
+	 * Obtiene el nombre del Usuario Segun ID
+	 *
+	 * @param string $usuario
+	 * @param string $clave
+	 * @return boolean, array
+	 */
+	public function GetNombreUsuarioById($id){
+		
+		//Preparacion del query
+		$sql = "SELECT nombre_usuario FROM usuario WHERE id_usuario = ".$id."";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["nombre_usuario"];
+		
+	}	
+	
+	
     	
 }		
 ?>

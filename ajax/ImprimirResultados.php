@@ -13,7 +13,7 @@
   -->
   
 <?php
-
+ 
 // Archivo de variables de configuracion
 require_once('../config/config.php');
 $obj_config= new ConfigVars();
@@ -24,6 +24,10 @@ require_once('.'.$obj_config->GetVar('ruta_config').'mensajes.php');
 // Clase Generica
 require('.'.$obj_config->GetVar('ruta_libreria').'Generica.php');
 $obj_generico= new Generica();
+
+// Clase Date
+require('.'.$obj_config->GetVar('ruta_libreria').'Fecha.php');
+$obj_date= new Fecha();
 
 // Conexion a la bases de datos
 require('.'.$obj_config->GetVar('ruta_libreria').'Bd.php');
@@ -36,67 +40,90 @@ if( !$obj_conexion->ConnectDataBase($obj_config->GetVar('host'), $obj_config->Ge
 require('.'.$obj_config->GetVar('ruta_modelo').'RVer_resultados.php');
 $obj_modelo= new RVer_Resultados($obj_conexion);
 
+
+
+
 session_start();
 
 //$id_taquilla=2;
 // Obtenemos los datos de la taquilla
 $id_taquilla= $obj_modelo->GetIdTaquilla();
 
+
+$string=date('Y-m-d H:i:s');
+$year = substr($string,0,4);
+$month = substr($string,5,2);
+$day = substr($string,8,2);
+$hour = substr($string,11,2);
+$minute = substr($string,14,2);
+$dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado");
+//$fecha_hora=$day."-".$month."-".$year." ".$hour.":".$minute;
+$fecha_hora=$day."-".$month."-".$year;
+
+if($hour > 11){
+	$formato="PM";
+}else{
+	$formato="AM";
+}
+$formato_militar= array("13","14","15","16","17","18","19","20","21","22","23","24");
+$formato_civil= array("01","02","03","04","05","06","07","08","09","10","11","12");
+
+$hour= str_replace($formato_militar,$formato_civil,$hour);
+$hora=$hour.":".$minute." ".$formato;
+
+
 $fecha= $obj_generico->CleanText($_GET['txt_fecha']);
 
-$fecha_desde=$obj_date->changeFormatDateII($fecha);
+$fecha=$obj_date->changeFormatDateII($fecha);
 
-// txt_fecha=06%2F02%2F2014&radio_periodo=1&btnentrar=Cargar
-//echo $fecha_desde, $fecha_hasta;
+$i = strtotime($fecha); 
+$numero_semana = jddayofweek(cal_to_jd(CAL_GREGORIAN, date("m",$i),date("d",$i), date("Y",$i)) , 0 ); 
+
 $data="";
-if( $result= $obj_modelo->GetResultados($fecha) ){
 
+
+$i=0;
+if( $result= $obj_modelo->GetResultados($fecha) ){
 	if ($obj_conexion->GetNumberRows($result)>0 ){
-		 
+		
 		// ENCABEZADO DEL TICKET
+		$data.=" <table width='100%' cellpadding='0' cellspacing='0' border='0' >";
+		$data.="<tr><td colspan='3' align='center'><font face='Tahoma' size='1' >";
+		$data.=$dias[date('w')]." ".$fecha_hora."&nbsp;&nbsp;".$hora;
+		$data.=" </font>";
+		$data.="<font face='Tahoma' size='2' >";
+		$data.="<br>";
+		$data.="<br>";
 		$data.="SISTEMA LOTTOMAX";
 		$data.="<br>";
-		$data.="Resultados Sorteos";
-		$data.="<br>";
-
-		//Cambio de tamano fuenta a 10 cpi
-		$data1="\\x1B\\x50";
-		$data1.="SISTEMA LOTTOMAX";
-		$data1.="\\n";
-		$data1.="Resultados Sorteos";
-		$data1.="\\n";
-
+		$data.=" Resultados Del ".$dias[$numero_semana]." ".$_GET['txt_fecha'];
+		$data.="<br><br>";
+		$data.=" </font></td> </tr>";		
+		$data.="<tr><td align='left'><font face='Tahoma' size='2' >Sorteos</font></td><td align='left'><font face='Tahoma' size='2' >Num</font></td><td align='left'>&nbsp;<font face='Tahoma' size='2' >Signo</font></td>";
+		$data.="</tr>";
 		while($row= $obj_conexion->GetArrayInfo($result)){
-
-			$data.="<br>FECHA: ".$row['fecha'];
-			$data.="<br>Total Ventas: ".$row['total_ventas'];
-			$data.="<br>Comision: ".$row['comision'];
-			$data.="<br>Total Premios: ".$row['total_premiado'];
-			$data.="<br>Balance: ".$row['balance'];
-			$data.="<br>";
-			$data.="-----------------------------";
-			$data.="<br>";
-
-				
-			$data1.="\\nFECHA: ".$row['fecha'];
-			$data1.="\\nTotal Ventas: ".$row['total_ventas'];
-			$data1.="\\nComision: ".$row['comision'];
-			$data1.="\\nTotal Premios: ".$row['total_premiado'];
-			$data1.="\\nBalance: ".$row['balance'];
-			$data1.="\\n";
-			$data1.="-----------------------------";
-			$data1.="\\n";
-
-
+			$data.="<tr>";
+			$data.="<td align='left'><font face='Tahoma' size='2' >".$row['nombre_sorteo']."</font></td>";
+			$data.="<td align='center'><font face='Tahoma' size='2' >".$row['numero']."</font></td>";
+			$pre_zodiacal=$row['pre_zodiacal'];
+			if ($pre_zodiacal == "**"){
+				$pre_zodiacal = "";
+			}
+			$data.="<td align='right'><font face='Tahoma' size='2' >".$pre_zodiacal."</font></td>";
+			$data.="</tr>";			
+			$i++;
 		}
-			
-		//echo $data;
+		$data.=" </table>";
 	}
 
 }
 
 // Obtenemos los datos de la taquilla
 $ida_taquilla= $obj_modelo->GetIdTaquillabyNumero($id_taquilla);
+
+//$lineas_saltar_despues= $obj_modelo->lineas_saltar_despues($ida_taquilla);
+
+
 //Determinar si va a imprimir incompletos y Agotados
 $info_impresora= $obj_modelo->GetDatosImpresora($ida_taquilla);
 
@@ -109,22 +136,12 @@ for($i=1;$i<=$lineas_saltar_despues;$i++){
 	$data.=".<br>";
 }
 
-//echo $data1;
-/*
- echo "<script type='text/javascript'>";
-echo "print('".$data1."')";
-echo "</script>";
-
-echo "<script language='javascript'>setTimeout('self.close();',5000)</script>"
-*/
-
 echo $data;
 ?>
-
 
 <script type="text/javascript"> 
 window.print();
 </script>
 <script language='javascript'>setTimeout('self.close();',5000)</script>
-   </body>
+</body>
 </html>

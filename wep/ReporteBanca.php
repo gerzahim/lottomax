@@ -78,6 +78,16 @@ if($dia_hoy == '01'){
 $fecha_hoy=$ano."-".$mes."-".$dia_hoy;
 $fecha_ayer=$ano."-".$mes1."-".$dia_ayer;
 
+if(isset($_GET ['fechadesde']))
+	$fecha_ayer=	$_GET ['fechadesde'];
+else
+	$fecha_ayer=$ano."-".$mes1."-".$dia_ayer;
+
+if(isset($_GET ['fechahasta']))
+	$fecha_hoy=	$_GET ['fechahasta'];
+else
+	$fecha_hoy=$ano."-".$mes."-".$dia_hoy;
+
 $fecha_desde= $obj_generico->CleanText($fecha_ayer);
 $fecha_hasta= $obj_generico->CleanText($fecha_hoy);
 
@@ -90,6 +100,9 @@ $fecha_hasta=$obj_date->changeFormatDateII($fecha_hasta);
 
 $comision=$obj_modelo->GetComision();
 $data="";
+$data.="URL ?fechadesde=".$fecha_ayer."&fechahasta=".$fecha_hoy;
+$data.="<br><br>";
+
          if( $result= $obj_modelo->GetBalance($fecha_desde, $fecha_hasta,$comision)){
             if ($obj_conexion->GetNumberRows($result)>0 ){
             	

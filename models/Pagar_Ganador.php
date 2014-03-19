@@ -263,14 +263,49 @@ class Pagar_Ganador{
 	 * @param string $id_ticket
          * @param string $total_premiado
 	 */
-	public function PagarTicket($id_ticket){
+	public function PagarTicket($id_ticket, $taquilla, $id_usuario){
 
 		//Preparacion del query
-		$sql = "UPDATE `ticket` SET  `pagado`='1'  WHERE id_ticket='".$id_ticket."'";
-          echo "SI PASA";      
+		$fecha= date('Y-m-d H:i:s');
+		$sql = "UPDATE `ticket` SET  `pagado`='1', `fecha_hora_pagado`='".$fecha."', `taquilla_pagado`='".$taquilla."', `usuario_pagado`='".$id_usuario."'  WHERE id_ticket='".$id_ticket."'";
+		
 		return $this->vConexion->ExecuteQuery($sql);
 
 	}
+	
+	/**
+	 * Busqueda de Id de Taquilla.
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetIdTaquilla(){
+	
+		//Preparacion del query
+		//		$sql = "SELECT * FROM parametros";
+		//		$result= $this->vConexion->ExecuteQuery($sql);
+		//		$roww= $this->vConexion->GetArrayInfo($result);
+		//		return $roww["taquilla"];
+		 
+		return $_SESSION['taquilla'];
+	}	
+	
+	/**
+	 * Busqueda de Id de Usuario.
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetIdUsuario(){
+	
+		//Preparacion del query
+		//		$sql = "SELECT * FROM parametros";
+		//		$result= $this->vConexion->ExecuteQuery($sql);
+		//		$roww= $this->vConexion->GetArrayInfo($result);
+		//		return $roww["taquilla"];
+			
+		return $_SESSION['id_usuario'];
+	}	
 
         /**
 	 * Actualiza Datos del ticket en detalle ticket  a premiadoo 1.
