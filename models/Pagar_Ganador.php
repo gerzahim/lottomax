@@ -143,18 +143,18 @@ class Pagar_Ganador{
 	 *
 	 * @param string $id_ticket
 	 */
-	public function GetDetalleTciket($id_ticket, $cantidad, $pagina){
+	public function GetDetalleTciket($id_ticket){
 
                 // Datos para la paginacion
-		$inicial= ($pagina-1) * $cantidad;
+		//$inicial= ($pagina-1) * $cantidad;
 		
 		//Preparacion del query
-                 $sql = "SELECT S.id_sorteo, S.nombre_sorteo, DT.*, S.hora_sorteo, TJ.nombre_jugada, Z.nombre_zodiacal
-                        FROM detalle_ticket DT
+                 $sql = "SELECT S.id_sorteo, S.nombre_sorteo, DT.*,  TJ.nombre_jugada, Z.nombre_zodiacal
+                        	FROM detalle_ticket DT
                             INNER JOIN sorteos S ON DT.id_sorteo=S.id_sorteo
                             INNER JOIN zodiacal Z ON DT.id_zodiacal=Z.Id_zodiacal
                             INNER JOIN tipo_jugadas TJ ON DT.id_tipo_jugada=TJ.id_tipo_jugada
-                        WHERE id_ticket='".$id_ticket."'";
+                        WHERE id_ticket='".$id_ticket."' AND total_premiado > 0";
 
                  
                  /*$sql = "SELECT S.id_sorteo, S.nombre_sorteo, DT.id_total_premiado,DT.id_detalle_ticket, S.hora_sorteo, DT.numero, DT.id_tipo_jugada, TJ.nombre_jugada, DT.id_zodiacal, Z.nombre_zodiacal, DT.monto
@@ -167,21 +167,8 @@ class Pagar_Ganador{
                  
 		$result= $this->vConexion->ExecuteQuery($sql);
 
-                // Datos para la paginacion
-		$total_registros= $this->vConexion->GetNumberRows($result);
-		if($cantidad!=0){
-			$total_paginas= ceil($total_registros / $cantidad);
-		}
-		else{
-			$total_paginas= 0;
-		}
-
-		// Nuevo SQL
-		$sql.=" LIMIT ".$cantidad." OFFSET ".$inicial."";
-		//echo $sql;
-                $result= $this->vConexion->ExecuteQuery($sql);
-
-                return array('pagina'=>$pagina,'total_paginas'=>$total_paginas,'total_registros'=>$total_registros,'result'=>$result);
+         
+                return $result;
 
 	}
 
