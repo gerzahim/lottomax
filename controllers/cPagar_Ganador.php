@@ -143,32 +143,20 @@ switch (ACCION){
                            		$_SESSION['mensaje']= $mensajes['serial_no_coincide'];
                             	header('location:'.$_SESSION['Ruta_serial']);
                             }
-                        
-                      
                 }
                 else{
                     // Mensaje
                      $_SESSION['mensaje']= $mensajes['serial_no_coincide'];
                       header('location:'.$_SESSION['Ruta_serial']);
-
                 }
 		break;
-                
 	default:
-		
 		// Ruta actual
 		$_SESSION['Ruta_Lista']= $obj_generico->RutaRegreso();
-				
-		
 		// Parseo del bloque
 		$obj_xtpl->parse('main.contenido.busqueda_ticket');
-		
 		break;
-	
 }
-
-
-
 $obj_xtpl->parse('main.contenido');
 
 ?>
