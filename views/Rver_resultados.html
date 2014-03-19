@@ -65,6 +65,8 @@
                         <input style="border: hidden" type="hidden" name="fecha" id="idaccion" value="{fecha}"/>
 			<table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1">
 				<caption>Resultados a la fecha {fecha}</caption>
+				<br>
+					<div class="paginas"><span>[ <a class="enlaces" href="./ajax/ImprimirResultados.php?txt_fecha={fecha}" target="_blank">Imprimir Ticket Resultados </a> ]</span></div>
 
 				<thead>
 					<tr>
@@ -99,7 +101,10 @@
 			</table>
                             <div class="paginas">{paginacion}</div>
                             <div class="paginas">{faltantes}</div>
+                            <br>
+							<div class="paginas"><span>[ <a class="enlaces" href="./ajax/ImprimirResultados.php?txt_fecha={fecha}" target="_blank">Imprimir Ticket Resultados </a> ]</span></div>
                             <div class="botones">
+                            
                                 <input  id="btnok" name="btnentrar" value="Descargar en PDF"  type="submit" class="boton" target="_blank">&nbsp;&nbsp;&nbsp;
 
                                 <input  id="btncancel" name="btncancelar" value="Cancelar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>

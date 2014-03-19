@@ -18,6 +18,11 @@
                                             <input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
                                             <input style="border: hidden" type="hidden" name="accion" id="idaccion" value="listar_resultados"/>
                                              <fieldset>
+                                             <legend>Listado de Ventas</legend>	
+			<div id="enlaces_accion">
+				<span>[ <a class="enlaces" href="{pagina_principal}?op={opcion_sistema}&amp;accion=search">Buscar Ticket</a> ]</span>	
+			</div>  
+			<br>                                             
                                                    <table align="center" border="0" cellpadding="2" cellspacing="0" width="80%">
                                                         <tr>
                                                             <td><span class="requerido">*</span> Fecha desde:</td>
@@ -96,6 +101,75 @@
                       
                         <!-- END: buscar_tickets -->
 
+
+                        <!-- BEGIN: search_tickets -->
+
+                        <table width="800" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF">
+                            <tr>
+                                <td>
+                                    <div id="main">
+
+                                        <br />
+
+                                        <form id="frm1" method="get" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es">
+                                            <input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
+                                            <input style="border: hidden" type="hidden" name="accion" id="idaccion" value="looking"/>
+                                             <fieldset>
+                                             <legend>Buscar Ticket</legend>	
+
+			<br>                                             
+                                                   <table align="center" border="0" cellpadding="2" cellspacing="0" width="80%">
+                                                        <tr>
+                                                            <td> 
+                                                                <input type="radio" id="radio_buscar"  name="radio_buscar" value="1">&nbsp;&nbsp;Buscar Por Fecha:&nbsp;&nbsp;<input type="text" id="fecha" name="fecha">
+                                                                <br>
+                                                                <input type="radio" id="radio_buscar"  name="radio_buscar" value="2">&nbsp;&nbsp;Por Numero del Ticket:&nbsp;&nbsp;<input type="text" id="id_ticket" name="id_ticket" >
+															</td> 
+                                                            <script type="text/javascript">
+                                                                 $(function() {
+                                                                     $("#fecha").datepicker({
+                                                                        beforeShow: RangoDefault,
+                                                                        changeMonth: true,
+                                                                        changeYear: true,
+                                                                        showOn: 'both',
+																		dateFormat:'dd/mm/yy',
+                                                                        buttonText: 'Calendario',
+                                                                        buttonImage: "./images/calendar.jpg",
+                                                                        buttonImageOnly: true
+                                                                        }).addClass("embed").attr('readonly','readonly');
+
+                                                                    // Para validar las fechas
+                                                                    function RangoDefault(input){
+                                                                            return {
+                                                                                    minDate: ( (input.id == "fechahasta" && $("#fechadesde").val()) ? $("#fechadesde").datepicker("getDate") : null),
+                                                                                    maxDate:  '+0d'
+                                                                            };
+                                                                    }
+
+                                                                  });
+                                                                </script>															                                                           
+                                                            
+                                                        </tr>
+                                                        <tr><td colspan="4"></td></tr>
+
+                                                    </table>
+                                                </fieldset>
+
+                                            <div class="botones">
+
+                                                    <input  id="btnok" name="btnentrar" value="Buscar"  type="submit" class="boton"/>&nbsp;&nbsp;&nbsp;
+
+                                                    <input  id="btncancel" name="btncancelar" value="Cancelar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
+
+                                            </div>
+                                        </form>
+                                       </div>
+                                </td>
+                            </tr>
+                        </table>
+                      
+                        <!-- END: search_tickets -->
+                        
                         <!-- BEGIN: lista_resultados -->
 			<form id="frm1" method="get" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es" target="_blank">
                         <input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
@@ -107,8 +181,11 @@
 			<table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1">
 				<caption>Tickets desde {fechadesde} hasta {fechahasta}</caption>
 							<div class="paginas">{taquilla_info}</div>
-                            <div class="paginas">{total_ventas}</div>
+                            <div class="paginas"><strong>{total_ventas}</strong></div>
                             <div class="paginas">{ticket_anulados}</div>
+                            <div class="paginas">{total_anulados}</div>
+                            <br>
+                            <div class="paginas"><span>[ <a class="enlaces" href="./ajax/ImprimirReporteTaquilla.php?fechadesde={fechadesde}&amp;fechahasta={fechahasta}&amp;taquilla={taquilla}" target="_blank">Imprimir Ticket Cuadre Taquilla </a> ]</span></div>
                             
 				<thead>
 					<tr>
@@ -143,8 +220,9 @@
 			</table>
                             <div class="paginas">{paginacion}</div>
 							<div class="paginas">{taquilla_info}</div>
-                            <div class="paginas">{total_ventas}</div>
+                            <div class="paginas"><strong>{total_ventas}</strong></div>
                             <div class="paginas">{ticket_anulados}</div>
+                            <div class="paginas">{total_anulados}</div>
 
                             
                            
@@ -158,9 +236,50 @@
                         </div>
 			<!-- END: lista_resultados -->
 			 <div class="paginas">{no_info}</div>
-			
-	
-                        <br />	<br />
+			 
+         <!-- BEGIN: lista_buscar -->
+<form id="frm1" method="get" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es" target="_blank">
+
+			<table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1"  >
+				<caption>Tickets</caption>
+                            
+				<thead>
+					<tr>
+						<th class="title header" scope="col">Fecha Hora</th>
+                        <th class="title header" scope="col">Numero Ticket</th>
+						<th class="title header" scope="col">Monto</th>
+						<th class="title header" scope="col">Premiado</th>
+						<th class="title header" scope="col">Pagado</th>
+						<th class="title header" scope="col">Estatus</th>																		
+                        <th class="title header" scope="col">Detalle Ticket</th>
+					</tr>
+				</thead>
+
+				<tbody>
+
+					<!-- BEGIN: listado -->
+					<tr class="{estilo_fila}">
+						<td align="center">&nbsp;{fecha_hora}</td>
+						<td align="center">{id_ticket}</td>
+   						<td align="center">{total}</td>
+   						<td align="center">{premiado}</td>
+   						<td align="center">{pagado}</td>
+   						<td align="center">{status}</td>   						   						   						                                         
+                        <td align="center"><a href="{link_detalle}" target="_blank">Ver Detalle</a></td>
+					</tr>
+					<!-- END: listado -->
+
+					<!-- BEGIN: no_listado -->
+
+					<tr class="even">
+						<td align="center" colspan="6" class="odd"><br />{sin_listado}<br />&nbsp;</td>
+					</tr>
+					<!-- END: no_listado -->
+
+				</tbody>
+			</table>
+			<!-- END: lista_buscar -->			
+ <br />	<br />
 		
 		</td>	
 	</tr>

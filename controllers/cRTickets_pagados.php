@@ -31,8 +31,17 @@ switch (ACCION){
         // Ruta regreso
         $obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Form']);
         
+        $op_fecha = $_GET['radio_pagado'];
+        if($op_fecha == '1'){
+        	// Selecciono Por Fecha Emision de Ticket
+        	$result= $obj_modelo->GetTicketsPagadosbyFechaEmitidos($fecha);
+        }else{
+        	// Selecciono Por Fecha de Pagado el Ticket
+        	$result= $obj_modelo->GetTicketsPagadosbyFechaPagados($fecha);
+        }
+                
         $i=0;
-        if( $result= $obj_modelo->GetTicketsGanadores($fecha) ){
+        if( $result ){
             if ($obj_conexion->GetNumberRows($result)>0 ){
                 
                 while($row= $obj_conexion->GetArrayInfo($result)){
@@ -43,9 +52,18 @@ switch (ACCION){
                             $obj_xtpl->assign('estilo_fila', 'odd');
                     }
 
-                    $obj_xtpl->assign('fecha_hora', $obj_date->changeFormatDateI($row['fecha_hora'],1));
+                    $obj_xtpl->assign('fecha_hora', $obj_date->GetFechaHoraNoMilitar($row['fecha_hora']));
                     $obj_xtpl->assign('id_ticket', $row['id_ticket']);
                     $obj_xtpl->assign('taquilla', $row['taquilla']);
+                    $obj_xtpl->assign('taquilla_pagado', $row['taquilla_pagado']);
+                    
+                    $nombre_usuario=$obj_modelo->GetNombreUsuarioById($row['usuario_pagado']);
+                    $nombre = explode(" ", $nombre_usuario);
+                    $nombre = $nombre[0];
+                    $obj_xtpl->assign('usuario_pagado', $nombre);
+                    
+                    $obj_xtpl->assign('fecha_hora_pagado', $obj_date->GetFechaHoraNoMilitar($row['fecha_hora_pagado']));
+                    
                     $obj_xtpl->assign('total', $row['total_ticket']);
                     $obj_xtpl->assign('total_premiado', $row['total_premiado']);
                     

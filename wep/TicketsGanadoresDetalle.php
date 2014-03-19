@@ -47,9 +47,14 @@ $ano=date('Y');
 $mes=date('m');
 $dia_hoy=date('d');
 
-$fecha_hoy=$ano."-".$mes."-".$dia_hoy;
+if(isset($_GET ['fecha']))
+	$fecha_hoy=	$_GET ['fecha'];
+else
+	$fecha_hoy=$ano."-".$mes."-".$dia_hoy;
 
 $data="";
+$data.="URL ?fecha=".$fecha_hoy;
+
          
          
          $data.="<br><br>";
@@ -59,7 +64,7 @@ $data="";
          		// ENCABEZADO DEL TICKET
          
          		 
-         		$data.=" <table width='200' border='2' ><tr><td colspan='3' align='center'><font face='arial' size='2' >";
+         		$data.=" <table width='200' border='1' ><tr><td colspan='3' align='center'><font face='arial' size='2' >";
          		$data.=" SISTEMA LOTTOMAX";
          		$data.=" </font></td> </tr>";
          		$data.="<tr> <td colspan='3' align='center'><font face='arial' size='2' >";
@@ -72,17 +77,31 @@ $data="";
          		$total_premios=0;
          		$total_pagado=0;
          		
-         		$data.="<tr><td width='40' align='center'><font face='arial' size='2' >ID</font> </td> <td align='center' width='73' ><font face='arial' size='2' >Monto Premiado</font></td></tr>";
+         		
          
          			
          		while($row= $obj_conexion->GetArrayInfo($result)){
          			//	$data.="SISTEMA LOTTOMAX";
+         			$data.="<tr><td width='40' align='center'><font face='arial' size='2' >ID</font> </td> <td align='center' width='73' ><font face='arial' size='2' >Monto Premiado</font></td></tr>";
          			$data.="<tr><td width='40' align='left'> <font face='times' size='2' >".$row['id_ticket']."</font></td> ";
-         			$data.="<td width='73' align='center'><font face='times' size='2' >".$row['total_premiado']."</font></td> ";
+         			$total_premio=$row['total_premiado'];
+         			if($total_premio < 400){
+         				$data.="<td width='73' align='center'><font face='times' size='2' ><strong>".$row['total_premiado']."</strong></font></td> ";
+         			}else{
+         				$data.="<td width='73' align='center'><font face='times' size='4' color='red' ><strong>".$row['total_premiado']."</strong></font></td> ";
+         			}
          			
-         			$data.="<tr><td colspan='2' width='40' align='center'><font face='arial' size='2' >";
-         			$data.="Detalle Jugada Ganadora: ".$row['id_ticket'];
-         			$data.="<br>Monto del Ticket: ".$row['total_ticket'];
+         			
+         			$data.="<tr><td colspan='2' width='40' align='left'><font face='arial' size='2' >";
+         			$data.="Detalle Apuesta Ganadora";
+         			$data.="<br>Ticket: ".$row['id_ticket'];
+         			$data.="<br>Fecha: ".$row['fecha_hora'];
+         			$data.="<br>Monto del Ticket Bs:".$row['total_ticket'];
+         			$data.="<br>Taquilla: ".$row['taquilla'];
+         			if($row['pagado']=='0'){$pagado='NO';}else{$pagado='SI';}
+         			$data.="<br>Pagado: ".$pagado;
+         			$data.="<br>Total Premio Ticket Bs: ".$row['total_premiado'];
+         			
          			
          			$resulta= $obj_modelo->GetDetalleTicketPremiados($row['id_ticket']);
          			
@@ -93,7 +112,12 @@ $data="";
          				if($rowa['id_zodiacal'] != '0'){
          					$data.="<br>Zodiacal: ".$obj_modelo->GetPreNombreSigno($rowa['id_zodiacal']);
          				}
-         				$data.="<br>Premiado Bs : ".$rowa['total_premiado'];
+         				$total_premioa=$rowa['total_premiado'];
+         				if($total_premioa < 400){
+         					$data.="<br><font face='times' size='3' ><strong>Premio Bs : ".$total_premioa."</strong></font>";
+         				}else{
+         					$data.="<br><font face='times' size='3' color='blue' ><strong>Premio Bs : ".$total_premioa."</strong></font>";
+         				}         				
          			
          			}        			
          			$data."</font></td></tr>";
@@ -109,6 +133,8 @@ $data="";
          }       
 
 echo $data;
+
+
 ?>
 
    </body>

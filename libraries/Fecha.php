@@ -118,18 +118,16 @@ class Fecha{
 	 * @return date $nueva_fecha
 	 */
 	public function changeFormatDateI($fecha,$tipo){
-		if($tipo==0)
-		{
-		if( $fecha=="" || $fecha=="0000-00-00"){
-			$nueva_fecha= "";
-		}
-		else{
-			$nueva_fecha= substr($fecha, 8, 2)."-".substr($fecha, 5, 2)."-".substr($fecha, 0, 4);
-		}
+		if($tipo==0){
+			if( $fecha=="" || $fecha=="0000-00-00"){
+				$nueva_fecha= "";
+			}
+			else{
+				$nueva_fecha= substr($fecha, 8, 2)."-".substr($fecha, 5, 2)."-".substr($fecha, 0, 4);
+			}
 	//	echo "pasa";
 		}
-		else
-		{
+		else{
 			if( $fecha=="" || $fecha=="0000-00-00"){
 				$nueva_fecha= "";
 			}
@@ -137,7 +135,6 @@ class Fecha{
 				$nueva_fecha= substr($fecha, 8, 2)."-".substr($fecha, 5, 2)."-".substr($fecha, 0, 4);
 				$nueva_fecha.=" ".substr($fecha, -8);
 			}
-			
 		}
 		return $nueva_fecha;
 	}	
@@ -230,5 +227,36 @@ class Fecha{
 		
 		return $mesArray[date("n")];
 	}
+	
+	/**
+	 * Devuelve la fecha y hora sin formato Militar
+	 *
+	 * @param string $fecha    2014-03-18 14:30:25
+	 * @return string $fecha   18/03/2014 14:30 PM 
+	 */
+	public function GetFechaHoraNoMilitar($fecha){
+	
+		$year = substr($fecha,0,4);
+		$month = substr($fecha,5,2);
+		$day = substr($fecha,8,2);
+		$hour = substr($fecha,11,2);
+		$minute = substr($fecha,14,2);
+	
+		if($hour > 11){
+			$formato="PM";
+		}else{
+			$formato="AM";
+		}
+		$formato_militar= array("13","14","15","16","17","18","19","20","21","22","23","24");
+		$formato_civil= array("01","02","03","04","05","06","07","08","09","10","11","12");
+	
+		$hour= str_replace($formato_militar,$formato_civil,$hour);
+		$hora=$hour.":".$minute." ".$formato;
+	
+		$fecha_nueva = $day."/".$month."/".$year." ".$hora;
+	
+		return $fecha_nueva;
+	
+	}	
 }
 ?>

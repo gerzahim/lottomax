@@ -37,6 +37,7 @@ if( !isset($_POST['btnentrar']) ){
 	// Asignaciones
 	$obj_xtpl->assign('titulo_web',$obj_config->GetVar('titulo_web'));
 	$obj_xtpl->assign('fecha_hoy',$obj_date->FechaActual());
+	$obj_xtpl->assign('fecha_ano',$obj_date->FechaAno());
 	$obj_xtpl->assign('titulo_sistema',$obj_config->GetVar('titulo_sistema'));
 	//echo "pasamos";
 	//Definiendo $_GET['msj']

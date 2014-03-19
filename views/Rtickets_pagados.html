@@ -37,6 +37,11 @@
                                                                     }).addClass("embed").attr('readonly','readonly');
                                                               });
                                                             </script>
+                                                            <td> 
+                                                                <input type="radio" id="radio_pagado"  name="radio_pagado" value="1">&nbsp;&nbsp;Por Fecha Emision de Ticket:
+                                                                <br>
+                                                                <input type="radio" id="radio_pagado"  name="radio_pagado" value="2">&nbsp;&nbsp;Por Fecha de Pagado el Ticket:
+															</td>                                                            
 
                                                         </tr>
                                                     </table>
@@ -63,13 +68,15 @@
                         <input style="border: hidden" type="hidden" name="accion" id="idaccion" value="ver_resultados"/>
                         <input style="border: hidden" type="hidden" name="fecha" id="idaccion" value="{fecha}"/>
 			<table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1">
-				<caption>Tickets Ganadores Pagados de la fecha {fecha}</caption>
+				<caption>Tickets Pagados de la fecha {fecha}</caption>
 
 				<thead>
 					<tr>
 						<th class="title header" scope="col">Fecha Hora</th>
-                                                <th class="title header" scope="col">Numero Ticket</th>
-                                                <th class="title header" scope="col">Taquilla</th>
+						<th class="title header" scope="col">Numero Ticket</th>
+                        <th class="title header" scope="col">Pagado en la Taquilla</th>
+                        <th class="title header" scope="col">Pagado Por</th>
+                        <th class="title header" scope="col">Pagado en la Fecha</th>
 						<th class="title header" scope="col">Monto</th>
 						<th class="title header" scope="col">Monto Premio</th>
                                                 <th class="title header" scope="col">Detalle Ticket</th>
@@ -82,7 +89,9 @@
 					<tr class="{estilo_fila}">
 						<td align="center">&nbsp;{fecha_hora}</td>
 						<td align="center">{id_ticket}</td>
-                                                <td align="center">{taquilla}</td>
+                        <td align="center">{taquilla_pagado}</td>
+                        <td align="center">{usuario_pagado}</td>
+                        <td align="center">{fecha_hora_pagado}</td>
    						<td align="center">{total}</td>
                                                 <td align="center">{total_premiado}</td>                                                
                                                 <td align="center"><a href="{link_detalle}" target="_blank">Ver Detalle</a></td>
