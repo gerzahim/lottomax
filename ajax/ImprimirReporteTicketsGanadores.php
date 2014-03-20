@@ -180,10 +180,10 @@ $data.="<tr><td colspan='2' align='left'><font face='arial' size='2' ></font> </
 $data.="<tr><td colspan='2' align='left'> <font face='times' size='2' > Total Premios: </font></td> ";
 $data.="<td colspan='2' align='left'> <font face='times' size='2' > ".$total_premios." Bs.</font></td></tr> ";
 
-$data.="<tr><td colspan='2' align='left'> <font face='times' size='2' > Total Pagados: </font></td> ";
+$data.="<tr><td colspan='2' align='left'> <font face='times' size='2' > Pagados: </font></td> ";
 $data.="<td colspan='2' align='left'> <font face='times' size='2' > ".$total_pagado." Bs.</font></td></tr> ";
 
-$data.="<tr><td colspan='2' align='left'> <font face='times' size='2' > Total No Pagados: </font></td> ";
+$data.="<tr><td colspan='2' align='left'> <font face='times' size='2' > Por Pagar: </font></td> ";
 $data.="<td colspan='2' align='left'> <font face='times' size='2' > ".($total_premios-$total_pagado)." Bs. </font></td></tr> ";
 $data.="</table>";
 
