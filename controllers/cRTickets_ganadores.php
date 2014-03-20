@@ -104,17 +104,18 @@ switch (ACCION){
         //echo $_GET['fecha'];
         
         $fecha = $_GET['fecha'];
-
-
+        
         // Imagen  de encabezado
         $pdf->Image("./images/banner4.jpg" , 10 ,0, 180 ,40  , "JPG" ,"");
         
         // Titulo del Reporte
             $pdf->SetFont('Arial','B',20);
             $pdf->SetY(45);
-            //$pdf->Cell(50,10,'Tickets Ganadores a la fecha '.$_GET['fecha']);
-            $pdf->Cell(50,10,'Tickets Ganadores a la fecha '.$obj_date->changeFormatDateI($fecha,0));
+            $pdf->Cell(50,10,'Tickets Ganadores a la fecha '.$_GET['fecha']);
+            //$pdf->Cell(50,10,'Tickets Ganadores a la fecha '.$obj_date->changeFormatDateI($fecha,1));
+            $fecha=$obj_date->changeFormatDate($fecha,0);
             
+            echo $fecha;
 
 
 

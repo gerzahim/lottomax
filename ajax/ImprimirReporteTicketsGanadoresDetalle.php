@@ -76,7 +76,6 @@ $fecha= $obj_generico->CleanText($_GET['fecha']);
          	if ($obj_conexion->GetNumberRows($result)>0 ){
          
          		// ENCABEZADO DEL TICKET
-         		 
          
          		$data.=" <table width='200' border='0' ><tr><td colspan='4' align='center'><font face='arial' size='2' >";
          		$data.=$dias[date('w')]." ".$fecha_hora."&nbsp;&nbsp;".$hora;
@@ -90,12 +89,8 @@ $fecha= $obj_generico->CleanText($_GET['fecha']);
          		$data.="Fecha: ".$fecha;
          		$data.="</font></td> </tr>";
          		 
-         		$total_premios=0;
-         		$total_pagado=0;
-         		 
-         		 
-         		 
-         
+				$total_premios=0;								            
+				$total_pagado=0;
          		while($row= $obj_conexion->GetArrayInfo($result)){
          			//	$data.="SISTEMA LOTTOMAX";
          			//$total_premio=$row['total_premiado'];
@@ -106,10 +101,19 @@ $fecha= $obj_generico->CleanText($_GET['fecha']);
          			$data.="<br>Fecha: ".$row['fecha_hora'];
          			$data.="<br>Monto del Ticket Bs:".$row['total_ticket'];
          			$data.="<br>Taquilla: ".$row['taquilla'];
-         			if($row['pagado']=='0'){$pagado='NO';}else{$pagado='SI';}
+         			
+         		    $total_premios+=$row['total_premiado'];
+         			if($row['pagado'] == '0'){
+         				$pagado="NO";
+         			}else{
+         				$total_pagado+=$row['total_premiado'];
+         				$pagado="SI";
+         			} 
+         			
          			$data.="<br>Pagado: ".$pagado;
          			$data.="<br>Total Premio Ticket Bs: ".$row['total_premiado'];
-         
+         			
+        
          
          			$resulta= $obj_modelo->GetDetalleTicketPremiados($row['id_ticket']);
          
@@ -131,7 +135,7 @@ $fecha= $obj_generico->CleanText($_GET['fecha']);
          			$data."</font></td></tr>";
          			//$data.="<tr><td colspan='4' width='40' align='center'><font face='arial' size='2' ></font>.</td></tr>";
          			$data.="<tr height='10'><td colspan='4' align='center'>=====================</td></tr>";
-         			$total_premios=$total_premios+$row['total_premiado'];
+         			//$total_premios=$total_premios+$row['total_premiado'];
          		}
          		//$data.="<tr><td colspan='4' width='40' align='center'><font face='arial' size='2' > Total Premios: ".round($total_premios, 2)."</font> </td></tr>";
          		 
@@ -163,10 +167,10 @@ $data.="<tr><td colspan='2' align='left'><font face='arial' size='2' ></font> </
 $data.="<tr><td colspan='2' align='left'> <font face='times' size='2' > Total Premios: </font></td> ";
 $data.="<td colspan='2' align='left'> <font face='times' size='2' > ".$total_premios." Bs.</font></td></tr> ";
 
-$data.="<tr><td colspan='2' align='left'> <font face='times' size='2' > Total Pagados: </font></td> ";
+$data.="<tr><td colspan='2' align='left'> <font face='times' size='2' > Pagados: </font></td> ";
 $data.="<td colspan='2' align='left'> <font face='times' size='2' > ".$total_pagado." Bs.</font></td></tr> ";
 
-$data.="<tr><td colspan='2' align='left'> <font face='times' size='2' > Total No Pagados: </font></td> ";
+$data.="<tr><td colspan='2' align='left'> <font face='times' size='2' > Por Pagar: </font></td> ";
 $data.="<td colspan='2' align='left'> <font face='times' size='2' > ".($total_premios-$total_pagado)." Bs. </font></td></tr> ";
 $data.="</table>";
 
