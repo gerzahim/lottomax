@@ -78,7 +78,7 @@ $fecha= $obj_generico->CleanText($_GET['fecha']);
          		// ENCABEZADO DEL TICKET
          		 
          
-         		$data.=" <table width='200' border='1' ><tr><td colspan='4' align='center'><font face='arial' size='2' >";
+         		$data.=" <table width='200' border='0' ><tr><td colspan='4' align='center'><font face='arial' size='2' >";
          		$data.=$dias[date('w')]." ".$fecha_hora."&nbsp;&nbsp;".$hora;
          		$data.="<br>";         		
          		$data.=" SISTEMA LOTTOMAX";
