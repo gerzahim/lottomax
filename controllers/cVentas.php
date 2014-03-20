@@ -26,6 +26,14 @@ if( $result= $obj_modelo->GetSorteosManana() ){
 		$obj_xtpl->assign('claset', '');
 		if ($estradicional == '1') {
 			$obj_xtpl->assign('claset', 'class="t_manana"');
+		}
+
+		//Colocar una clase a los Zodiacales de la Manana
+		$eszodiacal=$row['zodiacal'];
+		
+		$obj_xtpl->assign('clasez', '');
+		if ($eszodiacal == '1') {
+			$obj_xtpl->assign('clasez', 'class="z_manana"');
 		}		
 		
 		//Saca la hora del sorteo
@@ -64,6 +72,14 @@ if( $result= $obj_modelo->GetSorteosTarde() ){
 		if ($estradicional == '1') {
 			$obj_xtpl->assign('claset', 'class="t_tarde"');
 		}
+		
+		//Colocar una clase a los Zodiacales de la tarde
+		$eszodiacal=$row['zodiacal'];
+		
+		$obj_xtpl->assign('clasez', '');
+		if ($eszodiacal == '1') {
+			$obj_xtpl->assign('clasez', 'class="z_tarde"');
+		}		
 				
 		$hora_sorteo=$row['hora_sorteo'];
 		$hora_sorteo= strtotime($hora_sorteo);
@@ -98,6 +114,14 @@ if( $result= $obj_modelo->GetSorteosNoche() ){
 		if ($estradicional == '1') {
 			$obj_xtpl->assign('claset', 'class="t_noche"');
 		}
+		
+		//Colocar una clase a los Zodiacales de la noche
+		$eszodiacal=$row['zodiacal'];
+		
+		$obj_xtpl->assign('clasez', '');
+		if ($eszodiacal == '1') {
+			$obj_xtpl->assign('clasez', 'class="z_noche"');
+		}		
 				
 		$hora_sorteo=$row['hora_sorteo'];
 		$hora_sorteo= strtotime($hora_sorteo);
