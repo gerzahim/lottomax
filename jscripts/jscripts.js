@@ -1026,7 +1026,48 @@ $(document).keyup(function(tecla){
     	}       	
     }else if((tecla.keyCode == 75)){
         // Tecla K
-    	// DISPONIBLE
+    	var myRadio = $("input[name='turno']:checked").val();
+    	//alert(myRadio);
+    	
+    	if(myRadio == '1'){
+    		//el turno es la manana
+        	if ($('input.z_manana').is(':checked')){
+        		$('input.z_manana').prop("checked", false)
+            }else{
+            	$('input.z_manana').prop('checked', true); //seleccionar el turno de la manana
+            }    		
+    	}else if(myRadio == '2'){
+    		//el turno es la tarde
+        	if ($('input.z_tarde').is(':checked')){
+        		$('input.z_tarde').prop("checked", false)
+            }else{
+            	$('input.z_tarde').prop('checked', true); //seleccionar el turno de la tarde
+            }		
+    	}else if(myRadio == '3'){
+    		//el turno es la noche
+        	if ($('input.z_noche').is(':checked')){
+        		$('input.z_noche').prop("checked", false)
+            }else{
+            	$('input.z_noche').prop('checked', true); //seleccionar el turno de la Noche
+            }		
+    	}else if(myRadio == '4'){
+    		//el turno es Todos
+        	if ($('input.z_manana').is(':checked')){
+        		$('input.z_manana').prop("checked", false)
+            }else{
+            	$('input.z_manana').prop('checked', true); //seleccionar el turno de la manana
+            }     		
+        	if ($('input.z_tarde').is(':checked')){
+        		$('input.z_tarde').prop("checked", false)
+            }else{
+            	$('input.z_tarde').prop('checked', true); //seleccionar Todos los Turnos
+            }
+        	if ($('input.z_noche').is(':checked')){
+        		$('input.z_noche').prop("checked", false)
+            }else{
+            	$('input.z_noche').prop('checked', true); //seleccionar el turno de la Noche
+            }	        	
+    	} 
     }else if((tecla.keyCode == 76)) {
     	// tecla L
     	checkAllsorteos(document.getElementsByName('ss[]'));
