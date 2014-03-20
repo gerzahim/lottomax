@@ -114,7 +114,7 @@ $data.="</font></td> </tr>";
 $data.="<tr><td colspan='2' align='center'><font face='Tahoma' size='3' >";
 $data.="Serial: ".$formato_serial;
 $data.="</font></td> </tr>";
-$data.="<tr><td colspan='2' align='center'><font face='Tahoma' size='3' >";
+$data.="<tr><td colspan='2' align='center'><font face='Tahoma' size='2' >";
 $data.=$dias[date('w')]." ".$fecha_hora."&nbsp;&nbsp;".$hora;
 $data.="</font></td> </tr>";
 $data.="<tr><td colspan='2' align='center'><font face='Tahoma' size='3' >";
