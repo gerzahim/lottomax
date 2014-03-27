@@ -24,9 +24,12 @@ session_start();
 require('.'.$obj_config->GetVar('ruta_modelo').'Ventas.php');
 $obj_modelo= new Ventas($obj_conexion);
 $taquilla= $obj_modelo->GetIdTaquilla();
-$total_ticket=$_GET['monto_total'];
+
 $impreso=$obj_modelo->ExisteTicketNoImpreso($taquilla);
 if($impreso == 1 || $impreso == 2){
+	
+	
+	
 	$resultTT= $obj_modelo->GetDatosTicketTransaccional();
 	If ($obj_conexion->GetNumberRows($resultTT)>0){
 	
@@ -38,6 +41,14 @@ if($impreso == 1 || $impreso == 2){
 	    $serial = $obj_modelo->GeneraSerialTicket();
 	    while ($obj_modelo->GetExisteSerialTicket($serial)){
 	        $serial = $obj_modelo->GeneraSerialTicket();
+	    }
+	    
+	    if( $result= $obj_modelo->GetDatosTicketTransaccional() ){
+	    	$total_ticket=0;
+	    	while($row= $obj_conexion->GetArrayInfo($result)){
+	    		// acumula y suma el total a la variable
+	    		$total_ticket+=$row['monto'];
+	    	}
 	    }
 	    // Obtenemos los datos de la taquilla
 	    $fecha_hora= date('Y-m-d H:i:s');
@@ -91,8 +102,4 @@ else {
 	header ("Location: ImprimirTicket.php");
 	
 }
-
-
-
-
 ?>
