@@ -255,56 +255,56 @@ switch (ACCION){
 		break;
         case 'save':
 		//exit;
-        $sw=0; // PARA PREMIAR TICKETS LUEGO
-  		$mensaje='';
-		$fecha_hora = $obj_date->changeFormatDateII ( $_POST['fecha'] );
-		$result=$obj_modelo->GetResultadosRepetidos($fecha_hora);
-		$sorteosexistentes=array();
-		while($row=$obj_conexion->GetArrayInfo($result))
-			$sorteosexistentes[$row['id_sorteo']]=1;
-		$sorteos=preg_split('/-/',$_POST ['sorteosnocargados']);
-		$sql="INSERT INTO `resultados` (`id_sorteo` , `zodiacal`, `numero`, `fecha_hora`) VALUES ";
-		$resultados=array();
-		$zodiacales=array();
-		foreach($sorteos as $st)
-		{
-			$numero = $_POST['txt_numero-' .$st];
-			if (isset( $_POST ['zodiacal-' . $st] )){
-				$zodiacal = $_POST ['zodiacal-' . $st];
-				$zodiacales[$st]=$zodiacal;
-			}
-			else{
-				$zodiacales[$st]=0;
-				$zodiacal =0;
-			}
-			if(!empty($numero)){
-				if(!isset($sorteosexistentes[$st])){
-					if (strlen ( $numero ) == 3){
-						$resultados[$st]=$numero;
-						$sql.="('".$st."', '".$zodiacal."', '".$numero."', '".$fecha_hora."'),";
-						$sw=1;
+	        $sw=0; // PARA PREMIAR TICKETS LUEGO
+	  		$mensaje='';
+			$fecha_hora = $obj_date->changeFormatDateII ( $_POST['fecha'] );
+			$result=$obj_modelo->GetResultadosRepetidos($fecha_hora);
+			$sorteosexistentes=array();
+			while($row=$obj_conexion->GetArrayInfo($result))
+				$sorteosexistentes[$row['id_sorteo']]=1;
+			$sorteos=preg_split('/-/',$_POST ['sorteosnocargados']);
+			$sql="INSERT INTO `resultados` (`id_sorteo` , `zodiacal`, `numero`, `fecha_hora`) VALUES ";
+			$resultados=array();
+			$zodiacales=array();
+			foreach($sorteos as $st)
+			{
+				$numero = $_POST['txt_numero-' .$st];
+				if (isset( $_POST ['zodiacal-' . $st] )){
+					$zodiacal = $_POST ['zodiacal-' . $st];
+					$zodiacales[$st]=$zodiacal;
+				}
+				else{
+					$zodiacales[$st]=0;
+					$zodiacal =0;
+				}
+				if(!empty($numero)){
+					if(!isset($sorteosexistentes[$st])){
+						if (strlen ( $numero ) == 3){
+							$resultados[$st]=$numero;
+							$sql.="('".$st."', '".$zodiacal."', '".$numero."', '".$fecha_hora."'),";
+							$sw=1;
+						}
 					}
 				}
+				else {
+					$_SESSION ['mensaje'] = 'Los numeros ingresados deben ser de tres digitos! ';
+					header ( 'location:' . $_SESSION ['Ruta_Lista'] );
+				}
 			}
-			else {
-				$_SESSION ['mensaje'] = 'Los numeros ingresados deben ser de tres digitos! ';
-				header ( 'location:' . $_SESSION ['Ruta_Lista'] );
-			}
-		}
-		if($sw==1){
-			$sql=trim($sql,',');
-			$sql.=";";
-			if($obj_modelo->GuardarDatosResultadosMasivo($sql)){
-				$mensaje=$mensajes['info_agregada'];
-				PremiarGanadores ($obj_conexion, $obj_modelo,$resultados,$zodiacales,$fecha_hora); // Premiamos los tickets ganadores
-			}
+			if($sw==1){
+				$sql=trim($sql,',');
+				$sql.=";";
+				if($obj_modelo->GuardarDatosResultadosMasivo($sql)){
+					$mensaje=$mensajes['info_agregada'];
+					PremiarGanadores ($obj_conexion, $obj_modelo,$resultados,$zodiacales,$fecha_hora); // Premiamos los tickets ganadores
+				}
+				else
+				$mensaje= "No se ingresaron nuevos resultados";
+			}	
 			else
 			$mensaje= "No se ingresaron nuevos resultados";
-		}	
-		else
-		$mensaje= "No se ingresaron nuevos resultados";
-		$_SESSION ['mensaje'] = $mensaje;
-		header ( 'location:' . $_SESSION ['Ruta_Lista'] );
+			$_SESSION ['mensaje'] = $mensaje;
+			header ( 'location:' . $_SESSION ['Ruta_Lista'] );
 		break;
 	default:
 		// Ruta actual
