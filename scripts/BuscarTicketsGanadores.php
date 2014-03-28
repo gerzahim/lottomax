@@ -30,7 +30,6 @@ $fecha_hora=$_GET['fecha_hora'];
 else
 $fecha_hora=date('Y-m-d');
 $obj_modelo->DespremiarTicket($fecha_hora);
-exit;
 $aprox= $obj_modelo->GetAprox();
 //$where = " fecha_hora LIKE '%".date('Y-m-d')."%'";
 //$result= $obj_modelo->GetListadosegunVariable($where);
@@ -53,7 +52,8 @@ while($row=$obj_conexion->GetArrayInfo($result)){
 //print_r($relacion_pago);
 	$result= $obj_modelo->GetListadosegunVariable($fecha_hora);
     If ($obj_conexion->GetNumberRows($result)>0){
-    	$i=0; $j=0;
+    	for($i=0;$i<count($resultados);$i++)
+    	{
     	$ticket_premiado=0;
     	$monto_total_ticket=0;
     	while ($roww= $obj_conexion->GetArrayInfo($result)){
@@ -61,7 +61,7 @@ while($row=$obj_conexion->GetArrayInfo($result)){
     		$fecha_ticket= substr($roww["fecha_hora"],0 , -9);
     		$resultDT = $obj_modelo->GetAllDetalleTciket($id_ticket);
 	        //revisamos la tabla de detalle ticket y comparamos con los resultados
-    		$monto_total=0;
+    		$monto_total=$roww['total_premiado'];
     		$sw=0;
     	    while($rowDT= $obj_conexion->GetArrayInfo($resultDT)){
 	            // Verificamos si hay alguna apuesta ganadora...
@@ -104,6 +104,7 @@ while($row=$obj_conexion->GetArrayInfo($result)){
     	    $obj_modelo->PremiarTicket($id_ticket,$monto_total);
     	}
     }
+}
     	   
     	    	
 
