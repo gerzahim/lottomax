@@ -102,7 +102,7 @@ $comision=$obj_modelo->GetComision();
 $data="";
 $data.="URL ?fechadesde=".$fecha_ayer."&fechahasta=".$fecha_hoy;
 $data.="<br><br>";
-
+		$total_cuadre=0;
          if( $result= $obj_modelo->GetBalance($fecha_desde, $fecha_hasta,$comision)){
             if ($obj_conexion->GetNumberRows($result)>0 ){
             	
@@ -125,15 +125,14 @@ $data.="<br><br>";
 					$data.="<br>";
 					$data.="-----------------------------";
 					$data.="<br>";
-
+					$total_cuadre= $total_cuadre + $row['balance'];
                 }
- 				
                 //echo $data;               
             } 
 
          }
-         
-         
+         $data.="<br>";
+         $data.="El Balance es: Bs. ".round($total_cuadre, 2);
          $data.="<br><br>";
          if( $result= $obj_modelo->GetTicketsGanadores($fecha_hoy)){
          	if ($obj_conexion->GetNumberRows($result)>0 ){

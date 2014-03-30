@@ -55,7 +55,7 @@ else
 $data="";
 $data.="URL ?fecha=".$fecha_hoy;
 
-         
+
          
          $data.="<br><br>";
          if( $result= $obj_modelo->GetTicketsGanadores($fecha_hoy)){
@@ -94,7 +94,7 @@ $data.="URL ?fecha=".$fecha_hoy;
          			
          			$data.="<tr><td colspan='2' width='40' align='left'><font face='arial' size='2' >";
          			$data.="Detalle Apuesta Ganadora";
-         			$data.="<br>Ticket: ".$row['id_ticket'];
+         			$data.="<br><a href='detalle_ticket.php?id_ticket=".$row['id_ticket']."' target='_blank'>Detalle Ticket: ".$row['id_ticket']."</a>";
          			$data.="<br>Fecha: ".$row['fecha_hora'];
          			$data.="<br>Monto del Ticket Bs:".$row['total_ticket'];
          			$data.="<br>Taquilla: ".$row['taquilla'];
