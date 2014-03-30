@@ -109,10 +109,10 @@ switch (ACCION){
         case 'search':
         
         	// Ruta actual
-        	$_SESSION['Ruta_Form']= $obj_generico->RutaRegreso();
+        	$_SESSION['Ruta_search']= $obj_generico->RutaRegreso();
         	
         	// Ruta regreso
-        	$obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Lista']);
+        	$obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Form']);
         
         	// Parseo del bloque de la fila
         	$obj_xtpl->parse('main.contenido.search_tickets');
@@ -124,7 +124,7 @@ switch (ACCION){
         		$_SESSION['Ruta_Look']= $obj_generico->RutaRegreso();
         	
         		// Ruta regreso
-        		$obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Form']);
+        		$obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_search']);
         		
 		        $op_buscar = $_GET['radio_buscar'];
 		        $fecha = $_GET['fecha'];
@@ -178,6 +178,9 @@ switch (ACCION){
 		        			$obj_xtpl->assign('premiado', $premiado);
 		        			$obj_xtpl->assign('pagado', $pagado);
 		        			$obj_xtpl->assign('status', $status);
+
+		        			$link_detalle= $_SESSION['Ruta_Form']."&accion=ver_detalle&id_ticket=".$row['id_ticket'];
+		        			$obj_xtpl->assign('link_detalle', $link_detalle);		        			
 		        			 
 		        			// Parseo del bloque de la fila
 		        			$obj_xtpl->parse('main.contenido.lista_buscar.listado');

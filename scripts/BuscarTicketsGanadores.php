@@ -29,6 +29,9 @@ if(isset($_GET['fecha_hora']))
 $fecha_hora=$_GET['fecha_hora'];
 else
 $fecha_hora=date('Y-m-d');
+
+echo "URL ?fecha_hora=".$fecha_hora."<br>";
+
 $obj_modelo->DespremiarTicket($fecha_hora);
 $aprox= $obj_modelo->GetAprox();
 //$where = " fecha_hora LIKE '%".date('Y-m-d')."%'";
