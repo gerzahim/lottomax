@@ -137,7 +137,6 @@ if($txt_numero ==  'a' ){
 	echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";
 	//exit();
 }else {	
-	
 	// Asignando El Modo de juego 
 	$op_juego=$_POST['op_juego']; 
 	$id_insert_taquilla=$obj_modelo->GetUltimoIdInsert($taquilla)+1;
@@ -154,16 +153,10 @@ if($txt_numero ==  'a' ){
 					//recorrer el sorteo
 					$eszodiacal=1;					
 					foreach ($zodiacales as $zodiacal){
-						
 						//Proceso_Cupo() funcion para determinar los cupos					
 						//echo $txt_numero, $txt_monto, $sorteo, $zodiacal, $eszodiacal;
-						
 						$result = ProcesoCupos($txt_numero, $txt_monto, $sorteo, $zodiacal, $eszodiacal,$id_insert_taquilla);						
-						
 					}
-					
-					
-					
 					}else{
 						
 	
@@ -178,174 +171,145 @@ if($txt_numero ==  'a' ){
 										
 				}		
 			}
-			
-
-
-			
-	     break;
-		 
+	    break;
 		case 2:  
 			// Juega Permuta
           //  $result= $obj_modelo->GetIdTaquilla();
-
 			//recorriendo el array de los sorteos seleccionados
 			foreach ( $sorteos as $sorteo) {
-
 				// Verifica si el sorteo es Zodiacal
 				if($obj_modelo->GetTrueZodiacal($sorteo)){
 					//El sorteo si es zodiacal !
 					//recorrer el sorteo
 					$eszodiacal=1;
-
+					$zodiacalestotal='';
 					foreach ($zodiacales as $zodiacal){
-
 						// Realizamos la permuta
-                                                if (strlen($txt_numero)<3){
-                                                   echo "<div id='mensaje' class='mensaje' >Debe ingresar un numero de minimo tres cifras para generar la permuta !!!</div>";
-                                                }else{
-                                                    $numeros_permuta = Permutar($txt_numero);
-
-                                                    foreach ( $numeros_permuta as $numero_permuta) {
-                                                        //Proceso_Cupo() funcion para determinar los cupos
-                                                        $result = ProcesoCupos($numero_permuta, $txt_monto, $sorteo, $zodiacal, $eszodiacal,$id_insert_taquilla);
-                                                    }
-                                                }
-
+						$zodiacalestotal.=$zodiacal.",";
+						if (strlen($txt_numero)<3){
+                        	echo "<div id='mensaje' class='mensaje' >Debe ingresar un numero de minimo tres cifras para generar la permuta !!!</div>";
+						}else{
+                        	$numeros_permuta = Permutar($txt_numero);
+                            $numero_inicio=$numeros_permuta[0];
+                            $numero_final=$numeros_permuta[count($numeros_permuta)-1];
+                            $altero=0;
+                            foreach ( $numeros_permuta as $numero_permuta) {
+                            	//Proceso_Cupo() funcion para determinar los cupos
+                                $result = ProcesoCupos($numero_permuta, $txt_monto, $sorteo, $zodiacal, $eszodiacal,$id_insert_taquilla);
+                                if($result!=$txt_monto)
+                                	$altero=1;
+							}
+							
+						}						
 					}
-
-
-
+					$zodiacalestotal==trim($zodiacalestotal,",");
+	//$tipo_jugada_especial,$numero_inicio,$id_sorteos,$numero_final,$numero_solicitado,$monto,$id_zodiacales,$id_taquilla,$id_insert_taquilla
+					if($altero==0)
+						$obj_modelo->GuardarJugadaEspecial(1,$numero_inicio,$zodiacal,$id_tipo_jugada,$matriz2[0],$matriz2[1],$matriz2[2],$matriz2[3],$taquilla,$id_insert_taquilla) )
+							
+				}else{
+					//El sorteo no es zodiacal !
+                    $eszodiacal=0;
+                    $zodiacal=0;
+					// Realizamos la permuta
+                    if (strlen($txt_numero)<3){
+                    	echo "<div id='mensaje' class='mensaje' >Debe ingresar un numero de minimo tres cifras para generar la permuta !!!</div>";
 					}else{
-
-
-                                            //El sorteo no es zodiacal !
-                                            $eszodiacal=0;
-                                            $zodiacal=0;
-                                            
-                                            // Realizamos la permuta
-                                            if (strlen($txt_numero)<3){
-                                               echo "<div id='mensaje' class='mensaje' >Debe ingresar un numero de minimo tres cifras para generar la permuta !!!</div>";
-                                            }else{
-                                                $numeros_permuta = Permutar($txt_numero);
-
-                                                foreach ( $numeros_permuta as $numero_permuta) {
-                                                    //Proceso_Cupo() funcion para determinar los cupos
-                                                    $result = ProcesoCupos($numero_permuta, $txt_monto, $sorteo, $zodiacal, $eszodiacal,$id_insert_taquilla);
-                                                }
-                                            }
-
+                    	$numeros_permuta = Permutar($txt_numero);
+                        $numero_inicio=$numeros_permuta[0];
+                        $numero_final=$numeros_permuta[count($numeros_permuta)-1];
+						$altero=0;
+                        foreach ( $numeros_permuta as $numero_permuta) {
+                        	//Proceso_Cupo() funcion para determinar los cupos
+                        	$result = ProcesoCupos($numero_permuta, $txt_monto, $sorteo, $zodiacal, $eszodiacal,$id_insert_taquilla);
+							if($result!=$txt_monto)
+							$altero=1;
+                        }
+                        if($altero==0)
+                        $obj_modelo->GuardarJugadaEspecial($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$matriz2[0],$matriz2[1],$matriz2[2],$matriz2[3],$taquilla,$id_insert_taquilla) )
+					}
 				}
 			}
-			
-			
-	     break;
-		 
+		break;
 		case 3:  
 			// Juega Series
-                        $result= $obj_modelo->GetIdTaquilla();
-
+			$result= $obj_modelo->GetIdTaquilla();
 			//recorriendo el array de los sorteos seleccionados
 			foreach ( $sorteos as $sorteo) {
-
 				// Verifica si el sorteo es Zodiacal
 				if($obj_modelo->GetTrueZodiacal($sorteo)){
 					//El sorteo si es zodiacal !
 					//recorrer el sorteo
 					$eszodiacal=1;
-
 					foreach ($zodiacales as $zodiacal){
-
 						// Realizamos la serie
-                                                if (strlen($txt_numero)>2){
-                                                   echo "<div id='mensaje' class='mensaje' >Debe ingresar un numero de dos cifras para generar la serie !!!</div>";
-                                                }else{
-                                                    $numeros_serie = Serializar($txt_numero);
-
-                                                    foreach ( $numeros_serie as $numero_serie) {
-                                                        //Proceso_Cupo() funcion para determinar los cupos
-                                                        $result = ProcesoCupos($numero_serie, $txt_monto, $sorteo, $zodiacal, $eszodiacal,$id_insert_taquilla);
-                                                    }
-                                                }
+            			if (strlen($txt_numero)>2){
+                        	echo "<div id='mensaje' class='mensaje' >Debe ingresar un numero de dos cifras para generar la serie !!!</div>";
+						}else{
+                        	$numeros_serie = Serializar($txt_numero);
+							foreach ( $numeros_serie as $numero_serie) {
+                            	//Proceso_Cupo() funcion para determinar los cupos
+                                $result = ProcesoCupos($numero_serie, $txt_monto, $sorteo, $zodiacal, $eszodiacal,$id_insert_taquilla);
+							}
+						}
 					}
-
-
-
+				}else{
+					//El sorteo no es zodiacal !
+                    $eszodiacal=0;
+                    $zodiacal=0;
+					// Realizamos la serie
+                    if (strlen($txt_numero)>2){
+                    	echo "<div id='mensaje' class='mensaje' >Debe ingresar un numero de dos cifras para generar la serie !!!</div>";
 					}else{
-
-
-                                            //El sorteo no es zodiacal !
-                                            $eszodiacal=0;
-                                            $zodiacal=0;
-
-                                            // Realizamos la serie
-                                             if (strlen($txt_numero)>2){
-                                               echo "<div id='mensaje' class='mensaje' >Debe ingresar un numero de dos cifras para generar la serie !!!</div>";
-                                             }else{
-                                                $numeros_serie = Serializar($txt_numero);
-
-                                                foreach ( $numeros_serie as $numero_serie) {
-                                                    //Proceso_Cupo() funcion para determinar los cupos
-                                                    $result = ProcesoCupos($numero_serie, $txt_monto, $sorteo, $zodiacal, $eszodiacal,$id_insert_taquilla);
-                                                }
-                                           }
-
+                    	$numeros_serie = Serializar($txt_numero);
+						foreach ( $numeros_serie as $numero_serie) {
+                        	//Proceso_Cupo() funcion para determinar los cupos
+                        	$result = ProcesoCupos($numero_serie, $txt_monto, $sorteo, $zodiacal, $eszodiacal,$id_insert_taquilla);
+						}
+					}
 				}
 			}
-	     break;
-	     
+		break;
 		case 4:  
 			// Juega Corridas
-                	$result= $obj_modelo->GetIdTaquilla();
-
+			$result= $obj_modelo->GetIdTaquilla();
 			//recorriendo el array de los sorteos seleccionados
 			foreach ( $sorteos as $sorteo) {
-
 				// Verifica si el sorteo es Zodiacal
 				if($obj_modelo->GetTrueZodiacal($sorteo)){
 					//El sorteo si es zodiacal !
 					//recorrer el sorteo
 					$eszodiacal=1;
-
 					foreach ($zodiacales as $zodiacal){
-
 						// Realizamos la permuta
-                                                $numeros_corrida = Corrida($txt_numero);
-                                                if ($numeros_corrida == $txt_numero){
-                                                    echo "<div id='mensaje' class='mensaje' >Debe ingresar dos numeros de la forma: 'numero1-numero2' para generar la corrida !!!</div>";
-                                                }else{
-                                                    foreach ( $numeros_corrida as $numero_corrida) {
-                                                        //Proceso_Cupo() funcion para determinar los cupos
-                                                        $result = ProcesoCupos($numero_corrida, $txt_monto, $sorteo, $zodiacal, $eszodiacal,$id_insert_taquilla);
-                                                    }
-                                                }
-
-					}
-
-
-
+            			$numeros_corrida = Corrida($txt_numero);
+                        if ($numeros_corrida == $txt_numero){
+                        	echo "<div id='mensaje' class='mensaje' >Debe ingresar dos numeros de la forma: 'numero1-numero2' para generar la corrida !!!</div>";
+						}else{
+                        	foreach ( $numeros_corrida as $numero_corrida) {
+	                        	//Proceso_Cupo() funcion para determinar los cupos
+	                            $result = ProcesoCupos($numero_corrida, $txt_monto, $sorteo, $zodiacal, $eszodiacal,$id_insert_taquilla);
+							}
+						}
+					}	
 				}else{
-
-
-                                            //El sorteo no es zodiacal !
-                                            $eszodiacal=0;
-                                            $zodiacal=0;
-
-                                            // Realizamos la permuta
-                                            $numeros_corrida = Corrida($txt_numero);
-                                               if ($numeros_corrida == $txt_numero){
-                                                    echo "<div id='mensaje' class='mensaje' >Debe ingresar dos numeros de la forma: 'numero1-numero2' para generar la corrida !!!</div>";
-                                                }else{
-                                                    foreach ( $numeros_corrida as $numero_corrida) {
-                                                        //Proceso_Cupo() funcion para determinar los cupos
-                                                        $result = ProcesoCupos($numero_corrida, $txt_monto, $sorteo, $zodiacal, $eszodiacal,$id_insert_taquilla);
-                                                    }
-                                                }
+					//El sorteo no es zodiacal !
+                    $eszodiacal=0;
+                    $zodiacal=0;
+                    // Realizamos la permuta
+                    $numeros_corrida = Corrida($txt_numero);
+                    if ($numeros_corrida == $txt_numero){
+                    	echo "<div id='mensaje' class='mensaje' >Debe ingresar dos numeros de la forma: 'numero1-numero2' para generar la corrida !!!</div>";
+					}else{
+                    	foreach ( $numeros_corrida as $numero_corrida) {
+                        	//Proceso_Cupo() funcion para determinar los cupos
+                        	$result = ProcesoCupos($numero_corrida, $txt_monto, $sorteo, $zodiacal, $eszodiacal,$id_insert_taquilla);
+						}
+					}
 				}
 			}
-                        break;
-        
+		break;
 	}	
-	
 // Listado de Jugadas Agregadas
 if( $result= $obj_modelo->GetDatosTicketTransaccional() ){
 	echo "<br><table class='table_ticket' align='center' border='1' width='90%'>";
@@ -452,16 +416,18 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 	$fecha_hoy=date('Y-m-d');
 	//determinando el tipo de jugada
 	$id_tipo_jugada= $obj_modelo->GetTipoJugada($esZodiacal,$txt_numero);
-
+	//$monto_inicial=$txt_monto;
 	//revisar tabla de ticket_transaccional
+	$monto_inicial=$txt_monto;
 	$numero_jugadoticket= $obj_modelo->GetTicketTransaccional($txt_numero,$sorteo,$zodiacal, $id_tipo_jugada);
 
-	if ( $numero_jugadoticket['total_registros']>0 )
+	if ($numero_jugadoticket['total_registros']>0 )
 	{
 		if($numero_jugadoticket['id_taquilla']!=$_SESSION["taquilla"]){
 			$monto_restante = $numero_jugadoticket['monto_restante'];
 			if ($monto_restante >0){
 				$matriz2= CalculaIncompletoYnuevoMonto($monto_restante,$txt_monto);
+				$txt_monto=$matriz2[2];
 				// Guardar ticket a tabla transaccional
 				if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$matriz2[0],$matriz2[1],$matriz2[2],$matriz2[3],$taquilla,$id_insert_taquilla) ){
 				}
@@ -522,6 +488,8 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 			//si queda por un monto mayor que 0
 			if ($monto_restante >0){
 				$matriz2= CalculaIncompletoYnuevoMonto($monto_restante,$txt_monto);
+				$txt_monto=$matriz2[2];
+				
 				// Guardar ticket a tabla transaccional
 				if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$matriz2[0],$matriz2[1],$matriz2[2],$matriz2[3],$taquilla,$id_insert_taquilla) ){
 				}else{
@@ -532,6 +500,8 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 				//Mensaje de ERROR -- NUMERO AGOTADO PARA ESTE SORTEO
 				//Se registra el numero como agotado
 				$matriz2= CalculaIncompletoYnuevoMonto($monto_restante,$txt_monto);
+				$txt_monto=$matriz2[2];
+				
 				$obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$matriz2[0],$matriz2[1],$matriz2[2],$matriz2[3],$taquilla,$id_insert_taquilla);
 				$_SESSION['mensaje']= $txt_numero." AGOTADO para sorteo ".$obj_modelo->GetNombreSorteo($sorteo)."  ".$obj_modelo->GetPreNombreSigno($zodiacal);
 				echo "<div id='mensaje' class='mensaje' >".$_SESSION['mensaje']."</div>";
@@ -558,7 +528,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 							//  $monto_restante= $txt_monto;
 							//registrar $num_jug_nuevodisponible, $incompleto
 							$matriz2= CalculaIncompletoYnuevoMonto($monto_cupoespecial, $txt_monto);
-								
+							$txt_monto=$matriz2[2];
 							if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$matriz2[0],$matriz2[1],$matriz2[2],$matriz2[3],$taquilla,$id_insert_taquilla) ){
 
 							}
@@ -592,6 +562,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 
 						// Calculando $num_jug_nuevodisponible,$incompleto
 						$matriz2= CalculaIncompletoYnuevoMonto($cupo_general, $txt_monto);
+						$txt_monto=$matriz2[2];
 						if( $obj_modelo->GuardarTicketTransaccional($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$matriz2[0],$matriz2[1],$matriz2[2],$matriz2[3],$taquilla,$id_insert_taquilla) ){
 
 						}
@@ -640,8 +611,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 					
 			}
 		}
-		return 1;
-
+		return $txt_monto;
 	}
 }
 
