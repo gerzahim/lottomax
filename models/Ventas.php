@@ -168,6 +168,28 @@ class Ventas{
 		
 		
 	}	
+	
+	/**
+	 * Guardar Datos de Jugadas Especiales como Permutas, Series o Corridas
+	 *
+	 * @param string $numero
+	 * @param string $id_sorteos
+	 * @param string $id_zodiacal
+	 * @param string $monto
+	 * @param string $id_taquilla
+	 * @return boolean, array
+	 */
+	public function GuardarJugadaEspecial($tipo_jugada_especial,$numero_inicio,$id_sorteos,$numero_final,$numero_solicitado,$monto,$id_zodiacales,$id_taquilla,$id_insert_taquilla){
+	
+		//Preparacion del query
+		$sql = "INSERT INTO `jugadas_especiales`(`tipo_jugada_especial`, `numero_inicio`, `id_sorteos`, `numero_final`, `numero_solicitado`, `monto`, `id_zodiacales`) VALUES ('".$tipo_jugada_especial."', '".$numero_inicio."', '".$numero_final."', '".$numero_solicitado."', ".$monto.", '".$id_zodiacales."', '".$monto."', '".$id_taquilla."',".$id_insert_taquilla.")";
+		//echo $sql;
+		return $this->vConexion->ExecuteQuery($sql);
+	
+	
+	}
+	
+	
 
 	/**
 	 * Busqueda de datos ticket transaccional
@@ -1012,7 +1034,7 @@ class Ventas{
          public function ExisteTicketNoImpreso($taquilla){
          
          	//Preparacion del query
-         	$sql = "SELECT * FROM ticket WHERE status='1' AND taquilla  = ".$taquilla." ORDER BY `id_ticket` DESC LIMIT 1 ";
+         	$sql = "SELECT * FROM ticket WHERE status='1' AND taquilla  = ".$taquilla." ORDER BY `fecha_hora` DESC LIMIT 1 ";
          	$result= $this->vConexion->ExecuteQuery($sql);
          	$roww= $this->vConexion->GetArrayInfo($result);
          	if($this->vConexion->GetNumberRows($result)== 0){
@@ -1023,7 +1045,6 @@ class Ventas{
          	
          	/*$sql = "SELECT FROM `ticket` WHERE `fecha_hora` LIKE '%".$fecha_hora."%' , `taquilla`, `total_ticket` , `id_usuario` , `premiado`, `pagado`)
                     VALUES ('".$id_ticket."', '".$serial."', '".."', '".$taquilla."', '".$total_ticket."', '".$id_usuario."', '0', '0')";
-         
          	return $this->vConexion->ExecuteQuery($sql);*/
          }
 
