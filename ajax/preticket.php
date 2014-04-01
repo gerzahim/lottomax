@@ -190,23 +190,23 @@ if($txt_numero ==  'a' ){
                         	echo "<div id='mensaje' class='mensaje' >Debe ingresar un numero de minimo tres cifras para generar la permuta !!!</div>";
 						}else{
                         	$numeros_permuta = Permutar($txt_numero);
-                            $numero_inicio=$numeros_permuta[0];
-                            $numero_final=$numeros_permuta[count($numeros_permuta)-1];
-                            $altero=0;
+                      //      $numero_inicio=$numeros_permuta[0];
+                        //    $numero_final=$numeros_permuta[count($numeros_permuta)-1];
+                          //  $altero=0;
                             foreach ( $numeros_permuta as $numero_permuta) {
                             	//Proceso_Cupo() funcion para determinar los cupos
                                 $result = ProcesoCupos($numero_permuta, $txt_monto, $sorteo, $zodiacal, $eszodiacal,$id_insert_taquilla);
-                                if($result!=$txt_monto)
-                                	$altero=1;
+                            //    if($result!=$txt_monto)
+                              //  	$altero=1;
 							}
 							
 						}						
 					}
-					$zodiacalestotal==trim($zodiacalestotal,",");
+					//$zodiacalestotal==trim($zodiacalestotal,",");
 	//$tipo_jugada_especial,$numero_inicio,$id_sorteos,$numero_final,$numero_solicitado,$monto,$id_zodiacales,$id_taquilla,$id_insert_taquilla
-					if($altero==0)
+				/*	if($altero==0)
 						$obj_modelo->GuardarJugadaEspecial(1,$numero_inicio,$zodiacal,$id_tipo_jugada,$matriz2[0],$matriz2[1],$matriz2[2],$matriz2[3],$taquilla,$id_insert_taquilla) )
-							
+					*/		
 				}else{
 					//El sorteo no es zodiacal !
                     $eszodiacal=0;
@@ -216,17 +216,17 @@ if($txt_numero ==  'a' ){
                     	echo "<div id='mensaje' class='mensaje' >Debe ingresar un numero de minimo tres cifras para generar la permuta !!!</div>";
 					}else{
                     	$numeros_permuta = Permutar($txt_numero);
-                        $numero_inicio=$numeros_permuta[0];
+    /*                    $numero_inicio=$numeros_permuta[0];
                         $numero_final=$numeros_permuta[count($numeros_permuta)-1];
-						$altero=0;
+						$altero=0*/;
                         foreach ( $numeros_permuta as $numero_permuta) {
                         	//Proceso_Cupo() funcion para determinar los cupos
                         	$result = ProcesoCupos($numero_permuta, $txt_monto, $sorteo, $zodiacal, $eszodiacal,$id_insert_taquilla);
-							if($result!=$txt_monto)
-							$altero=1;
+						//	if($result!=$txt_monto)
+					//		$altero=1;
                         }
-                        if($altero==0)
-                        $obj_modelo->GuardarJugadaEspecial($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$matriz2[0],$matriz2[1],$matriz2[2],$matriz2[3],$taquilla,$id_insert_taquilla) )
+                       /* if($altero==0)
+                        $obj_modelo->GuardarJugadaEspecial($txt_numero,$sorteo,$zodiacal,$id_tipo_jugada,$matriz2[0],$matriz2[1],$matriz2[2],$matriz2[3],$taquilla,$id_insert_taquilla) )*/
 					}
 				}
 			}
@@ -414,6 +414,7 @@ function ProcesoCupos($txt_numero,$txt_monto, $sorteo, $zodiacal, $esZodiacal,$i
 	global $obj_modelo;
 	global $obj_conexion;
 	$fecha_hoy=date('Y-m-d');
+	//echo "pasa";
 	//determinando el tipo de jugada
 	$id_tipo_jugada= $obj_modelo->GetTipoJugada($esZodiacal,$txt_numero);
 	//$monto_inicial=$txt_monto;
