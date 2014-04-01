@@ -153,10 +153,10 @@ $data="";
                     
                 }
                 $data.="<tr height='10'><td colspan='2' align='center'>===========================</td></tr>";
-                $data.="<tr height='10'><td colspan='2' align='left'>Total Venta: ".$total_venta." Bs:</td></tr>";
-                $data.="<tr height='10'><td colspan='2' align='left'>Total Comision: ".$total_comision." Bs:</td></tr>";
-                $data.="<tr height='10'><td colspan='2' align='left'>Total Premios: ".$total_premios." Bs:</td></tr>";
-                $data.="<tr height='10'><td colspan='2' align='left'>Total Balance: ".$total_balance." Bs:</td></tr>";
+                //$data.="<tr height='10'><td colspan='2' align='left'>Total Venta: ".$total_venta." Bs:</td></tr>";
+                //$data.="<tr height='10'><td colspan='2' align='left'>Total Comision: ".$total_comision." Bs:</td></tr>";
+                //$data.="<tr height='10'><td colspan='2' align='left'>Total Premios: ".$total_premios." Bs:</td></tr>";
+                //$data.="<tr height='10'><td colspan='2' align='left'>Total Balance: ".$total_balance." Bs:</td></tr>";
                 //echo $data;               
             } 
 
