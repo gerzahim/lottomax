@@ -249,7 +249,7 @@ class Pagar_Ganador{
 	 *
 	 * @return boolean, array 
 	 */
-	public function GetRelacionPagos($id_tipo_jugada){
+	public function GetRelacionPagos(){
 
 		//Preparacion del query
 		$sql = "SELECT monto,id_tipo_jugada FROM relacion_pagos ";
@@ -329,9 +329,9 @@ class Pagar_Ganador{
 	public function DespremiarTicket($fecha_hora){
 	
 		//Preparacion del query
-		$sql = "UPDATE `ticket` SET `premiado`=0 WHERE `fecha_hora` LIKE '%".$fecha_hora."%'";
+		$sql = "UPDATE `ticket` SET `premiado`=0,`total_premiado`='0' WHERE `fecha_hora` LIKE '%".$fecha_hora."%'";
 		$this->vConexion->ExecuteQuery($sql);
-		$sql = "UPDATE `detalle_ticket` SET `premiado`='0', WHERE `fecha_sorteo` LIKE '%".$fecha_hora."%'";
+		$sql = "UPDATE `detalle_ticket` SET `premiado`='0',`total_premiado`='0', WHERE `fecha_sorteo` LIKE '%".$fecha_hora."%'";
 		return $this->vConexion->ExecuteQuery($sql);
 	}
 	
