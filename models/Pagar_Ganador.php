@@ -324,15 +324,18 @@ class Pagar_Ganador{
 	/**
 	 * Quitar Premios a Ticket
 	 * @param string $fecha_hora
-	 * @return boolean, array
+	 * @return boolean
 	 */
 	public function DespremiarTicket($fecha_hora){
 	
 		//Preparacion del query
 		$sql = "UPDATE `ticket` SET `premiado`=0,`total_premiado`='0' WHERE `fecha_hora` LIKE '%".$fecha_hora."%'";
-		$this->vConexion->ExecuteQuery($sql);
-		$sql = "UPDATE `detalle_ticket` SET `premiado`='0',`total_premiado`='0', WHERE `fecha_sorteo` LIKE '%".$fecha_hora."%'";
-		return $this->vConexion->ExecuteQuery($sql);
+		if($this->vConexion->ExecuteQuery($sql)  or die ('Hubo un error con el registro de los datos:' .mysql_error())){
+		$sql = "UPDATE `detalle_ticket` SET `premiado`='0',`total_premiado`='0' WHERE `fecha_sorteo` LIKE '%".$fecha_hora."%'";
+			return $this->vConexion->ExecuteQuery($sql) or die ('Hubo un error con el registro de los datos:' .mysql_error()); 
+		}
+		else
+		return 0;
 	}
 	
 	/**
