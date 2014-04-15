@@ -39,6 +39,10 @@ echo "URL ?fecha_desde=".$fecha_desde."&fecha_hasta=".$fecha_hasta."<br>";
 
 $fecha_hora=$fecha_desde;
 //exit;
+echo "DESDE".strtotime($fecha_hora);
+echo "Hasta".strtotime($fecha_hasta);
+exit;
+
 while(strtotime($fecha_hora)<=strtotime($fecha_hasta) )
 {
 	$obj_modelo->DespremiarTicket($fecha_hora);
