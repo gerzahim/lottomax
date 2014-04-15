@@ -43,10 +43,23 @@ $fecha_hora=$fecha_desde;
 echo "Hasta".strtotime($fecha_hasta);
 exit;
 */
-while(strtotime($fecha_hora)<=strtotime($fecha_hasta) )
-{
-	$obj_modelo->DespremiarTicket($fecha_hora);
-	$aprox= $obj_modelo->GetAprox();
+$aprox= $obj_modelo->GetAprox();
+$result=$obj_modelo->GetRelacionPagos();
+$relacion_pago=array();
+while($row=$obj_conexion->GetArrayInfo($result)){
+	$relacion_pago[$row['id_tipo_jugada']]=$row['monto'];
+	//	$id_tipo_jugada[]=$row['id_tipo_jugada'];
+}
+while(strtotime($fecha_hora)<=strtotime($fecha_hasta) ){
+	//echo "fech.".$fecha_hora;
+	$res=$obj_modelo->DespremiarTicket($fecha_hora);
+	//echo "<br>REST".$res;
+	if($res)
+	echo "<br>Despremiar Efectivo";
+	else{
+		echo "Fallo el despremiar. Intente Nuevamente";
+		exit;	
+	}
 	//exit;
 	//$where = " fecha_hora LIKE '%".date('Y-m-d')."%'";
 	//$result= $obj_modelo->GetListadosegunVariable($where);
@@ -59,18 +72,9 @@ while(strtotime($fecha_hora)<=strtotime($fecha_hasta) )
 		$id_sorteo[]=$row['id_sorteo'];
 		$id_zodiacal[]=$row['zodiacal'];
 	}
-	$relacion_pago=array();
-	//$id_tipo_jugada[]=array();
-	$result=$obj_modelo->GetRelacionPagos();
-	while($row=$obj_conexion->GetArrayInfo($result)){
-		$relacion_pago[$row['id_tipo_jugada']]=$row['monto'];
-	//	$id_tipo_jugada[]=$row['id_tipo_jugada'];
-	}
-	//print_r($relacion_pago);
-		$result= $obj_modelo->GetListadosegunVariable($fecha_hora);
-	    If ($obj_conexion->GetNumberRows($result)>0){
-	    	for($i=0;$i<count($resultados);$i++)
-	    	{
+	$result= $obj_modelo->GetListadosegunVariable($fecha_hora);
+    If ($obj_conexion->GetNumberRows($result)>0){
+    	for($i=0;$i<count($resultados);$i++){
 	    	$ticket_premiado=0;
 	    	$monto_total_ticket=0;
 	    	while ($roww= $obj_conexion->GetArrayInfo($result)){
@@ -111,17 +115,17 @@ while(strtotime($fecha_hora)<=strtotime($fecha_hasta) )
 							$obj_modelo->PremiarDetalleTicket($rowDT['id_detalle_ticket'], $monto_pago);
 							$sw=1;
 						}
-						
 					}	
-	    	    }
-	    	    if($sw==1)
-	    	    $obj_modelo->PremiarTicket($id_ticket,$monto_total);
-	    	}
+				}
+		    	if($sw==1)
+		    	$obj_modelo->PremiarTicket($id_ticket,$monto_total);
+		    }
 	    }
 	}
-	$fecha_hora = strtotime ( '+1 day' , strtotime ( $fecha_hora) ) ;
+	$fecha_hora = strtotime ( '+1 day' , strtotime ( $fecha_hora));
 	if( date ( 'l' , strtotime($fecha_hora))=='Sunday')
-	$fecha_hora = strtotime ( '+1 day' , strtotime ( $fecha_hora) ) ;
+	$fecha_hora = strtotime ( '+1 day' , strtotime ( $fecha_hora));
+	$fecha_hora=date('Y-m-d',$fecha_hora );
 }
     	   
     	    	
