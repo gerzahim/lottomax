@@ -19,7 +19,18 @@ class Ventas{
 	}
 
 	
+	/**
+	 * Busqueda de los turnos
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetTurnos(){
 	
+		//Preparacion del query
+		$sql = "SELECT * FROM turno ";
+		return $this->vConexion->ExecuteQuery($sql);
+	}
 	/**
 	 * Busqueda de todos los Sorteos
 	 *
@@ -40,12 +51,26 @@ class Ventas{
 	 * @access public
 	 * @return boolean
 	 */
-	public function GetSorteosManana(){
-		
+	public function GetSorteosxTurno(){
 		//Preparacion del query
-		$sql = "SELECT * FROM sorteos WHERE id_turno =1 AND STATUS =1 ORDER BY hora_sorteo, id_loteria, zodiacal, nombre_sorteo ASC "; 
+		$sql = "SELECT * FROM sorteos WHERE STATUS =1 AND id_dias_semana LIKE '%".date("w")."%' ORDER BY id_turno, hora_sorteo, id_loteria, zodiacal, nombre_sorteo ASC ";  
 		return $this->vConexion->ExecuteQuery($sql);
 	}		
+	
+	
+	
+	/**
+	 * Busqueda de todos los Sorteos Manana
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetSorteosManana(){
+	
+		//Preparacion del query
+		$sql = "SELECT * FROM sorteos WHERE id_turno =1 AND STATUS =1 ORDER BY hora_sorteo, id_loteria, zodiacal, nombre_sorteo ASC ";
+		return $this->vConexion->ExecuteQuery($sql);
+	}
 	
 	
 	/**

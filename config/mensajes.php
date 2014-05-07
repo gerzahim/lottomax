@@ -27,6 +27,11 @@ $mensajes['email_incorrecto']= "Sintaxis de Correo Electronico Erronea !!!";
 
 $mensajes['login_invalido']= "Login Invalido !!!";
 
+$mensajes['loteria_activada']= "La loter&iacute;a fue activada satisfactoriamente!!!";
+$mensajes['loteria_desactivada']= "La loter&iacute;a fue desactivada satisfactoriamente!!!";
+$mensajes['fallo_loteria_activada']= "La loter&iacute;a no se pudo activar Intente de Nuevo!!!";
+$mensajes['fallo_loteria_desactivada']= "La loter&iacute;a no se pudo desactivar Intente de Nuevo!!!";
+
 
 $mensajes['info_eliminada']= "La informaci&oacute;n seleccionada ha sido eliminada!!!";
 
