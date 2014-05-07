@@ -1,5 +1,4 @@
-<html>
-<body>
+
 <!-- BEGIN: contenido -->       
 <table width="800" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#fdfef0">
 	<tr>
@@ -49,12 +48,12 @@
 		Numeros :&nbsp;(U)<br> 
         <input id="txt_numero" name="txt_numero" size="7" maxlength="7" type="text" value=""/><br><br>
 		Montos Bs : (B)<br>
-		<input id="txt_monto" name="txt_monto" size="10" onfocus="seleccionar_monto();" maxlength="10" type="text" value=""/><br><br>
+		<input id="txt_monto" name="txt_monto" size="10" onFocus="seleccionar_monto();" maxlength="10" type="text" value=""/><br><br>
         <img src="./images/add1.png" onClick='agregar_ticket();calcula_total();'/>
         <br>AGREGAR AL TICKET&nbsp;(+)<br><br>
         <p align="center">&nbsp;Estaci&oacute;n: &nbsp;<input id="taquilla" name="taquilla" size="3" type="text" disabled="disabled" value="{taquilla}"/></p></td>
    		 
-	</td>
+
     <td rowspan="3"  align="left">
 
     <div align="center">
@@ -66,41 +65,26 @@
     </div>   
 <br>
 
-	    <input id="cant_sorteos" name="cant_sorteos" size="10" " maxlength="6" type="hidden" value="{cant_sorteos}"/>
+	    <input id="cant_sorteos" name="cant_sorteos" size="10"  maxlength="6" type="hidden" value="{cant_sorteos}"/>
 	    <!--  
 	&nbsp;&nbsp;Todos   Si / No&nbsp;(L)&nbsp;&nbsp;&nbsp;<input type="checkbox" id="s0" name="s0" value="0" onClick="checkAllsorteos(document.getElementsByName('ss[]'));" >	   
  	-->
 	&nbsp;<input type="checkbox" id="s0" name="s0" value="0" onClick="checkAllsorteos(document.getElementsByName('ss[]'));" > &nbsp;<label for="sm">Todos   Si / No&nbsp;(L)</label>
-	    <div  id="checkboxesorteos" style=" width:200px; height:540px; overflow:auto;">
-     <span class="text-label1">
+	      <div  id="checkboxesorteos" style=" width:200px; height:540px; overflow:auto;">
+		
+		<!-- BEGIN: lista_turnos -->
+		
+     <span class="{text_turno}">
 			<table border="0">
-			  <!-- BEGIN: lista_sorteos_manana -->
+			  <!-- BEGIN: lista_sorteos -->
 			  <tr class="eveni">
-			    <td><input type="checkbox" name="ss[]" value="{id_sorteo}" {claset} {clasez} />&nbsp;<label for="sm">{nombre_sorteo}</label></td>
+			    <td><input type="checkbox" name="ss[]" value="{id_sorteo}" {claset} />&nbsp;<label for="sm">{nombre_sorteo}</label></td>
 			  </tr>	
-			  <!-- END: lista_sorteos_manana -->
+			  <!-- END: lista_sorteos -->
 			</table>
 	 </span>
 
-     <span class="text-label2">
-			<table border="0">
-			  <!-- BEGIN: lista_sorteos_tarde -->
-			  <tr class="eveni">
-			    <td><input type="checkbox" name="ss[]" value="{id_sorteo}" {claset} {clasez} />&nbsp;<label for="sm">{nombre_sorteo}</label></td>
-			  </tr>	
-			  <!-- END: lista_sorteos_tarde -->
-			</table>
-			</span>
-			
-    	 <span class="text-label3">
-			<table border="0">			
-			  <!-- BEGIN: lista_sorteos_noche -->
-			  <tr class="eveni">
-			    <td><input type="checkbox" name="ss[]" value="{id_sorteo}" {claset} {clasez} />&nbsp;<label for="sm">{nombre_sorteo}</label></td>
-			  </tr>	
-			  <!-- END: lista_sorteos_noche -->			  			
-			</table>
-			</span>
+		<!-- END: lista_turnos -->
 			
 		</div>
 		
@@ -112,7 +96,7 @@
 		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="z0" value="0" onClick="checkAllZodiacales(document.getElementsByName('zz[]'));" > &nbsp;<label for="sm">Todos   Si / No&nbsp;(Z)</label></td>
 		    </tr>
 			<tr class="eveni">
-		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id=""z0" name="zz[]" value="1" /> &nbsp;<label for="sm">Acuario</label></td>
+		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="zz[]" value="1" /> &nbsp;<label for="sm">Acuario</label></td>
 		  </tr>
 		  <tr class="eveni">
 		    <td>&nbsp;&nbsp;&nbsp;<input type="checkbox" id="z0" name="zz[]" value="2" /> &nbsp;<label for="sm">Aries</label></td>
@@ -245,7 +229,6 @@
 <a name="final"></a>
      
 <!-- END: contenido --> 
-</body>      
-</html>
+
 
 

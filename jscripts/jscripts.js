@@ -24,7 +24,7 @@ var update = function () {
 	
     //Cambio de Turno al seleccionar por radio
     cambioTurno();
-    
+    fechasi();
 	$("#txt_numero").focus();
 	//$("#s1").focus();
 	//$("#op_juego").focus();	
@@ -163,6 +163,25 @@ function cambioTurno(){
 			}
 
 	     });	
+
+}
+
+
+function fechasi(){
+	$("input[name='opt_fecha_si']").change(function() {
+		//$("input[name=turno]:radio").change(function () {
+			if ($("input[name='opt_fecha_si']:checked").val() == '1'){
+				//Selecciono Turno Manana	
+				//alert('paso');
+				$('.fechasi').show();
+				//$("#s0").focus(); // hace focus en el campo de checkboxes Sorteos			
+			}else {
+				//alert('esconde');
+				//Selecciono Turno Tarde
+				$('.fechasi').hide();
+		    	//$("#s0").focus(); // hace focus en el campo de checkboxes Sorteos				
+			}
+	});	
 
 }
 

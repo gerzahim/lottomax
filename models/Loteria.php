@@ -52,6 +52,18 @@ class Loteria{
 		return array('pagina'=>$pagina,'total_paginas'=>$total_paginas,'total_registros'=>$total_registros,'result'=>$result);
 		
 	}
+	/**
+	 * Busqueda de dias de la semana
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetDias(){
+	
+		//Preparacion del query
+		$sql = "SELECT * FROM dias_semana";
+		return $this->vConexion->ExecuteQuery($sql);
+	}
 	
 
 	/**
@@ -61,11 +73,11 @@ class Loteria{
 	 * @param string $clave
 	 * @return boolean, array
 	 */
-	public function GuardarDatosLoteria($nombre){
+	public function GuardarDatosLoteria($nombre,$status,$id_dias_semana,$fecha_desde,$fecha_hasta,$status_especial){
 		
 		// id_loteria 	nombre_loteria	status
 		//Preparacion del query
-		$sql = "INSERT INTO `loterias` (`nombre_loteria` , `status`) VALUES ('".$nombre."', 1)";
+		$sql = "INSERT INTO `loterias` (`nombre_loteria` , `status`, `id_dias_semana` , `fecha_desde` , `fecha_hasta`,`status_especial`) VALUES ('".$nombre."', ".$status.",'".$id_dias_semana."','".$fecha_desde."','".$fecha_hasta."', ".$status_especial.")";
 		return $this->vConexion->ExecuteQuery($sql);
 		
 	}	
@@ -98,11 +110,14 @@ class Loteria{
 	 * @param string $clave
 	 * @return boolean, array
 	 */
-	public function ActualizaDatosLoteria($id_loteria,$nombre,$status){
+	public function ActualizaDatosLoteria($id_loteria,$nombre,$status,$id_dias_semana,$fecha_desde,$fecha_hasta,$status_especial){
 		
-		$time= $hora.":".$minutos.":00";
+	//	$time= $hora.":".$minutos.":00";
 		//Preparacion del query
-		$sql = "UPDATE `loterias` SET `nombre_loteria`='".$nombre."', `status`='".$status."' WHERE id_loteria='".$id_loteria."'";
+		$sql = "UPDATE `loterias` SET `nombre_loteria`='".$nombre."', `status`='".$status."', `id_dias_semana`='".$id_dias_semana ."' , `fecha_desde`='".$fecha_desde."' , `fecha_hasta`='".$fecha_hasta."', `status_especial`='".$status_especial."'  WHERE id_loteria='".$id_loteria."'";
+		/*echo $sql;
+		exit;*/
+		echo "<br>".$sql;
 		return $this->vConexion->ExecuteQuery($sql);
 		
 	}
@@ -113,10 +128,11 @@ class Loteria{
 	 * @param string $status
 	 * @return boolean, array
 	 */
-	public function ActualizaStatusSorteo($id_loteria,$status){
+	public function ActualizaStatusSorteo($id_loteria,$status,$id_dias_semana){
 	
 		//Preparacion del query
-		$sql = "UPDATE `sorteos` SET `status`='".$status."' WHERE id_loteria='".$id_loteria."'";
+		$sql = "UPDATE `sorteos` SET `status`='".$status."', `id_dias_semana`='".$id_dias_semana."' WHERE id_loteria='".$id_loteria."'";
+		echo "<br>".$sql;
 		return $this->vConexion->ExecuteQuery($sql);
 	
 	}	
@@ -136,6 +152,74 @@ class Loteria{
 		return $this->vConexion->ExecuteQuery($sql);
 		
 	}		
+	
+	/**
+	 * Actualizar Estatus de Loteria
+	 *
+	 * @param string $usuario
+	 * @param string $clave
+	 * @return boolean, array
+	 */
+	public function ActualizarStatusLoteria($id_loteria,$status){
+		//Preparacion del query
+		$sql = "UPDATE `loterias` SET `status`= ".$status." WHERE id_loteria='".$id_loteria."'";
+		echo "<br>".$sql;
+		$this->vConexion->ExecuteQuery($sql);
+	
+		$sql = "UPDATE `sorteos` SET `status`= ".$status." WHERE id_loteria='".$id_loteria."'";
+		echo "<br>".$sql;
+		return $this->vConexion->ExecuteQuery($sql);
+	
+	}
+	
+	/**
+	 * Actualizar Estatus Especial
+	 *
+	 * @param string $usuario
+	 * @param string $clave
+	 * @return boolean, array
+	 */
+	public function ActualizarStatusEspecialLoteria($id_loteria,$status_especial){
+		//Preparacion del query
+		$sql = "UPDATE `loterias` SET `status_especial`= ".$status_especial." WHERE id_loteria='".$id_loteria."'";
+		$this->vConexion->ExecuteQuery($sql);
+		echo "<br>".$sql;
+	
+		
+	
+	}
+	
+	
+	/**
+	 * Buscar Fecha de Estatus Especial
+	 *
+	 * @param string $usuario
+	 * @param string $clave
+	 * @return boolean, array
+	 */
+	public function BuscarFechaEspecial($string_busqueda){
+		//Preparacion del query
+		$sql = "SELECT * FROM `loterias` WHERE ".$string_busqueda;
+		echo "<br>".$sql;
+		return $this->vConexion->ExecuteQuery($sql);
+	
+	}
+	
+	/**
+	 * Buscar Sorteos de una Loteria en Particular
+	 *
+	 * @param string $usuario
+	 * @param string $clave
+	 * @return boolean, array
+	 */
+	public function BuscarLoterias($id_loteria){
+		//Preparacion del query
+		$sql = "SELECT * FROM `sorteos` WHERE id_loteria = ".$id_loteria;
+		echo "<br>".$sql;
+		return $this->vConexion->ExecuteQuery($sql);
+	
+	}
+	
 
 	
 }		

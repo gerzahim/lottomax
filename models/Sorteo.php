@@ -104,11 +104,11 @@ class Sorteo{
 	 * @param string $clave
 	 * @return boolean, array
 	 */
-	public function GuardarDatosSorteo($id_loteria,$nombre,$time, $turno, $zodiacal,$tradicional,$tipoc){
+	public function GuardarDatosSorteo($id_loteria,$nombre,$time, $turno, $zodiacal,$tradicional,$tipoc,$id_dias_semana){
 		
 		// id_sorteo  id_loteria nombre_sorteo	hora_sorteo	zodiacal status
 		//Preparacion del query
-		$sql = "INSERT INTO `sorteos` (`id_loteria` , `nombre_sorteo` , `hora_sorteo`, `id_turno` , `zodiacal`, `tradicional` , `status`, `id_tipo_sorteo`) VALUES ('".$id_loteria."', '".$nombre."', '".$time."', '".$turno."', '".$zodiacal."', '".$tradicional."', 1 , '".$tipoc."')";
+		$sql = "INSERT INTO `sorteos` (`id_loteria` , `nombre_sorteo` , `hora_sorteo`, `id_turno` , `zodiacal`, `tradicional` , `status`, `id_tipo_sorteo`, `id_dias_semana`) VALUES ('".$id_loteria."', '".$nombre."', '".$time."', '".$turno."', '".$zodiacal."', '".$tradicional."', 1 , '".$tipoc."' , '".$id_dias_semana."' )";
 		return $this->vConexion->ExecuteQuery($sql);
 		
 	}	
@@ -141,11 +141,11 @@ class Sorteo{
 	 * @param string $clave
 	 * @return boolean, array
 	 */
-	public function ActualizaDatosSorteo($id_sorteo,$id_loteria,$nombre,$hora,$minutos,$turno,$zodiacal,$tradicional,$status,$tipoc){
+	public function ActualizaDatosSorteo($id_sorteo,$id_loteria,$nombre,$hora,$minutos,$turno,$zodiacal,$tradicional,$status,$tipoc,$id_dias_semana){
 		
 		$time= $hora.":".$minutos.":00";
 		//Preparacion del query
-		$sql = "UPDATE `sorteos` SET `id_loteria`='".$id_loteria."',  `nombre_sorteo`='".$nombre."', `hora_sorteo`='".$time."', `id_turno`='".$turno."', `zodiacal`='".$zodiacal."', `tradicional`='".$tradicional."', `status`='".$status."', `id_tipo_sorteo`='".$tipoc."' WHERE id_sorteo='".$id_sorteo."'";
+		$sql = "UPDATE `sorteos` SET `id_loteria`='".$id_loteria."',  `nombre_sorteo`='".$nombre."', `hora_sorteo`='".$time."', `id_turno`='".$turno."', `zodiacal`='".$zodiacal."', `tradicional`='".$tradicional."', `status`='".$status."', `id_tipo_sorteo`='".$tipoc."', `id_dias_semana`='".$id_dias_semana."' WHERE id_sorteo='".$id_sorteo."'";
 		return $this->vConexion->ExecuteQuery($sql);
 		
 	}
@@ -177,6 +177,20 @@ class Sorteo{
 		$sql = "SELECT * FROM loterias";
 		return $this->vConexion->ExecuteQuery($sql);
 	}	
+	
+	
+	/**
+	 * Busqueda de dias de la semana
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function GetDias(){
+	
+		//Preparacion del query
+		$sql = "SELECT * FROM dias_semana";
+		return $this->vConexion->ExecuteQuery($sql);
+	}
 
 	
 	/**

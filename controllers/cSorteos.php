@@ -56,7 +56,16 @@ switch (ACCION){
 			}
 		}		
 			*/	
+		if( $result= $obj_modelo->GetDias() ){
+			while($row= $obj_conexion->GetArrayInfo($result)){
+				$obj_xtpl->assign('id_dias_semana', $row['id_dias_semana']);
+				$obj_xtpl->assign('abv_dia_semana', $row['abv_dia_semana']);
 		
+		
+					
+				$obj_xtpl->parse('main.contenido.formulario.dias_sem');
+			}
+		}
 		// Parseo del bloque
 		$obj_xtpl->parse('main.contenido.formulario');			
 		break;
@@ -73,13 +82,21 @@ switch (ACCION){
 		$status= $obj_generico->CleanText($_POST['op_status']);	
 		$tipoc= $obj_generico->CleanText($_POST['op_tipo']);
 
+		$dia_sem =$_POST['dia_sem'];
+		$id_dias_semana='';
+		foreach ( $dia_sem as $dia) {
+			$id_dias_semana.=$dia.',';
+		}
+		$id_dias_semana=trim($id_dias_semana,",");
+		
+		
 		// Verifica que los datos requeridos no este vacios
-		if(!$obj_generico->IsEmpty($nombre) && !$obj_generico->IsEmpty($id_loteria) && !$obj_generico->IsEmpty($hora) && !$obj_generico->IsEmpty($minutos) && !$obj_generico->IsEmpty($zodiacal)){
+		if(!$obj_generico->IsEmpty($nombre) && !$obj_generico->IsEmpty($id_loteria) && !$obj_generico->IsEmpty($hora) && !$obj_generico->IsEmpty($minutos) && !$obj_generico->IsEmpty($zodiacal)&& !$obj_generico->IsEmpty($id_dias_semana)){
 				
 				$time= $hora.":".$minutos.":00";
 
 				// Crea la cuenta de acceso
-				if( $obj_modelo->GuardarDatosSorteo($id_loteria,$nombre,$time,$turno,$zodiacal,$tradicional,$tipoc) ){
+				if( $obj_modelo->GuardarDatosSorteo($id_loteria,$nombre,$time,$turno,$zodiacal,$tradicional,$tipoc,$id_dias_semana) ){
 					
 					$_SESSION['mensaje']= $mensajes['info_agregada'];
 					header('location:'.$_SESSION['Ruta_Lista']);					
@@ -208,8 +225,31 @@ switch (ACCION){
 				$obj_xtpl->assign('selecciona_c','selected="selected"');
 			}else if ($row_datos['id_tipo_sorteo'] == '4'){
 				$obj_xtpl->assign('selecciona_z','selected="selected"');
-			}			
-							
+			}	
+
+			
+			if( $result= $obj_modelo->GetDias() ){
+				while($row= $obj_conexion->GetArrayInfo($result)){
+					$obj_xtpl->assign('id_dias_semana', $row['id_dias_semana']);
+					$obj_xtpl->assign('abv_dia_semana', $row['abv_dia_semana']);
+					
+					
+					
+					if( strpos( $row_datos['id_dias_semana'], $row['id_dias_semana']) !== false )    
+						$obj_xtpl->assign('chek', 'checked');
+					else
+						$obj_xtpl->assign('chek', '');
+						
+						
+					
+					
+					//if( )
+					
+					$obj_xtpl->parse('main.contenido.formulario.dias_sem');
+				}
+			}
+			
+
 			// Lista los datos del usuario obtenidos de la BD
 			$obj_xtpl->assign('txt_name', $row_datos['nombre_sorteo']);
 			$obj_xtpl->assign('id_Sorteo', $_GET['id']);
@@ -241,13 +281,19 @@ switch (ACCION){
 		$status= $obj_generico->CleanText($_POST['op_status']);		
 		$id_sorteo= $_REQUEST['idreferencia'];
 		$tipoc= $obj_generico->CleanText($_POST['op_tipo']);
-			
+		$dia_sem =$_POST['dia_sem'];
+		$id_dias_semana='';
+		foreach ( $dia_sem as $dia) {
+			$id_dias_semana.=$dia.',';
+		}
+		$id_dias_semana=trim($id_dias_semana,",");
+		
 		// Verifica que los datos requeridos no este vacios
-		if(!$obj_generico->IsEmpty($nombre) && !$obj_generico->IsEmpty($hora) && !$obj_generico->IsEmpty($minutos) && !$obj_generico->IsEmpty($zodiacal) && !$obj_generico->IsEmpty($id_sorteo)){
+		if(!$obj_generico->IsEmpty($nombre) && !$obj_generico->IsEmpty($hora) && !$obj_generico->IsEmpty($minutos) && !$obj_generico->IsEmpty($zodiacal) && !$obj_generico->IsEmpty($id_sorteo) && !$obj_generico->IsEmpty($id_dias_semana) ){
 				
 
 			// Modifica la cuenta
-			if( $obj_modelo->ActualizaDatosSorteo($id_sorteo,$id_loteria,$nombre,$hora,$minutos,$turno,$zodiacal,$tradicional,$status,$tipoc) ){
+			if( $obj_modelo->ActualizaDatosSorteo($id_sorteo,$id_loteria,$nombre,$hora,$minutos,$turno,$zodiacal,$tradicional,$status,$tipoc,$id_dias_semana) ){
 				
 				$_SESSION['mensaje']= $mensajes['info_modificada'];
 				header('location:'.$_SESSION['Ruta_Lista']);					
@@ -324,10 +370,8 @@ switch (ACCION){
 				}else{
 					$obj_xtpl->assign('status', 'Inactivo');				
 				}				
-				
 				// Parseo del bloque de la fila  
 				$obj_xtpl->parse('main.contenido.lista_usuario.lista');
-				
 				$i++;
 			}
 		}
@@ -338,16 +382,12 @@ switch (ACCION){
 			// Parseo del bloque de la fila
 			$obj_xtpl->parse('main.contenido.lista_usuario.no_lista');
 		}
-	
 		// Datos para la paginacion
 		$paginacion= $obj_generico->paginacion($lista['pagina'],$lista['total_paginas'],$lista['total_registros'],$obj_generico->urlPaginacion());
 		$obj_xtpl->assign('paginacion',$paginacion);
-		
 		// Parseo del bloque
 		$obj_xtpl->parse('main.contenido.lista_usuario');		
-		
 		break;
-	
 }
 
 $obj_xtpl->parse('main.contenido');

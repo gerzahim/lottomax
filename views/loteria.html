@@ -32,9 +32,15 @@
                            	</a>
 						</td>
 						<td scope="row" align="center">
-							<a href="{pagina_principal}?op={opcion_sistema}&amp;accion=del&amp;id={id_Loteria}" title="Eliminar">
-                            	<img src="./images/delete.png" border="0"/>
+						
+						
+							<a href="{pagina_principal}?op={opcion_sistema}&amp;accion={accion_modificar}&amp;id={id_Loteria}" title="Eliminar">
+                            
+							
+								<img src="./images/{accion_modificar}.png" border="0"/>
                             </a>
+						
+						
 						</td>
 						<td align="left">&nbsp;{Nombre_Loteria}</td>		
    						<td align="center">{status}</td>				
@@ -94,9 +100,9 @@
 							<tr><td colspan="2"></td></tr>
                             <tr>
         
-                                <td class="tag" width="230"><span class="requerido">*</span> Status Loteria:</td>
+                                <td class="tag" width="230"><span class="requerido">*</span> Estatus Loteria:</td>
         
-                                <td>
+                              <td>
         
                                     <select id="op_status" name="op_status" >
         
@@ -104,11 +110,89 @@
                                         <option value="0" {seleccionu}>Inactivo</option>
         
                                     </select>
+									
+								</td>
+                            </tr>
+							
+							<tr>
         
-                                </td>
+                                <td class="tag" width="230"><span class="requerido">*</span> &nbsp;Estatus Especial por Fecha:</td>
         
-                            </tr>                                                         
-		
+                              <td>
+        
+                                    Si <input type="radio" name="opt_fecha_si"   value="1" {check_fechassi_si}/>
+                                	No <input type="radio" name="opt_fecha_si"  value="0"  {check_fechassi_no}/>
+								</td>
+                            </tr>
+							
+							 <tr>
+                               <td class="tag" width="230">  <span  class='fechasi' {muestra_fechasi}>
+       <span class="requerido">*</span> Estatus Especial Loteria:	</span></td>
+        
+                              <td>
+        <span  class='fechasi' {muestra_fechasi}>
+                                    <select id="op_status_espe" name="op_status_espe" >
+        
+                                        <option value="1" {seleccionoe}>Activo</option>
+                                        <option value="0" {seleccionue}>Inactivo</option>
+        
+                                    </select>
+									</span>
+								</td>
+						
+		                    </tr>
+							 <tr>
+							    <td colspan="2">
+								<span  class='fechasi' {muestra_fechasi}>
+									<table align="center" border="0" cellpadding="2" cellspacing="0" width="80%">
+									<tr>
+                                    	<td><span class="requerido">*</span> Fecha desde:</td>
+                                        <td><input type="text" id="fechadesde" name="fechadesde" value="{fechadesde}"></td>
+                                        <td><span class="requerido">*</span> Fecha hasta:</td>
+                                        <td><input type="text" id="fechahasta" name="fechahasta" value="{fechahasta}"></td>
+					                    <script type="text/javascript">
+                    						$(function() {
+                                            	$("#fechadesde,#fechahasta").datepicker({
+                                                	beforeShow: RangoDefault,
+                                                    changeMonth: true,
+                                                    changeYear: true,
+                                                    showOn: 'both',
+                                                    buttonText: 'Calendario',
+                                                    buttonImage: "./images/calendar.jpg",
+													dateFormat:'dd-mm-yy',
+                                                    buttonImageOnly: true
+												}).addClass("embed").attr('readonly','readonly');
+						                    // Para validar las fechas
+                        						function RangoDefault(input){
+                                                	return {
+									minDate: ( (input.id == "fechahasta" && $("#fechadesde").val()) ? $("#fechadesde").datepicker("getDate") : null),
+													};
+												}
+											});
+										</script>
+									</tr>
+									<tr>
+										<td align="center" colspan="4"></td>
+									<tr>
+				                </table>
+								</span>
+								</td>  
+				            </tr>
+	 					
+							
+							
+                           <tr>
+        
+                                <td class="tag" width="230"><span class="requerido">*</span> D&iacute;a de Semana:</td>
+        
+                                <td>
+        							 <!-- BEGIN: dias_sem -->
+										<input type="checkbox" id="dia_sem[]" name="dia_sem[]" {chek} value="{id_dias_semana}"/>&nbsp;{abv_dia_semana}
+                                        <!-- END: dias_sem -->
+	                            </td>
+        
+                            </tr>         
+								 
 							<tr><td colspan="2"></td></tr>                                                                                        	
 						</table>
 		
