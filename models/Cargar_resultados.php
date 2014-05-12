@@ -55,16 +55,16 @@ class Cargar_Resultados{
                 
 		$sql = "SELECT S.id_sorteo, S.hora_sorteo, S.id_loteria, S.id_tipo_sorteo, S.nombre_sorteo, S.zodiacal, 'signo','numero', 'id_resultado', 'bajado'
                     FROM sorteos S
-                    WHERE ".$sql_periodo. " AND S.status = 1 AND S.id_sorteo NOT IN (SELECT id_sorteo FROM resultados WHERE fecha_hora LIKE '%".$fecha."%')
-                   
+                    WHERE ".$sql_periodo. " AND S.id_dias_semana LIKE '%".date('w',strtotime($fecha))."%' AND S.status = 1 AND S.id_sorteo NOT IN (SELECT id_sorteo FROM resultados WHERE fecha_hora LIKE '%".$fecha."%')
                     UNION ALL
                     SELECT S.id_sorteo, S.hora_sorteo, S.id_loteria, S.id_tipo_sorteo, S.nombre_sorteo, S.zodiacal, Z.nombre_zodiacal,R.numero, R.id_resultados, R.bajado
                     FROM resultados R
                     INNER JOIN zodiacal Z ON R.zodiacal=Z.Id_zodiacal
                     INNER JOIN  sorteos S ON S.id_sorteo=R.id_sorteo
-                    WHERE ".$sql_periodo. " AND S.status = 1 AND R.fecha_hora LIKE '%".$fecha."%'  ORDER BY  `id_loteria` ASC, hora_sorteo ASC, id_tipo_sorteo ASC
+                    WHERE ".$sql_periodo. " AND S.id_dias_semana LIKE '%".date('w',strtotime($fecha))."%' AND S.status = 1 AND R.fecha_hora LIKE '%".$fecha."%'  ORDER BY  `id_loteria` ASC, hora_sorteo ASC, id_tipo_sorteo ASC
                     ";
-	//	echo $sql;
+		/*echo $sql;
+		exit;*/
 		return $this->vConexion->ExecuteQuery($sql);
 	}
 	
