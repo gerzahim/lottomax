@@ -3,8 +3,8 @@ set_time_limit( 3600);
 //Creamos la conexión a las distintas base de datos, la de arriba y las de abajo.
 $conexion_abajo = mysql_connect("localhost" , "root" , "secreta");
 mysql_select_db("lottomax",$conexion_abajo);
-$conexion_arriba = mysql_connect("www.db4free.net" , "lottomaxuser" , "secreta7",true);
-mysql_select_db("lottomaxdb",$conexion_arriba);
+$conexion_arriba = mysql_connect("lottomax.dlinkddns.com" , "lottomaxuser" , "voil4#2oo6",true);
+mysql_select_db("lottomax",$conexion_arriba);
 /*$conexion_arriba = mysql_connect("www.db4free.net:3306" , "lottomaxuser" , "secreta7");
 mysql_select_db("lottomaxdb",$conexion_arriba);
 //Buscamos los tickets que no han sido subido abajo.
