@@ -8,8 +8,8 @@ error_reporting(E_ALL);
 require_once('BajadaController.php');
 $conexion_abajo = mysql_connect("localhost" , "root" , "secreta");
 mysql_select_db("lottomax",$conexion_abajo);
-$conexion_arriba = mysql_connect("www.db4free.net" , "lottomaxuser" , "secreta7",true);
-mysql_select_db("lottomaxdb",$conexion_arriba);
+$conexion_arriba = mysql_connect("lottomax.dlinkddns.com" , "lottomaxuser" , "voil4#2oo6",true);
+mysql_select_db("lottomax",$conexion_arriba);
 $obj_modelo= new BajadaController();
 $sql = "SELECT * FROM resultados WHERE bajado = 0";
 if($result= mysql_query($sql,$conexion_arriba))
@@ -39,10 +39,13 @@ if($result= mysql_query($sql,$conexion_arriba))
 	$consulta_abajo=trim($consulta_abajo,",");
 	$consulta_abajo.=";";
 	$error=0;
+	//echo $consulta_abajo;
 	if (mysql_query("SET AUTOCOMMIT=0;",$conexion_abajo))//desactivar el modo de autoguardado
 		if (mysql_query("BEGIN;",$conexion_abajo)) //dar inicio a la transacción
 			if (mysql_query($consulta_abajo,$conexion_abajo) AND $h==1)
+				{echo "<br>Inserto Abajo";	
 				$error=0;//mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);	
+				}
 			else
 			$error=1;
 		else
@@ -56,6 +59,7 @@ if($result= mysql_query($sql,$conexion_arriba))
 				foreach ($arreglo as $id){
 					$sql="UPDATE resultados SET bajado=1 WHERE bajado=0 AND id_resultados=".$id;
 					if (mysql_query($sql,$conexion_arriba)){
+						echo "<br>Actualizo Arriba";
 					}
 					else
 					$error=1;
@@ -91,8 +95,10 @@ if($result= mysql_query($sql,$conexion_arriba)){
 		if(mysql_query("SET AUTOCOMMIT=0;",$conexion_abajo) AND mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
 		if(mysql_query("BEGIN;",$conexion_abajo) AND mysql_query("BEGIN;",$conexion_arriba)){ //dar inicio a la transacción
 			if(mysql_query($consulta_abajo,$conexion_abajo)){//EJECUTA EL QUERY
+				echo "<br>Actualizo Abajo";				
 				if (mysql_query($consulta_arriba,$conexion_arriba)){ //EJECUTA EL QUERY
 					$sw=1;
+					echo "<br>Actualizo Arriba";
 					mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
 					mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
 					$resultados[$row['id_sorteo']."/".$row['fecha_hora']]=$row['numero'];
