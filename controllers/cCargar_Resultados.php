@@ -150,10 +150,9 @@ switch (ACCION){
 		$sorteosassign='';
 		$sorteosnocargados='';
 		if ($result = $obj_modelo->GetSorteos ( $fecha, $periodo )) {
-			
+			$i = 1;
+			$j = 0;
 			if ($obj_conexion->GetNumberRows ( $result ) > 0) {
-				$i = 1;
-				$j = 0;
 				while ( $row = $obj_conexion->GetArrayInfo ( $result ) ) {
 					
 					//print_r($row);

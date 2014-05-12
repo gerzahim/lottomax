@@ -77,7 +77,7 @@ class Loteria{
 		
 		// id_loteria 	nombre_loteria	status
 		//Preparacion del query
-		$sql = "INSERT INTO `loterias` (`nombre_loteria` , `status`, `id_dias_semana` , `fecha_desde` , `fecha_hasta`,`status_especial`) VALUES ('".$nombre."', ".$status.",'".$id_dias_semana."','".$fecha_desde."','".$fecha_hasta."', ".$status_especial.")";
+		$sql = "INSERT INTO `loterias` (`nombre_loteria` , `status`, `id_dias_semana` , `fecha_desde` , `fecha_hasta`,`status_especial`,`bajado`) VALUES ('".$nombre."', ".$status.",'".$id_dias_semana."','".$fecha_desde."','".$fecha_hasta."', ".$status_especial.", 0)";
 		return $this->vConexion->ExecuteQuery($sql);
 		
 	}	
@@ -114,7 +114,7 @@ class Loteria{
 		
 	//	$time= $hora.":".$minutos.":00";
 		//Preparacion del query
-		$sql = "UPDATE `loterias` SET `nombre_loteria`='".$nombre."', `status`='".$status."', `id_dias_semana`='".$id_dias_semana ."' , `fecha_desde`='".$fecha_desde."' , `fecha_hasta`='".$fecha_hasta."', `status_especial`='".$status_especial."'  WHERE id_loteria='".$id_loteria."'";
+		$sql = "UPDATE `loterias` SET `nombre_loteria`='".$nombre."', `status`='".$status."', `id_dias_semana`='".$id_dias_semana ."' , `fecha_desde`='".$fecha_desde."' , `fecha_hasta`='".$fecha_hasta."', `status_especial`='".$status_especial."', `bajado`=2  WHERE id_loteria='".$id_loteria."'";
 		/*echo $sql;
 		exit;*/
 		echo "<br>".$sql;
@@ -147,12 +147,9 @@ class Loteria{
 		//Preparacion del query
 		$sql = "UPDATE `loterias` SET `status`= 0 WHERE id_loteria='".$id_loteria."'";
 		$this->vConexion->ExecuteQuery($sql);
-		
 		$sql = "UPDATE `sorteos` SET `status`= 0 WHERE id_loteria='".$id_loteria."'";
 		return $this->vConexion->ExecuteQuery($sql);
-		
 	}		
-	
 	/**
 	 * Actualizar Estatus de Loteria
 	 *
@@ -162,16 +159,36 @@ class Loteria{
 	 */
 	public function ActualizarStatusLoteria($id_loteria,$status){
 		//Preparacion del query
-		$sql = "UPDATE `loterias` SET `status`= ".$status." WHERE id_loteria='".$id_loteria."'";
+		$sql = "UPDATE `loterias` SET `status`= ".$status.", bajado=2 WHERE id_loteria='".$id_loteria."'";
 		echo "<br>".$sql;
 		$this->vConexion->ExecuteQuery($sql);
-	
 		$sql = "UPDATE `sorteos` SET `status`= ".$status." WHERE id_loteria='".$id_loteria."'";
 		echo "<br>".$sql;
 		return $this->vConexion->ExecuteQuery($sql);
-	
 	}
 	
+	
+	
+	
+	/**
+	 * Busca las loterias que fueron agregadas o cambiadas en el servidor
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function BuscarLoteriasActualizadas($conexion_arriba){
+	
+		//Preparacion del query
+		$sql = "SELECT * FROM loterias WHERE bajado = 0 OR bajado= 2 ";
+	
+		if( $result= $this->vConexion->ExecuteQuery($sql) ){
+			return $this->vConexion->GetArrayInfo($result);
+		}
+		else{
+			return false;
+		}
+	
+	}
 	/**
 	 * Actualizar Estatus Especial
 	 *
@@ -184,12 +201,7 @@ class Loteria{
 		$sql = "UPDATE `loterias` SET `status_especial`= ".$status_especial." WHERE id_loteria='".$id_loteria."'";
 		$this->vConexion->ExecuteQuery($sql);
 		echo "<br>".$sql;
-	
-		
-	
 	}
-	
-	
 	/**
 	 * Buscar Fecha de Estatus Especial
 	 *
@@ -202,9 +214,7 @@ class Loteria{
 		$sql = "SELECT * FROM `loterias` WHERE ".$string_busqueda;
 		echo "<br>".$sql;
 		return $this->vConexion->ExecuteQuery($sql);
-	
 	}
-	
 	/**
 	 * Buscar Sorteos de una Loteria en Particular
 	 *
@@ -217,10 +227,6 @@ class Loteria{
 		$sql = "SELECT * FROM `sorteos` WHERE id_loteria = ".$id_loteria;
 		echo "<br>".$sql;
 		return $this->vConexion->ExecuteQuery($sql);
-	
 	}
-	
-
-	
 }		
 ?>

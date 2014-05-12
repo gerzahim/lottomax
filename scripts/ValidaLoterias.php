@@ -13,14 +13,24 @@ $obj_generico= new Generica();
 
 // Conexion a la bases de datos
 require('.'.$obj_config->GetVar('ruta_libreria').'Bd.php');
+$obj_modelo= new Loteria($obj_conexion);
+
+$conexion_arriba  = new Bd();
+if( !$conexion_arriba ->ConnectDataBase('www.db4free.net', 'lottomaxdb', "lottomaxuser" , 'secreta7') ){
+	echo "sin_conexion_bd";
+}
+
+
 $obj_conexion= new Bd();
 if( !$obj_conexion->ConnectDataBase($obj_config->GetVar('host'), $obj_config->GetVar('data_base'), $obj_config->GetVar('usuario_db'), $obj_config->GetVar('clave_db')) ){
 	echo "sin_conexion_bd";
 }
+
+
 // Modelo asignado
 require('.'.$obj_config->GetVar('ruta_modelo').'Loteria.php');
-$obj_modelo= new Loteria($obj_conexion);
 //Script Para Activar y Desactivar Programación de Loterias  
+
 $string_busqueda=" fecha_desde <= '".date('Y-m-d')."'  AND status_especial <> 2 AND fecha_desde <> '0000-00-00'";
 $result=$obj_modelo->BuscarFechaEspecial($string_busqueda);
 if($obj_conexion->GetNumberRows($result)>0)
