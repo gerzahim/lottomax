@@ -41,9 +41,10 @@ if($result= mysql_query($sql,$conexion_abajo)){
 	$error=0;
 	if (mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
 	{
-		echo "ENTRO";
+		echo "<br>Desactivo el modo de autoguardado";
 		if (mysql_query("BEGIN;",$conexion_arriba)) //dar inicio a la transacción
 		{
+			echo "<br>Inicia la conexion";
 			if (mysql_query($consulta_arriba_ticket,$conexion_arriba))
 			{
 				echo "<br>Inserto Ticket";
