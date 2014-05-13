@@ -12,8 +12,8 @@ mysql_select_db("lottomaxdb",$conexion_arriba);
 $sql = "SELECT * FROM ticket WHERE subido=0 LIMIT 0,30 ";
 
 if($result= mysql_query($sql,$conexion_abajo)){
-	echo "PASA";
-	exit;
+	/*echo "PASA";
+	exit;*/
 	$numero_registros = mysql_num_rows($result);
 	//Creamos la cadena para insertar los ticket y detalle_ticket que no han sido subidos.
 	$consulta_arriba_ticket="INSERT INTO ticket (id_ticket, serial, fecha_hora, taquilla, total_ticket, id_usuario, premiado, pagado, total_premiado, status, fecha_hora_anulacion, taquilla_anulacion, subido, verificado, impreso) VALUES  ";
@@ -34,10 +34,10 @@ if($result= mysql_query($sql,$conexion_abajo)){
 	$consulta_arriba_ticket.=";";
 	$consulta_arriba_detalle.=";";
 	
-	/*echo $consulta_arriba_ticket;
+	echo $consulta_arriba_ticket;
 	echo $consulta_arriba_detalle;
 	
-	exit;*/
+	exit;
 	$error=0;
 	if (mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
 		if (mysql_query("BEGIN;",$conexion_arriba)) //dar inicio a la transacción
