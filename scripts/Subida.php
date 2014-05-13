@@ -34,7 +34,7 @@ if($result= mysql_query($sql,$conexion_abajo)){
 	$consulta_arriba_ticket.=";";
 	$consulta_arriba_detalle.=";";
 	
-	echo $consulta_arriba_ticket;
+	/*echo $consulta_arriba_ticket;
 	echo $consulta_arriba_detalle;
 	//*/
 	//exit;*/
