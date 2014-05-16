@@ -84,6 +84,8 @@ switch (ACCION){
 					header('location:'.$_SESSION['Ruta_Lista']);					
 				}
 				else{
+					exit;
+					
 					$_SESSION['mensaje']= $mensajes['fallo_agregar'];
 					header('location:'.$_SESSION['Ruta_Form']);
 				}				

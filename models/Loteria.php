@@ -78,6 +78,8 @@ class Loteria{
 		// id_loteria 	nombre_loteria	status
 		//Preparacion del query
 		$sql = "INSERT INTO `loterias` (`nombre_loteria` , `status`, `id_dias_semana` , `fecha_desde` , `fecha_hasta`,`status_especial`,`bajado`) VALUES ('".$nombre."', ".$status.",'".$id_dias_semana."','".$fecha_desde."','".$fecha_hasta."', ".$status_especial.", 0)";
+		
+		echo $sql; 
 		return $this->vConexion->ExecuteQuery($sql);
 		
 	}	
