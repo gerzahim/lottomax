@@ -43,7 +43,7 @@ switch (ACCION){
 		$nombre= $obj_generico->CleanText($_POST['txt_name']);
 		$status= $obj_generico->CleanText($_POST['op_status']);	
 		$status_espe= $obj_generico->CleanText($_POST['op_status_espe']);
-		
+		$dia_sem =$_POST['dia_sem'];
 		$id_dias_semana='';
 		foreach ( $dia_sem as $dia) {
 			$id_dias_semana.=$dia.',';
@@ -84,7 +84,6 @@ switch (ACCION){
 					header('location:'.$_SESSION['Ruta_Lista']);					
 				}
 				else{
-					exit;
 					
 					$_SESSION['mensaje']= $mensajes['fallo_agregar'];
 					header('location:'.$_SESSION['Ruta_Form']);
