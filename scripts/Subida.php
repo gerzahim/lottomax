@@ -21,8 +21,17 @@ if($result= mysql_query($sql,$conexion_abajo)){
 	while ($row = mysql_fetch_array($result)){
 		// Creamos la consulta para extraer los datos de detalle_ticket de cada ticket extraído de la tabla ticket que no ha sido subido
 		if($row['usuario_pagado']==null)
-		$usuario_taquilla=0;
-		$consulta_arriba_ticket.="('".$row['id_ticket']."','".$row['serial']."','".$row['fecha_hora']."',".$row['taquilla'].",'".$row['total_ticket']."',".$row['id_usuario'].",".$row['premiado'].",".$row['pagado'].",".$row['total_premiado'].",".$row['status'].",'".$row['fecha_hora_anulacion']."',".$row['taquilla_anulacion'].",1,".$row['verificado'].",".$row['impreso'].",'".$row['fecha_hora_pagado']."',".$usuario_taquilla.",".$usuario_taquilla."),";   
+		{
+			$usuario_pagado=0;
+			$taquilla_pagado=0;
+		}
+		else
+		{
+			$usuario_pagado=$row['usuario_pagado'];
+			$taquilla_pagado=$row['taquilla_pagado'];
+				
+		}
+		$consulta_arriba_ticket.="('".$row['id_ticket']."','".$row['serial']."','".$row['fecha_hora']."',".$row['taquilla'].",'".$row['total_ticket']."',".$row['id_usuario'].",".$row['premiado'].",".$row['pagado'].",".$row['total_premiado'].",".$row['status'].",'".$row['fecha_hora_anulacion']."',".$row['taquilla_anulacion'].",1,".$row['verificado'].",".$row['impreso'].",'".$row['fecha_hora_pagado']."',".$usuario_pagado.",".$taquilla_pagado."),";   
 		$arreglo[]=$row['id_ticket'];
 		$sql1 = "SELECT * FROM detalle_ticket WHERE id_ticket=".$row['id_ticket'];
 		$result1= mysql_query($sql1,$conexion_abajo);
