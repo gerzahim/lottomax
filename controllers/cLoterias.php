@@ -24,6 +24,17 @@ switch (ACCION){
 		// Accion a realizar
 		$obj_xtpl->assign('tipo_accion', 'save');
 		$obj_xtpl->assign('tag_boton', 'Guardar');
+		
+		if( $result= $obj_modelo->GetDias() ){
+			while($row= $obj_conexion->GetArrayInfo($result)){
+				$obj_xtpl->assign('id_dias_semana', $row['id_dias_semana']);
+				$obj_xtpl->assign('abv_dia_semana', $row['abv_dia_semana']);
+		
+		
+					
+				$obj_xtpl->parse('main.contenido.formulario.dias_sem');
+			}
+		}
 								
 		// Parseo del bloque
 		$obj_xtpl->parse('main.contenido.formulario');			
