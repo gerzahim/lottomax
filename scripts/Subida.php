@@ -97,12 +97,18 @@ if($result= mysql_query($sql,$conexion_abajo)){
 	{
 		mysql_query("ROLLBACK;",$conexion_abajo); //garantizo que se haga el retroceso de las operaciones
 		mysql_query("ROLLBACK;",$conexion_arriba); //garantizo que se haga el retroceso de las operaciones	
+		mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
+		mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
+		mysql_close($conexion_arriba);
+		mysql_close($conexion_abajo);
 	}
 	else
 	{
 		echo "<br>Perfecto";
 		mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
 		mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
+		mysql_close($conexion_arriba);
+		mysql_close($conexion_abajo);
 	}	
 }
 
