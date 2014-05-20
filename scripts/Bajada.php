@@ -113,6 +113,10 @@ if($result= mysql_query($sql,$conexion_arriba)){
 		$obj_modelo->DespremiarTicket($resultados, $conexion_abajo);
 		PremiarGanadores($conexion_abajo,$obj_modelo,$resultados,$zodiacales,$fecha_hora2);
 	}	
+	mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
+	mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
+	mysql_close($conexion_arriba);
+	mysql_close($conexion_abajo);
 }
 
 function ExisteResultado ($id_sorteo, $zodiacal, $numero, $fecha_hora,$conexion_abajo){
