@@ -9,6 +9,7 @@ require_once('BajadaController.php');
 $conexion_abajo = mysql_connect("localhost" , "root" , "secreta");
 mysql_select_db("lottomax",$conexion_abajo);
 $conexion_arriba = mysql_connect("lottomax.dlinkddns.com" , "lottomaxuser" , "voil4#2oo6",true);
+//$conexion_arriba = mysql_connect("lottomax.dlinkddns.com" , "lottomaxuser" , "voil4#2oo6",true);
 mysql_select_db("lottomax",$conexion_arriba);
 $obj_modelo= new BajadaController();
 $sql = "SELECT * FROM resultados WHERE bajado = 0";
@@ -39,7 +40,7 @@ if($result= mysql_query($sql,$conexion_arriba))
 	$consulta_abajo=trim($consulta_abajo,",");
 	$consulta_abajo.=";";
 	$error=0;
-	//echo $consulta_abajo;
+	//echo "<br> Consulta abajo. ".$consulta_abajo;
 	if (mysql_query("SET AUTOCOMMIT=0;",$conexion_abajo))//desactivar el modo de autoguardado
 		if (mysql_query("BEGIN;",$conexion_abajo)) //dar inicio a la transacción
 			if (mysql_query($consulta_abajo,$conexion_abajo) AND $h==1)
@@ -122,6 +123,8 @@ if($result= mysql_query($sql,$conexion_arriba)){
 function ExisteResultado ($id_sorteo, $zodiacal, $numero, $fecha_hora,$conexion_abajo){
 	$obj_modelo= new BajadaController();
 	$result1=$obj_modelo->GetResultadosRepetidos($id_sorteo, $zodiacal, $numero, $fecha_hora,$conexion_abajo);
+	echo "<br> Hay Tantos".mysql_num_rows($result1);
+	
 	if(mysql_num_rows($result1)>0)
 	return false;
 	else
