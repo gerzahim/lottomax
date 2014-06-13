@@ -60,7 +60,7 @@ class BajadaController{
 	public function GetResultadosRepetidos($id_sorteo, $zodiacal, $numero, $fecha_hora,$conexion_abajo){
 	
 		//Preparacion del query
-		$sql = "SELECT id_sorteo, zodiacal, numero FROM resultados WHERE fecha_hora LIKE '%".$fecha_hora."%' AND id_sorteo=".$id_sorteo." AND zodiacal=".$zodiacal." AND numero=".$numero;
+		$sql = "SELECT id_sorteo, zodiacal, numero FROM resultados WHERE fecha_hora LIKE '%".$fecha_hora."%' AND id_sorteo=".$id_sorteo;
 		//echo $sql;
 		$result= mysql_query($sql,$conexion_abajo);
 	
