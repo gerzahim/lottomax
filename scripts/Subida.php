@@ -9,7 +9,7 @@ mysql_select_db("lottomax",$conexion_arriba);
 mysql_select_db("lottomaxdb",$conexion_arriba);
 //Buscamos los tickets que no han sido subido abajo.
 */
-$sql = "SELECT * FROM ticket WHERE subido=0 LIMIT 0,30 ";
+$sql = "SELECT * FROM ticket WHERE subido=0 LIMIT 0,50 ";
 
 if($result= mysql_query($sql,$conexion_abajo)){
 	/*echo "PASA";
