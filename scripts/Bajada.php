@@ -26,6 +26,7 @@ if($result= mysql_query($sql,$conexion_arriba))
 	$zodiacales=array();
 	$fecha_hora=array();
 	while ($row = mysql_fetch_array($result)){
+		echo "<br>Resultados";
 		if(!in_array($row['fecha_hora'], $fecha_hora)){
 			$fecha_hora[]=$row['fecha_hora'];
 		}
