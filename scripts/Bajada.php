@@ -15,6 +15,7 @@ $obj_modelo= new BajadaController();
 $sql = "SELECT * FROM resultados WHERE bajado = 0";
 if($result= mysql_query($sql,$conexion_arriba))
 {
+	echo "hay conexion, hay resultados";
 	$numero_registros = mysql_num_rows($result);
 	$consulta_abajo="INSERT INTO resultados ( id_sorteo, zodiacal, numero, fecha_hora, bajado) VALUES  ";
 	$h=0;
