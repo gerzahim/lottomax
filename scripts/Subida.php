@@ -9,7 +9,7 @@ mysql_select_db("lottomax",$conexion_arriba);
 mysql_select_db("lottomaxdb",$conexion_arriba);
 //Buscamos los tickets que no han sido subido abajo.
 */
-$sql = "SELECT * FROM ticket WHERE subido=0 LIMIT 0,50 ";
+$sql = "SELECT * FROM ticket WHERE subido=0 ORDER by fecha_hora ASC LIMIT 0,50 ";
 
 if($result= mysql_query($sql,$conexion_abajo)){
 	/*echo "PASA";
@@ -20,18 +20,21 @@ if($result= mysql_query($sql,$conexion_abajo)){
 	$consulta_arriba_detalle="INSERT INTO detalle_ticket (id_detalle_ticket,id_ticket, numero, id_sorteo, fecha_sorteo, id_zodiacal, id_tipo_jugada, monto, premiado, total_premiado, monto_restante, monto_faltante) VALUES ";
 	while ($row = mysql_fetch_array($result)){
 		// Creamos la consulta para extraer los datos de detalle_ticket de cada ticket extraído de la tabla ticket que no ha sido subido
+		
 		if($row['usuario_pagado']==null)
 		{
 			$usuario_pagado=0;
 			$taquilla_pagado=0;
+			$fecha_hora_pagado='0000-00-00 00:00:00';
 		}
 		else
 		{
 			$usuario_pagado=$row['usuario_pagado'];
 			$taquilla_pagado=$row['taquilla_pagado'];
+			$fecha_hora_pagado=$row['fecha_hora_pagado'];
 				
 		}
-		$consulta_arriba_ticket.="('".$row['id_ticket']."','".$row['serial']."','".$row['fecha_hora']."',".$row['taquilla'].",'".$row['total_ticket']."',".$row['id_usuario'].",".$row['premiado'].",".$row['pagado'].",".$row['total_premiado'].",".$row['status'].",'".$row['fecha_hora_anulacion']."',".$row['taquilla_anulacion'].",1,".$row['verificado'].",".$row['impreso'].",'".$row['fecha_hora_pagado']."',".$usuario_pagado.",".$taquilla_pagado."),";   
+		$consulta_arriba_ticket.="('".$row['id_ticket']."','".$row['serial']."','".$row['fecha_hora']."',".$row['taquilla'].",'".$row['total_ticket']."',".$row['id_usuario'].",".$row['premiado'].",".$row['pagado'].",".$row['total_premiado'].",".$row['status'].",'".$row['fecha_hora_anulacion']."',".$row['taquilla_anulacion'].",1,".$row['verificado'].",".$row['impreso'].",'".$fecha_hora_pagado."',".$usuario_pagado.",".$taquilla_pagado."),";   
 		$arreglo[]=$row['id_ticket'];
 		$sql1 = "SELECT * FROM detalle_ticket WHERE id_ticket=".$row['id_ticket'];
 		$result1= mysql_query($sql1,$conexion_abajo);
