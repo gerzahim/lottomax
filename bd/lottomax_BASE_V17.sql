@@ -681,6 +681,11 @@ ALTER TABLE `cupo_especial`
 --
 ALTER TABLE `cupo_general`
  ADD PRIMARY KEY (`id_cupo_general`), ADD KEY `FK_id_tipo_jugadas` (`id_tipo_jugada`);
+--
+-- AUTO_INCREMENT for table `detalle_ticket`
+--
+ALTER TABLE `detalle_ticket`
+MODIFY `id_detalle_ticket` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
 
 --
 -- Indexes for table `dias_semana`
@@ -759,6 +764,11 @@ ALTER TABLE `taquillas`
 --
 ALTER TABLE `ticket_transaccional`
  ADD PRIMARY KEY (`id_ticket_transaccional`), ADD KEY `id_taquilla` (`id_taquilla`), ADD KEY `id_zodiacal` (`id_zodiacal`), ADD KEY `id_sorteo` (`id_sorteo`), ADD KEY `id_tipo_jugada` (`id_tipo_jugada`);
+--
+-- AUTO_INCREMENT for table `ticket_transaccional`
+--
+ALTER TABLE `ticket_transaccional`
+MODIFY `id_ticket_transaccional` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=558;
 
 --
 -- Indexes for table `tipo_jugadas`
@@ -899,6 +909,12 @@ ALTER TABLE `cupo_general`
 ADD CONSTRAINT `FK_id_tipo_jugadas` FOREIGN KEY (`id_tipo_jugada`) REFERENCES `tipo_jugadas` (`id_tipo_jugada`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Indexes for table `detalle_ticket`
+--
+ALTER TABLE `detalle_ticket`
+ ADD KEY `id_detalle_ticket` (`id_detalle_ticket`), ADD KEY `FK_id_ticket` (`id_ticket`), ADD KEY `FK_id_tipo_jugada` (`id_tipo_jugada`);
+
+--
 -- Constraints for table `impresora_taquillas`
 --
 ALTER TABLE `impresora_taquillas`
@@ -926,6 +942,13 @@ ADD CONSTRAINT `numeros_jugados_ibfk_3` FOREIGN KEY (`id_zodiacal`) REFERENCES `
 --
 ALTER TABLE `relacion_pagos`
 ADD CONSTRAINT `relacion_pagos_ibfk_1` FOREIGN KEY (`id_tipo_jugada`) REFERENCES `tipo_jugadas` (`id_tipo_jugada`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+--
+-- Indexes for table `resultados`
+--
+ALTER TABLE `resultados`
+ ADD PRIMARY KEY (`id_resultados`), ADD KEY `id_sorteo` (`id_sorteo`), ADD KEY `zodiacal` (`zodiacal`);
 
 --
 -- Constraints for table `sorteos`
