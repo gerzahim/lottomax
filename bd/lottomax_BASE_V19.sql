@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `lottomax`
 --
-CREATE DATABASE `lottomax` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+
 USE `lottomax`;
 
 -- --------------------------------------------------------
