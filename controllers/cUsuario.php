@@ -8,6 +8,7 @@ require($obj_config->GetVar('ruta_modelo').'Usuario.php');
 
 $obj_modelo= new Usuario($obj_conexion);
 
+$id_perfil = $_SESSION['id_perfil'];
 
 switch (ACCION){
 	case 'add':
@@ -26,8 +27,13 @@ switch (ACCION){
 		// Listado de Perfiles
 		if( $result= $obj_modelo->GetPerfiles() ){
 			while($row= $obj_conexion->GetArrayInfo($result)){
+				
+				if($id_perfil<= $row['id_perfil'])
+				{
+					
 				$obj_xtpl->assign($obj_generico->CleanTextDb($row));
 				$obj_xtpl->parse('main.contenido.formulario.lista_perfiles');
+				}
 			}
 		}		
 		
@@ -326,6 +332,11 @@ switch (ACCION){
 		if( $lista['total_registros']>0 ){
 			$i=1;
 			while($row= $obj_conexion->GetArrayInfo($lista['result'])){
+				
+				if($id_perfil<= $row['id_perfil'])
+				{
+						
+				
 				if( ($i % 2) >0){
 					$obj_xtpl->assign('estilo_fila', 'even');
 				}
@@ -343,6 +354,7 @@ switch (ACCION){
 				$obj_xtpl->parse('main.contenido.lista_usuario.lista');
 				
 				$i++;
+				}
 			}
 		}
 		else{
