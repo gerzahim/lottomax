@@ -49,7 +49,9 @@ $id_taquilla= $obj_modelo->GetIdTaquilla();
 
 $info_ticket= $obj_modelo->GetLastTicket($id_taquilla);
 //echo "<pre>".print_r($info_ticket)."</pre>";
-$id_ticket=$info_ticket["id_ticket"];
+
+
+$id_ticket=$info_ticket["id_ticket_diario"];
 $id_ticket1= substr($id_ticket, 0 , 3);
 $id_ticket2= substr($id_ticket, 3 , 3);
 $id_ticket3= substr($id_ticket, 6);

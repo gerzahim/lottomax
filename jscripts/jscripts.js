@@ -12,38 +12,55 @@ var update = function () {
 	//auditoria();
 	//segDate();
 	//document.forms[0].reset
-	
-
+		//alert(host + '/index.php?op=ventas#final');
 	deshabilitarTeclasFechas();
-	
 	ValidateFormSell();
-	 
     datetime = $('#clock');
     //update();
     setInterval(update, 1000);	 
-	
     //Cambio de Turno al seleccionar por radio
     cambioTurno();
     fechasi();
-	$("#txt_numero").focus();
-	//$("#s1").focus();
+    var url = window.location.href;
+	var host = window.location.host;
+	//alert(host);
+    if(url=='http://'+host+'/index.php?op=ventas' || url=='http://'+host+'/lottomax/index.php?op=ventas#final')
+    {
+    	$("#txt_numero").focus();
+    	  calcula_total();
+    }
+    else
+    if(url=='http://'+host+'/lottomax/index.php?op=pagar_ganador' || url=='http://'+host+'/index.php?op=pagar_ganador' )
+    	$("#id_ticket").focus();
+    else
+    	if (url.indexOf('btnentrar=Pagar')!=-1) {
+    	$("#serial").focus();
+    	//tu codigo
+    	}
+    	else
+        	if (url.indexOf('?op=copiar_ticket')!=-1) {
+            	$("#id_ticket").focus();
+            	//alert('pasa');
+            	//tu codigo
+            	}
+        	
+    
+    
+    	
+    //$("#s1").focus();
 	//$("#op_juego").focus();	
 	$("#txtuser").focus();
-	
-
 	// Bloque para el control de logueo de usuarios
 	setInterval(aunEstoyVivo, 60000);
 });
-
-
 function DetectarUrlVentas(){
 	//var pathname = window.location.pathname;
 	//var url = 'http://'+host'/lottomax/index.php?op=ventas#final';
 	
 	var url = window.location.href;
 	var host = window.location.host;
-	//alert(host);
-	//alert(host + '/index.php?op=ventas#final');
+	/*alert(host);
+	alert(host + '/index.php?op=ventas#final');*/
 	if(url.indexOf(host + '/index.php?op=ventas') != -1) {
 		 //match
 		return true;  
@@ -888,6 +905,7 @@ function AjustarMontos(){
         }
 
      });
+    calcula_total();
 }
 
 function ajustarMontoApuestas(monto)
@@ -898,6 +916,7 @@ function ajustarMontoApuestas(monto)
             calcula_cambio();
             $("#txt_numero").focus();
     });
+    calcula_total();
  }
 
 // ESTA Funcion es para poder hacer tab like enter
@@ -1141,6 +1160,7 @@ $(document).keyup(function(tecla){
     }else if((tecla.keyCode == 84)){
     	// tecla T     	
         // Turno Tarde
+    	if(url=='http://'+host+'/index.php?op=ventas' || url=='http://'+host+'/lottomax/index.php?op=ventas#final'){
 		$("#txt_numero").focus(); // hace focus en el campo de numeros
     	$('.text-label1').hide();
     	$('.text-label3').hide();
@@ -1149,6 +1169,7 @@ $(document).keyup(function(tecla){
     	$('input:radio[name=turno]')[1].checked = true;
     	
 		$("#s0").focus(); // hace focus en el campo de checkboxes Sorteos		
+    	}
     }else if( (tecla.keyCode == 85)){
         // Tecla U     	
     	$("#txt_numero").focus(); // hace focus en el campo de numeros    	

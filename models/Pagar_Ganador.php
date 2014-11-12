@@ -64,13 +64,16 @@ class Pagar_Ganador{
 		// deberiamos colocar un parametro premiado=0, verificado=0
 		// premiado cambia cuando se premia un ticket
 		// verificado cambia cuando ya se reviso y no esta premiado verificado=1
-		$sql = "SELECT * FROM ticket WHERE status='1' AND pagado=0 AND id_ticket=".$id_ticket." AND premiado=1" ;
+		$sql = "SELECT * FROM ticket_diario WHERE status='1' AND pagado=0 AND id_ticket_diario=".$id_ticket." AND premiado=1" ;
 		// echo $sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
-		
-		
+		$total_registros= $this->vConexion->GetNumberRows($result);
+		if($total_registros==0)
+		{
+			$sql = "SELECT * FROM ticket WHERE status='1' AND pagado=0 AND id_ticket=".$id_ticket." AND premiado=1" ;
+			$result= $this->vConexion->ExecuteQuery($sql);
+		}
 		return  $result;
-	
 	}
 	
 	/**
@@ -143,18 +146,25 @@ class Pagar_Ganador{
 	 *
 	 * @param string $id_ticket
 	 */
-	public function GetDetalleTciket($id_ticket){
+	public function GetDetalleTciket($id_ticket,$param){
 
                 // Datos para la paginacion
 		//$inicial= ($pagina-1) * $cantidad;
 		
 		//Preparacion del query
+		
+		if($param)
+		$tabla="ticket";
+		else
+		$tabla="ticket_diario";
+		
+			
                  $sql = "SELECT S.id_sorteo, S.nombre_sorteo, DT.*,  TJ.nombre_jugada, Z.nombre_zodiacal
-                        	FROM detalle_ticket DT
+                        	FROM detalle_".$tabla." DT
                             INNER JOIN sorteos S ON DT.id_sorteo=S.id_sorteo
                             INNER JOIN zodiacal Z ON DT.id_zodiacal=Z.Id_zodiacal
                             INNER JOIN tipo_jugadas TJ ON DT.id_tipo_jugada=TJ.id_tipo_jugada
-                        WHERE id_ticket='".$id_ticket."' AND total_premiado > 0";
+                        WHERE id_".$tabla."='".$id_ticket."' AND total_premiado > 0";
 
                  
                  /*$sql = "SELECT S.id_sorteo, S.nombre_sorteo, DT.id_total_premiado,DT.id_detalle_ticket, S.hora_sorteo, DT.numero, DT.id_tipo_jugada, TJ.nombre_jugada, DT.id_zodiacal, Z.nombre_zodiacal, DT.monto
@@ -263,12 +273,16 @@ class Pagar_Ganador{
 	 * @param string $id_ticket
          * @param string $total_premiado
 	 */
-	public function PagarTicket($id_ticket, $taquilla, $id_usuario){
+	public function PagarTicket($id_ticket, $taquilla, $id_usuario,$param){
 
 		//Preparacion del query
 		$fecha= date('Y-m-d H:i:s');
-		$sql = "UPDATE `ticket` SET  `pagado`='1', `fecha_hora_pagado`='".$fecha."', `taquilla_pagado`='".$taquilla."', `usuario_pagado`='".$id_usuario."'  WHERE id_ticket='".$id_ticket."'";
+		if($param)
+		$tabla="ticket";
+		else
+		$tabla="ticket_diario";
 		
+		$sql = "UPDATE `".$tabla."` SET  `pagado`='1', `fecha_hora_pagado`='".$fecha."', `taquilla_pagado`='".$taquilla."', `usuario_pagado`='".$id_usuario."'  WHERE id_".$tabla."='".$id_ticket."'";
 		return $this->vConexion->ExecuteQuery($sql);
 
 	}

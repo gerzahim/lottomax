@@ -272,7 +272,7 @@ class Ventas{
 	public function GetDetalleTicketByIdticket($id_ticket){
 		
 		//Preparacion del query
-		$sql = "SELECT * FROM detalle_ticket WHERE id_ticket = ".$id_ticket." ";
+		$sql = "SELECT * FROM detalle_ticket_diario WHERE id_ticket_diario = ".$id_ticket." ";
 		$sql.= "ORDER BY id_sorteo, id_zodiacal, numero ASC";
 		//echo $sql;
 		
@@ -289,7 +289,7 @@ class Ventas{
 	public function GetDetalleTicketByIdticket2($id_ticket){
 		
 		//Preparacion del query
-		$sql = "SELECT * FROM detalle_ticket WHERE id_ticket = ".$id_ticket." ";
+		$sql = "SELECT * FROM detalle_ticket_diario WHERE id_ticket_diario = ".$id_ticket." ";
 		$sql.= "ORDER BY numero, id_sorteo, id_zodiacal ASC";
 		//echo $sql;
 		
@@ -411,17 +411,17 @@ class Ventas{
 	public function GetLastTicket($id_taquilla){
 
 		//Preparacion del query
-		$sql = "SELECT id_ticket FROM ticket WHERE status='1' AND taquilla  = ".$id_taquilla." ORDER BY fecha_hora DESC LIMIT 1";
+		$sql = "SELECT id_ticket_diario FROM ticket_diario WHERE status='1' AND taquilla  = ".$id_taquilla." ORDER BY fecha_hora DESC LIMIT 1";
 		//echo $sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
 		$roww= $this->vConexion->GetArrayInfo($result);
-		$id_ticket=$roww["id_ticket"];
+		$id_ticket=$roww["id_ticket_diario"];
 		//echo "<pre>".print_r($roww)."</pre>";
-		$sql = "SELECT id_ticket, serial, fecha_hora, total_ticket, id_usuario FROM ticket WHERE status='1' AND id_ticket  = ".$id_ticket."";
-		//echo $sql;
+		$sql = "SELECT id_ticket_diario, serial, fecha_hora, total_ticket, id_usuario FROM ticket_diario WHERE status='1' AND id_ticket_diario  = ".$id_ticket."";
 		$result= $this->vConexion->ExecuteQuery($sql);
 		$roww= $this->vConexion->GetArrayInfo($result);		
 		return $roww;		
+		
 	}
 	
         /**
@@ -593,45 +593,40 @@ class Ventas{
 	 * @param string $sorteo
 	 * @return boolean, array
 	 */
-	public function GetNumerosJugados($numero, $sorteo, $id_zodiacal,$fecha_hoy){
-		
-		
-			
+	public function GetNumerosJugados($numero, $sorteo, $id_zodiacal){
 		//Preparacion del query
-		$sql = "SELECT id_numero_jugados, monto_restante FROM numeros_jugados 
-							
-				WHERE numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal." AND fecha LIKE '%".$fecha_hoy."%' ";
-	//	exit;
+		
+		
+		/*"SELECT DT.id_detalle_ticket_diario, DT.monto_restante, TD.fecha_hora FROM detalle_ticket_diario DT 
+					INNER JOIN ticket_diario TD ON DT.id_ticket_diario = TD.id_ticket_diario
+					WHERE DT.numero='".$numero."' 
+					AND DT.id_sorteo='".$row['id_sorteo']."' AND  DT.id_zodiacal='".$row['id_zodiacal']."' 
+					AND DT.id_tipo_jugada ='".$row['id_tipo_jugada']."' AND DT.id_ticket_diario <> '".$id_ticket."'";*/
+		
+		$sql = "SELECT DT.monto_restante FROM detalle_ticket_diario DT
+				INNER JOIN ticket_diario TD ON DT.id_ticket_diario = TD.id_ticket_diario
+				WHERE DT.numero='".$numero."' AND DT.id_sorteo  = ".$sorteo." 
+				AND DT.id_zodiacal = ".$id_zodiacal." AND 
+				DT.status=1 ORDER BY TD.fecha_hora DESC limit 1";
+		
 		$result= $this->vConexion->ExecuteQuery($sql);
-		
-		
-		
 		//numeros_jugados
 		//id_numero_jugados	fecha	numero	id_sorteo	id_tipo_jugada	id_zodiacal	monto_restante
-
 		// Datos para la paginacion
 		$total_registros= $this->vConexion->GetNumberRows($result);
-		
 		$roww= $this->vConexion->GetArrayInfo($result);
 		
 		if($total_registros>0)
-		{
-			$id_numeros_jugados=$roww["id_numero_jugados"];
 			$monto_restante=$roww["monto_restante"];
-		}
 		else
-		{
-			$id_numeros_jugados=0;
 			$monto_restante=0;
-		}
 		
 	/*	echo $sql;		
 		echo $id_numeros_jugados;
 		echo $monto_restante;
 		exit;
 		*/
-		return array('total_registros'=>$total_registros,'monto_restante'=>$monto_restante,'id_numeros_jugados'=>$id_numeros_jugados);
-		
+		return array('total_registros'=>$total_registros,'monto_restante'=>$monto_restante);
 	}	
 	
 	
@@ -947,7 +942,7 @@ class Ventas{
             $id_agencia=$roww["id_agencia"];
             $taquilla=$_SESSION["taquilla"];
             
-            $sql = "SELECT id_ticket FROM ticket WHERE taquilla  = ".$taquilla." ORDER BY fecha_hora DESC limit 1";
+            $sql = "SELECT id_ticket_diario FROM ticket_diario WHERE taquilla  = ".$taquilla." ORDER BY fecha_hora DESC limit 1";
            /* echo $sql;
             exit;*/
             $result= $this->vConexion->ExecuteQuery($sql);
@@ -956,7 +951,7 @@ class Ventas{
             if ($this->vConexion->GetNumberRows($result)>0){
             	
 				$roww= $this->vConexion->GetArrayInfo($result);
-				$maximo=$roww["id_ticket"];
+				$maximo=$roww["id_ticket_diario"];
             	
 				//preguntar si es de los ticket viejos o no
 	            $tamano = strlen($maximo);
@@ -1015,7 +1010,7 @@ class Ventas{
 	public function GetExisteSerialTicket($serial){
 
 		//Preparacion del query
-		$sql = "SELECT id_ticket FROM ticket WHERE status='1' AND serial = ".$serial."";
+		$sql = "SELECT id_ticket_diario FROM ticket_diario WHERE status='1' AND serial = ".$serial."";
 		$result= $this->vConexion->ExecuteQuery($sql);
 		
 		if ($this->vConexion->GetNumberRows($result)>0){
@@ -1039,7 +1034,7 @@ class Ventas{
 	public function GuardarTicket($id_ticket, $serial,$fecha_hora,$taquilla,$total_ticket,$id_usuario){
 
 		//Preparacion del query
-		$sql = "INSERT INTO `ticket` (`id_ticket`, `serial` , `fecha_hora` , `taquilla`, `total_ticket` , `id_usuario` , `premiado`, `pagado`)
+		$sql = "INSERT INTO `ticket_diario` (`id_ticket_diario`, `serial` , `fecha_hora` , `taquilla`, `total_ticket` , `id_usuario` , `premiado`, `pagado`)
                     VALUES ('".$id_ticket."', '".$serial."', '".$fecha_hora."', '".$taquilla."', '".$total_ticket."', '".$id_usuario."', '0', '0')";
 			/*echo $sql;
 			exit;*/
@@ -1059,7 +1054,7 @@ class Ventas{
          public function ExisteTicketNoImpreso($taquilla){
          
          	//Preparacion del query
-         	$sql = "SELECT * FROM ticket WHERE status='1' AND taquilla  = ".$taquilla." ORDER BY `fecha_hora` DESC LIMIT 1 ";
+         	$sql = "SELECT * FROM ticket_diario WHERE status='1' AND taquilla  = ".$taquilla." ORDER BY `fecha_hora` DESC LIMIT 1 ";
          	$result= $this->vConexion->ExecuteQuery($sql);
          	$roww= $this->vConexion->GetArrayInfo($result);
          	if($this->vConexion->GetNumberRows($result)== 0){
@@ -1088,7 +1083,7 @@ class Ventas{
 	public function GuardarDetalleTicket($id_ticket,$numero,$id_sorteo,$fecha_sorteo,$id_zodiacal,$id_tipo_jugada,$monto,$monto_restante,$monto_faltante){
 
 		//Preparacion del query
-		$sql = "INSERT INTO `detalle_ticket` (`id_ticket`, `numero` , `id_sorteo` , `fecha_sorteo`, `id_zodiacal` , `id_tipo_jugada` , `monto`,`monto_restante`,`monto_faltante`)
+		$sql = "INSERT INTO `detalle_ticket_diario` (`id_ticket_diario`, `numero` , `id_sorteo` , `fecha_sorteo`, `id_zodiacal` , `id_tipo_jugada` , `monto`,`monto_restante`,`monto_faltante`)
                     VALUES ('".$id_ticket."', '".$numero."', '".$id_sorteo."', '".$fecha_sorteo."', '".$id_zodiacal."', '".$id_tipo_jugada."', '".$monto."','".$monto_restante."','".$monto_faltante."')";
 
                 return $this->vConexion->ExecuteQuery($sql);
@@ -1122,14 +1117,14 @@ class Ventas{
 	 * @param string $numero
 	 * @return boolean, array
 	 */
-	public function GetExisteNumeroJugados($numero, $id_sorteo, $id_tipo_jugada, $id_zodiacal){
+	/*public function GetExisteNumeroJugados($numero, $id_sorteo, $id_tipo_jugada, $id_zodiacal){
 
 		//Preparacion del query
 		$sql = "SELECT id_numero_jugados, monto_restante FROM numeros_jugados WHERE numero = ".$numero." AND id_sorteo  = ".$id_sorteo." AND id_tipo_jugada  = ".$id_tipo_jugada." AND id_zodiacal = ".$id_zodiacal."";
 		$result= $this->vConexion->ExecuteQuery($sql);
 
                 return $result;
-	}
+	}*/
 
         /**
 	 * Actualiza Datos de Numeros Jugados
@@ -1137,16 +1132,16 @@ class Ventas{
          * @param string $monto_restante
 	 * @return boolean, array
 	 */
-	public function ActualizaNumeroJugados($id_numero_jugados,$monto_restante){
+/*	public function ActualizaNumeroJugados($id_numero_jugados,$monto_restante){
 
 		//Preparacion del query
 		$sql = "UPDATE `numeros_jugados` SET `monto_restante`='".$monto_restante."' WHERE id_numero_jugados='".$id_numero_jugados."'";
 		
 	/*	echo $sql;
 		exit;*/
-		return $this->vConexion->ExecuteQuery($sql);
+	//	return $this->vConexion->ExecuteQuery($sql);
 
-	}
+	//}
 
 	/**
 	 * Actualiza impreso=1 en Impresion
@@ -1156,7 +1151,7 @@ class Ventas{
 	public function SeteaImpresionenTicket($id_ticket){
 	
 		//Preparacion del query `id_ticket`, `serial`
-		$sql = "UPDATE `ticket` SET `impreso`= 1 WHERE id_ticket='".$id_ticket."'";
+		$sql = "UPDATE `ticket_diario` SET `impreso`= 1 WHERE id_ticket_diario='".$id_ticket."'";
 		return $this->vConexion->ExecuteQuery($sql);
 	
 	}	
@@ -1170,7 +1165,7 @@ class Ventas{
 	public function ActualizaSerialReimpresion($id_ticket, $serial){
 	
 		//Preparacion del query `id_ticket`, `serial`
-		$sql = "UPDATE `ticket` SET `serial`='".$serial."', `impreso`= 2 WHERE id_ticket='".$id_ticket."'";
+		$sql = "UPDATE `ticket_diario` SET `serial`='".$serial."', `impreso`= 2 WHERE id_ticket_diario='".$id_ticket."'";
 		return $this->vConexion->ExecuteQuery($sql);
 	
 	}	
@@ -1186,7 +1181,7 @@ class Ventas{
          * @param string $monto_restante
 	 * @return boolean, array
 	 */
-	public function GuardarNumerosJugados($fecha,$numero,$id_sorteo,$id_tipo_jugada,$id_zodiacal,$monto_restante){
+	/*public function GuardarNumerosJugados($fecha,$numero,$id_sorteo,$id_tipo_jugada,$id_zodiacal,$monto_restante){
 
 		//Preparacion del query
 		$sql = "INSERT INTO `numeros_jugados` (`fecha`, `numero` , `id_sorteo` , `id_tipo_jugada` , `id_zodiacal`, `monto_restante` )
@@ -1194,7 +1189,7 @@ class Ventas{
 
                 return $this->vConexion->ExecuteQuery($sql);
 
-	}
+	}*/
 	
 	/**
 	 * Eliminar terminales de Ticket transaccional segun un Id

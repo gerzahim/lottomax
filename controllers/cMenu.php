@@ -9,6 +9,10 @@ if ($id_perfil == '1') {
 	//Menu para Vendedor
 	$obj_xtpl->assign_file('menu', $obj_config->GetVar('ruta_vista').'menu_vendedor'.$obj_config->GetVar('ext_vista'));
 }
+elseif ($id_perfil == '3'){
+	//Menu para Vendedor
+	$obj_xtpl->assign_file('menu', $obj_config->GetVar('ruta_vista').'menu_agencia'.$obj_config->GetVar('ext_vista'));
+}
 
 // Vista asignada
 //$obj_xtpl->assign_file('menu', $obj_config->GetVar('ruta_vista').'menu'.$obj_config->GetVar('ext_vista'));

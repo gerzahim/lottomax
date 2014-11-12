@@ -323,7 +323,7 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 	//print_r($resultados);
 	$aprox= $obj_modelo->GetAprox();
 	$relacion_pago=array();
-	$result=$obj_modelo->GetRelacionPagos($fecha_hora);
+	$result=$obj_modelo->GetRelacionPagos();
 	while($row=$obj_conexion->GetArrayInfo($result)){
 		$relacion_pago[$row['id_tipo_jugada']]=$row['monto'];
 	}

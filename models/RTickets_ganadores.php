@@ -36,16 +36,14 @@ class RTickets_ganadores{
 	 * @return boolean, array
 	 */
 	public function GetTicketsGanadores($fecha){
-
 		//Preparacion del query
-		$sql = "SELECT * FROM  ticket WHERE premiado='1' AND fecha_hora LIKE '%".$fecha."%'";
+		$sql = "SELECT * FROM ticket WHERE premiado='1' AND fecha_hora LIKE '%".$fecha."%'
+				UNION 
+				SELECT * FROM ticket_diario WHERE premiado='1' AND fecha_hora LIKE '%".$fecha."%'";
         //echo $sql;        
 		$result= $this->vConexion->ExecuteQuery($sql);
         return $result;
-		
-		
 	}
-	
 	/**
 	 * Obtiene el nombre del Sorteo Segun ID
 	 *
@@ -77,11 +75,21 @@ class RTickets_ganadores{
                         INNER JOIN sorteos S ON S.id_sorteo=DT.id_sorteo
                         INNER JOIN zodiacal Z ON Z.Id_zodiacal=DT.id_zodiacal
                         WHERE id_ticket='".$id_ticket."' AND monto <> 0";
-				                        
 		$result= $this->vConexion->ExecuteQuery($sql);
-                return $result;
-
-
+		$total_registros= $this->vConexion->GetNumberRows($result);
+		if($total_registros==0)
+		{
+			$sql = " SELECT DTD.*, SS.nombre_sorteo, ZZ.nombre_zodiacal
+				FROM  detalle_ticket_diario DTD
+                INNER JOIN sorteos SS ON SS.id_sorteo=DTD.id_sorteo
+                INNER JOIN zodiacal ZZ ON ZZ.Id_zodiacal=DTD.id_zodiacal
+                WHERE id_ticket_diario='".$id_ticket."' AND monto <> 0"; 
+			$result= $this->vConexion->ExecuteQuery($sql);
+			//echo $sql;
+		}
+		
+		//echo $sql;
+		return $result;
 	}
 
 	/**
@@ -111,15 +119,12 @@ class RTickets_ganadores{
 	
 		//Preparacion del query
 		$sql = "SELECT DT.*, S.nombre_sorteo, Z.nombre_zodiacal
-                        FROM  detalle_ticket DT
-                        INNER JOIN sorteos S ON S.id_sorteo=DT.id_sorteo
-                        INNER JOIN zodiacal Z ON Z.Id_zodiacal=DT.id_zodiacal
-                        WHERE id_ticket='".$id_ticket."' AND premiado=1";
-	
+				FROM  detalle_ticket DT
+                INNER JOIN sorteos S ON S.id_sorteo=DT.id_sorteo
+                INNER JOIN zodiacal Z ON Z.Id_zodiacal=DT.id_zodiacal
+                WHERE id_ticket='".$id_ticket."' AND premiado=1";
 		$result= $this->vConexion->ExecuteQuery($sql);
 		return $result;
-	
-	
 	}	
 	
 	/**

@@ -38,14 +38,14 @@ class RTickets_anulados{
 	public function GetTicketsAnulados($fecha){
 
 		//Preparacion del query
-		$sql = "SELECT * FROM  ticket WHERE status='0' AND fecha_hora LIKE '%".$fecha."%'";
-                
+        
+		$sql = "SELECT * FROM ticket WHERE status='0' AND fecha_hora LIKE '%".$fecha."%'
+				UNION
+				SELECT * FROM ticket_diario WHERE status='0' AND fecha_hora LIKE '%".$fecha."%'";
+		//echo $sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
-                return $result;
-		
-		
+		return $result;
 	}
-
         /**
 	 * Devuelve el detalle de jugadas de algun ticket
 	 *
@@ -53,21 +53,26 @@ class RTickets_anulados{
 	 * @return boolean, array
 	 */
 	public function GetDetalleTicket($id_ticket){
-
 		//Preparacion del query
 		$sql = "SELECT DT.*, S.nombre_sorteo, Z.nombre_zodiacal
                         FROM  detalle_ticket DT
                         INNER JOIN sorteos S ON S.id_sorteo=DT.id_sorteo
                         INNER JOIN zodiacal Z ON Z.Id_zodiacal=DT.id_zodiacal
                         WHERE id_ticket='".$id_ticket."'";
-                        
 		$result= $this->vConexion->ExecuteQuery($sql);
-                return $result;
-
-
+		$total_registros= $this->vConexion->GetNumberRows($result);
+		if($total_registros==0)
+		{
+			$sql = " SELECT DTD.*, SS.nombre_sorteo, ZZ.nombre_zodiacal
+				FROM  detalle_ticket_diario DTD
+                INNER JOIN sorteos SS ON SS.id_sorteo=DTD.id_sorteo
+                INNER JOIN zodiacal ZZ ON ZZ.Id_zodiacal=DTD.id_zodiacal
+                WHERE id_ticket_diario='".$id_ticket."' AND monto <> 0";
+			$result= $this->vConexion->ExecuteQuery($sql);
+			//echo $sql;
+		}
+		return $result;
 	}
-	
-	
 	/**
 	 * Obtiene el hora del Sorteo Segun ID
 	 *

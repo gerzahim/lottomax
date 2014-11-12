@@ -68,7 +68,7 @@ switch (ACCION){
 				}
 
 				// Asignacion de los datos
-                                $obj_xtpl->assign('id_ticket', $obj_generico->CleanTextDb($row["id_ticket"]));
+                                $obj_xtpl->assign('id_ticket', $obj_generico->CleanTextDb($row["id_ticket_diario"]));
                                 $obj_xtpl->assign('fecha_hora', $obj_date->changeFormatDateI($obj_generico->CleanTextDb($row["fecha_hora"]),1) );
                                 $obj_xtpl->assign('total_ticket', $obj_generico->CleanTextDb($row["total_ticket"]));
 
@@ -142,7 +142,7 @@ switch (ACCION){
 
                 $where = "";
 		if(!$obj_generico->IsEmpty($id_ticket)){
-                    $where = $where. " id_ticket='".$id_ticket."' AND " ;
+                    $where = $where. " id_ticket_diario='".$id_ticket."' AND " ;
                 }
 
                 if(!$obj_generico->IsEmpty($serial)){
@@ -161,9 +161,9 @@ switch (ACCION){
                     if (!$obj_modelo->ValidaSorteosTicket($id_ticket)  && $fecha_actual==substr($obj_modelo->GetFechaTicket($id_ticket), 0,10)){
 
                          // Eliminamos el ticket
-                        if( $obj_modelo->EliminarTicket($row['id_ticket'])){
+                        if( $obj_modelo->EliminarTicket($row['id_ticket_diario'])){
                         	//Reestablecer Incompletos y Agotados
-                        	$obj_modelo->ReestablecerImcompletosyJugados($id_ticket);
+                        	$obj_modelo->ReestablecerImcompletosyJugados($id_ticket,$row['fecha_hora']);
                             $_SESSION['mensaje']= $mensajes['info_eliminada'];
                         }
                         else{
@@ -269,7 +269,7 @@ switch (ACCION){
 				}
 				
 				// Asignacion de los datos
-				$obj_xtpl->assign('id_ticket', $obj_generico->CleanTextDb($row["id_ticket"]));
+				$obj_xtpl->assign('id_ticket', $obj_generico->CleanTextDb($row["id_ticket_diario"]));
                                $obj_xtpl->assign('fecha_hora', $obj_date->changeFormatDateI($obj_generico->CleanTextDb($row["fecha_hora"]),1));
                                    $obj_xtpl->assign('total_ticket', $obj_generico->CleanTextDb($row["total_ticket"]));
                                

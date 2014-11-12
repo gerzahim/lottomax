@@ -38,7 +38,9 @@ class RTickets_pagados{
 	public function GetTicketsPagadosbyFechaEmitidos($fecha){
 
 		//Preparacion del query
-		$sql = "SELECT * FROM  ticket WHERE premiado='1' AND pagado='1' AND fecha_hora LIKE '%".$fecha."%'";        
+		$sql = "SELECT * FROM  ticket WHERE premiado='1' AND pagado='1' AND fecha_hora LIKE '%".$fecha."%'
+				UNION 
+				SELECT * FROM ticket_diario WHERE premiado='1' AND pagado='1' AND fecha_hora LIKE '%".$fecha."%'";
 		$result= $this->vConexion->ExecuteQuery($sql);
         return $result;
 	}
@@ -52,7 +54,10 @@ class RTickets_pagados{
 	public function GetTicketsPagadosbyFechaPagados($fecha){
 	
 		//Preparacion del query
-		$sql = "SELECT * FROM  ticket WHERE premiado='1' AND pagado='1' AND fecha_hora_pagado LIKE '%".$fecha."%'";
+		$sql = "SELECT * FROM  ticket WHERE premiado='1' AND pagado='1' AND fecha_hora_pagado LIKE '%".$fecha."%'
+				UNION 
+				SELECT * FROM ticket_diario WHERE premiado='1' AND pagado='1' AND fecha_hora_pagado LIKE '%".$fecha."%'";
+				
 		$result= $this->vConexion->ExecuteQuery($sql);
 		return $result;
 	}	
@@ -73,6 +78,18 @@ class RTickets_pagados{
                         WHERE id_ticket='".$id_ticket."' AND monto <> 0";
 				                        
 		$result= $this->vConexion->ExecuteQuery($sql);
+		
+		$total_registros= $this->vConexion->GetNumberRows($result);
+		if($total_registros==0)
+		{
+			$sql = " SELECT DTD.*, SS.nombre_sorteo, ZZ.nombre_zodiacal
+				FROM  detalle_ticket_diario DTD
+                INNER JOIN sorteos SS ON SS.id_sorteo=DTD.id_sorteo
+                INNER JOIN zodiacal ZZ ON ZZ.Id_zodiacal=DTD.id_zodiacal
+                WHERE id_ticket_diario='".$id_ticket."' AND monto <> 0";
+			$result= $this->vConexion->ExecuteQuery($sql);
+			//echo $sql;
+		}
                 return $result;
 
 

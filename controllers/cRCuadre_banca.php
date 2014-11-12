@@ -16,30 +16,25 @@ require($obj_config->GetVar('ruta_modelo').'RCuadre_banca.php');
 
 $obj_modelo= new RCuadre_banca($obj_conexion);
 $obj_date= new Fecha();
-$comision=$obj_modelo->GetComision();
-
+$comisionarreglo=$obj_modelo->GetComision();
+$comision=$comisionarreglo['comision_agencia'];
+$tipo_comision=$comisionarreglo['tipo_comision'];
 require('./fpdf/fpdf.php');
-
 switch (ACCION){
 
     case 'listar_resultados':
         // Ruta actual
         $_SESSION['Ruta_Lista']= $obj_generico->RutaRegreso();
-
         // Ruta regreso
         $obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Form']);
-        
         $fecha_desde= $obj_generico->CleanText($_GET['fechadesde']);
         $fecha_hasta= $obj_generico->CleanText($_GET['fechahasta']);
-
         $obj_xtpl->assign('fechadesde', $fecha_desde);
         $obj_xtpl->assign('fechahasta', $fecha_hasta);
-		
        	$fecha_desde=$obj_date->changeFormatDateII($fecha_desde);
        	$fecha_hasta=$obj_date->changeFormatDateII($fecha_hasta);
-       	
         $i=0; $total_cuadre=0;
-        if( $result= $obj_modelo->GetBalance($fecha_desde, $fecha_hasta,$comision) ){
+        if( $result= $obj_modelo->GetBalance($fecha_desde, $fecha_hasta,$comision,$tipo_comision) ){
             if ($obj_conexion->GetNumberRows($result)>0 ){
                 
                 while($row= $obj_conexion->GetArrayInfo($result)){
@@ -58,7 +53,6 @@ switch (ACCION){
                             $obj_xtpl->assign('estilo_fila', 'odd');
                          }
                     }
-
                     $obj_xtpl->assign('fecha', $obj_date->changeFormatDateI($row['fecha'], 0));
                     $obj_xtpl->assign('total_ventas', number_format($row['total_ventas'], 2) );
                     $obj_xtpl->assign('comision', number_format($row['comision'],2));

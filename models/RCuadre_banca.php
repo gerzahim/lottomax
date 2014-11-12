@@ -8,17 +8,13 @@
  * @license BSD License
  * @version v 1.0 Junio - 2013
  */
-
 class RCuadre_banca{
-
 	/**
 	 * Objeto de la conexion.
 	 *
 	 * @var object $vConexion
 	 */
 	private $vConexion="";
-	
-	
 	/**
 	 * Constructor de la clase. Instancia.
 	 *
@@ -35,16 +31,12 @@ class RCuadre_banca{
 	 * @return integer, comision
 	 */
 	public function GetComision(){
-	
 		//Preparacion del query
-		 
-		$sql = "SELECT comision_agencia FROM parametros WHERE id_agencia=1";
+		$sql = "SELECT comision_agencia,tipo_comision FROM parametros WHERE id_agencia=1";
 		$result= $this->vConexion->ExecuteQuery($sql);
 		$roww= $this->vConexion->GetArrayInfo($result);
-		return $roww['comision_agencia'];
+		return $roww;
 	}    
-	
-	
          /**
 	 * Devuelve el listado de balance por dia entre dos fechas
 	 *
@@ -53,24 +45,31 @@ class RCuadre_banca{
          * @param integer $comision
 	 * @return boolean, array
 	 */
-	public function GetBalance($fecha_desde, $fecha_hasta,$comision){
-
+	public function GetBalance($fecha_desde, $fecha_hasta,$comision,$tipo_comision){
 		//Preparacion del query
-               
         //echo $fecha_desde, $fecha_hasta,$comision;      
-
+		if($tipo_comision==1)
 		$sql = "SELECT LEFT(fecha_hora,10) AS fecha, SUM(total_ticket) AS total_ventas, SUM(total_ticket)* ".$comision." /100 AS comision, SUM(total_premiado) AS total_premiado, SUM(total_ticket)- ((SUM(total_ticket)* ".$comision." /100) + SUM(total_premiado)) AS balance
-                        FROM ticket
-                        WHERE status='1' AND fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."  23:59:59'
-                        GROUP BY LEFT(fecha_hora,10)";
-		//echo $sql;
-		
+				FROM ticket
+                WHERE status='1' AND fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."  23:59:59'
+                UNION
+                SELECT LEFT(fecha_hora,10) AS fecha, SUM(total_ticket) AS total_ventas, SUM(total_ticket)* ".$comision." /100 AS comision, SUM(total_premiado) AS total_premiado, SUM(total_ticket)- ((SUM(total_ticket)* ".$comision." /100) + SUM(total_premiado)) AS balance
+				FROM ticket_diario
+                WHERE status='1' AND fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."  23:59:59'
+                GROUP BY LEFT(fecha_hora,10)";
+		if($tipo_comision==2)
+		$sql = "SELECT LEFT(fecha_hora,10) AS fecha, SUM(total_ticket) AS total_ventas, (SUM(total_ticket) - SUM(total_premiado) )* ".$comision." /100 AS comision, SUM(total_premiado) AS total_premiado, SUM(total_ticket) - SUM(total_premiado)-(SUM(total_ticket) - SUM(total_premiado) )* ".$comision." /100 AS balance
+				FROM ticket
+                WHERE status='1' AND fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."  23:59:59'
+                UNION
+                SELECT LEFT(fecha_hora,10) AS fecha, SUM(total_ticket) AS total_ventas, (SUM(total_ticket) - SUM(total_premiado) )* ".$comision." /100 AS comision, SUM(total_premiado) AS total_premiado, SUM(total_ticket)- SUM(total_premiado)-(SUM(total_ticket) - SUM(total_premiado) )* ".$comision." /100 AS balance
+				FROM ticket_diario
+                WHERE status='1' AND fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."  23:59:59'
+				GROUP BY LEFT(fecha_hora,10)";
+	//	echo $sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
-                return $result;
-		
-		
+		return $result;
 	} 
-	
 	/**
 	 * Devuelve el listado de Tickets Ganadores
 	 *

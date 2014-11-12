@@ -31,7 +31,10 @@ switch (ACCION){
         // Ruta regreso
         $obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Form']);
         
+        if(!empty($_GET['radio_pagado']))
         $op_fecha = $_GET['radio_pagado'];
+        else
+        $op_fecha='1';
         if($op_fecha == '1'){
         	// Selecciono Por Fecha Emision de Ticket
         	$result= $obj_modelo->GetTicketsPagadosbyFechaEmitidos($fecha);
