@@ -9,7 +9,7 @@ mysql_select_db("lottomax",$conexion_arriba);
 mysql_select_db("lottomaxdb",$conexion_arriba);
 //Buscamos los tickets que no han sido subido abajo.
 */
-$sql = "SELECT * FROM ticket WHERE subido=0 ORDER by fecha_hora ASC LIMIT 0,50 ";
+$sql = "SELECT * FROM ticket_diario WHERE subido=0 ORDER by fecha_hora ASC LIMIT 0,50 ";
 
 if($result= mysql_query($sql,$conexion_abajo)){
 	/*echo "PASA";
@@ -34,14 +34,14 @@ if($result= mysql_query($sql,$conexion_abajo)){
 			$fecha_hora_pagado=$row['fecha_hora_pagado'];
 				
 		}
-		$consulta_arriba_ticket.="('".$row['id_ticket']."','".$row['serial']."','".$row['fecha_hora']."',".$row['taquilla'].",'".$row['total_ticket']."',".$row['id_usuario'].",".$row['premiado'].",".$row['pagado'].",".$row['total_premiado'].",".$row['status'].",'".$row['fecha_hora_anulacion']."',".$row['taquilla_anulacion'].",1,".$row['verificado'].",".$row['impreso'].",'".$fecha_hora_pagado."',".$usuario_pagado.",".$taquilla_pagado."),";   
-		$arreglo[]=$row['id_ticket'];
-		$sql1 = "SELECT * FROM detalle_ticket WHERE id_ticket=".$row['id_ticket'];
+		$consulta_arriba_ticket.="('".$row['id_ticket_diario']."','".$row['serial']."','".$row['fecha_hora']."',".$row['taquilla'].",'".$row['total_ticket']."',".$row['id_usuario'].",".$row['premiado'].",".$row['pagado'].",".$row['total_premiado'].",".$row['status'].",'".$row['fecha_hora_anulacion']."',".$row['taquilla_anulacion'].",1,".$row['verificado'].",".$row['impreso'].",'".$fecha_hora_pagado."',".$usuario_pagado.",".$taquilla_pagado."),";   
+		$arreglo[]=$row['id_ticket_diario'];
+		$sql1 = "SELECT * FROM detalle_ticket_diario WHERE id_ticket_diario=".$row['id_ticket_diario'];
 		$result1= mysql_query($sql1,$conexion_abajo);
 		$numero_registros1 = mysql_num_rows($result1);
 		//	echo $numero_registros1."<br>";
 		while ($row1 = mysql_fetch_array($result1))
-		$consulta_arriba_detalle.="(".$row1['id_detalle_ticket'].",".$row1['id_ticket'].",'".$row1['numero']."',".$row1['id_sorteo'].",'".$row1['fecha_sorteo']."',".$row1['id_zodiacal'].",".$row1['id_tipo_jugada'].",".$row1['monto'].",".$row1['premiado'].",".$row1['total_premiado'].",".$row1['monto_restante'].",".$row1['monto_faltante']."),";
+		$consulta_arriba_detalle.="(".$row1['id_detalle_ticket_diario'].",".$row1['id_ticket_diario'].",'".$row1['numero']."',".$row1['id_sorteo'].",'".$row1['fecha_sorteo']."',".$row1['id_zodiacal'].",".$row1['id_tipo_jugada'].",".$row1['monto'].",".$row1['premiado'].",".$row1['total_premiado'].",".$row1['monto_restante'].",".$row1['monto_faltante']."),";
 	}
 	$consulta_arriba_detalle = trim($consulta_arriba_detalle, ',');
 	$consulta_arriba_ticket = trim($consulta_arriba_ticket, ',');
@@ -86,7 +86,7 @@ if($result= mysql_query($sql,$conexion_abajo)){
 			if (mysql_query("BEGIN;",$conexion_abajo)) //dar inicio a la transacción
 				foreach ($arreglo as $id)
 				{
-					$sql="UPDATE ticket SET subido=1 WHERE subido=0 AND id_ticket=".$id;
+					$sql="UPDATE ticket_diario SET subido=1 WHERE subido=0 AND id_ticket_diario=".$id;
 					if (mysql_query($sql,$conexion_abajo)){}
 					else
 					$error=1;						
