@@ -17,19 +17,6 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 
---
--- Dumping data for table `dias_semana`
---
-INSERT INTO `dias_semana` (`id_dias_semana`, `nombre_dia_semana`, `abv_dia_semana`) VALUES
-(0, 'Domingo', 'dom'),
-(1, 'Lunes', 'lun'),
-(2, 'Martes', 'mar'),
-(3, 'Miercoles', 'mie'),
-(4, 'Jueves', 'jue'),
-(5, 'Viernes', 'vie'),
-(6, 'Sabado', 'sab');
-
-
 
 --
 -- Dumping data for table `loterias`
@@ -295,6 +282,19 @@ INSERT INTO `sorteos` (`id_sorteo`, `id_loteria`, `nombre_sorteo`, `hora_sorteo`
 (107, 10, 'PAR MILL B 7:30PM', '19:30:00', 3, 0, 0, 1, 2, '0'),
 (108, 11, 'ESPECIAL CANTADO A 7:30PM', '19:30:00', 3, 0, 0, 1, 1, '0'),
 (109, 12, 'CASH 3', '21:00:00', 3, 0, 0, 0, 1, '0,1,2,3,4,5,6');
+
+
+--
+-- Dumping data for table `dias_semana`
+--
+INSERT INTO `dias_semana` (`id_dias_semana`, `nombre_dia_semana`, `abv_dia_semana`) VALUES
+(0, 'Domingo', 'dom'),
+(1, 'Lunes', 'lun'),
+(2, 'Martes', 'mar'),
+(3, 'Miercoles', 'mie'),
+(4, 'Jueves', 'jue'),
+(5, 'Viernes', 'vie'),
+(6, 'Sabado', 'sab');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
