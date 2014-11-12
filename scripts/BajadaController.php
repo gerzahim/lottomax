@@ -95,7 +95,7 @@ class BajadaController{
 		// deberiamos colocar un parametro premiado=0, verificado=0
 		// premiado cambia cuando se premia un ticket
 		// verificado cambia cuando ya se reviso y no esta premiado verificado=1
-		$sql = "SELECT * FROM ticket WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'";
+		$sql = "SELECT * FROM ticket_diario WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'";
 		//echo $sql;
 		$result= mysql_query($sql,$conexion_abajo);
 		return  $result;
@@ -111,8 +111,8 @@ class BajadaController{
 	
 		//Preparacion del query
 		$sql = "SELECT *
-                        FROM detalle_ticket DT
-                        WHERE id_ticket='".$id_ticket."'";
+                        FROM detalle_ticket_diario DT
+                        WHERE id_ticket_diario='".$id_ticket."'";
 	
 		$result= mysql_query($sql,$conexion_abajo);
 	
@@ -127,7 +127,7 @@ class BajadaController{
 	public function PremiarDetalleTicket($id_detalle_ticket, $total_premiado,$conexion_abajo){
 	
 		//Preparacion del query
-		$sql = "UPDATE `detalle_ticket` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_detalle_ticket='".$id_detalle_ticket."'";
+		$sql = "UPDATE `detalle_ticket_diario` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_detalle_ticket_diario='".$id_detalle_ticket."'";
 		//echo $sql;
 		$result= mysql_query($sql,$conexion_abajo);
 		return $result;
@@ -143,7 +143,7 @@ class BajadaController{
 		foreach ($resultados as $key => $rs){
 			$aux=preg_split("/\//",$key);
 			if($fecha_ante=='')
-			$sql = "SELECT * FROM `detalle_ticket` WHERE `premiado`=1 AND (`fecha_sorteo` LIKE '%".$aux[1]."%' AND (`id_sorteo` =".$aux[0];
+			$sql = "SELECT * FROM `detalle_ticket_diario` WHERE `premiado`=1 AND (`fecha_sorteo` LIKE '%".$aux[1]."%' AND (`id_sorteo` =".$aux[0];
 			else
 			if($aux[1]==$fecha_ante)
 			$sql.=" OR `id_sorteo` = ".$aux[0];
@@ -154,7 +154,7 @@ class BajadaController{
 		$sql.="))";
 		$result=mysql_query($sql,$conexion_abajo);
 		while($row=mysql_fetch_array($result)){
-			$sql = "SELECT * FROM `ticket` WHERE `id_ticket` = ".$row['id_ticket'];
+			$sql = "SELECT * FROM `ticket_diario` WHERE `id_ticket_diario` = ".$row['id_ticket_diario'];
 			$result2=mysql_query($sql,$conexion_abajo);
 			while($row2=mysql_fetch_array($result2)){
 				$total_premiado=$row2['total_premiado']-$row['total_premiado'];
@@ -162,9 +162,9 @@ class BajadaController{
 					$premiado=0;
 				else
 					$premiado=1;
-				$sql = "UPDATE `ticket` SET `premiado`=".$premiado.", `total_premiado`=".$total_premiado." WHERE `id_ticket`=".$row['id_ticket'];
+				$sql = "UPDATE `ticket_diario` SET `premiado`=".$premiado.", `total_premiado`=".$total_premiado." WHERE `id_ticket_diario`=".$row['id_ticket_diario'];
 				mysql_query($sql,$conexion_abajo);
-				$sql = "UPDATE `detalle_ticket` SET `premiado`=0, `total_premiado`=0 WHERE `id_detalle_ticket`=".$row['id_detalle_ticket'];
+				$sql = "UPDATE `detalle_ticket_diario` SET `premiado`=0, `total_premiado`=0 WHERE `id_detalle_ticket_diario`=".$row['id_detalle_ticket_diario'];
 				mysql_query($sql,$conexion_abajo);
 			}
 		}
@@ -178,7 +178,7 @@ class BajadaController{
 	public function PremiarTicket($id_ticket, $total_premiado,$conexion_abajo){
 	
 		//Preparacion del query
-		$sql = "UPDATE `ticket` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_ticket='".$id_ticket."'";
+		$sql = "UPDATE `ticket_diario` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_ticket_diario='".$id_ticket."'";
 	
 		$result= mysql_query($sql,$conexion_abajo);
 		return $result;
