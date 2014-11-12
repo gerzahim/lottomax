@@ -7,39 +7,26 @@
  * @license BSD License
  * @version v 1.0 Mayo - 2013
  */
-
 // Vista asignada
 $obj_xtpl->assign_file('contenido', $obj_config->GetVar('ruta_vista').'Rtickets_ganadores'.$obj_config->GetVar('ext_vista'));
-
 // Modelo asignado
 require($obj_config->GetVar('ruta_modelo').'RTickets_ganadores.php');
 $obj_date= new Fecha();
-
 $obj_modelo= new RTickets_ganadores($obj_conexion);
-
 require('./fpdf/fpdf.php');
-
 switch (ACCION){
-
     case 'listar_resultados':
         $fecha = $obj_date->changeFormatDateII($_GET['txt_fecha']);
-        
         $obj_xtpl->assign('fecha', $obj_date->changeFormatDateI($fecha,0));
-        
         // Ruta actual
         $_SESSION['Ruta_Lista']= $obj_generico->RutaRegreso();
-
         // Ruta regreso
         $obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Form']);
-        
         $obj_xtpl->assign('fecha_busca', $fecha);
-        
-        
-        
-        $i=0;$total_ganadores=0;
+        $i=0;
+        $total_ganadores=0;
         if( $result= $obj_modelo->GetTicketsGanadores($fecha) ){
             if ($obj_conexion->GetNumberRows($result)>0 ){
-                
                 while($row= $obj_conexion->GetArrayInfo($result)){
                     if( ($i % 2) >0){
                             $obj_xtpl->assign('estilo_fila', 'even');

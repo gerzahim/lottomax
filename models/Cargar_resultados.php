@@ -83,7 +83,14 @@ class Cargar_Resultados{
 		// deberiamos colocar un parametro premiado=0, verificado=0
 		// premiado cambia cuando se premia un ticket
 		// verificado cambia cuando ya se reviso y no esta premiado verificado=1
+		
+		$fecha_resultado= strtotime(substr ($fecha_resultado,0,10));
+		$fecha_actual =strtotime(date('Y-m-d'));
+		if($fecha_resultado<$fecha_actual)
 		$sql = "SELECT * FROM ticket WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'";
+		else
+		$sql = "SELECT * FROM ticket_diario WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'";
+				
 		$result= $this->vConexion->ExecuteQuery($sql);
 		return  $result;
 	
@@ -99,10 +106,13 @@ class Cargar_Resultados{
 	
 		$sql = "UPDATE `detalle_ticket` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_detalle_ticket='".$id_detalle_ticket."'";
 		//echo $sql;
-		return $this->vConexion->ExecuteQuery($sql);
-	
+		$result=$this->vConexion->ExecuteQuery($sql);
+		if($this->vConexion->mysql_affected_rows($result)==0){
+			$sql = "UPDATE `detalle_ticket_diario` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_detalle_ticket_diario='".$id_detalle_ticket."'";
+			$result=$this->vConexion->ExecuteQuery($sql);
+		}
+		return $result;
 	}
-	
 	/**
 	 * Busqueda de detalle de Tickets Segun id_ticket
 	 *
@@ -116,7 +126,13 @@ class Cargar_Resultados{
                         WHERE id_ticket='".$id_ticket."'";
 	
 		$result= $this->vConexion->ExecuteQuery($sql);
-	
+		$total_registros= $this->vConexion->GetNumberRows($result);
+		if($total_registros==0)
+		{
+			$sql = "SELECT * FROM detalle_ticket_diario WHERE status='1' AND pagado=0 AND id_ticket_diario=".$id_ticket." AND premiado=1" ;
+			$result= $this->vConexion->ExecuteQuery($sql);
+		}		
+		
 		return $result;
 	
 	}
@@ -185,7 +201,7 @@ class Cargar_Resultados{
 	 *
 	 * @return boolean, array
 	 */
-	public function GetRelacionPagos($id_tipo_jugada){
+	public function GetRelacionPagos(){
 	
 		//Preparacion del query
 		$sql = "SELECT monto,id_tipo_jugada FROM relacion_pagos ";
@@ -251,8 +267,12 @@ class Cargar_Resultados{
 	
 		//Preparacion del query
 		$sql = "UPDATE `ticket` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_ticket='".$id_ticket."'";
-		return $this->vConexion->ExecuteQuery($sql);
-	
+		$result=$this->vConexion->ExecuteQuery($sql);
+		if($this->vConexion->mysql_affected_rows($result)==0){
+			$sql = "UPDATE `ticket_diario` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_ticket_diario='".$id_ticket."'";
+			$result=$this->vConexion->ExecuteQuery($sql);
+		}
+		return $result;
 	}
 
          /**
@@ -377,10 +397,23 @@ class Cargar_Resultados{
 	 */
 	public function DespremiarTicket($fecha_hora,$id_sorteo){
 	
+		//Sw que valilda si busca en Ticket o Ticket Diario
+		$sw=0;
 		//Preparacion del query
 		$sql = "SELECT * FROM `detalle_ticket` WHERE `premiado`=1 AND `fecha_sorteo` LIKE '%".$fecha_hora."%' AND id_sorteo=".$id_sorteo;
 		$result=$this->vConexion->ExecuteQuery($sql);
+		$total_registros= $this->vConexion->GetNumberRows($result);
+		if($total_registros==0)
+		{
+			$sql = "SELECT * FROM `detalle_ticket_diario` WHERE `premiado`=1 AND `fecha_sorteo` LIKE '%".$fecha_hora."%' AND id_sorteo=".$id_sorteo;
+			$result=$this->vConexion->ExecuteQuery($sql);
+			$sw=1;
+		}
+		
 		while($row=$this->vConexion->GetArrayInfo($result)){
+			if($sw==1)
+			$sql = "SELECT * FROM `ticket_diario` WHERE `id_ticket_diario` = ".$row['id_ticket_diario'];
+			else	
 			$sql = "SELECT * FROM `ticket` WHERE `id_ticket` = ".$row['id_ticket'];
 				$result2=$this->vConexion->ExecuteQuery($sql);
 				while($row2=$this->vConexion->GetArrayInfo($result2)){
@@ -389,8 +422,14 @@ class Cargar_Resultados{
 					$premiado=0;
 					else
 					$premiado=1;
+					if($sw==1)
+					$sql = "UPDATE `ticket_diario` SET `premiado`=".$premiado.", `total_premiado`=".$total_premiado." WHERE `id_ticket_diario`=".$row['id_ticket_diario'];
+					else	
 					$sql = "UPDATE `ticket` SET `premiado`=".$premiado.", `total_premiado`=".$total_premiado." WHERE `id_ticket`=".$row['id_ticket'];
 					$this->vConexion->ExecuteQuery($sql);
+					if($sw==1)
+					$sql = "UPDATE `detalle_ticket_diario` SET `premiado`=0, `total_premiado`=0 WHERE `id_detalle_ticket_diario`=".$row['id_detalle_ticket_diario'];
+					else
 					$sql = "UPDATE `detalle_ticket` SET `premiado`=0, `total_premiado`=0 WHERE `id_detalle_ticket`=".$row['id_detalle_ticket'];
 					$this->vConexion->ExecuteQuery($sql);
 				}		

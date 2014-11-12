@@ -101,9 +101,17 @@ class CopiarTicket{
 	public function GetListadosegunVariable($parametro_where){
 
 		//Preparacion del query
-                 $sql = "SELECT * FROM ticket WHERE status='1' AND ".$parametro_where;
+		if(empty($parametro_where))
+		$sql = "SELECT * FROM ticket ";
+		else
+		$sql = "SELECT * FROM ticket WHERE ".$parametro_where;
                  
 		$result= $this->vConexion->ExecuteQuery($sql);
+		
+		/*echo $sql;
+		exit;
+		*/
+		
 		return  $result;
 
 	}
@@ -140,13 +148,16 @@ class CopiarTicket{
          * @param string $serial
 	 */
 	public function GetDetalleTicket($id_ticket){
-
 		//Preparacion del query
         $sql = "SELECT * FROM detalle_ticket WHERE id_ticket='".$id_ticket."'";
-        
-		$result= $this->vConexion->ExecuteQuery($sql);
+        $result= $this->vConexion->ExecuteQuery($sql);
+        $total_registros= $this->vConexion->GetNumberRows($result);
+        if($total_registros==0)
+        {
+        	$sql = "SELECT * FROM detalle_ticket_diario WHERE id_ticket_diario='".$id_ticket."'";
+        	$result= $this->vConexion->ExecuteQuery($sql);
+        }
 		return  $result;
-
 	}
 
 	/**
@@ -269,29 +280,40 @@ class CopiarTicket{
 	 * @param string $sorteo
 	 * @return boolean, array
 	 */
-	public function GetNumerosJugados($numero, $sorteo, $id_zodiacal,$fecha_hoy){
-		
-		
-			
+public function GetNumerosJugados($numero, $sorteo, $id_zodiacal){
 		//Preparacion del query
-		$sql = "SELECT id_numeros_jugados, monto_restante FROM numeros_jugados 
-							
-				WHERE numero = ".$numero." AND id_sorteo  = ".$sorteo." AND id_zodiacal = ".$id_zodiacal." AND fecha LIKE '%".$fecha_hoy."%' ";
-	//	exit;
+		
+		
+		/*"SELECT DT.id_detalle_ticket_diario, DT.monto_restante, TD.fecha_hora FROM detalle_ticket_diario DT 
+					INNER JOIN ticket_diario TD ON DT.id_ticket_diario = TD.id_ticket_diario
+					WHERE DT.numero='".$numero."' 
+					AND DT.id_sorteo='".$row['id_sorteo']."' AND  DT.id_zodiacal='".$row['id_zodiacal']."' 
+					AND DT.id_tipo_jugada ='".$row['id_tipo_jugada']."' AND DT.id_ticket_diario <> '".$id_ticket."'";*/
+		
+		$sql = "SELECT DT.monto_restante FROM detalle_ticket_diario DT
+				INNER JOIN ticket_diario TD ON DT.id_ticket_diario = TD.id_ticket_diario
+				WHERE DT.numero='".$numero."' AND DT.id_sorteo  = ".$sorteo." 
+				AND DT.id_zodiacal = ".$id_zodiacal." AND 
+				DT.status=1 ORDER BY TD.fecha_hora DESC limit 1";
+		
 		$result= $this->vConexion->ExecuteQuery($sql);
-		
-		
-		
 		//numeros_jugados
 		//id_numero_jugados	fecha	numero	id_sorteo	id_tipo_jugada	id_zodiacal	monto_restante
-
 		// Datos para la paginacion
 		$total_registros= $this->vConexion->GetNumberRows($result);
-		
 		$roww= $this->vConexion->GetArrayInfo($result);
 		
-		return array('total_registros'=>$total_registros,'monto_restante'=>$roww["monto_restante"],'id_numeros_jugados'=>$roww["id_numeros_jugados"]);
+		if($total_registros>0)
+			$monto_restante=$roww["monto_restante"];
+		else
+			$monto_restante=0;
 		
+	/*	echo $sql;		
+		echo $id_numeros_jugados;
+		echo $monto_restante;
+		exit;
+		*/
+		return array('total_registros'=>$total_registros,'monto_restante'=>$monto_restante);
 	}	
 
         /**

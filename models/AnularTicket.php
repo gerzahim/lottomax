@@ -42,7 +42,7 @@ class AnularTicket{
 		$inicial= ($pagina-1) * $cantidad;
 		
 		//Preparacion del query
-		$sql = "SELECT * FROM ticket WHERE status='1' AND taquilla='".$_SESSION['InfoLogin']->GetTaquilla()."' AND premiado=0 AND pagado=0 AND fecha_hora LIKE '%".Date('Y-m-d')."%' ORDER BY fecha_hora DESC";
+		$sql = "SELECT * FROM ticket_diario WHERE status='1' AND taquilla='".$_SESSION['InfoLogin']->GetTaquilla()."' AND premiado=0 AND pagado=0 AND fecha_hora LIKE '%".Date('Y-m-d')."%' ORDER BY fecha_hora DESC";
 		//echo $sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
 		
@@ -74,10 +74,10 @@ class AnularTicket{
 	public function EliminarTicket($id_ticket){
 		//Preparacion del query
 		//$sql = "DELETE FROM `ticket` WHERE id_ticket='".$id_ticket."'";
-        $sql = "UPDATE ticket SET status='0', fecha_hora_anulacion='".Date('Y-m-d H:i:s')."', taquilla_anulacion='".$_SESSION['taquilla']."' WHERE id_ticket='".$id_ticket."'";
+        $sql = "UPDATE ticket_diario SET status='0', fecha_hora_anulacion='".Date('Y-m-d H:i:s')."', taquilla_anulacion='".$_SESSION['taquilla']."' WHERE id_ticket_diario='".$id_ticket."'";
             
 		return $this->vConexion->ExecuteQuery($sql);
-		
+		//return 1;
 	}
 
 	
@@ -87,10 +87,11 @@ class AnularTicket{
 	 * @param string $id_ticket
 	 * @return boolean, array
 	 */
-	public function ReestablecerImcompletosyJugados($id_ticket){
+	public function ReestablecerImcompletosyJugados($id_ticket,$fecha_hora){
 		//Preparacion del query
-        $sql = "SELECT * FROM detalle_ticket WHERE id_ticket='".$id_ticket."'";
+        $sql = "SELECT * FROM detalle_ticket_diario WHERE id_ticket_diario='".$id_ticket."'";
 		$result= $this->vConexion->ExecuteQuery($sql);
+		$total_registros= $this->vConexion->GetNumberRows($result);
 		while($row= $this->vConexion->GetArrayInfo($result)){
 			$numero=$row['numero'];
 			$id_sorteo=$row['id_sorteo'];
@@ -98,33 +99,29 @@ class AnularTicket{
 			$monto=$row['monto'];
 			$id_tipo_jugada=$row['id_tipo_jugada'];
 			
-			$sql = "SELECT monto_cupo FROM cupo_general WHERE id_tipo_jugada  = ".$id_tipo_jugada."";
-			$result= $this->vConexion->ExecuteQuery($sql);
-			$roww= $this->vConexion->GetArrayInfo($result);
-			$monto_cupo=$roww["monto_cupo"];			
-			
-			
-			//Buscando en Imcopletos y Agotados
-			$sql = "DELETE FROM incompletos_agotados WHERE numero='".$numero."' AND id_sorteo='".$id_sorteo."' AND id_zodiacal='".$id_zodiacal."' AND id_ticket='".$id_ticket."'";
-			$resulta= $this->vConexion->ExecuteQuery($sql);
-			
-			//Buscamos en Numeros Jugados Directamente para Actualizar
-			$sql = "SELECT * FROM numeros_jugados WHERE numero='".$numero."' AND id_sorteo='".$id_sorteo."' AND id_zodiacal='".$id_zodiacal."'";
-			$resulte= $this->vConexion->ExecuteQuery($sql);
-			$rowww= $this->vConexion->GetArrayInfo($resulte);
-			$monto_restante=$rowww['monto_restante'];
-		
-			$monto_restante_ant= $monto+$monto_restante;
-			
-			if ($monto == $monto_cupo || $monto_restante_ant == $monto_cupo){
-				//Borrar porque con esta se agoto el numero
-				$sql = "DELETE FROM numeros_jugados WHERE numero='".$numero."' AND id_sorteo='".$id_sorteo."' AND id_zodiacal='".$id_zodiacal."'";
-			}else{
-				//Modificar el monto 			
-				$sql = "UPDATE `numeros_jugados` SET `monto_restante`='".$monto_restante_ant."' WHERE numero='".$numero."' AND id_sorteo='".$id_sorteo."' AND id_zodiacal='".$id_zodiacal."'";
+			$sql = "SELECT DT.id_detalle_ticket_diario, DT.monto_restante, TD.fecha_hora FROM detalle_ticket_diario DT 
+					INNER JOIN ticket_diario TD ON DT.id_ticket_diario = TD.id_ticket_diario
+					WHERE DT.numero='".$numero."' 
+					AND DT.id_sorteo='".$row['id_sorteo']."' AND  DT.id_zodiacal='".$row['id_zodiacal']."' 
+					AND DT.id_tipo_jugada ='".$row['id_tipo_jugada']."' AND DT.id_ticket_diario <> '".$id_ticket."'";
+			//echo "<br>".$sql;
+			//exit;
+			$result2= $this->vConexion->ExecuteQuery($sql);
+			$total_registros= $this->vConexion->GetNumberRows($result2);
+			if($total_registros>0){
+				while($roww= $this->vConexion->GetArrayInfo($result2)){
+					if($roww['fecha_hora']>$fecha_hora)
+					{
+						$monto_restante=$roww['monto_restante']+$monto;
+						$sql="UPDATE detalle_ticket_diario SET monto_restante ='".$monto_restante."' WHERE id_detalle_ticket_diario='".$roww['id_detalle_ticket_diario']."'";
+						$result3= $this->vConexion->ExecuteQuery($sql);					
+					}
+				}
+				$sql="UPDATE detalle_ticket_diario SET status =0 WHERE id_detalle_ticket_diario='".$row['id_detalle_ticket_diario']."'";
+				$result4= $this->vConexion->ExecuteQuery($sql);
 			}
-			$this->vConexion->ExecuteQuery($sql);
-						
+			
+					
 			
 		}
 		
@@ -141,8 +138,9 @@ class AnularTicket{
 	public function GetListadosegunVariable($parametro_where){
 
 		//Preparacion del query
-                 $sql = "SELECT * FROM ticket WHERE status='1' AND taquilla='".$_SESSION['taquilla']."' AND premiado=0 AND pagado=0 AND ".$parametro_where;
-                 
+                 $sql = "SELECT * FROM ticket_diario WHERE status='1' AND taquilla='".$_SESSION['taquilla']."' AND premiado=0 AND pagado=0 AND ".$parametro_where;
+       //        echo $sql;
+         //      exit; 
 		$result= $this->vConexion->ExecuteQuery($sql);
 		return  $result;
 
@@ -170,16 +168,12 @@ class AnularTicket{
          * @param string $serial
 	 */
 	public function GetFechaTicket($id_ticket){
-
 		//Preparacion del query
-                 $sql = "SELECT fecha_hora FROM ticket WHERE status='1' AND id_ticket='".$id_ticket."'";
-
+        $sql = "SELECT fecha_hora FROM ticket_diario WHERE status='1' AND id_ticket_diario='".$id_ticket."'";
 		$result= $this->vConexion->ExecuteQuery($sql);
 		$roww= $this->vConexion->GetArrayInfo($result);
 		return $roww["fecha_hora"];
-
 	}
-
         /**
 	 * Valida que los sorteos de un Ticket no se han cerrado
 	 *
@@ -189,7 +183,7 @@ class AnularTicket{
 	public function ValidaSorteosTicket($id_ticket){
 
 		//Preparacion del query
-                $sql = "SELECT id_sorteo FROM detalle_ticket WHERE id_ticket='".$id_ticket."'";
+                $sql = "SELECT id_sorteo FROM detalle_ticket_diario WHERE id_ticket_diario='".$id_ticket."'";
                  
 				$result= $this->vConexion->ExecuteQuery($sql);
 		        $total_registros= $this->vConexion->GetNumberRows($result);

@@ -48,24 +48,34 @@ switch (ACCION){
 		$lista= $obj_modelo->GetPremiado($id_ticket);
 		$total_registros= $obj_conexion->GetNumberRows($lista);
 		if( $total_registros >0 ){
-			while($row= $obj_conexion->GetArrayInfo($lista)){
-				$fecha_ticket= $row['fecha_hora'];
+				$row= $obj_conexion->GetArrayInfo($lista);
+				$fecha_ticket= strtotime(substr ($row['fecha_hora'],0,10));
 				$fecha_actual =strtotime(date('Y-m-d'));
-                //Detectando el Proximo Domingo
+/*                //Detectando el Proximo Domingo
                 $proximo_domingo=strtotime($fecha_ticket);
                 $proximo_domingo=strtotime("next Sunday",$proximo_domingo);
               	if($proximo_domingo < $fecha_actual){
                 	//quiere decir que hay un domingo de por medio
                     $tiempo_vigencia=$tiempo_vigencia+1;
                     $fecha_vencido_ticket = strtotime("+$tiempo_vigencia days", strtotime($fecha_ticket));
-                   }else{
-                		$fecha_vencido_ticket = strtotime("+$tiempo_vigencia days", strtotime($fecha_ticket));
-                   }                                
+                   }else{*/
+                		$fecha_vencido_ticket = strtotime("+$tiempo_vigencia days", strtotime($row['fecha_hora']));
+//                   }                                
 					// Verificamos que el ticket no este vencido...
                     if ($fecha_vencido_ticket >= $fecha_actual) {
                     	$monto_total=0;
                     	$i=0;
-						$resultDT = $obj_modelo->GetDetalleTciket($row['id_ticket']);
+                    	// Si el ticket ganador es de hoy el parametro es 0 eso indica que tiene que buscar en tabla de ticket diario
+                    	// Si el ticket ganador es de dias atrás el parametro es 1 indica que tiene que buscar en tabla de ticket
+                    	if($fecha_ticket<$fecha_actual){
+                    		$id_ticket=$row['id_ticket'];
+                    		$param=1;
+                    	}
+                    	else{
+                    		$id_ticket=$row['id_ticket_diario'];
+                    		$param=0;
+                    	}
+						$resultDT = $obj_modelo->GetDetalleTciket($id_ticket,$param);
                         while($rowDT= $obj_conexion->GetArrayInfo($resultDT)){
 	                    if( ($i % 2) >0)
 	                    	$obj_xtpl->assign('estilo_fila', 'even');
@@ -95,7 +105,7 @@ switch (ACCION){
                 	$_SESSION['mensaje']= $mensajes['ticket_vencido'];
                     header('location:'.$_SESSION['Ruta_Lista']);
 				}
-			}
+			
 		}
 		else{
 			$_SESSION['mensaje']= $mensajes['no_ticket'];
@@ -135,7 +145,17 @@ switch (ACCION){
                         if($row= $obj_conexion->GetArrayInfo($lista))
                         	if($row['serial']==$serial)
                         	{
-                 				if( $obj_modelo->PagarTicket($row['id_ticket'], $taquilla, $id_usuario)){
+                        		$fecha_ticket= strtotime(substr ($row['fecha_hora'],0,10));
+                        		$fecha_actual =strtotime(date('Y-m-d'));
+                        		// Si el ticket ganador es de hoy el parametro es 0 eso indica que tiene que buscar en tabla de ticket diario
+                        		// Si el ticket ganador es de dias atrás el parametro es 1 indica que tiene que buscar en tabla de ticket
+                        		if($fecha_ticket<$fecha_actual)
+                        			$param=1;
+                        		else
+                        			$param=0;
+                        		
+                        		
+                 				if( $obj_modelo->PagarTicket($row['id_ticket'], $taquilla, $id_usuario,$param)){
                  					$_SESSION['mensaje']= $mensajes['serial_coincide'];
                                     header('location:'.$_SESSION['Ruta_Lista']);
                                 }

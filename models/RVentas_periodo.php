@@ -66,32 +66,29 @@ class RVentas_periodo{
 	 * @return boolean, array
 	 */
 	public function GetTickets($fecha_desde, $fecha_hasta, $taquilla, $sorteo){
-
 		//Preparacion del query
-                $where = "";
-                if(!Empty($taquilla)){
-                    $where = $where. " taquilla='".$taquilla."' AND " ;
-                }
-
-                if(!Empty($sorteo)){
-                     $where = $where. "id_ticket IN (SELECT id_ticket FROM detalle_ticket WHERE id_sorteo='".$sorteo."') AND ";
-                }
-
-                if(!Empty($fecha_desde) && !Empty($fecha_hasta)){
-                    $where = $where." fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta." 23:59:59' AND ";
-                }
-
-                $where = substr($where, 0,strlen($where) - 5);
-
-		$sql = "SELECT * FROM  ticket WHERE ".$where. " ORDER BY fecha_hora DESC";
-                
+		$where = "";
+        $where2="";
+        if(!Empty($taquilla)){
+        	$where = $where. " taquilla='".$taquilla."' AND " ;
+            $where2=$where2. " taquilla='".$taquilla."' AND " ;
+		}
+        if(!Empty($sorteo)){
+        	$where = $where. "id_ticket IN (SELECT id_ticket FROM detalle_ticket WHERE id_sorteo='".$sorteo."') AND ";
+            $where2 = $where2. "id_ticket IN (SELECT id_ticket FROM detalle_ticket WHERE id_sorteo='".$sorteo."') AND ";
+		}
+		if(!Empty($fecha_desde) && !Empty($fecha_hasta)){
+        	$where = $where." fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta." 23:59:59' AND ";
+            $where2 = $where2." fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta." 23:59:59' AND ";
+		}
+        $where = substr($where, 0,strlen($where) - 5);
+        $where2 = substr($where2, 0,strlen($where2) - 5);
+		$sql = "SELECT * FROM  ticket WHERE ".$where. " UNION 
+				SELECT * FROM ticket_diario WHERE ".$where2. "
+				ORDER BY fecha_hora DESC";
 		$result= $this->vConexion->ExecuteQuery($sql);
-                return $result;
-		
-		
+    	return $result;
 	}
-	
-	
 	/**
 	 * Devuelve el listado de Tickets en determinado rango de  fechas
 	 *
@@ -105,13 +102,14 @@ class RVentas_periodo{
 	
 		//Preparacion del query
 		$where = "";
-	
+		$where2 = "";
 		if(!Empty($fecha)){
 			$where = $where." fecha_hora LIKE '%".$fecha."%'";
+			$where2 = $where2." fecha_hora LIKE '%".$fecha."%'";
 		}
-	
-		$sql = "SELECT * FROM  ticket WHERE ".$where. " ORDER BY fecha_hora DESC";
-		
+		$sql = "SELECT * FROM  ticket WHERE ".$where." UNION 
+				SELECT * FROM ticket_diario WHERE ".$where2. "
+				ORDER BY fecha_hora DESC";
 		$result= $this->vConexion->ExecuteQuery($sql);
 		return $result;
 	}	
@@ -126,20 +124,19 @@ class RVentas_periodo{
 	 * @return boolean, array
 	 */
 	public function GetTicketsbyId($id_ticket){
-	
 		//Preparacion del query
 		$where = "";
-	
+		$where2 = "";
 		if(!Empty($id_ticket)){
 			$where = $where." id_ticket = '".$id_ticket."'";
+			$where2 = $where2." id_ticket_diario = '".$id_ticket."'";
 		}
-	
-		$sql = "SELECT * FROM  ticket WHERE ".$where;
-	
+		$sql = "SELECT * FROM  ticket WHERE ".$where." UNION 
+				SELECT * FROM ticket_diario WHERE ".$where2. "
+				ORDER BY fecha_hora DESC";
 		$result= $this->vConexion->ExecuteQuery($sql);
 		return $result;
 	}	
-
         /**
 	 * Devuelve el detalle de jugadas de algun ticket
 	 *
@@ -149,14 +146,25 @@ class RVentas_periodo{
 	public function GetDetalleTicket($id_ticket){
 
 		//Preparacion del query
-		$sql = "SELECT DT.*, S.nombre_sorteo, Z.nombre_zodiacal
-                        FROM  detalle_ticket DT
-                        INNER JOIN sorteos S ON S.id_sorteo=DT.id_sorteo
-                        INNER JOIN zodiacal Z ON Z.Id_zodiacal=DT.id_zodiacal
-                        WHERE id_ticket='".$id_ticket."' AND monto <> 0";
-                        
+		$sql = "SELECT DT.monto,DT.id_sorteo,DT.numero,DT.premiado, S.nombre_sorteo, Z.nombre_zodiacal
+				FROM  detalle_ticket DT
+                INNER JOIN sorteos S ON S.id_sorteo=DT.id_sorteo
+                INNER JOIN zodiacal Z ON Z.Id_zodiacal=DT.id_zodiacal
+                WHERE id_ticket='".$id_ticket."' AND monto <> 0";
 		$result= $this->vConexion->ExecuteQuery($sql);
-                return $result;
+		$total_registros= $this->vConexion->GetNumberRows($result);
+		if($total_registros==0)
+		{
+			$sql = " SELECT DTD.monto,DTD.id_sorteo,DTD.numero,DTD.premiado, SS.nombre_sorteo, ZZ.nombre_zodiacal
+				FROM  detalle_ticket_diario DTD
+                INNER JOIN sorteos SS ON SS.id_sorteo=DTD.id_sorteo
+                INNER JOIN zodiacal ZZ ON ZZ.Id_zodiacal=DTD.id_zodiacal
+                WHERE id_ticket_diario='".$id_ticket."' AND monto <> 0"; ;
+			$result= $this->vConexion->ExecuteQuery($sql);
+		}
+	//	echo $sql;
+		
+		return $result;
 
 
 	}
