@@ -50,7 +50,7 @@ INSERT INTO `parametros` (`id_parametros`, `id_agencia`, `nombre_agencia`, `tiem
 INSERT INTO `perfil` (`id_perfil`, `nombre_perfil`) VALUES
 (1, 'Administrador'),
 (2, 'Banquero'),
-(3, 'Intermediario'),
+(3, 'Agencia'),
 (4, 'Vendedor');
 
 
