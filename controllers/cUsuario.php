@@ -65,14 +65,23 @@ switch (ACCION){
 			// Listado de Perfiles
 			if( $result= $obj_modelo->GetPerfiles() ){
 				while($row= $obj_conexion->GetArrayInfo($result)){
+					
+					
+					
 					if( $row['id_perfil'] == $row_datos['id_perfil']){
 						$obj_xtpl->assign('seleccion','selected="selected"');
 					}
 					else{
 						$obj_xtpl->assign('seleccion','');
 					}
-					$obj_xtpl->assign($obj_generico->CleanTextDb($row));
-					$obj_xtpl->parse('main.contenido.formulario.lista_perfiles');
+					
+					
+					if($id_perfil<= $row['id_perfil'])
+				{
+					
+				$obj_xtpl->assign($obj_generico->CleanTextDb($row));
+				$obj_xtpl->parse('main.contenido.formulario.lista_perfiles');
+				}
 				}
 			}
 			
