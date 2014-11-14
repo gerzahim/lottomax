@@ -337,11 +337,50 @@ class Cargar_Resultados{
 	public function GuardarDatosResultados($id_sorteo, $zodiacal, $numero, $fecha_hora){
 
 		//Preparacion del query
+		$sw=1;
 		$sql = "INSERT INTO `resultados` (`id_sorteo` , `zodiacal`, `numero`, `fecha_hora`) VALUES ('".$id_sorteo."', '".$zodiacal."', '".$numero."', '".$fecha_hora."')";
+		$this->vConexion->ExecuteQuery($sql);
+		$id_resultado=mysql_insert_id();
+		$result=self::buscarIdAgencias();
+		echo "PASA";
+		while ($row = mysql_fetch_array($result)){
+			$sql = "INSERT INTO ``resultado_bajado_agencia` (`id_resultado` , `id_agencia`, `tipo`) VALUES ('".$id_resultado."', ".$row['id_agencia'].", 1)";
+			if(!$this->vConexion->ExecuteQuery($sql))
+			$sw=0;
+			else 
+			echo "FINISIMO";
+		}
+		return $sw;
+		
+	}
+	/**
+	 * Obtener los id agencias activos
+	 *
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @return result
+	 */
+	public function buscarIdAgencias(){
+		//Preparacion del query
+		$sql = "SELECT id_agencia FROM agencias WHERE status=1";
 		return $this->vConexion->ExecuteQuery($sql);
-                
+	
 	}
 	
+	/**
+	 * Setea el autoincremental en el ultimo ID posible esto por los valores eliminados de la tabla
+	 *
+	 * @return result
+	 */
+	public function reseteaID($id){
+		//Preparacion del query
+		$sql = "ALTER TABLE resultados AUTO_INCREMENT = ".$id;
+		return $this->vConexion->ExecuteQuery($sql);
+	
+	}
+		
 	
 	/**
 	 * Obtiene los resultados de acuerdo a una fecha
@@ -365,10 +404,41 @@ class Cargar_Resultados{
 	 * @param string $sql
 	 * @return boolean, array
 	 */
-	public function GuardarDatosResultadosMasivo($sql){
+	public function GuardarDatosResultadosMasivo($sql,$id_resultado,$primer_id){
 	
 		//Preparacion del query
+		//echo "pasa";
+		$result=self::buscarIdAgencias();
+		$sql2 = "INSERT INTO `resultado_bajado_agencia` (`id_resultado` , `id_agencia`, `tipo`) VALUES ";
+		while ($row = mysql_fetch_array($result)){
+			for($i=$primer_id+1;$i<=$id_resultado;$i++)
+			{
+				$sql2.="(".$i.", ".$row['id_agencia'].", 1),";
+			}
+		}
+		$sql2=trim($sql2,',');
+		$sql2.=";";
+		$this->vConexion->ExecuteQuery($sql2);
 		return $this->vConexion->ExecuteQuery($sql);
+	
+	}
+	
+	
+	/**
+	 * Retorna El ultimo Id_resultado
+	 *
+	 * 
+	 * @return int
+	 */
+	public function getUltimoIdResultado(){
+	
+		//Preparacion del query
+		//echo "pasa";
+		$sql="SELECT id_resultados FROM resultados ORDER by id_resultados DESC";
+		$result=$this->vConexion->ExecuteQuery($sql);
+		$row=$this->vConexion->GetArrayInfo($result);
+		return $row['id_resultados'];
+		
 	
 	}
 

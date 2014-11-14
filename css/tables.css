@@ -2,7 +2,6 @@
 
 .table_list {
 	width:90%;
-	border-top:1px solid #e5eff8;
 	border-right:1px solid #e5eff8;
 	margin:1em auto;
 	border-collapse:collapse;
@@ -48,6 +47,21 @@ caption {
 	caption-side:top;
 	text-align:center;
 	}	
+	
+
+.titulo_agencia {
+	color: #666666;
+	font-size:12px;
+	
+	}	
+	
+	.cuadre_agencia {
+	color: #666666;
+	font-size:12px;
+	text-align:center;
+	
+	}	
+	
 tr.odd td	{
 	/*background:#f7fbff*/
 	background:#EEEEEE;

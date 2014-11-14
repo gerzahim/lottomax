@@ -936,10 +936,7 @@ class Ventas{
             
             /// CABLEADA EL ID DE LA AGENCIA ///
             // Obtenemos el id de la agencia y taquilla
-            $sql = "SELECT id_agencia FROM parametros";
-            $result= $this->vConexion->ExecuteQuery($sql);
-            $roww= $this->vConexion->GetArrayInfo($result);
-            $id_agencia=$roww["id_agencia"];
+           	$id_agencia=self::getIdAgencia();
             $taquilla=$_SESSION["taquilla"];
             
             $sql = "SELECT id_ticket_diario FROM ticket_diario WHERE taquilla  = ".$taquilla." ORDER BY fecha_hora DESC limit 1";
@@ -1008,14 +1005,18 @@ class Ventas{
 	 * @return boolean, array
 	 */
 	public function GetExisteSerialTicket($serial){
-
 		//Preparacion del query
 		$sql = "SELECT id_ticket_diario FROM ticket_diario WHERE status='1' AND serial = ".$serial."";
 		$result= $this->vConexion->ExecuteQuery($sql);
-		
 		if ($this->vConexion->GetNumberRows($result)>0){
                     return true;
         }else{
+        	$sql = "SELECT id_ticket FROM ticket WHERE status='1' AND serial = ".$serial."";
+        	$result= $this->vConexion->ExecuteQuery($sql);
+        	if ($this->vConexion->GetNumberRows($result)>0){
+        		return true;
+        	}
+        	else
 			return false;
 		}
 	}
@@ -1034,13 +1035,28 @@ class Ventas{
 	public function GuardarTicket($id_ticket, $serial,$fecha_hora,$taquilla,$total_ticket,$id_usuario){
 
 		//Preparacion del query
-		$sql = "INSERT INTO `ticket_diario` (`id_ticket_diario`, `serial` , `fecha_hora` , `taquilla`, `total_ticket` , `id_usuario` , `premiado`, `pagado`)
-                    VALUES ('".$id_ticket."', '".$serial."', '".$fecha_hora."', '".$taquilla."', '".$total_ticket."', '".$id_usuario."', '0', '0')";
+		$id_agencia=self::getIdAgencia();
+		
+		$sql = "INSERT INTO `ticket_diario` (`id_ticket_diario`, `serial` ,`id_agencia`, `fecha_hora` , `taquilla`, `total_ticket` , `id_usuario` , `premiado`, `pagado`)
+                    VALUES ('".$id_ticket."', '".$serial."', '".$id_agencia."', '".$fecha_hora."', '".$taquilla."', '".$total_ticket."', '".$id_usuario."', '0', '0')";
 			/*echo $sql;
 			exit;*/
-    return $this->vConexion->ExecuteQuery($sql);
-         }
+    	return $this->vConexion->ExecuteQuery($sql);
+		}
+
          
+         
+         /**
+          * Valida el Id de la Agencia para la Inserción
+          *
+          * @return boolean, array
+          */
+         function getIdAgencia(){
+         	$sql="SELECT id_agencia FROM parametros WHERE 1";
+         	$result=$this->vConexion->ExecuteQuery($sql);
+			$row= $this->vConexion->GetArrayInfo($result);
+         	return $row['id_agencia'];
+         }
          
          /**
           * Existe Ticket no impreso

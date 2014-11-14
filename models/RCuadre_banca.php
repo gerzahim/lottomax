@@ -24,16 +24,47 @@ class RCuadre_banca{
 		$this->vConexion= $conexion;
 	}
 
+	/**
+	 * Devuelve los id y nombres de las agencias
+	 *
+	 * @return resource
+	 */
+	public function getAgencias(){
+		//Preparacion del query
+		$sql = "SELECT id_agencia, nombre_agencia FROM agencias WHERE status=1";
+		return $this->vConexion->ExecuteQuery($sql);
+	
+	}
+	
+	
+	
+	/**
+	 * Devuelve el id y nombre de la agencia activa
+	 *
+	 * @return resource
+	 */
+	public function getAgencia(){
+		//Preparacion del query
+		$sql = "SELECT A.id_agencia, A.nombre_agencia
+ 				FROM parametros P
+                INNER JOIN agencias A ON P.id_agencia=A.id_agencia
+				WHERE A.status=1";
+		$result=$this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww;
+	}
+	
 	// CABLEADO DE AGENCIA 1
 	/**
 	 * Devuelve el porcentaje de comisión de la agencia
 	 *
 	 * @return integer, comision
 	 */
-	public function GetComision(){
+	public function getComision($id_agencia){
 		//Preparacion del query
-		$sql = "SELECT comision_agencia,tipo_comision FROM parametros WHERE id_agencia=1";
+		$sql = "SELECT comision_agencia,tipo_comision FROM parametros WHERE id_agencia=".$id_agencia;
 		$result= $this->vConexion->ExecuteQuery($sql);
+	//	echo $sql;
 		$roww= $this->vConexion->GetArrayInfo($result);
 		return $roww;
 	}    
@@ -45,28 +76,30 @@ class RCuadre_banca{
          * @param integer $comision
 	 * @return boolean, array
 	 */
-	public function GetBalance($fecha_desde, $fecha_hasta,$comision,$tipo_comision){
+	public function GetBalance($fecha_desde, $fecha_hasta,$comision,$tipo_comision,$param_extra){
 		//Preparacion del query
         //echo $fecha_desde, $fecha_hasta,$comision;      
 		if($tipo_comision==1)
 		$sql = "SELECT LEFT(fecha_hora,10) AS fecha, SUM(total_ticket) AS total_ventas, SUM(total_ticket)* ".$comision." /100 AS comision, SUM(total_premiado) AS total_premiado, SUM(total_ticket)- ((SUM(total_ticket)* ".$comision." /100) + SUM(total_premiado)) AS balance
 				FROM ticket
-                WHERE status='1' AND fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."  23:59:59'
+                WHERE status='1' AND fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."  23:59:59' ".$param_extra."
+               	GROUP BY LEFT(fecha_hora,10) 
                 UNION
                 SELECT LEFT(fecha_hora,10) AS fecha, SUM(total_ticket) AS total_ventas, SUM(total_ticket)* ".$comision." /100 AS comision, SUM(total_premiado) AS total_premiado, SUM(total_ticket)- ((SUM(total_ticket)* ".$comision." /100) + SUM(total_premiado)) AS balance
 				FROM ticket_diario
-                WHERE status='1' AND fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."  23:59:59'
-                GROUP BY LEFT(fecha_hora,10)";
+                WHERE status='1' AND fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."  23:59:59' ".$param_extra."
+                GROUP BY LEFT(fecha_hora,10) ";
 		if($tipo_comision==2)
 		$sql = "SELECT LEFT(fecha_hora,10) AS fecha, SUM(total_ticket) AS total_ventas, (SUM(total_ticket) - SUM(total_premiado) )* ".$comision." /100 AS comision, SUM(total_premiado) AS total_premiado, SUM(total_ticket) - SUM(total_premiado)-(SUM(total_ticket) - SUM(total_premiado) )* ".$comision." /100 AS balance
 				FROM ticket
-                WHERE status='1' AND fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."  23:59:59'
+                WHERE status='1' AND fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."  23:59:59' ".$param_extra."
+                GROUP BY LEFT(fecha_hora,10) 
                 UNION
                 SELECT LEFT(fecha_hora,10) AS fecha, SUM(total_ticket) AS total_ventas, (SUM(total_ticket) - SUM(total_premiado) )* ".$comision." /100 AS comision, SUM(total_premiado) AS total_premiado, SUM(total_ticket)- SUM(total_premiado)-(SUM(total_ticket) - SUM(total_premiado) )* ".$comision." /100 AS balance
 				FROM ticket_diario
-                WHERE status='1' AND fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."  23:59:59'
-				GROUP BY LEFT(fecha_hora,10)";
-	//	echo $sql;
+                WHERE status='1' AND fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."  23:59:59' ".$param_extra."
+				GROUP BY LEFT(fecha_hora,10) ";
+		//echo "<br>".$sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
 		return $result;
 	} 

@@ -262,7 +262,11 @@ switch (ACCION){
 			while($row=$obj_conexion->GetArrayInfo($result))
 				$sorteosexistentes[$row['id_sorteo']]=1;
 			$sorteos=preg_split('/-/',$_POST ['sorteosnocargados']);
+			$primer_id=$obj_modelo->getUltimoIdResultado();
+			$id_resultado=$primer_id;
+			$obj_modelo->reseteaID($id_resultado+1);
 			$sql="INSERT INTO `resultados` (`id_sorteo` , `zodiacal`, `numero`, `fecha_hora`) VALUES ";
+			//$id_resultado."', ".$row['id_agencia'].", 1)";
 			$resultados=array();
 			$zodiacales=array();
 			foreach($sorteos as $st)
@@ -282,6 +286,7 @@ switch (ACCION){
 							$resultados[$st]=$numero;
 							$sql.="('".$st."', '".$zodiacal."', '".$numero."', '".$fecha_hora."'),";
 							$sw=1;
+							$id_resultado++;
 						}
 					}
 				}
@@ -293,7 +298,7 @@ switch (ACCION){
 			if($sw==1){
 				$sql=trim($sql,',');
 				$sql.=";";
-				if($obj_modelo->GuardarDatosResultadosMasivo($sql)){
+				if($obj_modelo->GuardarDatosResultadosMasivo($sql,$id_resultado,$primer_id)){
 					$mensaje=$mensajes['info_agregada'];
 					PremiarGanadores ($obj_conexion, $obj_modelo,$resultados,$zodiacales,$fecha_hora); // Premiamos los tickets ganadores
 				}

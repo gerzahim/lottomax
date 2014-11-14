@@ -1,147 +1,206 @@
 <!-- BEGIN: contenido -->       
 <table width="800" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF">
 	<tr>
-		<td >
-	        <br /> 
-            <div id="message" class="message" >{mensaje}</div>        
-                 
-                        <!-- BEGIN: buscar_tickets -->
+	<td>
+		<div id="message" class="message" >{mensaje}</div>        
+		<!-- BEGIN: buscar_tickets -->
+		<table width="800" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF">
+        <tr>
+        <td>
+		<br />
+		<br />
+		<div id="main">
+		<form id="frm1" method="get" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es">
+			<input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
+			<input style="border: hidden" type="hidden" name="accion" id="idaccion" value="listar_resultados"/>
+			<fieldset>
+			<table align="center" border="0" cellpadding="2" cellspacing="0" width="82%">
+			<tr>
+			<td><span class="requerido">*</span> Fecha desde:</td>
+			<td><input type="text" id="fechadesde" name="fechadesde" value="{fecha}"></td>
+			<td align="right" ><span class="requerido">*</span> Fecha hasta:</td>
+			<td colspan="2"><input type="text" id="fechahasta" name="fechahasta" value="{fecha}"></td>
+			<script type="text/javascript">
+									 $(function() {
+										 $("#fechadesde,#fechahasta").datepicker({
+											beforeShow: RangoDefault,
+											changeMonth: true,
+											changeYear: true,
+											showOn: 'both',
+											buttonText: 'Calendario',
+											buttonImage: "./images/calendar.jpg",
+											dateFormat:'dd/mm/yy',
+											buttonImageOnly: true
+											}).addClass("embed").attr('readonly','readonly');
 
-                        <table width="800" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF">
-                            <tr>
-                                <td>
-                                    <div id="main">
+										// Para validar las fechas
+										function RangoDefault(input){
+												return {
+														minDate: ( (input.id == "fechahasta" && $("#fechadesde").val()) ? $("#fechadesde").datepicker("getDate") : null),
+														maxDate:  '+0d'
+												};
+										}
 
-                                        <br />
+									  });
+									</script>
 
-                                        <form id="frm1" method="get" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es">
-                                            <input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
-                                            <input style="border: hidden" type="hidden" name="accion" id="idaccion" value="listar_resultados"/>
-                                             <fieldset>
-                                                   <table align="center" border="0" cellpadding="2" cellspacing="0" width="80%">
-												 
-                                                        <tr>
-                                                            <td><span class="requerido">*</span> Fecha desde:</td>
-                                                            <td><input type="text" id="fechadesde" name="fechadesde" value="{fecha}"></td>
-                                                            <td><span class="requerido">*</span> Fecha hasta:</td>
-                                                            <td><input type="text" id="fechahasta" name="fechahasta" value="{fecha}"></td>
-
-                                                            <script type="text/javascript">
-                                                                 $(function() {
-                                                                     $("#fechadesde,#fechahasta").datepicker({
-                                                                        beforeShow: RangoDefault,
-                                                                        changeMonth: true,
-                                                                        changeYear: true,
-                                                                        showOn: 'both',
-                                                                        buttonText: 'Calendario',
-                                                                        buttonImage: "./images/calendar.jpg",
-																		dateFormat:'dd/mm/yy',
-                                                                        buttonImageOnly: true
-                                                                        }).addClass("embed").attr('readonly','readonly');
-
-                                                                    // Para validar las fechas
-                                                                    function RangoDefault(input){
-                                                                            return {
-                                                                                    minDate: ( (input.id == "fechahasta" && $("#fechadesde").val()) ? $("#fechadesde").datepicker("getDate") : null),
-                                                                                    maxDate:  '+0d'
-                                                                            };
-                                                                    }
-
-                                                                  });
-                                                                </script>
-
-                                                        </tr>
-														<tr>
-														                                                      
-														 <td align="center" colspan="4"></td>
-															
+				  </tr>
+							<tr>
+																				  
+							 <td align="center" colspan="4"></td>
+								
 <tr>
 
-                                                    </table>
-                                                </fieldset>
+<!-- BEGIN: id_agencia -->
+<tr>
+<td>
+</td>
+<td align="right" >
+Agencia a Consultar:
+</td>
+<td>
+<select id="agencia" name="agencia" >        
+                                        <option value="">Seleccione Agencia....</option>        
+                                        <!-- BEGIN: lista_agencias -->        
+                                        <option value="{id_agencia}" >{nombre_agencia}</option>        
+                                        <!-- END: lista_agencias -->
+        
+                      </select>
+</td>
+<td>
+</td>
+</tr>
+<!-- END: id_agencia -->
+				</table>
+				</fieldset>
 
-                                            <div class="botones">
+				<div class="botones">
 <input  id="btayer" name="btayer" value="Ayer"  type="button" class="boton" onclick="location='{ruta_ayer}'"/>
-                                                    <input  id="btnok" name="btnentrar" value="Ver"  type="submit" class="boton"/>&nbsp;&nbsp;&nbsp;
+						<input  id="btnok" name="btnentrar" value="Ver"  type="submit" class="boton"/>&nbsp;&nbsp;&nbsp;
 
-                                                    <input  id="btncancel" name="btncancelar" value="Cancelar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
+						<input  id="btncancel" name="btncancelar" value="Cancelar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
 
-                                            </div>
-                                        </form>
-                                       </div>
-                                </td>
-                            </tr>
-                        </table>
-                      
-                        <!-- END: buscar_tickets -->
+				</div>
+			</form>
+		   </div>
+	</td>
+</tr>
 
-                        <!-- BEGIN: lista_resultados -->
-			<form id="frm1" method="get" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es" target="_blank">
-                        <input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
-                        <input style="border: hidden" type="hidden" name="accion" id="idaccion" value="ver_resultados"/>
-                        <input style="border: hidden" type="hidden" name="fechadesde" id="idaccion" value="{fechadesde}"/>
-                        <input style="border: hidden" type="hidden" name="fechahasta" id="idaccion" value="{fechahasta}"/>
-			<table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1">
-				<caption>Cuadre con Banca desde {fechadesde} hasta {fechahasta}</caption>
 
-				<thead>
-					<tr>
-						<th class="title header" scope="col">Fecha</th>
-                                                <th class="title header" scope="col">Total Ventas</th>
-						<th class="title header" scope="col">Comision</th>
-                                                <th class="title header" scope="col">Total Premiado</th>
-                                                <th class="title header" scope="col">Balance</th>
-					</tr>
-				</thead>
+</table>
 
-				<tbody>
+<!-- END: buscar_tickets -->
 
-					<!-- BEGIN: lista -->
-					<tr class="{estilo_fila}">
-						<td align="center">&nbsp;{fecha}</td>
-						<td align="center">{total_ventas}</td>
-   						<td align="center">{comision}</td>
-                                                <td align="center">{total_premiado}</td>
-                                                <td align="center">{balance}</td>
-					</tr>
-					<!-- END: lista -->
+<!-- BEGIN: lista_resultados -->
+<form id="frm1" method="get" enctype="multipart/form-data" action="{pagina_principal}" xml:lang="es" lang="es" target="_blank">
+<input style="border: hidden" type="hidden" name="op" id="idop" value="{opcion_sistema}"/>
+<input style="border: hidden" type="hidden" name="accion" id="idaccion" value="ver_resultados"/>
+<input style="border: hidden" type="hidden" name="fechadesde" id="idaccion" value="{fechadesde}"/>
+<input style="border: hidden" type="hidden" name="fechahasta" id="idaccion" value="{fechahasta}"/>
 
-					<!-- BEGIN: no_lista -->
+<table id="tb1" align="center" class="table_list" cellpadding="1" cellspacing="1">
+<caption>Cuadre con Banca desde {fechadesde} hasta {fechahasta}</caption>
 
-					<tr class="even">
-						<td align="center" colspan="6" class="odd"><br />{sin_listado}<br />&nbsp;</td>
-					</tr>
-					<!-- END: no_lista -->
 
-				</tbody>
-				<tfoot>
-                                    </tfoot>
-			</table>
-                            <div class="paginas">{paginacion}</div>
-                            <div class="paginas">{total_cuadre}</div>
-                            
-                           
-                            <div class="botones">
-                                <span>[ <a class="enlaces" href="./ajax/ImprimirReporteBanca.php?fechadesde={fechadesde}&amp;fechahasta={fechahasta}" target="_blank">Imprimir Ticket Cuadre Agencia</a> ]</span>
-                                
-                                <br> <br>
-                                                                
-                                <input  id="btnok" name="btnentrar" value="Descargar en PDF"  type="submit" class="boton" target="_blank">&nbsp;&nbsp;&nbsp;
+<!-- BEGIN: lista_max -->
+<thead>
 
-                                <input  id="btncancel" name="btncancelar" value="Cancelar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
+<tr height="8"   >
+<td align="center" colspan="5"></td>
+</tr>
+<tr height="15" >
+<td  colspan="5" class="titulo_agencia">{nombre_agencia} {id_agencia}</td>
+</tr>
+<tr height="8" >
+<td align="center" colspan="5"></td>
+</tr>
+<tr>
+<th class="title header" scope="col">Fecha</th>
+					<th class="title header" scope="col">Total Ventas</th>
+<th class="title header" scope="col">Comision</th>
+					<th class="title header" scope="col">Total Premiado</th>
+					<th class="title header" scope="col">Balance</th>
+</tr>
+</thead>
+<tbody>
+<!-- BEGIN: lista -->
+<tr class="{estilo_fila}">
+<td align="center">&nbsp;{fecha}</td>
+<td align="center">{total_ventas}</td>
+<td align="center">{comision}</td>
+<td align="center">{total_premiado}</td>
+<td align="center">{balance}</td>
+</tr>
+<!-- END: lista -->
 
-                        </div>
-			<!-- END: lista_resultados -->
-			 <div class="paginas">{no_info}</div>
-			
+<tr height="10">
+<td colspan="5"></td>
+</tr>
+<tr height="10">
+<td colspan="5" class="cuadre_agencia"> {cuadre_agencia}</td>
+</tr>
+
+<!-- END: lista_max -->
+
+<!-- BEGIN: no_lista -->
+
+<thead>
+
+<tr height="8"   >
+<td align="center" colspan="5"></td>
+</tr>
+<tr height="15" >
+<td  colspan="5" class="titulo_agencia">{nombre_agencia} {id_agencia}</td>
+</tr>
+<tr height="8" >
+<td align="center" colspan="5"></td>
+</tr>
+<tr>
+<th class="title header" scope="col">Fecha</th>
+					<th class="title header" scope="col">Total Ventas</th>
+<th class="title header" scope="col">Comision</th>
+					<th class="title header" scope="col">Total Premiado</th>
+					<th class="title header" scope="col">Balance</th>
+</tr>
+</thead>
+
+
+<tr class="even">
+<td align="center" colspan="6" class="odd"><br />{sin_listado}<br />&nbsp;</td>
+</tr>
+<!-- END: no_lista -->
+
+<tr height="4">
+<td align="center" colspan="6" class="odd"><br />{sin_listado}<br />&nbsp;</td>
+</tr>
+</tbody>
+<tfoot>
+		</tfoot>
+</table>
+<div class="paginas">{paginacion}</div>
+<div class="paginas">{total_cuadre}</div>
+
+
+<div class="botones">
+	<span>[ <a class="enlaces" href="./ajax/ImprimirReporteBanca.php?fechadesde={fechadesde}&amp;fechahasta={fechahasta}" target="_blank">Imprimir Ticket Cuadre Agencia</a> ]</span>
 	
-                        <br />	<br />
-		
-		</td>	
-	</tr>
+	<br> <br>
+									
+	<input  id="btnok" name="btnentrar" value="Descargar en PDF"  type="submit" class="boton" target="_blank">&nbsp;&nbsp;&nbsp;
 
-    </table>
-     
+	<input  id="btncancel" name="btncancelar" value="Cancelar" type="button" class="boton" onclick="location='{ruta_regreso}'"/>
+
+</div>
+<!-- END: lista_resultados -->
+<div class="paginas">{no_info}</div>
+
+
+<br />	<br />
+
+	
+
+</table>
+
 <!-- END: contenido -->       
 
 
