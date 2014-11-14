@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 3.4.11.1deb2
+-- version 3.5.1
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 14-02-2014 a las 10:33:24
--- Versión del servidor: 5.5.31
--- Versión de PHP: 5.4.4-14+deb7u4
+-- Tiempo de generación: 14-11-2014 a las 15:34:47
+-- Versión del servidor: 5.5.24-log
+-- Versión de PHP: 5.3.13
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -19,6 +19,22 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `lottomax`
 --
+CREATE DATABASE `lottomax` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+USE `lottomax`;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `agencias`
+--
+
+CREATE TABLE IF NOT EXISTS `agencias` (
+  `id_agencia` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre_agencia` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `contacto` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `status` int(1) NOT NULL,
+  PRIMARY KEY (`id_agencia`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
 
 -- --------------------------------------------------------
 
@@ -28,7 +44,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE IF NOT EXISTS `cupo_especial` (
   `id_cupo_especial` int(11) NOT NULL AUTO_INCREMENT,
-  `numero` int(11) NOT NULL,
+  `numero` varchar(3) COLLATE utf8_unicode_ci NOT NULL,
   `id_sorteo` int(11) NOT NULL DEFAULT '0',
   `monto_cupo` int(11) NOT NULL COMMENT '0=Numero Bloqueado o Agotado',
   `id_tipo_jugada` int(11) NOT NULL,
@@ -55,16 +71,6 @@ CREATE TABLE IF NOT EXISTS `cupo_general` (
   KEY `FK_id_tipo_jugadas` (`id_tipo_jugada`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
 
---
--- Volcado de datos para la tabla `cupo_general`
---
-
-INSERT INTO `cupo_general` (`id_cupo_general`, `monto_cupo`, `id_tipo_jugada`) VALUES
-(1, 600, 1),
-(2, 100, 2),
-(3, 500, 3),
-(4, 80, 4);
-
 -- --------------------------------------------------------
 
 --
@@ -82,10 +88,50 @@ CREATE TABLE IF NOT EXISTS `detalle_ticket` (
   `monto` decimal(10,2) NOT NULL,
   `premiado` int(11) NOT NULL DEFAULT '0',
   `total_premiado` int(11) NOT NULL DEFAULT '0',
+  `monto_restante` decimal(10,2) NOT NULL,
+  `monto_faltante` decimal(10,2) NOT NULL,
   KEY `id_detalle_ticket` (`id_detalle_ticket`),
   KEY `FK_id_ticket` (`id_ticket`),
   KEY `FK_id_tipo_jugada` (`id_tipo_jugada`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Detalle ticket' AUTO_INCREMENT=1851 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Detalle ticket' AUTO_INCREMENT=1779328 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `detalle_ticket_diario`
+--
+
+CREATE TABLE IF NOT EXISTS `detalle_ticket_diario` (
+  `id_detalle_ticket_diario` int(11) NOT NULL AUTO_INCREMENT,
+  `id_ticket_diario` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
+  `numero` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `id_sorteo` int(11) NOT NULL,
+  `fecha_sorteo` date NOT NULL,
+  `id_zodiacal` int(11) NOT NULL,
+  `id_tipo_jugada` int(11) NOT NULL DEFAULT '0',
+  `monto` decimal(10,2) NOT NULL,
+  `premiado` int(11) NOT NULL DEFAULT '0',
+  `total_premiado` int(11) NOT NULL,
+  `monto_restante` decimal(10,2) NOT NULL,
+  `monto_faltante` decimal(10,2) NOT NULL,
+  `status` int(1) NOT NULL DEFAULT '1' COMMENT '1=Activo 0=Desactivado Para los cupos',
+  KEY `id_detalle_ticket_diario` (`id_detalle_ticket_diario`),
+  KEY `FK_id_detalle_ticket_diario` (`id_ticket_diario`),
+  KEY `FK_id_tipo_jugada` (`id_tipo_jugada`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Detalle ticket diario' AUTO_INCREMENT=1779328 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `dias_semana`
+--
+
+CREATE TABLE IF NOT EXISTS `dias_semana` (
+  `id_dias_semana` int(11) NOT NULL,
+  `nombre_dia_semana` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `abv_dia_semana` varchar(4) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id_dias_semana`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -106,15 +152,6 @@ CREATE TABLE IF NOT EXISTS `impresora_taquillas` (
   UNIQUE KEY `id_taquilla` (`id_taquilla`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Configuracion de Impresora' AUTO_INCREMENT=10 ;
 
---
--- Volcado de datos para la tabla `impresora_taquillas`
---
-
-INSERT INTO `impresora_taquillas` (`id_impresora_taquillas`, `id_taquilla`, `nombre_vendedor_ticket`, `cortar_ticket`, `lineas_saltar_antes`, `lineas_saltar_despues`, `ver_numeros_incompletos`, `ver_numeros_agotados`) VALUES
-(2, 2, 1, 0, 0, 0, 1, 1),
-(3, 1, 1, 0, 0, 0, 1, 1),
-(9, 3, 1, 0, 0, 0, 1, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -130,13 +167,33 @@ CREATE TABLE IF NOT EXISTS `incompletos_agotados` (
   `id_tipo_jugada` int(11) NOT NULL,
   `id_zodiacal` int(11) NOT NULL,
   `monto_restante` decimal(10,2) NOT NULL,
-  `incompleto` int(11) NOT NULL COMMENT '0=completo, 1=Incompleto, 2=Agotado, 3=Con esta Jugada Se Agota',
+  `incompleto` int(11) NOT NULL COMMENT '0=completo, 1=Incompleto, 2=Agotado',
   PRIMARY KEY (`id_incompletos_agotados`),
   KEY `id_sorteo` (`id_sorteo`),
   KEY `id_tipo_jugada` (`id_tipo_jugada`),
   KEY `id_zodiacal` (`id_zodiacal`),
   KEY `FK_id_tickets` (`id_ticket`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='guarda numeros incompletos y agotados' AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `jugadas_especiales`
+--
+
+CREATE TABLE IF NOT EXISTS `jugadas_especiales` (
+  `id_jugada_especial` int(11) NOT NULL AUTO_INCREMENT,
+  `id_tipo_jugada_especial` int(1) NOT NULL,
+  `numero_inicio` varchar(3) COLLATE utf8_unicode_ci NOT NULL,
+  `id_sorteos` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `numero_final` varchar(3) COLLATE utf8_unicode_ci NOT NULL,
+  `numero_solicitado` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `monto` decimal(10,2) NOT NULL,
+  `id_zodiacales` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `id_taquilla` int(1) NOT NULL,
+  `id_insert_taquilla` int(11) NOT NULL,
+  PRIMARY KEY (`id_jugada_especial`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -148,23 +205,13 @@ CREATE TABLE IF NOT EXISTS `loterias` (
   `id_loteria` int(11) NOT NULL AUTO_INCREMENT,
   `nombre_loteria` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `status` int(11) NOT NULL COMMENT '0=Inactivo, 1=Activo',
+  `fecha_desde` date NOT NULL,
+  `fecha_hasta` date NOT NULL,
+  `id_dias_semana` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `status_especial` int(1) NOT NULL COMMENT 'Cuando se activa o desactiva por fechas',
+  `bajado` int(1) NOT NULL COMMENT 'Indica si los Cambios Fueron Bajados',
   PRIMARY KEY (`id_loteria`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Listados de Loterias' AUTO_INCREMENT=10 ;
-
---
--- Volcado de datos para la tabla `loterias`
---
-
-INSERT INTO `loterias` (`id_loteria`, `nombre_loteria`, `status`) VALUES
-(1, 'ZAMORANO', 0),
-(2, 'TACHIRA', 1),
-(3, 'ZODIACAL', 1),
-(4, 'LEON', 1),
-(5, 'CHANCE', 1),
-(6, 'ZULIA', 1),
-(7, 'TRIPLEMANIA', 1),
-(8, 'MULTITRIPLE', 1),
-(9, 'TRILLONARIO', 1);
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Listados de Loterias' AUTO_INCREMENT=13 ;
 
 -- --------------------------------------------------------
 
@@ -184,7 +231,7 @@ CREATE TABLE IF NOT EXISTS `numeros_jugados` (
   KEY `id_sorteo` (`id_sorteo`),
   KEY `id_tipo_jugada` (`id_tipo_jugada`),
   KEY `id_zodiacal` (`id_zodiacal`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=261 ;
 
 -- --------------------------------------------------------
 
@@ -202,15 +249,9 @@ CREATE TABLE IF NOT EXISTS `parametros` (
   `aprox_abajo` tinyint(1) NOT NULL DEFAULT '0',
   `aprox_arriba` tinyint(1) NOT NULL DEFAULT '0',
   `comision_agencia` int(11) NOT NULL,
+  `tipo_comision` int(1) NOT NULL COMMENT '1= comisión por ventas brutas 2= Comisión por ganancia',
   UNIQUE KEY `id_parametros` (`id_parametros`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
-
---
--- Volcado de datos para la tabla `parametros`
---
-
-INSERT INTO `parametros` (`id_parametros`, `id_agencia`, `nombre_agencia`, `tiempo_cierre_sorteos`, `tiempo_anulacion_ticket`, `tiempo_vigencia_ticket`, `aprox_abajo`, `aprox_arriba`, `comision_agencia`) VALUES
-(1, 1, 'Makamindres', 10, 5, 3, 1, 1, 22);
 
 -- --------------------------------------------------------
 
@@ -223,16 +264,6 @@ CREATE TABLE IF NOT EXISTS `perfil` (
   `nombre_perfil` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id_perfil`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
-
---
--- Volcado de datos para la tabla `perfil`
---
-
-INSERT INTO `perfil` (`id_perfil`, `nombre_perfil`) VALUES
-(1, 'Administrador'),
-(2, 'Banquero'),
-(3, 'Intermediario'),
-(4, 'Vendedor');
 
 -- --------------------------------------------------------
 
@@ -261,16 +292,19 @@ CREATE TABLE IF NOT EXISTS `relacion_pagos` (
   KEY `id_tipo_jugada` (`id_tipo_jugada`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
 
+-- --------------------------------------------------------
+
 --
--- Volcado de datos para la tabla `relacion_pagos`
+-- Estructura de tabla para la tabla `resultado_bajado_agencia`
 --
 
-INSERT INTO `relacion_pagos` (`id_relacion_pagos`, `monto`, `id_tipo_jugada`, `status`) VALUES
-(1, 800, 1, 1),
-(2, 60, 2, 1),
-(3, 6000, 3, 1),
-(4, 600, 4, 1),
-(5, 10, 5, 1);
+CREATE TABLE IF NOT EXISTS `resultado_bajado_agencia` (
+  `id_resultado_bajado_agencia` int(11) NOT NULL AUTO_INCREMENT,
+  `id_resultado` int(11) NOT NULL,
+  `id_agencia` int(11) NOT NULL,
+  `tipo` int(1) NOT NULL,
+  PRIMARY KEY (`id_resultado_bajado_agencia`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=265 ;
 
 -- --------------------------------------------------------
 
@@ -288,7 +322,7 @@ CREATE TABLE IF NOT EXISTS `resultados` (
   PRIMARY KEY (`id_resultados`),
   KEY `id_sorteo` (`id_sorteo`),
   KEY `zodiacal` (`zodiacal`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=59068 ;
 
 -- --------------------------------------------------------
 
@@ -305,122 +339,13 @@ CREATE TABLE IF NOT EXISTS `sorteos` (
   `zodiacal` int(11) NOT NULL,
   `tradicional` int(1) NOT NULL COMMENT '0=No Tradicional, 1= Si Tradicional',
   `status` int(11) NOT NULL COMMENT '0=Inactivo, 1=Activo',
+  `id_dias_semana` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `id_tipo_sorteo` int(11) NOT NULL,
   UNIQUE KEY `id_sorrteo` (`id_sorteo`),
   KEY `FK_zodiacal` (`zodiacal`),
   KEY `FK_id_loteria` (`id_loteria`),
   KEY `turno_fk` (`id_turno`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=106 ;
-
---
--- Volcado de datos para la tabla `sorteos`
---
-
-INSERT INTO `sorteos` (`id_sorteo`, `id_loteria`, `nombre_sorteo`, `hora_sorteo`, `id_turno`, `zodiacal`, `tradicional`, `status`) VALUES
-(1, 1, 'ZAMORANO A 12PM', '12:00:00', 1, 0, 0, 0),
-(2, 1, 'ZAMORANO C 12PM', '12:00:00', 1, 0, 0, 0),
-(3, 1, 'ASTRO ZAMORANO 12PM', '12:00:00', 1, 1, 0, 0),
-(4, 2, 'TACHIRA A 12PM', '12:00:00', 1, 0, 1, 1),
-(5, 2, 'TACHIRA B 12PM', '12:00:00', 1, 0, 1, 1),
-(6, 2, 'TACHIRA C 12PM', '12:00:00', 1, 0, 0, 1),
-(7, 2, 'SIGNO TACHIRA 12PM', '12:00:00', 1, 1, 0, 1),
-(8, 3, 'ZODIACAL A 12:45PM', '12:45:00', 1, 0, 1, 1),
-(9, 3, 'ZODIACAL B 12:45PM', '12:45:00', 1, 0, 1, 1),
-(10, 3, 'ZODIACAL SIGNO 12:45PM', '12:45:00', 1, 1, 0, 1),
-(11, 4, 'LEON A 12:30PM', '12:30:00', 1, 0, 1, 1),
-(12, 4, 'LEON B 12:30PM', '12:30:00', 1, 0, 1, 1),
-(13, 4, 'LEON C 12:30PM', '12:30:00', 1, 0, 0, 1),
-(14, 4, 'TRIPLETON 12:30PM', '12:30:00', 1, 1, 0, 1),
-(15, 6, 'ZULIA A 12:45PM', '12:45:00', 1, 0, 1, 1),
-(16, 6, 'ZULIA B 12:45PM', '12:45:00', 1, 0, 1, 1),
-(17, 6, 'ZULIA C 12:45PM', '12:45:00', 1, 0, 0, 1),
-(18, 6, 'ZODIACO DEL ZULIA 12:45PM', '12:45:00', 1, 1, 0, 1),
-(19, 5, 'CHANCE A 1PM', '13:00:00', 1, 0, 1, 1),
-(20, 5, 'CHANCE B 1PM', '13:00:00', 1, 0, 1, 1),
-(21, 5, 'CHANCE C 1PM', '13:00:00', 1, 0, 0, 1),
-(22, 5, 'ASTRAL 1PM', '13:00:00', 1, 1, 0, 1),
-(23, 1, 'ZAMORANO A 4PM', '16:00:00', 2, 0, 0, 0),
-(24, 1, 'ZAMORANO C 4PM', '16:00:00', 2, 0, 0, 0),
-(25, 1, 'ASTRO ZAMORANO 4PM', '16:00:00', 2, 1, 0, 0),
-(26, 4, 'LEON A 4:30PM', '16:30:00', 2, 0, 1, 1),
-(27, 4, 'LEON B 4:30PM', '16:30:00', 2, 0, 1, 1),
-(28, 4, 'LEON C 4:30PM', '16:30:00', 2, 0, 0, 1),
-(29, 4, 'TRIPLETON 4:30PM', '16:30:00', 2, 1, 0, 1),
-(30, 5, 'CHANCE A 4:30PM', '16:30:00', 2, 0, 1, 1),
-(31, 5, 'CHANCE B 4:30PM', '16:30:00', 2, 0, 1, 1),
-(32, 5, 'CHANCE C 4:30PM', '16:30:00', 2, 0, 0, 1),
-(33, 5, 'ASTRAL 4:30PM', '16:30:00', 2, 1, 0, 1),
-(34, 3, 'ZODIACAL A 4:45PM', '16:45:00', 2, 0, 1, 1),
-(35, 3, 'ZODIACAL B 4:45PM', '16:45:00', 2, 0, 1, 1),
-(36, 3, 'ZODIACAL SIGNO 4:45PM', '16:45:00', 2, 1, 0, 1),
-(37, 6, 'ZULIA A 4:45PM', '16:45:00', 2, 0, 1, 1),
-(38, 6, 'ZULIA B 4:45PM', '16:45:00', 2, 0, 1, 1),
-(39, 6, 'ZULIA C 4:45PM', '16:45:00', 2, 0, 0, 1),
-(40, 6, 'ZODIACO DEL ZULIA 4:45PM', '16:45:00', 2, 1, 0, 1),
-(41, 2, 'TACHIRA A 5PM', '17:00:00', 2, 0, 1, 1),
-(42, 2, 'TACHIRA B 5PM', '17:00:00', 2, 0, 1, 1),
-(43, 2, 'TACHIRA C 5PM', '17:00:00', 2, 0, 0, 1),
-(44, 2, 'SIGNO TACHIRA 5PM', '17:00:00', 2, 1, 0, 1),
-(45, 1, 'ZAMORANO A 7PM', '19:00:00', 3, 0, 0, 0),
-(46, 1, 'ZAMORANO C 7PM', '19:00:00', 3, 0, 0, 0),
-(47, 1, 'ASTRO ZAMORANO 7PM', '19:00:00', 3, 1, 0, 0),
-(48, 3, 'ZODIACAL A 7:45PM', '19:45:00', 3, 0, 1, 1),
-(49, 3, 'ZODIACAL B 7:45PM', '19:45:00', 3, 0, 1, 1),
-(50, 3, 'ZODIACAL SIGNO 7:45PM', '19:45:00', 3, 1, 0, 1),
-(51, 4, 'LEON A 7:30PM', '19:30:00', 3, 0, 1, 1),
-(52, 4, 'LEON B 7:30PM', '19:30:00', 3, 0, 1, 1),
-(53, 4, 'LEON C 7:30PM', '19:30:00', 3, 0, 0, 1),
-(54, 4, 'TRIPLETON 7:30PM', '19:30:00', 3, 1, 0, 1),
-(55, 6, 'ZULIA A 7:45PM', '19:45:00', 3, 0, 1, 1),
-(56, 6, 'ZULIA B 7:45PM', '19:45:00', 3, 0, 1, 1),
-(57, 6, 'ZULIA C 7:45PM', '19:45:00', 3, 0, 0, 1),
-(58, 6, 'ZODIACO DEL ZULIA 19:45PM', '19:45:00', 3, 1, 0, 1),
-(59, 5, 'CHANCE A 8PM', '20:00:00', 3, 0, 1, 1),
-(60, 5, 'CHANCE B 8PM', '20:00:00', 3, 0, 1, 1),
-(61, 5, 'CHANCE C 8PM', '20:00:00', 3, 0, 0, 1),
-(62, 5, 'ASTRAL 8PM', '20:00:00', 3, 1, 0, 1),
-(63, 2, 'TACHIRA A 9PM', '21:00:00', 3, 0, 1, 1),
-(64, 2, 'TACHIRA B 9PM', '21:00:00', 3, 0, 1, 1),
-(65, 2, 'TACHIRA C 9PM', '21:00:00', 3, 0, 0, 1),
-(66, 2, 'SIGNO TACHIRA 9PM', '21:00:00', 3, 1, 0, 1),
-(67, 7, 'TRIPLEMANIA A 1PM', '13:00:00', 1, 0, 0, 1),
-(68, 7, 'TRIPLEMANIA B 1PM', '13:00:00', 1, 0, 0, 1),
-(69, 7, 'TRIPLEMANIA C 1PM', '13:00:00', 1, 0, 0, 1),
-(70, 7, 'MANIA ZODIACAL 1PM', '13:00:00', 1, 1, 0, 1),
-(71, 7, 'TRIPLEMANIA A 4:30PM', '16:30:00', 2, 0, 0, 1),
-(72, 7, 'TRIPLEMANIA B 4:30PM', '16:30:00', 2, 0, 0, 1),
-(73, 7, 'TRIPLEMANIA C 4:30PM', '16:30:00', 2, 0, 0, 1),
-(74, 7, 'MANIA ZODIACAL 4:30PM', '16:30:00', 2, 1, 0, 1),
-(75, 7, 'TRIPLEMANIA A 7:45PM', '19:45:00', 3, 0, 0, 1),
-(76, 7, 'TRIPLEMANIA B 7:45PM', '19:45:00', 3, 0, 0, 1),
-(77, 7, 'TRIPLEMANIA C 7:45PM', '19:45:00', 3, 0, 0, 1),
-(78, 7, 'MANIA ZODIACAL 7:45PM', '19:45:00', 3, 1, 0, 1),
-(79, 8, 'MULTITRIPLE A 12:40PM', '12:40:00', 1, 0, 0, 1),
-(80, 8, 'MULTITRIPLE B 12:40PM', '12:40:00', 1, 0, 0, 1),
-(81, 8, 'MULTITRIPLE C 12:40PM', '12:40:00', 1, 0, 0, 1),
-(82, 8, 'MULTITRIPLE A 4:40PM', '16:40:00', 2, 0, 0, 1),
-(83, 8, 'MULTITRIPLE B 4:40PM', '16:40:00', 2, 0, 0, 1),
-(84, 8, 'MULTITRIPLE C 4:40PM', '16:40:00', 2, 0, 0, 1),
-(85, 8, 'MULTISIGNO 12:40PM', '12:40:00', 1, 1, 0, 1),
-(86, 8, 'MULTISIGNO 4:40PM', '16:40:00', 2, 1, 1, 1),
-(87, 8, 'MULTITRIPLE A 7:40PM', '19:40:00', 3, 0, 0, 1),
-(88, 8, 'MULTITRIPLE B 7:40PM', '19:40:00', 3, 0, 0, 1),
-(89, 8, 'MULTITRIPLE C 7:40PM', '19:40:00', 3, 0, 0, 1),
-(90, 8, 'MULTISIGNO 7:40PM', '19:40:00', 3, 1, 0, 1),
-(91, 9, 'TRILLONARIO A 1:10PM', '13:10:00', 1, 0, 0, 1),
-(92, 9, 'TRILLONARIO B 1:10PM', '13:10:00', 1, 0, 0, 1),
-(93, 9, 'TRILLONARIO C 1:10PM', '13:10:00', 1, 0, 0, 1),
-(94, 9, 'TRILLON ZODIACAL 1:10PM', '13:10:00', 1, 1, 0, 1),
-(95, 9, 'TRILLONARIO A 4:40PM', '16:40:00', 2, 0, 0, 1),
-(96, 9, 'TRILLONARIO B 4:40PM', '16:40:00', 2, 0, 0, 1),
-(97, 9, 'TRILLONARIO C 4:40PM', '16:40:00', 2, 0, 0, 1),
-(98, 9, 'TRILLON ZODIACAL 4:40PM', '16:40:00', 2, 1, 0, 1),
-(99, 9, 'TRILLONARIO A 7:35PM', '19:35:00', 3, 0, 0, 1),
-(100, 9, 'TRILLONARIO B 7:35PM', '19:35:00', 3, 0, 0, 1),
-(101, 9, 'TRILLONARIO C 7:35PM', '19:35:00', 3, 0, 0, 1),
-(102, 9, 'TRILLON ZODIACAL 7:35PM', '19:35:00', 3, 1, 0, 1),
-(103, 3, 'ZODIACAL C 12:45PM', '12:45:00', 1, 0, 0, 1),
-(104, 3, 'ZODIACAL C 4:45PM', '16:45:00', 2, 0, 0, 1),
-(105, 3, 'ZODIACAL C 7:45PM', '19:45:00', 3, 0, 0, 1);
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=109 ;
 
 -- --------------------------------------------------------
 
@@ -433,15 +358,6 @@ CREATE TABLE IF NOT EXISTS `status` (
   `status_nombre` varchar(15) COLLATE utf8_spanish_ci NOT NULL,
   PRIMARY KEY (`id_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
---
--- Volcado de datos para la tabla `status`
---
-
-INSERT INTO `status` (`id_status`, `status_nombre`) VALUES
-(0, 'Inactivo'),
-(1, 'Activo'),
-(2, 'Modificado');
 
 -- --------------------------------------------------------
 
@@ -456,16 +372,6 @@ CREATE TABLE IF NOT EXISTS `taquillas` (
   PRIMARY KEY (`id_taquilla`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
 
---
--- Volcado de datos para la tabla `taquillas`
---
-
-INSERT INTO `taquillas` (`id_taquilla`, `numero_taquilla`, `status`) VALUES
-(1, '01', 1),
-(2, '02', 1),
-(3, '03', 1),
-(4, '04', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -475,6 +381,7 @@ INSERT INTO `taquillas` (`id_taquilla`, `numero_taquilla`, `status`) VALUES
 CREATE TABLE IF NOT EXISTS `ticket` (
   `id_ticket` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
   `serial` varchar(11) COLLATE utf8_unicode_ci NOT NULL,
+  `id_agencia` int(11) NOT NULL,
   `fecha_hora` datetime NOT NULL,
   `taquilla` int(11) NOT NULL,
   `total_ticket` decimal(10,2) NOT NULL,
@@ -488,8 +395,40 @@ CREATE TABLE IF NOT EXISTS `ticket` (
   `subido` int(11) NOT NULL DEFAULT '0',
   `verificado` int(11) NOT NULL DEFAULT '0',
   `impreso` int(11) NOT NULL DEFAULT '0' COMMENT '0= No Impreso, 1= Impreso, 2=Reimpreso',
+  `fecha_hora_pagado` datetime DEFAULT NULL,
+  `taquilla_pagado` int(1) DEFAULT NULL,
+  `usuario_pagado` int(1) DEFAULT NULL,
   PRIMARY KEY (`id_ticket`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='ticket';
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ticket_diario`
+--
+
+CREATE TABLE IF NOT EXISTS `ticket_diario` (
+  `id_ticket_diario` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
+  `serial` varchar(11) COLLATE utf8_unicode_ci NOT NULL,
+  `id_agencia` int(11) NOT NULL,
+  `fecha_hora` datetime NOT NULL,
+  `taquilla` int(11) NOT NULL,
+  `total_ticket` decimal(10,2) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `premiado` int(11) NOT NULL,
+  `pagado` int(11) NOT NULL,
+  `total_premiado` int(11) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT '1' COMMENT '0=Inactivo, 1=Activo',
+  `fecha_hora_anulacion` datetime NOT NULL,
+  `taquilla_anulacion` int(11) NOT NULL,
+  `subido` int(11) NOT NULL DEFAULT '0',
+  `verificado` int(11) NOT NULL DEFAULT '0',
+  `impreso` int(11) NOT NULL DEFAULT '0' COMMENT '0= No Impreso, 1= Impreso, 2=Reimpreso',
+  `fecha_hora_pagado` datetime DEFAULT NULL,
+  `taquilla_pagado` int(1) DEFAULT NULL,
+  `usuario_pagado` int(1) DEFAULT NULL,
+  PRIMARY KEY (`id_ticket_diario`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='ticket_diario';
 
 -- --------------------------------------------------------
 
@@ -507,12 +446,14 @@ CREATE TABLE IF NOT EXISTS `ticket_transaccional` (
   `incompleto` int(11) NOT NULL COMMENT '0=completo, 1=Incompleto, 2=Agotado',
   `monto` decimal(10,2) NOT NULL,
   `id_taquilla` int(11) NOT NULL,
+  `id_insert_jugada` int(11) NOT NULL,
+  `monto_restante` decimal(10,2) NOT NULL,
   PRIMARY KEY (`id_ticket_transaccional`),
   KEY `id_taquilla` (`id_taquilla`),
   KEY `id_zodiacal` (`id_zodiacal`),
   KEY `id_sorteo` (`id_sorteo`),
   KEY `id_tipo_jugada` (`id_tipo_jugada`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Ticket Transaccional' AUTO_INCREMENT=55 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Ticket Transaccional' AUTO_INCREMENT=449 ;
 
 -- --------------------------------------------------------
 
@@ -529,16 +470,29 @@ CREATE TABLE IF NOT EXISTS `tipo_jugadas` (
   PRIMARY KEY (`id_tipo_jugada`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
 
+-- --------------------------------------------------------
+
 --
--- Volcado de datos para la tabla `tipo_jugadas`
+-- Estructura de tabla para la tabla `tipo_sorteo`
 --
 
-INSERT INTO `tipo_jugadas` (`id_tipo_jugada`, `nombre_jugada`, `zodiacal`, `triple`, `status`) VALUES
-(1, 'Triple', 0, 1, 1),
-(2, 'Terminal', 0, 0, 1),
-(3, 'Tripletazo', 1, 1, 1),
-(4, 'Terminalazo', 1, 0, 1),
-(5, 'Aproximacion', 0, 2, 1);
+CREATE TABLE IF NOT EXISTS `tipo_sorteo` (
+  `id_tipo_sorteo` int(11) NOT NULL,
+  `letra_tipo_sorteo` varchar(1) COLLATE utf8_unicode_ci NOT NULL,
+  KEY `id_tipo_sorteo` (`id_tipo_sorteo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tipos_jugada_especial`
+--
+
+CREATE TABLE IF NOT EXISTS `tipos_jugada_especial` (
+  `id_tipo_jugada_especial` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre_jugada_especial` varchar(11) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id_tipo_jugada_especial`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
 
 -- --------------------------------------------------------
 
@@ -552,15 +506,6 @@ CREATE TABLE IF NOT EXISTS `turno` (
   `pre_turno` enum('M','T','N') COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id_turno`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Turneo de los Sorteos';
-
---
--- Volcado de datos para la tabla `turno`
---
-
-INSERT INTO `turno` (`id_turno`, `nom_turno`, `pre_turno`) VALUES
-(1, 'Manana', 'M'),
-(2, 'Tarde', 'T'),
-(3, 'Noche', 'N');
 
 -- --------------------------------------------------------
 
@@ -578,18 +523,7 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `id_status_usuario` int(11) DEFAULT NULL COMMENT '0=Inactivo, 1=Activo',
   PRIMARY KEY (`id_usuario`),
   KEY `FK_id_perfil` (`id_perfil`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
-
---
--- Volcado de datos para la tabla `usuario`
---
-
-INSERT INTO `usuario` (`id_usuario`, `id_perfil`, `nombre_usuario`, `email_usuario`, `login_usuario`, `clave_usuario`, `id_status_usuario`) VALUES
-(1, 1, 'Gerzahim Salas', 'rasce88@gmail.com', 'admin', 'admin1', 1),
-(3, 4, 'Yumijaika Oduber', 'rasce88@gmail.com', 'yumi', '1234', 1),
-(4, 4, 'Yiserly Fagundez', 'yiserly_17@hotmail.com', 'yiserly', '1234', 1),
-(5, 4, 'Jasmin Burgo', 'jasmin_burgo@hotmail.com', 'jasmin', '1234', 1),
-(6, 4, 'Daryeli Barrios', 'daryeli_barrios@hotmail.com', 'daryeli', '1234', 1);
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 -- --------------------------------------------------------
 
@@ -604,17 +538,7 @@ CREATE TABLE IF NOT EXISTS `usuarios_taquillas` (
   `time_ping` datetime DEFAULT NULL,
   PRIMARY KEY (`id_usuario_taquilla`),
   KEY `id_taquilla` (`id_taquilla`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=29 ;
-
---
--- Volcado de datos para la tabla `usuarios_taquillas`
---
-
-INSERT INTO `usuarios_taquillas` (`id_usuario_taquilla`, `id_usuario`, `id_taquilla`, `time_ping`) VALUES
-(25, 4, 3, '2014-02-11 19:19:58'),
-(26, 6, 1, '2014-02-11 19:16:15'),
-(27, 5, 2, '2014-02-12 10:27:34'),
-(28, 1, 4, '2014-02-12 19:52:19');
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=65 ;
 
 -- --------------------------------------------------------
 
@@ -628,25 +552,6 @@ CREATE TABLE IF NOT EXISTS `zodiacal` (
   `pre_zodiacal` varchar(3) COLLATE utf8_unicode_ci NOT NULL,
   UNIQUE KEY `Id_zodiacal` (`Id_zodiacal`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Signo Zodiacal';
-
---
--- Volcado de datos para la tabla `zodiacal`
---
-
-INSERT INTO `zodiacal` (`Id_zodiacal`, `nombre_zodiacal`, `pre_zodiacal`) VALUES
-(0, 'No Zodiacal', '**'),
-(1, 'Acuario', 'Acu'),
-(2, 'Aries', 'Ari'),
-(3, 'Cancer', 'Can'),
-(4, 'Capricornio', 'Cap'),
-(5, 'Escorpio', 'Esc'),
-(6, 'Geminis', 'Gem'),
-(7, 'Leo', 'Leo'),
-(8, 'Libra', 'Lib'),
-(9, 'Piscis', 'Pis'),
-(10, 'Sagitario', 'Sag'),
-(11, 'Tauro', 'Tau'),
-(12, 'Virgo', 'Vir');
 
 --
 -- Restricciones para tablas volcadas
@@ -672,6 +577,13 @@ ALTER TABLE `cupo_general`
 ALTER TABLE `detalle_ticket`
   ADD CONSTRAINT `detalle_ticket_ibfk_1` FOREIGN KEY (`id_ticket`) REFERENCES `ticket` (`id_ticket`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `detalle_ticket_ibfk_2` FOREIGN KEY (`id_tipo_jugada`) REFERENCES `tipo_jugadas` (`id_tipo_jugada`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `detalle_ticket_diario`
+--
+ALTER TABLE `detalle_ticket_diario`
+  ADD CONSTRAINT `detalle_ticket_diario_ibfk_1` FOREIGN KEY (`id_ticket_diario`) REFERENCES `ticket_diario` (`id_ticket_diario`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `detalle_ticket_diario_ibfk_2` FOREIGN KEY (`id_tipo_jugada`) REFERENCES `tipo_jugadas` (`id_tipo_jugada`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `impresora_taquillas`
