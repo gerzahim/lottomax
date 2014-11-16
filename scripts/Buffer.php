@@ -7,7 +7,7 @@ mysql_select_db("lottomax",$conexion);
 mysql_select_db("lottomaxdb",$conexion_arriba);
 //Buscamos los tickets que no han sido subido abajo.
 */
-$sql = "SELECT * FROM ticket_diario WHERE subido=1 ORDER by fecha_hora ASC ";
+$sql = "SELECT * FROM ticket_diario ORDER by fecha_hora ASC ";
 if($result= mysql_query($sql,$conexion)){
 	/*echo "PASA";
 	exit;*/
