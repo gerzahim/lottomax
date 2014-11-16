@@ -41,6 +41,7 @@ if( !$obj_conexion->ConnectDataBase($obj_config->GetVar('host'), $obj_config->Ge
 require('.'.$obj_config->GetVar('ruta_modelo').'RCuadre_banca.php');
 
 $obj_modelo= new RCuadre_banca($obj_conexion);
+$agencia=$obj_modelo->getAgencia();
 
 session_start();
 
@@ -69,16 +70,19 @@ $formato_civil= array("01","02","03","04","05","06","07","08","09","10","11","12
 $hour= str_replace($formato_militar,$formato_civil,$hour);
 $hora=$hour.":".$minute." ".$formato;
 
-
 $fecha_desde= $obj_generico->CleanText($_GET['fechadesde']);
 $fecha_hasta= $obj_generico->CleanText($_GET['fechahasta']);
 
 $fecha_desde=$obj_date->changeFormatDateII($fecha_desde);
 $fecha_hasta=$obj_date->changeFormatDateII($fecha_hasta);
-$comision=$obj_modelo->GetComision();
+$comisionarreglo=$obj_modelo->GetComision($agencia['id_agencia']);
+$comision=$comisionarreglo['comision_agencia'];
+$tipo_comision=$comisionarreglo['tipo_comision'];
 //echo $fecha_desde, $fecha_hasta;
+$param_extra=" AND id_agencia=".$agencia['id_agencia'];
+
 $data="";
-         if( $result= $obj_modelo->GetBalance($fecha_desde, $fecha_hasta,$comision)){
+         if( $result= $obj_modelo->GetBalance($fecha_desde, $fecha_hasta,$comision,$tipo_comision,$param_extra)){
             if ($obj_conexion->GetNumberRows($result)>0 ){
             	
 				// ENCABEZADO DEL TICKET
