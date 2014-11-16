@@ -75,8 +75,13 @@ class AnularTicket{
 		//Preparacion del query
 		//$sql = "DELETE FROM `ticket` WHERE id_ticket='".$id_ticket."'";
         $sql = "UPDATE ticket_diario SET status='0', fecha_hora_anulacion='".Date('Y-m-d H:i:s')."', taquilla_anulacion='".$_SESSION['taquilla']."' WHERE id_ticket_diario='".$id_ticket."'";
-            
-		return $this->vConexion->ExecuteQuery($sql);
+        $this->vConexion->ExecuteQuery($sql);
+        $sql = "UPDATE detalle_ticket_diario SET status=0 WHERE id_ticket_diario=".$id_ticket;
+        
+       // echo $sql;
+        
+        return $this->vConexion->ExecuteQuery($sql);
+		
 		//return 1;
 	}
 
