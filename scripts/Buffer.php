@@ -13,7 +13,7 @@ if($result= mysql_query($sql,$conexion)){
 	exit;*/
 	$numero_registros = mysql_num_rows($result);
 	//Creamos la cadena para insertar los ticket y detalle_ticket que no han sido subidos.
-	$consulta_arriba_ticket="INSERT INTO ticket (id_ticket, serial, fecha_hora, taquilla, total_ticket, id_usuario, premiado, pagado, total_premiado, status, fecha_hora_anulacion, taquilla_anulacion, subido, verificado, impreso, fecha_hora_pagado, usuario_pagado, taquilla_pagado) VALUES  ";
+	$consulta_arriba_ticket="INSERT INTO ticket (id_ticket, serial, id_agencia, fecha_hora, taquilla, total_ticket, id_usuario, premiado, pagado, total_premiado, status, fecha_hora_anulacion, taquilla_anulacion, subido, verificado, impreso, fecha_hora_pagado, usuario_pagado, taquilla_pagado) VALUES  ";
 	$consulta_arriba_detalle="INSERT INTO detalle_ticket (id_detalle_ticket,id_ticket, numero, id_sorteo, fecha_sorteo, id_zodiacal, id_tipo_jugada, monto, premiado, total_premiado, monto_restante, monto_faltante) VALUES ";
 	while ($row = mysql_fetch_array($result)){
 		// Creamos la consulta para extraer los datos de detalle_ticket de cada ticket extraído de la tabla ticket que no ha sido subido
@@ -30,7 +30,7 @@ if($result= mysql_query($sql,$conexion)){
 			$fecha_hora_pagado=$row['fecha_hora_pagado'];
 				
 		}
-		$consulta_arriba_ticket.="('".$row['id_ticket_diario']."','".$row['serial']."','".$row['fecha_hora']."',".$row['taquilla'].",'".$row['total_ticket']."',".$row['id_usuario'].",".$row['premiado'].",".$row['pagado'].",".$row['total_premiado'].",".$row['status'].",'".$row['fecha_hora_anulacion']."',".$row['taquilla_anulacion'].",1,".$row['verificado'].",".$row['impreso'].",'".$fecha_hora_pagado."',".$usuario_pagado.",".$taquilla_pagado."),";   
+		$consulta_arriba_ticket.="('".$row['id_ticket_diario']."','".$row['serial']."','".$row['id_agencia']."','".$row['fecha_hora']."',".$row['taquilla'].",'".$row['total_ticket']."',".$row['id_usuario'].",".$row['premiado'].",".$row['pagado'].",".$row['total_premiado'].",".$row['status'].",'".$row['fecha_hora_anulacion']."',".$row['taquilla_anulacion'].",1,".$row['verificado'].",".$row['impreso'].",'".$fecha_hora_pagado."',".$usuario_pagado.",".$taquilla_pagado."),";   
 		$arreglo[]=$row['id_ticket_diario'];
 		$sql1 = "SELECT * FROM detalle_ticket_diario WHERE id_ticket_diario=".$row['id_ticket_diario'];
 		$result1= mysql_query($sql1,$conexion);
