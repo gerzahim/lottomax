@@ -28,7 +28,7 @@ if($numero_registros>0){
 //	$numero_registros = mysql_num_rows($result);
 	//Creamos la cadena para insertar los ticket y detalle_ticket que no han sido subidos.
 	$consulta_arriba_ticket="INSERT INTO ticket (id_ticket, serial, id_agencia, fecha_hora, taquilla, total_ticket, id_usuario, premiado, pagado, total_premiado, status, fecha_hora_anulacion, taquilla_anulacion, subido, verificado, impreso, fecha_hora_pagado, usuario_pagado, taquilla_pagado) VALUES  ";
-	$consulta_arriba_detalle="INSERT INTO detalle_ticket (id_detalle_ticket,id_ticket, numero, id_sorteo, fecha_sorteo, id_zodiacal, id_tipo_jugada, monto, premiado, total_premiado, monto_restante, monto_faltante) VALUES ";
+	$consulta_arriba_detalle="INSERT INTO detalle_ticket (id_ticket, numero, id_sorteo, fecha_sorteo, id_zodiacal, id_tipo_jugada, monto, premiado, total_premiado, monto_restante, monto_faltante,status) VALUES ";
 	while ($row = mysql_fetch_array($result)){
 		// Creamos la consulta para extraer los datos de detalle_ticket de cada ticket extraído de la tabla ticket que no ha sido subido
 		if($row['usuario_pagado']==null)
@@ -50,14 +50,14 @@ if($numero_registros>0){
 		$numero_registros1 = mysql_num_rows($result1);
 		//	echo $numero_registros1."<br>";
 		while ($row1 = mysql_fetch_array($result1))
-		$consulta_arriba_detalle.="(".$row1['id_detalle_'.$insert].",".$row1['id_'.$insert].",'".$row1['numero']."',".$row1['id_sorteo'].",'".$row1['fecha_sorteo']."',".$row1['id_zodiacal'].",".$row1['id_tipo_jugada'].",".$row1['monto'].",".$row1['premiado'].",".$row1['total_premiado'].",".$row1['monto_restante'].",".$row1['monto_faltante']."),";
+		$consulta_arriba_detalle.="('".$row1['id_'.$insert]."','".$row1['numero']."',".$row1['id_sorteo'].",'".$row1['fecha_sorteo']."',".$row1['id_zodiacal'].",".$row1['id_tipo_jugada'].",".$row1['monto'].",".$row1['premiado'].",".$row1['total_premiado'].",".$row1['monto_restante'].",".$row1['monto_faltante'].",".$row1['status']."),";
 	}
 	$consulta_arriba_detalle = trim($consulta_arriba_detalle, ',');
 	$consulta_arriba_ticket = trim($consulta_arriba_ticket, ',');
 	$consulta_arriba_ticket.=";";
 	$consulta_arriba_detalle.=";";
 	
-	echo $consulta_arriba_ticket;
+	//echo $consulta_arriba_ticket;
 	//echo $consulta_arriba_detalle;
 	//*/
 	//exit;*/
@@ -71,7 +71,7 @@ if($numero_registros>0){
 			if (mysql_query($consulta_arriba_ticket,$conexion_arriba))
 			{
 				echo "<br>Inserto Ticket";
-				//echo $consulta_arriba_detalle;
+				echo $consulta_arriba_detalle;
 				if (mysql_query($consulta_arriba_detalle,$conexion_arriba))
 				{
 					echo "<br>Inserto Detalle Ticket";
