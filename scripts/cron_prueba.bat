@@ -1,0 +1,1 @@
+C:\wamp\bin\php\php5.4.3\php.exe -f C:\wamp\www\lottomax\miscelaneos\test.php
