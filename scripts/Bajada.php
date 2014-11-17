@@ -12,14 +12,16 @@ mysql_select_db("lottomax",$conexion_abajo);
 
 $conexion_arriba = mysql_connect("lottomaxserver01.kmdns.net" , "lottomaxuser" , "voil4#2oo6",true);
 //$conexion_arriba = mysql_connect("lottomax.dlinkddns.com" , "lottomaxuser" , "voil4#2oo6",true);
-mysql_select_db("lottomax2",$conexion_arriba);
+mysql_select_db("lottomax",$conexion_arriba);
 $obj_modelo= new BajadaController();
 $id_agencia=getIdAgencia($conexion_abajo);
 /*echo $id_agencia;
 exit;*/
 $sql = "SELECT R.* FROM resultados R
-		INNER JOIN resultado_bajado_agencia RBA ON R.id_resultado=RBA.id_resultado
-		WHERE RBA.id_agencia='".$id_agencia." AND tipo=1'";
+		INNER JOIN resultado_bajado_agencia RBA ON R.id_resultados=RBA.id_resultado
+		WHERE RBA.id_agencia=".$id_agencia." AND tipo=1";
+
+//echo $sql;
 if($result= mysql_query($sql,$conexion_arriba))
 {
 	echo "hay conexion, hay resultados";
@@ -33,7 +35,7 @@ if($result= mysql_query($sql,$conexion_arriba))
 	$zodiacales=array();
 	$fecha_hora=array();
 	while ($row = mysql_fetch_array($result)){
-		echo "<br>Resultados";
+		//echo "<br>Resultados";
 		if(!in_array($row['fecha_hora'], $fecha_hora)){
 			$fecha_hora[]=$row['fecha_hora'];
 		}
@@ -67,7 +69,8 @@ if($result= mysql_query($sql,$conexion_arriba))
 		if (mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
 			if (mysql_query("BEGIN;",$conexion_arriba)) //dar inicio a la transacción
 				foreach ($arreglo as $id){
-					$sql="DELETE resultado_bajado_agencia WHERE id_resultados=".$id." AND id_agencia=".$id_agencia;
+					$sql="DELETE FROM resultado_bajado_agencia WHERE id_resultado=".$id." AND id_agencia=".$id_agencia;
+					//echo $sql;
 					if (mysql_query($sql,$conexion_arriba)){
 						echo "<br>Elimino Arriba";
 					}
@@ -89,6 +92,7 @@ if($result= mysql_query($sql,$conexion_arriba))
 		PremiarGanadores($conexion_abajo,$obj_modelo,$resultados,$zodiacales,$fecha_hora);
 	}
 }
+
 // COMIENZA LAS INSTRUCCIONES PARA CUANDO UN RESULTADO FUE MODIFICADO Y REQUIERE SER ACTUALIZADO EN LA BD LOCAL
 $id_sorteo=array();
 $fecha_hora2=array();
