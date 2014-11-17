@@ -274,9 +274,11 @@ switch (ACCION){
             $ayer= date('d/m/Y', strtotime('-1 day')) ;
             $obj_xtpl->assign('ruta_ayer', $obj_generico->RutaRegreso()."&accion=listar_resultados&fechadesde=".$ayer."&fechahasta=".$ayer);
             // Parseo del bloque
+            echo "pasa1";
             if($id_perfil==1) // OJO Cableado el perfil 1 significa administrador
             {
             	$result=$obj_modelo->getAgencias();
+            	echo "pasa";
             	while($row=$obj_conexion->GetArrayInfo($result)){
             		$obj_xtpl->assign('id_agencia', $row['id_agencia']);
             		$obj_xtpl->assign('nombre_agencia', $row['nombre_agencia']);
