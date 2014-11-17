@@ -45,10 +45,8 @@ class RCuadre_banca{
 	 */
 	public function getAgencia(){
 		//Preparacion del query
-		$sql = "SELECT A.id_agencia, A.nombre_agencia
- 				FROM parametros P
-                INNER JOIN agencias A ON P.id_agencia=A.id_agencia
-				WHERE A.status=1";
+		$sql = "SELECT id_agencia, nombre_agencia
+ 				FROM parametros P";
 		$result=$this->vConexion->ExecuteQuery($sql);
 		$roww= $this->vConexion->GetArrayInfo($result);
 		return $roww;
