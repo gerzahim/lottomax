@@ -44,7 +44,7 @@ if($numero_registros>0){
 			$fecha_hora_pagado=$row['fecha_hora_pagado'];
 		}
 		$consulta_arriba_ticket.="('".$row['id_'.$insert]."','".$row['serial']."',".$row['id_agencia'].",'".$row['fecha_hora']."',".$row['taquilla'].",'".$row['total_ticket']."',".$row['id_usuario'].",".$row['premiado'].",".$row['pagado'].",".$row['total_premiado'].",".$row['status'].",'".$row['fecha_hora_anulacion']."',".$row['taquilla_anulacion'].",1,".$row['verificado'].",".$row['impreso'].",'".$fecha_hora_pagado."',".$usuario_pagado.",".$taquilla_pagado."),";   
-		$arreglo[]=$row['id_ticket_diario'];
+		$arreglo[]=$row['id_'.$insert];
 		$sql1 = "SELECT * FROM detalle_".$insert." WHERE id_".$insert."=".$row['id_'.$insert];
 		$result1= mysql_query($sql1,$conexion_abajo);
 		$numero_registros1 = mysql_num_rows($result1);
