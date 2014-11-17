@@ -939,16 +939,22 @@ class Ventas{
            	$id_agencia=self::getIdAgencia();
             $taquilla=$_SESSION["taquilla"];
             
-            $sql = "SELECT id_ticket_diario FROM ticket_diario WHERE taquilla  = ".$taquilla." ORDER BY fecha_hora DESC limit 1";
+           /* $sql = "SELECT id_ticket_diario FROM ticket_diario WHERE taquilla  = ".$taquilla." ORDER BY fecha_hora DESC limit 1";
+            $ticket="ticket_diario";
            /* echo $sql;
             exit;*/
-            $result= $this->vConexion->ExecuteQuery($sql);
+            //$result= $this->vConexion->ExecuteQuery($sql);
             
+            //if ($this->vConexion->GetNumberRows($result)==0){
+            	$sql = "SELECT id_ticket FROM ticket WHERE taquilla  = ".$taquilla." ORDER BY fecha_hora DESC limit 1";
+            	$ticket="ticket";
+            	$result= $this->vConexion->ExecuteQuery($sql);
+//            }
             // Existe algun ticket en esta bd ?
             if ($this->vConexion->GetNumberRows($result)>0){
             	
 				$roww= $this->vConexion->GetArrayInfo($result);
-				$maximo=$roww["id_ticket_diario"];
+				$maximo=$roww["id_".$ticket];
             	
 				//preguntar si es de los ticket viejos o no
 	            $tamano = strlen($maximo);
@@ -966,6 +972,11 @@ class Ventas{
 	            	$correlativo=1;
 	            }
             }else{
+            	
+            
+            	
+            	
+            	
             	$correlativo=1;
             }            
 
