@@ -195,18 +195,55 @@ class RVentas_periodo{
 	public function GetBalancebyTaquilla($fecha_desde, $fecha_hasta, $num_taquilla){
 	
 		//Preparacion del query
-		$where = "";
+		/*$where = "";
 		if(!Empty($num_taquilla)){
 			$where = "taquilla='".$num_taquilla."' AND" ;
-		}	
+		}*/	
+		
 			
+		
+		$where = "";
+		$where2="";
+		if(!Empty($num_taquilla)){
+			$where = $where. " taquilla='".$num_taquilla."' AND " ;
+			$where2=$where2. " taquilla='".$num_taquilla."' AND " ;
+		}
+		/*if(!Empty($sorteo)){
+			$where = $where. "id_ticket IN (SELECT id_ticket FROM detalle_ticket WHERE id_sorteo='".$sorteo."') AND ";
+			$where2 = $where2. "id_ticket_diario IN (SELECT id_ticket_diario FROM detalle_ticket_diario WHERE id_sorteo='".$sorteo."') AND ";
+		}*/
+			$where = $where." fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta." 23:59:59' AND ";
+			$where2 = $where2." fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta." 23:59:59' AND ";
+		
+		
+		/*
+		$sql = "SELECT * FROM  ticket WHERE ".$where. " UNION
+				SELECT * FROM ticket_diario WHERE ".$where2. "
+				ORDER BY fecha_hora DESC";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		return $result;
+		*/
+		
+		$sql = "SELECT LEFT(fecha_hora,10) AS fecha, SUM(total_ticket) AS total_ventas, SUM(total_ticket)* 15 /100 AS comision, SUM(total_premiado) AS total_premiado, SUM(total_ticket)- ((SUM(total_ticket)* 15 /100) + SUM(total_premiado)) AS balance
+                        FROM ticket
+                        WHERE ".$where."  status='1'
+						GROUP BY LEFT(fecha_hora,10) 
+				UNION
+                 SELECT LEFT(fecha_hora,10) AS fecha, SUM(total_ticket) AS total_ventas, SUM(total_ticket)* 15 /100 AS comision, SUM(total_premiado) AS total_premiado, SUM(total_ticket)- ((SUM(total_ticket)* 15 /100) + SUM(total_premiado)) AS balance
+                        FROM ticket_diario
+                        WHERE ".$where2."  status='1'
+						GROUP BY LEFT(fecha_hora,10) 
+				ORDER BY fecha DESC";
+/*		$result= $this->vConexion->ExecuteQuery($sql);
+		
 	
 		$sql = "SELECT LEFT(fecha_hora,10) AS fecha, SUM(total_ticket) AS total_ventas, SUM(total_ticket)* 15 /100 AS comision, SUM(total_premiado) AS total_premiado, SUM(total_ticket)- ((SUM(total_ticket)* 15 /100) + SUM(total_premiado)) AS balance
                         FROM ticket
                         WHERE ".$where." fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."  23:59:59' AND status='1'
 						GROUP BY LEFT(fecha_hora,10)";
-		//echo $sql;
-	
+		echo $sql;
+	*/
+	//	echo $sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
 		return $result;
 	
@@ -231,10 +268,17 @@ class RVentas_periodo{
 		}
 			
 	
+		
+		
 		$sql = "SELECT id_ticket, LEFT(fecha_hora,10) AS fecha, taquilla, fecha_hora_anulacion, total_ticket
                         FROM ticket
                         WHERE ".$where." fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."  23:59:59' AND status='0'
-                        ORDER BY `fecha` ASC, taquilla ASC";
+
+                        		
+                        		ORDER BY `fecha` ASC, taquilla ASC
+                
+                        		
+                        		";
 	
 		//echo $sql;
 		
