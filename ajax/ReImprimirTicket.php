@@ -58,7 +58,7 @@ while ($obj_modelo->GetExisteSerialTicket($serial)){
 
 $info_ticket= $obj_modelo->GetLastTicket($id_taquilla);
 
-$id_ticket=$info_ticket["id_ticket"];
+$id_ticket=$info_ticket["id_ticket_diario"];
 $id_ticket1= substr($id_ticket, 0 , 3);
 $id_ticket2= substr($id_ticket, 3 , 3);
 $id_ticket3= substr($id_ticket, 6);
