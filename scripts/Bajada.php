@@ -51,7 +51,7 @@ if($result= mysql_query($sql,$conexion_arriba))
 	$consulta_abajo=trim($consulta_abajo,",");
 	$consulta_abajo.=";";
 	$error=0;
-	//echo "<br> Consulta abajo. ".$consulta_abajo;
+	echo "<br> Consulta abajo. ".$consulta_abajo;
 	if (mysql_query("SET AUTOCOMMIT=0;",$conexion_abajo))//desactivar el modo de autoguardado
 		if (mysql_query("BEGIN;",$conexion_abajo)) //dar inicio a la transacción
 			if (mysql_query($consulta_abajo,$conexion_abajo) AND $h==1)
