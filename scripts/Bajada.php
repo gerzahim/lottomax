@@ -12,15 +12,20 @@ mysql_select_db("lottomax",$conexion_abajo);
 
 $conexion_arriba = mysql_connect("lottomaxserver01.kmdns.net" , "lottomaxuser" , "voil4#2oo6",true);
 //$conexion_arriba = mysql_connect("lottomax.dlinkddns.com" , "lottomaxuser" , "voil4#2oo6",true);
-mysql_select_db("lottomax2",$conexion_arriba);
+mysql_select_db("lottomax",$conexion_arriba);
 $obj_modelo= new BajadaController();
 $id_agencia=getIdAgencia($conexion_abajo);
 /*echo $id_agencia;
 exit;*/
 $sql = "SELECT R.* FROM resultados R
-		INNER JOIN resultado_bajado_agencia RBA ON R.id_resultado=RBA.id_resultado
-		WHERE RBA.id_agencia='".$id_agencia." AND tipo=1'";
-if($result= mysql_query($sql,$conexion_arriba))
+		INNER JOIN resultado_bajado_agencia RBA ON R.id_resultados=RBA.id_resultado
+		WHERE RBA.id_agencia=".$id_agencia." AND tipo=1";
+echo "<br>".$sql;
+
+$result= mysql_query($sql,$conexion_arriba);
+$numero_registros = mysql_num_rows($result);
+echo "<br>numer".$numero_registros;
+if($numero_registros>0)
 {
 	echo "hay conexion, hay resultados";
 	$numero_registros = mysql_num_rows($result);
@@ -67,7 +72,8 @@ if($result= mysql_query($sql,$conexion_arriba))
 		if (mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
 			if (mysql_query("BEGIN;",$conexion_arriba)) //dar inicio a la transacción
 				foreach ($arreglo as $id){
-					$sql="DELETE resultado_bajado_agencia WHERE id_resultados=".$id." AND id_agencia=".$id_agencia;
+					$sql="DELETE FROM resultado_bajado_agencia WHERE id_resultado=".$id." AND id_agencia=".$id_agencia;
+					echo "<br>".$sql;
 					if (mysql_query($sql,$conexion_arriba)){
 						echo "<br>Elimino Arriba";
 					}
@@ -105,7 +111,8 @@ if($result= mysql_query($sql,$conexion_arriba)){
 		if(!in_array($row['fecha_hora'],$fecha_hora2))
 			$fecha_hora2[]=$row['fecha_hora'];
 		$consulta_abajo="UPDATE resultados SET numero='".$row['numero']."', zodiacal='".$row['zodiacal']."' WHERE id_sorteo=".$row['id_sorteo']." AND fecha_hora LIKE '%".$row['fecha_hora']."%'";
-		$consulta_arriba="DELETE resultado_bajado_agencia WHERE id_resultados=".$row['id_resultados']." AND id_agencia=".$id_agencia; // Eliminamos los resultados asociados a la agencia para descargar.
+		$consulta_arriba="DELETE resultado_bajado_agencia WHERE id_resultado=".$row['id_resultados']." AND id_agencia=".$id_agencia; // Eliminamos los resultados asociados a la agencia para descargar.
+		
 		if(mysql_query("SET AUTOCOMMIT=0;",$conexion_abajo) AND mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
 		if(mysql_query("BEGIN;",$conexion_abajo) AND mysql_query("BEGIN;",$conexion_arriba)){ //dar inicio a la transacción
 			if(mysql_query($consulta_abajo,$conexion_abajo)){//EJECUTA EL QUERY
