@@ -55,8 +55,6 @@ $obj_xtpl->assign ( 'tag_boton', 'Guardar' );
 $obj_xtpl->assign ( 'pagina_principal', 'save_result.php' );
 $obj_xtpl->assign ( 'opcion_sistema', 'cargar_resultados' );
 $obj_xtpl->assign ( 'fecha', $obj_date->changeFormatDateI ($fecha,0));
-
-
 $periodo='Todos';
 // Listado de Sorteos
 $sorteosassign='';

@@ -74,14 +74,18 @@ class AnularTicket{
 	public function EliminarTicket($id_ticket){
 		//Preparacion del query
 		//$sql = "DELETE FROM `ticket` WHERE id_ticket='".$id_ticket."'";
-        $sql = "UPDATE ticket_diario SET status='0', fecha_hora_anulacion='".Date('Y-m-d H:i:s')."', taquilla_anulacion='".$_SESSION['taquilla']."' WHERE id_ticket_diario='".$id_ticket."'";
+		
+		$sql = "SELECT subido FROM ticket_diario WHERE id_ticket_diario='".$id_ticket."'";
+		$result=$this->vConexion->ExecuteQuery($sql);
+		$row= $this->vConexion->GetArrayInfo($result);
+		if($row['subido']==0)
+		$adicional="";
+		else
+		$adicional=", subido = 2";
+        $sql = "UPDATE ticket_diario SET status='0', fecha_hora_anulacion='".Date('Y-m-d H:i:s')."', taquilla_anulacion='".$_SESSION['taquilla']."' ".$adicional." WHERE id_ticket_diario='".$id_ticket."'";
         $this->vConexion->ExecuteQuery($sql);
         $sql = "UPDATE detalle_ticket_diario SET status=0 WHERE id_ticket_diario=".$id_ticket;
-        
-       // echo $sql;
-        
         return $this->vConexion->ExecuteQuery($sql);
-		
 		//return 1;
 	}
 

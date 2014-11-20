@@ -40,6 +40,11 @@ $sorteos=preg_split('/-/',$_POST ['sorteosnocargados']);
 $sql="INSERT INTO `resultados` (`id_sorteo` , `zodiacal`, `numero`, `fecha_hora`) VALUES ";
 $resultados=array();
 $zodiacales=array();
+
+$primer_id=$obj_modelo->getUltimoIdResultado();
+$id_resultado=$primer_id;
+$obj_modelo->reseteaID($id_resultado+1);
+
 foreach($sorteos as $st)
 {
 	$numero = $_POST['txt_numero-' .$st];
@@ -57,6 +62,7 @@ foreach($sorteos as $st)
 				$resultados[$st]=$numero;
 				$sql.="('".$st."', '".$zodiacal."', '".$numero."', '".$fecha_hora."'),";
 				$sw=1;
+				$id_resultado++;
 			}
 		}
 	}
@@ -68,7 +74,9 @@ foreach($sorteos as $st)
 if($sw==1){
 	$sql=trim($sql,',');
 	$sql.=";";
-	if($obj_modelo->GuardarDatosResultadosMasivo($sql)){
+	//echo "Aqui estamos";
+	if($obj_modelo->GuardarDatosResultadosMasivo($sql,$id_resultado,$primer_id)){
+	//	echo "ok";
 		$mensaje=$mensajes['info_agregada'];
 		PremiarGanadores ($obj_conexion, $obj_modelo,$resultados,$zodiacales,$fecha_hora); // Premiamos los tickets ganadores
 	}
@@ -79,45 +87,72 @@ else
 $mensaje= "No se ingresaron nuevos resultados";
 $_SESSION ['mensaje'] = $mensaje;
 header('Location: CargarResultados.php?fecha='.$fecha_hora);
-
 function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fecha_hora){
 	$id_detalle_ticket[]="";
 	$id_tickets[]="";
 	$totales[]="";
+//	echo "pasa";
 	//print_r($resultados);
 	$aprox= $obj_modelo->GetAprox();
 	$relacion_pago=array();
-	$result=$obj_modelo->GetRelacionPagos($fecha_hora);
+	$result=$obj_modelo->GetRelacionPagos();
+//	echo "aqui ando";
 	while($row=$obj_conexion->GetArrayInfo($result)){
 		$relacion_pago[$row['id_tipo_jugada']]=$row['monto'];
 	}
 	$result= $obj_modelo->GetListadosegunVariable($fecha_hora);
+//	$fecha_resultado= strtotime(substr ($fecha_hora,0,10));
+	$fecha_actual =strtotime(date('Y-m-d'));
 	If($obj_conexion->GetNumberRows($result)>0){
 		$i=0; $j=0;
 		$ticket_premiado=0;
 		while ($roww= $obj_conexion->GetArrayInfo($result)){
+			
+			/*echo "<br>ANTES".$roww['id_ticket_diario'];
+			if(isset($roww['id_ticket_diario']))
+			/*{
+				echo "<br>pasa";
+				$ticket="ticket_diario";
+			}
+				else
+				$ticket="ticket";
+				*/					
 			$id_ticket=$roww["id_ticket"];
 			$fecha_ticket= substr($roww["fecha_hora"],0 , -9);
 			$resultDT = $obj_modelo->GetAllDetalleTciket($id_ticket);
 			//revisamos la tabla de detalle ticket y comparamos con los resultados
 			$monto_total=$roww['total_premiado'];
+		//	echo "<br> Monto Total ".$monto_total;
 			$sw=0;
 			// SE RECORRE CADA TICKET VENDIDO EL DIA DE LA CARGA DE RESULTADO
 			while($rowDT= $obj_conexion->GetArrayInfo($resultDT)){
 				// Verificamos si hay alguna apuesta ganadora...
+		//		echo "<br>PASAAA DT";
 				$terminal_abajo=0;
 				$terminal_arriba=0;
 				if($rowDT['id_tipo_jugada']==2){
 					switch ($aprox){
 						case 0:
-							$terminal_abajo=$rowDT['numero']-1;
+							if($rowDT['numero']=='00')
+								$terminal_abajo='99';
+							else
+								$terminal_abajo=$rowDT['numero']-1;
 							break;
 						case 1:
-							$terminal_arriba=$rowDT['numero']+1;
-							$terminal_abajo=$rowDT['numero']-1;
+							if($rowDT['numero']=='00')
+								$terminal_abajo='99';
+							else
+								$terminal_abajo=$rowDT['numero']-1;
+							if($rowDT['numero']=='99')
+								$terminal_arriba='00';
+							else
+								$terminal_arriba=$rowDT['numero']+1;
 							break;
 						case 2:
-							$terminal_arriba=$rowDT['numero']+1;
+							if($rowDT['numero']=='99')
+								$terminal_arriba='00';
+							else
+								$terminal_arriba=$rowDT['numero']+1;
 							break;
 					}
 					if(isset($resultados[$rowDT['id_sorteo']]))
@@ -141,7 +176,6 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 		}
 	}
 }
-
 
 
 ?>
