@@ -119,10 +119,64 @@ if($numero_registros>0){
 		echo "<br>Perfecto";
 		mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
 		mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
-		mysql_close($conexion_arriba);
-		mysql_close($conexion_abajo);
+
+		
+		
 	}	
 }
-
-
+$sql = "SELECT * FROM ticket WHERE subido=2 ORDER by fecha_hora ASC LIMIT 0,50 ";
+$result= mysql_query($sql,$conexion_abajo);
+$numero_registros = mysql_num_rows($result);
+$insert="ticket";
+if($numero_registros==0){
+	$sql = "SELECT * FROM ticket_diario WHERE subido=2 ORDER by fecha_hora ASC LIMIT 0,50 ";
+	$result= mysql_query($sql,$conexion_abajo);
+	$numero_registros = mysql_num_rows($result);
+	$insert="ticket_diario";
+}
+if($numero_registros>0){
+	while ($row = mysql_fetch_array($result)){
+		$error=0;
+		$consulta_arriba_ticket="UPDATE ticket SET status=0, fecha_hora_anulacion='".$row['fecha_hora_anulacion']."', taquilla_anulacion=".$row['taquilla_anulacion']." WHERE id_ticket= ".$row['id_'.$insert];
+		//$consulta_arriba_ticket="UPDATE ticket SET status=0 WHERE id_ticket= ".$row['id_'.$insert];
+		if (mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
+		{
+			echo "<br>Desactivo el modo de autoguardado";
+			if (mysql_query("BEGIN;",$conexion_arriba)) //dar inicio a la transacción
+			{
+				echo "<br>Inicia la conexion";
+				if (mysql_query($consulta_arriba_ticket,$conexion_arriba))
+				{
+					echo "<br>Modifico el Ticket Arriba";
+					//echo "<br> Consulta Arriba ".$consulta_arriba_ticket;
+					$consulta_abajo_ticket="UPDATE ".$insert." SET subido=1 WHERE subido=2 AND id_".$insert."=".$row['id_'.$insert];
+					if (mysql_query($consulta_abajo_ticket,$conexion_abajo)){
+/*						echo "<br>Consulta Abajo: ".$consulta_abajo_ticket;
+						echo "<br>Consulta Arriba: ".$consulta_arriba_ticket;*/
+						echo "<br>Excelente";
+						mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
+						mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
+					}
+					else
+					{
+						//echo "<br>pasa por aqui";
+						mysql_query("ROLLBACK;",$conexion_abajo); //garantizo que se haga el retroceso de las operaciones
+						mysql_query("ROLLBACK;",$conexion_arriba); //garantizo que se haga el retroceso de las operaciones
+					}
+				}
+				else
+					$error=1;
+			}
+			else
+				$error=1;
+		}
+		else
+			$error=1;
+		if($error==1)
+			echo "<br>Fallo";
+			//echo $consulta_arriba_detalle;
+	}
+}
+	mysql_close($conexion_arriba);
+	mysql_close($conexion_abajo);
 ?>
