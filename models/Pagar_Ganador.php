@@ -283,7 +283,7 @@ class Pagar_Ganador{
 		$tabla="ticket_diario";
 		*/
 		$sql = "UPDATE `".$param."` SET  `pagado`='1', `fecha_hora_pagado`='".$fecha."', `taquilla_pagado`='".$taquilla."', `usuario_pagado`='".$id_usuario."'  WHERE id_".$param."='".$id_ticket."'";
-		echo $sql;
+		//echo $sql;
 		return $this->vConexion->ExecuteQuery($sql);
 
 	}
