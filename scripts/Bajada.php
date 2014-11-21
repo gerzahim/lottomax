@@ -170,12 +170,10 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 	$relacion_pago=array();
 	$result=$obj_modelo->GetRelacionPagos($obj_conexion);
 	$fecha_actual=date('Y-m-d');
-	while($row=mysql_fetch_array($result)){
-		$relacion_pago[$row['id_tipo_jugada']]=$row['monto'];
+	while($row=$obj_conexion->GetArrayInfo($result)){
+		$relacion_pago[$row['id_tipo_jugada']][$row['id_agencia']]=$row['monto'];
 	}
 	foreach ($fecha_hora as $fh){
-		
-		
 		$result= $obj_modelo->GetListadosegunVariable($fh,$obj_conexion,$fecha_actual);
 		If(mysql_num_rows($result)>0){
 			$i=0; $j=0;
@@ -222,7 +220,7 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 						}
 						if(isset($resultados[$rowDT['id_sorteo']."/".$rowDT['fecha_sorteo']]))
 						if(($terminal_abajo==substr($resultados[$rowDT['id_sorteo']."/".$rowDT['fecha_sorteo']], 1, 3) OR $terminal_arriba==substr($resultados[$rowDT['id_sorteo']."/".$rowDT['fecha_sorteo']], 1, 3)) ){	
-							$monto_pago=$relacion_pago[5]*$rowDT['monto'];
+							$monto_pago=$relacion_pago[5][$roww['id_agencia']]*$rowDT['monto'];
 							$monto_total+=$monto_pago;
 							if($fh<$fecha_actual)
 							$id_detalle_ticket=$rowDT['id_detalle_ticket'];
@@ -234,16 +232,13 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 					}
 					if(isset($resultados[$rowDT['id_sorteo']."/".$rowDT['fecha_sorteo']]))
 					if(($rowDT['numero']==$resultados[$rowDT['id_sorteo']."/".$rowDT['fecha_sorteo']] AND ($rowDT['id_zodiacal']==$zodiacales[$rowDT['id_sorteo']."/".$rowDT['fecha_sorteo']])) OR ( ($rowDT['numero']== substr($resultados[$rowDT['id_sorteo']."/".$rowDT['fecha_sorteo']], 1, 3)  AND $rowDT['id_zodiacal']==$zodiacales[$rowDT['id_sorteo']."/".$rowDT['fecha_sorteo']]) AND ($rowDT['id_tipo_jugada']==2 OR $rowDT['id_tipo_jugada']==4)) ){
-						$monto_pago=$relacion_pago[$rowDT['id_tipo_jugada']]*$rowDT['monto'];
+						$monto_pago=$relacion_pago[$rowDT['id_tipo_jugada']][$row['id_agencia']]*$rowDT['monto'];
 						$monto_total+=$monto_pago;
 						$sw=1;
-						
 						if($fh<$fecha_actual)
 							$id_detalle_ticket=$rowDT['id_detalle_ticket'];
 						else
 							$id_detalle_ticket=$rowDT['id_detalle_ticket_diario'];
-						
-						
 						$obj_modelo->PremiarDetalleTicket($id_detalle_ticket, $monto_pago,$obj_conexion);
 					}
 				}

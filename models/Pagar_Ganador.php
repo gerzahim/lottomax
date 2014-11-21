@@ -277,12 +277,13 @@ class Pagar_Ganador{
 
 		//Preparacion del query
 		$fecha= date('Y-m-d H:i:s');
-		if($param)
+		/*if($param)
 		$tabla="ticket";
 		else
 		$tabla="ticket_diario";
-		
-		$sql = "UPDATE `".$tabla."` SET  `pagado`='1', `fecha_hora_pagado`='".$fecha."', `taquilla_pagado`='".$taquilla."', `usuario_pagado`='".$id_usuario."'  WHERE id_".$tabla."='".$id_ticket."'";
+		*/
+		$sql = "UPDATE `".$param."` SET  `pagado`='1', `fecha_hora_pagado`='".$fecha."', `taquilla_pagado`='".$taquilla."', `usuario_pagado`='".$id_usuario."'  WHERE id_".$param."='".$id_ticket."'";
+		echo $sql;
 		return $this->vConexion->ExecuteQuery($sql);
 
 	}
