@@ -87,9 +87,9 @@ class Cargar_Resultados{
 		/*$fecha_resultado= strtotime(substr ($fecha_resultado,0,10));
 		$fecha_actual =strtotime(date('Y-m-d'));*/
 	//	if($fecha_resultado<$fecha_actual)
-		$sql = "SELECT id_ticket as id_ticket, fecha_hora as fecha_hora, total_premiado as total_premiado FROM ticket WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'
+		$sql = "SELECT id_ticket as id_ticket, fecha_hora as fecha_hora, total_premiado as total_premiado, id_agencia as id_agencia FROM ticket WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'
 				UNION ALL
-				SELECT id_ticket_diario as id_ticket, fecha_hora as fecha_hora, total_premiado as total_premiado  FROM ticket_diario WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'";
+				SELECT id_ticket_diario as id_ticket, fecha_hora as fecha_hora, total_premiado as total_premiado, id_agencia as id_agencia  FROM ticket_diario WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'";
 			
 /*		
 		$sql = "SELECT * FROM ticket_diario WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'";
@@ -230,7 +230,7 @@ class Cargar_Resultados{
 	public function GetRelacionPagos(){
 	
 		//Preparacion del query
-		$sql = "SELECT monto,id_tipo_jugada FROM relacion_pagos ";
+		$sql = "SELECT monto, id_tipo_jugada, id_agencia FROM relacion_pagos ";
 		$result= $this->vConexion->ExecuteQuery($sql);
 		return $result;
 	

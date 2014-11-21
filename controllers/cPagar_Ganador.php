@@ -150,23 +150,27 @@ switch (ACCION){
                         		// Si el ticket ganador es de hoy el parametro es 0 eso indica que tiene que buscar en tabla de ticket diario
                         		// Si el ticket ganador es de dias atrás el parametro es 1 indica que tiene que buscar en tabla de ticket
                         		if($fecha_ticket<$fecha_actual)
-                        			$param=1;
+                        		{
+                        			$param="ticket";
+                        		}
                         		else
-                        			$param=0;
+                        		{
+                        			$param="ticket_diario";
+                        		}
                         		
                         		
-                 				if( $obj_modelo->PagarTicket($row['id_ticket'], $taquilla, $id_usuario,$param)){
+                 				if( $obj_modelo->PagarTicket($row['id_'.$param], $taquilla, $id_usuario,$param)){
                  					$_SESSION['mensaje']= $mensajes['serial_coincide'];
-                                    header('location:'.$_SESSION['Ruta_Lista']);
+                                    //header('location:'.$_SESSION['Ruta_Lista']);
                                 }
                             	else{
                             		$_SESSION['mensaje']= $mensajes['fallo_modificar'];
-                            		header('location:'.$_SESSION['Ruta_ticket']);
+                            		//header('location:'.$_SESSION['Ruta_ticket']);
                             	}
                         	}
                           	else{
                            		$_SESSION['mensaje']= $mensajes['serial_no_coincide'];
-                            	header('location:'.$_SESSION['Ruta_serial']);
+                            	//header('location:'.$_SESSION['Ruta_serial']);
                             }
                         
                       
@@ -174,7 +178,7 @@ switch (ACCION){
                 else{
                     // Mensaje
                      $_SESSION['mensaje']= $mensajes['serial_no_coincide'];
-                      header('location:'.$_SESSION['Ruta_serial']);
+                      //header('location:'.$_SESSION['Ruta_serial']);
 
                 }
 		break;

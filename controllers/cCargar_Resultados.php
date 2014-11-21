@@ -54,7 +54,6 @@ switch (ACCION){
 			
 			//print_r($row);
 			// Array ( [0] => 1 [id_resultados] => 1 [1] => 4 [id_sorteo] => 4 [2] => 0 [zodiacal] => 0 [3] => 833 [numero] => 833 [4] => 2014-02-08 [fecha_hora] => 2014-02-08 [5] => 1 [bajado] => 1 ) 
-			
 			if ($row ['zodiacal'] != 0) {
 							// Listado de Zodiacal
 							if ($result_z = $obj_modelo->GetZodiacales ()) {
@@ -73,20 +72,15 @@ switch (ACCION){
 				$obj_xtpl->parse ( 'main.contenido.formulario.lista_zodiacal.op_zodiacal' );
 			}
 			$obj_xtpl->parse ( 'main.contenido.formulario.lista_zodiacal' );
-				
 			// Lista los datos del usuario obtenidos de la BD
 			$obj_xtpl->assign('fecha', $_GET['fecha']);
 			$obj_xtpl->assign('zodiacal', $row ['zodiacal']);
 			$obj_xtpl->assign('id_Sorteo', $_GET['id']);
 			$obj_xtpl->assign('id_resultado', $id_resultado);
 			$obj_xtpl->assign('bajado', $bajado);
-				
 			// ID en el hidden
 			$obj_xtpl->parse('main.contenido.formulario.identificador');
-	
 		}
-	
-	
 		// Parseo del bloque
 		$obj_xtpl->parse('main.contenido.formulario');
 		break;
@@ -111,10 +105,7 @@ switch (ACCION){
 				$_SESSION['mensaje']= $mensajes['info_agregada'];
 				header('location:'.$_SESSION['Ruta_Lista']);
 			}
-			
-	
 			break;		
-
         case 'cargar_resultados':
         $zodiacales=array();
         if ($result_z = $obj_modelo->GetZodiacales ())
@@ -322,8 +313,10 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 	$result=$obj_modelo->GetRelacionPagos();
 //	echo "aqui ando";
 	while($row=$obj_conexion->GetArrayInfo($result)){
-		$relacion_pago[$row['id_tipo_jugada']]=$row['monto'];
+		$relacion_pago[$row['id_tipo_jugada']][$row['id_agencia']]=$row['monto'];
 	}
+	
+	//print_r($relacion_pago);
 	$result= $obj_modelo->GetListadosegunVariable($fecha_hora);
 //	$fecha_resultado= strtotime(substr ($fecha_hora,0,10));
 	$fecha_actual =strtotime(date('Y-m-d'));
@@ -380,7 +373,7 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 					}
 					if(isset($resultados[$rowDT['id_sorteo']]))
 						if(($terminal_abajo==substr($resultados[$rowDT['id_sorteo']], 1, 3) OR $terminal_arriba==substr($resultados[$rowDT['id_sorteo']], 1, 3)) ){
-						$monto_pago=$relacion_pago[5]*$rowDT['monto'];
+						$monto_pago=$relacion_pago[5][$roww['id_agencia']]*$rowDT['monto'];
 						$monto_total+=$monto_pago;
 						$obj_modelo->PremiarDetalleTicket($rowDT['id_detalle_ticket'], $monto_pago);
 						$sw=1;
@@ -388,7 +381,7 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 				}
 				if(isset($resultados[$rowDT['id_sorteo']]))
 					if(($rowDT['numero']==$resultados[$rowDT['id_sorteo']] AND ($rowDT['id_zodiacal']==$zodiacales[$rowDT['id_sorteo']])) OR ( ($rowDT['numero']== substr($resultados[$rowDT['id_sorteo']], 1, 3)  AND $rowDT['id_zodiacal']==$zodiacales[$rowDT['id_sorteo']]) AND ($rowDT['id_tipo_jugada']==2 OR $rowDT['id_tipo_jugada']==4)) ){
-					$monto_pago=$relacion_pago[$rowDT['id_tipo_jugada']]*$rowDT['monto'];
+					$monto_pago=$relacion_pago[$rowDT['id_tipo_jugada']][$row['id_agencia']]*$rowDT['monto'];
 					$monto_total+=$monto_pago;
 					$sw=1;
 					$obj_modelo->PremiarDetalleTicket($rowDT['id_detalle_ticket'], $monto_pago);

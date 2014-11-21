@@ -72,11 +72,11 @@ class BajadaController{
 	 *
 	 * @return boolean, array
 	 */
-	public function GetRelacionPagos($conexion_abajo){
+	public function GetRelacionPagos(){
 	
 		//Preparacion del query
-		$sql = "SELECT monto,id_tipo_jugada FROM relacion_pagos ";
-		$result= mysql_query($sql,$conexion_abajo);
+		$sql = "SELECT monto, id_tipo_jugada, id_agencia FROM relacion_pagos ";
+		$result= $this->vConexion->ExecuteQuery($sql);
 		return $result;
 	
 	}
