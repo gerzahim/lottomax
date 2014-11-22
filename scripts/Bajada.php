@@ -171,6 +171,7 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 	while($row=mysql_fetch_array($result)){
 		$relacion_pago[$row['id_tipo_jugada']][$row['id_agencia']]=$row['monto'];
 	}
+//	print_r($relacion_pago);
 	foreach ($fecha_hora as $fh){
 		$result= $obj_modelo->GetListadosegunVariable($fh,$obj_conexion,$fecha_actual);
 		If(mysql_num_rows($result)>0){
@@ -231,7 +232,7 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 					}
 					if(isset($resultados[$rowDT['id_sorteo']."/".$rowDT['fecha_sorteo']]))
 					if(($rowDT['numero']==$resultados[$rowDT['id_sorteo']."/".$rowDT['fecha_sorteo']] AND ($rowDT['id_zodiacal']==$zodiacales[$rowDT['id_sorteo']."/".$rowDT['fecha_sorteo']])) OR ( ($rowDT['numero']== substr($resultados[$rowDT['id_sorteo']."/".$rowDT['fecha_sorteo']], 1, 3)  AND $rowDT['id_zodiacal']==$zodiacales[$rowDT['id_sorteo']."/".$rowDT['fecha_sorteo']]) AND ($rowDT['id_tipo_jugada']==2 OR $rowDT['id_tipo_jugada']==4)) ){
-						$monto_pago=$relacion_pago[$rowDT['id_tipo_jugada']][$row['id_agencia']]*$rowDT['monto'];
+						$monto_pago=$relacion_pago[$rowDT['id_tipo_jugada']][$roww['id_agencia']]*$rowDT['monto'];
 						$monto_total+=$monto_pago;
 						$sw=1;
 						echo "Premia";
