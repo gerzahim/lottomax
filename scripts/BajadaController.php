@@ -238,9 +238,11 @@ class BajadaController{
 		//Preparacion del query
 		$sql = "UPDATE `ticket` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_ticket='".$id_ticket."'";
 		$result= mysql_query($sql,$conexion_abajo);
+		echo "<br>Sql ".$sql;
 		if(mysql_affected_rows()==0){
 			$sql = "UPDATE `ticket_diario` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_ticket_diario='".$id_ticket."'";
 			$result= mysql_query($sql,$conexion_abajo);
+			echo "<br>Sql ".$sql;
 		}
 		return $result;
 		

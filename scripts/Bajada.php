@@ -98,8 +98,6 @@ if($numero_registros>0)
 // COMIENZA LAS INSTRUCCIONES PARA CUANDO UN RESULTADO FUE MODIFICADO Y REQUIERE SER ACTUALIZADO EN LA BD LOCAL
 $id_sorteo=array();
 $fecha_hora2=array();
-
-
 $sql = "SELECT R.* FROM resultados R
 		INNER JOIN resultado_bajado_agencia RBA ON R.id_resultado=RBA.id_resultado
 		WHERE RBA.id_agencia='".$id_agencia." AND tipo=2'";
@@ -222,6 +220,7 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 						if(($terminal_abajo==substr($resultados[$rowDT['id_sorteo']."/".$rowDT['fecha_sorteo']], 1, 3) OR $terminal_arriba==substr($resultados[$rowDT['id_sorteo']."/".$rowDT['fecha_sorteo']], 1, 3)) ){	
 							$monto_pago=$relacion_pago[5][$roww['id_agencia']]*$rowDT['monto'];
 							$monto_total+=$monto_pago;
+							echo "Premia";
 							if($fh<$fecha_actual)
 							$id_detalle_ticket=$rowDT['id_detalle_ticket'];
 							else
@@ -235,6 +234,7 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 						$monto_pago=$relacion_pago[$rowDT['id_tipo_jugada']][$row['id_agencia']]*$rowDT['monto'];
 						$monto_total+=$monto_pago;
 						$sw=1;
+						echo "Premia";
 						if($fh<$fecha_actual)
 							$id_detalle_ticket=$rowDT['id_detalle_ticket'];
 						else
