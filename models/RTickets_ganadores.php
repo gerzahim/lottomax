@@ -74,7 +74,7 @@ class RTickets_ganadores{
                         FROM  detalle_ticket DT
                         INNER JOIN sorteos S ON S.id_sorteo=DT.id_sorteo
                         INNER JOIN zodiacal Z ON Z.Id_zodiacal=DT.id_zodiacal
-                        WHERE id_ticket='".$id_ticket."' AND monto <> 0";
+                        WHERE id_ticket='".$id_ticket."' AND monto <> 0 ORDER BY premiado DESC";
 		$result= $this->vConexion->ExecuteQuery($sql);
 		$total_registros= $this->vConexion->GetNumberRows($result);
 		if($total_registros==0)
@@ -83,7 +83,7 @@ class RTickets_ganadores{
 				FROM  detalle_ticket_diario DTD
                 INNER JOIN sorteos SS ON SS.id_sorteo=DTD.id_sorteo
                 INNER JOIN zodiacal ZZ ON ZZ.Id_zodiacal=DTD.id_zodiacal
-                WHERE id_ticket_diario='".$id_ticket."' AND monto <> 0"; 
+                WHERE id_ticket_diario='".$id_ticket."' AND monto <> 0 ORDER BY premiado DESC"; 
 			$result= $this->vConexion->ExecuteQuery($sql);
 			//echo $sql;
 		}
