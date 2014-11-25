@@ -20,8 +20,6 @@ if($numero_registros==0){
 	$numero_registros = mysql_num_rows($result);
 	$insert="ticket_diario";
 }	
-
-
 if($numero_registros>0){
 	/*echo "PASA";
 	exit;*/

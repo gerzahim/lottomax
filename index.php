@@ -218,7 +218,11 @@ switch(OPCION){
 		
 	case 'inicio':
 		include($obj_config->GetVar('ruta_controlador').'cHome.php');
-		break;		
+		break;	
+
+		case 'agencia':
+			include($obj_config->GetVar('ruta_controlador').'cAgencia.php');
+			break;
 	
 	default:
 		include($obj_config->GetVar('ruta_controlador').'cHome.php');
