@@ -8,11 +8,10 @@ error_reporting(E_ALL);
 require_once('BajadaController.php');
 $conexion_abajo = mysql_connect("localhost" , "root" , "secreta");
 mysql_select_db("lottomax",$conexion_abajo);
-
-
 $conexion_arriba = mysql_connect("lottomaxserver01.kmdns.net" , "lottomaxuser" , "voil4#2oo6",true);
-//$conexion_arriba = mysql_connect("lottomax.dlinkddns.com" , "lottomaxuser" , "voil4#2oo6",true);
 mysql_select_db("lottomax",$conexion_arriba);
+
+//$conexion_arriba = mysql_connect("lottomax.dlinkddns.com" , "lottomaxuser" , "voil4#2oo6",true);
 $obj_modelo= new BajadaController();
 $id_agencia=getIdAgencia($conexion_abajo);
 /*echo $id_agencia;
