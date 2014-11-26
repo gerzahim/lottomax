@@ -15,6 +15,9 @@ $mensajes['acceso_bloqueado']= "
 	Por favor, contacte al administrador del sistema.
 ";
 
+
+$mensajes['agencia_repetida']= "El ID de Agencia ingresado ya se encuentra registrado por favor intente con otro!!!";
+
 $mensajes['sin_lista']= "No existe informacion para mostrar!!!";
 
 $mensajes['clave_desiguales']= "Las Contrasenas no coinciden !!!";
