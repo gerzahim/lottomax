@@ -55,8 +55,8 @@ if($numero_registros>0){
 	$consulta_arriba_ticket.=";";
 	$consulta_arriba_detalle.=";";
 	
-	echo $consulta_arriba_ticket;
-	echo $consulta_arriba_detalle;
+/*	echo $consulta_arriba_ticket;
+	echo $consulta_arriba_detalle;*/
 	//*/
 	//exit;*/
 	$error=0;
