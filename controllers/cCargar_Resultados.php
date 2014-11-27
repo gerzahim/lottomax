@@ -373,6 +373,7 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 						if(($terminal_abajo==substr($resultados[$rowDT['id_sorteo']], 1, 3) OR $terminal_arriba==substr($resultados[$rowDT['id_sorteo']], 1, 3)) ){
 						$monto_pago=$relacion_pago[5][$roww['id_agencia']]*$rowDT['monto'];
 						$monto_total+=$monto_pago;
+						echo "<br> Id_agencia".$roww['id_agencia'];
 						echo "<br> monto".$monto_pago;
 						echo "<br> monto total".$monto_total;
 						$obj_modelo->PremiarDetalleTicket($rowDT['id_detalle_ticket'], $monto_pago);
@@ -381,8 +382,10 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 				}
 				if(isset($resultados[$rowDT['id_sorteo']]))
 					if(($rowDT['numero']==$resultados[$rowDT['id_sorteo']] AND ($rowDT['id_zodiacal']==$zodiacales[$rowDT['id_sorteo']])) OR ( ($rowDT['numero']== substr($resultados[$rowDT['id_sorteo']], 1, 3)  AND $rowDT['id_zodiacal']==$zodiacales[$rowDT['id_sorteo']]) AND ($rowDT['id_tipo_jugada']==2 OR $rowDT['id_tipo_jugada']==4)) ){
-					$monto_pago=$relacion_pago[$rowDT['id_tipo_jugada']][$row['id_agencia']]*$rowDT['monto'];
+					$monto_pago=$relacion_pago[$rowDT['id_tipo_jugada']][$roww['id_agencia']]*$rowDT['monto'];
 					$monto_total+=$monto_pago;
+					echo "<br> Id_agencia".$roww['id_agencia'];
+						
 					echo "<br> monto".$monto_pago;
 					echo "<br> monto total".$monto_total;
 					$sw=1;
