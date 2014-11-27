@@ -274,7 +274,7 @@ switch (ACCION){
 				}
 			}
 			if($sw==1){
-				echo "PASA";
+			//	echo "PASA";
 				$sql=trim($sql,',');
 				$sql.=";";
 				if($obj_modelo->GuardarDatosResultadosMasivo($sql,$id_resultado,$primer_id)){
@@ -314,7 +314,7 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 		$relacion_pago[$row['id_tipo_jugada']][$row['id_agencia']]=$row['monto'];
 	}
 	
-	//print_r($relacion_pago);
+	print_r($relacion_pago);
 	$result= $obj_modelo->GetListadosegunVariable($fecha_hora);
 //	$fecha_resultado= strtotime(substr ($fecha_hora,0,10));
 	$fecha_actual =strtotime(date('Y-m-d'));
