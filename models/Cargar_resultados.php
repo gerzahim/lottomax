@@ -444,9 +444,10 @@ class Cargar_Resultados{
 		}
 		//echo "PASA";
 		//exit;
-		//echo $sql2;
+		echo $sql2;
 		$sql2=trim($sql2,',');
 		$sql2.=";";
+	
 		$this->vConexion->ExecuteQuery($sql2);
 		return $this->vConexion->ExecuteQuery($sql);
 	
