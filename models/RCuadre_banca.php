@@ -97,7 +97,7 @@ class RCuadre_banca{
 				FROM ticket_diario
                 WHERE status='1' AND fecha_hora BETWEEN '".$fecha_desde."' AND '".$fecha_hasta."  23:59:59' ".$param_extra."
 				GROUP BY LEFT(fecha_hora,10) ";
-		echo "<br>".$sql;
+		//echo "<br>".$sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
 		
 		
