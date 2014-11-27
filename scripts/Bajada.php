@@ -136,7 +136,6 @@ if($result= mysql_query($sql,$conexion_arriba)){
 	mysql_close($conexion_arriba);
 	mysql_close($conexion_abajo);
 }
-
 function ExisteResultado ($id_sorteo, $zodiacal, $numero, $fecha_hora,$conexion_abajo){
 	$obj_modelo= new BajadaController();
 	$result1=$obj_modelo->GetResultadosRepetidos($id_sorteo, $zodiacal, $numero, $fecha_hora,$conexion_abajo);
@@ -145,10 +144,7 @@ function ExisteResultado ($id_sorteo, $zodiacal, $numero, $fecha_hora,$conexion_
 	return false;
 	else
 	return true;
-	
 }
-
-
 //Funcion para validar el id agencia
 function getIdAgencia($conexion_abajo){
 	$sql="SELECT id_agencia FROM parametros WHERE 1";
@@ -156,8 +152,6 @@ function getIdAgencia($conexion_abajo){
 	$row=mysql_fetch_array($result);
 	return $row['id_agencia'];
 }
-
-
 // Funcion para premiar los tickets ganadores
 function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fecha_hora){
 	$id_detalle_ticket[]="";
