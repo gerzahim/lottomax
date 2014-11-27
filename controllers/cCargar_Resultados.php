@@ -274,6 +274,7 @@ switch (ACCION){
 				}
 			}
 			if($sw==1){
+				echo "PASA";
 				$sql=trim($sql,',');
 				$sql.=";";
 				if($obj_modelo->GuardarDatosResultadosMasivo($sql,$id_resultado,$primer_id)){
