@@ -270,7 +270,7 @@ switch (ACCION){
 				}
 				else {
 					$_SESSION ['mensaje'] = 'Los numeros ingresados deben ser de tres digitos! ';
-					header ( 'location:' . $_SESSION ['Ruta_Lista'] );
+					//header ( 'location:' . $_SESSION ['Ruta_Lista'] );
 				}
 			}
 			if($sw==1){
@@ -287,7 +287,7 @@ switch (ACCION){
 			else
 			$mensaje= "No se ingresaron nuevos resultados";
 			$_SESSION ['mensaje'] = $mensaje;
-			header ( 'location:' . $_SESSION ['Ruta_Lista'] );
+			//header ( 'location:' . $_SESSION ['Ruta_Lista'] );
 		break;
 	default:
 		// Ruta actual
