@@ -35,15 +35,12 @@ switch (ACCION){
 		$obj_xtpl->assign('tag_boton', 'Modificar');
 		//Obteniendo Datos del Usuario
 		if( is_numeric($_GET['id'])){
-			
 			$fecha= $_GET['fecha'];
 			$fecha_hora = $obj_date->changeFormatDateII($fecha);
 			$id_sorteo= $_GET['id'];
 			$bajado= $_GET['bajado'];
 			$id_resultado = $obj_modelo->VerificarResultadoSorteo($id_sorteo, $fecha_hora);
-			
 			if($obj_generico->IsEmpty($id_resultado)){
-							
 				// no tiene id_resultado, es decir no lo han cargado aun
 				$_SESSION['mensaje']= $mensajes['no_idresultado'];
 				header('location:'.$_SESSION['Ruta_Lista']);
