@@ -69,7 +69,7 @@ if($numero_registros>0){
 			if (mysql_query($consulta_arriba_ticket,$conexion_arriba))
 			{
 				echo "<br>Inserto Ticket";
-				echo $consulta_arriba_detalle;
+				//echo $consulta_arriba_detalle;
 				if (mysql_query($consulta_arriba_detalle,$conexion_arriba))
 				{
 					echo "<br>Inserto Detalle Ticket";
@@ -117,9 +117,6 @@ if($numero_registros>0){
 		echo "<br>Perfecto";
 		mysql_query("SET AUTOCOMMIT=1;",$conexion_abajo);
 		mysql_query("SET AUTOCOMMIT=1;",$conexion_arriba);
-
-		
-		
 	}	
 }
 $sql = "SELECT * FROM ticket WHERE subido=2 ORDER by fecha_hora ASC LIMIT 0,50 ";
@@ -143,6 +140,7 @@ if($numero_registros>0){
 			if (mysql_query("BEGIN;",$conexion_arriba)) //dar inicio a la transacción
 			{
 				echo "<br>Inicia la conexion";
+				echo "<br> ".$consulta_arriba_ticket;
 				if (mysql_query($consulta_arriba_ticket,$conexion_arriba))
 				{
 					echo "<br>Modifico el Ticket Arriba";
