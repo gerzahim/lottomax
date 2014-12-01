@@ -74,6 +74,7 @@ while(strtotime($fecha_hora)<=strtotime($fecha_hasta) ){
 	while($row=$obj_conexion->GetArrayInfo($result)){
 		$relacion_pago[$row['id_tipo_jugada']][$row['id_agencia']]=$row['monto'];
 	}
+	echo print_r($relacion_pago);
 	$result= $obj_modelo->GetListadosegunVariable2($fecha_hora,$obj_conexion,$fecha_actual);
     If ($obj_conexion->GetNumberRows($result)>0){
     	for($i=0;$i<count($resultados);$i++){
@@ -111,7 +112,6 @@ while(strtotime($fecha_hora)<=strtotime($fecha_hasta) ){
 			    	    	if(($terminal_abajo==substr($resultados[$i], 1, 3) OR $terminal_arriba==substr($resultados[$i], 1, 3)) AND $rowDT['id_sorteo']==$id_sorteo[$i] ){
 								$monto_pago=$relacion_pago[5][$roww['id_agencia']]*$rowDT['monto'];
 								echo "<br>Monto Pago: ".$monto_pago;
-								
 			    	    		echo "Pasa";
 			    	    		if($fecha_hora<$fecha_actual)
 							$id_detalle_ticket=$rowDT['id_detalle_ticket'];
