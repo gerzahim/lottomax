@@ -34,9 +34,7 @@ if(isset($_GET['fecha_hasta']))
 $fecha_hasta=$_GET['fecha_hasta'];
 else
 $fecha_hasta=date('Y-m-d');
-
 echo "URL ?fecha_desde=".$fecha_desde."&fecha_hasta=".$fecha_hasta."<br>";
-
 $fecha_hora=$fecha_desde;
 //exit;
 /*echo "DESDE".strtotime($fecha_hora);
@@ -111,7 +109,7 @@ while(strtotime($fecha_hora)<=strtotime($fecha_hasta) ){
 								break;
 			    	    	}
 			    	    	if(($terminal_abajo==substr($resultados[$i], 1, 3) OR $terminal_arriba==substr($resultados[$i], 1, 3)) AND $rowDT['id_sorteo']==$id_sorteo[$i] ){
-			    	    		$monto_pago=$relacion_pago[5]*$rowDT['monto'];
+								$monto_pago=$relacion_pago[5][$roww['id_agencia']]*$rowDT['monto'];
 			    	    		echo "Pasa";
 			    	    		if($fecha_hora<$fecha_actual)
 							$id_detalle_ticket=$rowDT['id_detalle_ticket'];
@@ -123,7 +121,7 @@ while(strtotime($fecha_hora)<=strtotime($fecha_hasta) ){
 			    	    	}
 		    	    	}
 		    	    	if( $rowDT['id_zodiacal']==$id_zodiacal[$i]  AND ((($rowDT['numero']==$resultados[$i] AND ($rowDT['id_tipo_jugada']==1 OR $rowDT['id_tipo_jugada']==3))OR ($rowDT['numero']== substr($resultados[$i], 1, 3) AND ($rowDT['id_tipo_jugada']==2 OR $rowDT['id_tipo_jugada']==4))    )      AND $rowDT['id_sorteo']==$id_sorteo[$i] )){
-							$monto_pago=$relacion_pago[$rowDT['id_tipo_jugada']]*$rowDT['monto'];
+							$monto_pago=$relacion_pago[$rowDT['id_tipo_jugada']][$roww['id_agencia']]*$rowDT['monto'];
 							$monto_total+=$monto_pago;
 							echo "Pasa";
 							if($fecha_hora<$fecha_actual)
