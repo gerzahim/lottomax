@@ -285,7 +285,7 @@ class Pagar_Ganador{
 	public function GetRelacionPagos(){
 
 		//Preparacion del query
-		$sql = "SELECT monto,id_tipo_jugada,id_agencia FROM relacion_pagos ";
+		$sql = "SELECT monto,id_tipo_jugada,id_agencia FROM relacion_pagos WHERE status=1 ";
 		$result= $this->vConexion->ExecuteQuery($sql);
         return $result;
 
