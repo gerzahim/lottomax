@@ -64,6 +64,7 @@ while(strtotime($fecha_hora)<=strtotime($fecha_hasta) ){
 	$resultados=array();
 	$id_sorteo=array();
 	$id_zodiacal=array();
+	$relacion_pago=array();
 	$result=$obj_modelo->GetResultados($fecha_hora);
 	while($row=$obj_conexion->GetArrayInfo($result)){
 		$resultados[]=$row['numero'];
@@ -72,15 +73,20 @@ while(strtotime($fecha_hora)<=strtotime($fecha_hasta) ){
 	}
 	$fecha_actual=date('Y-m-d');
 	$result=$obj_modelo->GetRelacionPagos($obj_conexion);
-	
+//	echo "Numero".$obj_conexion->GetNumberRows($result);
 	while($row=$obj_conexion->GetArrayInfo($result)){
+		/*echo "<br>Id_tipo ".$row['id_tipo_jugada'];
+		echo "<br>Id_agencia ".$row['id_agencia'];
+		echo "<br>Monto ".$row['monto'];*/
 		$relacion_pago[$row['id_tipo_jugada']][$row['id_agencia']]=$row['monto'];
 	}
-	echo "<br>";
+	
+	/*echo "<br>";
+	
 	
 	echo print_r($relacion_pago);
 	echo "<br>";
-	
+	exit;*/
 	$result= $obj_modelo->GetListadosegunVariable2($fecha_hora,$obj_conexion,$fecha_actual);
     If ($obj_conexion->GetNumberRows($result)>0){
     	for($i=0;$i<count($resultados);$i++){
