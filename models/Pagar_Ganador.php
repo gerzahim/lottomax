@@ -45,9 +45,32 @@ class Pagar_Ganador{
         // premiado cambia cuando se premia un ticket
         // verificado cambia cuando ya se reviso y no esta premiado verificado=1
         $sql = "SELECT * FROM ticket WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'";
+
+        echo "sql".$sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
 		return  $result;
 
+	}
+// OJO CABLEADO PARA SALVAR LA PATRIA
+	public function GetListadosegunVariable2($fecha_resultado,$conexion_abajo,$fecha_actual){
+		//echo $fecha_resultado;
+		//Preparacion del query
+		//$sql = "SELECT * FROM ticket WHERE status='1' AND pagado=0 AND ".$parametro_where;
+		// deberiamos colocar un parametro premiado=0, verificado=0
+		// premiado cambia cuando se premia un ticket
+		// verificado cambia cuando ya se reviso y no esta premiado verificado=1
+		
+		if($fecha_resultado<$fecha_actual)
+		$sql = "SELECT * FROM ticket WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'
+				";
+		else
+		$sql="	SELECT * FROM ticket_diario WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'";
+		
+		
+		echo $sql;
+		$result= $this->vConexion->ExecuteQuery($sql);
+		return  $result;
+	
 	}
 	
 	/**
@@ -335,6 +358,25 @@ class Pagar_Ganador{
 		return $this->vConexion->ExecuteQuery($sql);
 
 	}
+	// CABLEADO PARA SALVAR LA PATRAIA
+	/**
+	 * Actualiza Datos del ticket en detalle ticket  a premiadoo 1.
+	 * @param string $id_detalle_ticket
+	 */
+	public function PremiarDetalleTicket2($id_detalle_ticket, $total_premiado){
+		//Preparacion del query
+		$sql = "UPDATE `detalle_ticket` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_detalle_ticket='".$id_detalle_ticket."'";
+		echo "<br>".$sql;
+		$result= mysql_query($sql);
+		//print_r($result);
+	//	echo "<br>result".$result;
+		if(mysql_affected_rows()==0){
+			$sql = "UPDATE `detalle_ticket_diario` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_detalle_ticket_diario='".$id_detalle_ticket."'";
+			$result= mysql_query($sql);
+			echo "detalle_ticket_diario". $sql;
+		}
+		return $result;
+	}
 	
 	/**
 	 * Quitar Premios a Ticket
@@ -344,9 +386,14 @@ class Pagar_Ganador{
 	public function DespremiarTicket($fecha_hora){
 	
 		//Preparacion del query
-		$sql = "UPDATE `ticket` SET `premiado`=0,`total_premiado`='0' WHERE `fecha_hora` LIKE '%".$fecha_hora."%'";
+		$fecha_actual=date('Y-m-d');
+		if($fecha_hora<$fecha_actual)
+		$tabla="ticket";
+		else
+		$tabla="ticket_diario";
+		$sql = "UPDATE `".$tabla."` SET `premiado`=0,`total_premiado`='0' WHERE `fecha_hora` LIKE '%".$fecha_hora."%'";
 		if($this->vConexion->ExecuteQuery($sql)  or die ('Hubo un error con el registro de los datos:' .mysql_error())){
-		$sql = "UPDATE `detalle_ticket` SET `premiado`='0',`total_premiado`='0' WHERE `fecha_sorteo` LIKE '%".$fecha_hora."%'";
+		$sql = "UPDATE `detalle_".$tabla."` SET `premiado`='0',`total_premiado`='0' WHERE `fecha_sorteo` LIKE '%".$fecha_hora."%'";
 			return $this->vConexion->ExecuteQuery($sql) or die ('Hubo un error con el registro de los datos:' .mysql_error()); 
 		}
 		else
@@ -442,6 +489,132 @@ class Pagar_Ganador{
 
                 return $result;
 
+	}
+
+
+// CABLEADO PAR SALVAR LA PATRIA
+	  /**
+	 * Busqueda de detalle de Tickets Segun id_ticket
+	 *
+	 * @param string $id_ticket
+	 */
+	public function GetAllDetalleTciket2($id_ticket){
+	
+		//Preparacion del query
+		$sql = "SELECT *
+                        FROM detalle_ticket DT
+                        WHERE id_ticket='".$id_ticket."'";
+		$result= mysql_query($sql);
+		$total_registros=  $this->vConexion->GetNumberRows($result);
+		if($total_registros==0){
+			$sql = "SELECT *
+                        FROM detalle_ticket_diario DT
+                        WHERE id_ticket_diario='".$id_ticket."'";
+			$result=  $this->vConexion->ExecuteQuery($sql);
+		}	
+		return $result;
+	}
+
+	// CABLEADO PARA SALVAR LA PATRIA
+
+	/**
+	 * Actualiza Datos del ticket en premiadoo 1 y el monto total del premio
+	 * @param string $id_ticket
+	 * @param string $total_premiado
+	 */
+	public function PremiarTicket2($id_ticket, $total_premiado){
+	
+		//Preparacion del query
+		$sql = "UPDATE `ticket` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_ticket='".$id_ticket."'";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		if(mysql_affected_rows()==0){
+			$sql = "UPDATE `ticket_diario` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_ticket_diario='".$id_ticket."'";
+			$result= $this->vConexion->ExecuteQuery($sql);
+		}
+		return $result;
+		
+	}
+
+// CABLEADO PARA SALVAR LA PATRIA
+	/**
+	 * Quitar Premios a Ticket
+	 * @param array $resultados, $conexion_abajo
+	 * @return boolean, array
+	 */
+	public function DespremiarTicket2($resultados){
+		$fecha_ante='';
+		$fecha_ante2='';
+		$fecha_actual=date('Y-m-d');
+		foreach ($resultados as $key => $rs){
+			$aux=preg_split("/\//",$key);
+			
+			if($fecha_ante2=='' AND $fecha_actual==$aux[1])
+			$sql2 = "SELECT * FROM `detalle_ticket_diario` WHERE `premiado`=1 AND (`fecha_sorteo` LIKE '%".$aux[1]."%' AND (`id_sorteo` =".$aux[0];
+			else
+			if($aux[1]==$fecha_ante2 AND $fecha_actual==$aux[1])
+			$sql2.=" OR `id_sorteo` = ".$aux[0];
+			elseif($fecha_actual==$aux[1])
+			$sql2.=") OR (`fecha_sorteo` LIKE '%".$aux[1]."%' AND `id_sorteo` =".$aux[0];
+			if($fecha_ante=='' AND $fecha_actual!=$aux[1])
+			$sql = "SELECT * FROM `detalle_ticket` WHERE `premiado`=1 AND (`fecha_sorteo` LIKE '%".$aux[1]."%' AND (`id_sorteo` =".$aux[0];
+			else
+			if($aux[1]==$fecha_ante AND $fecha_actual!=$aux[1])
+			$sql.=" OR `id_sorteo` = ".$aux[0];
+			elseif($fecha_actual!=$aux[1])
+			$sql.=") OR (`fecha_sorteo` LIKE '%".$aux[1]."%' AND `id_sorteo` =".$aux[0];
+			if($fecha_actual!=$aux[1])
+			$fecha_ante=$aux[1];
+			if($fecha_actual==$aux[1])
+			$fecha_ante2=$aux[1];
+		}
+		if(!empty($sql))
+		$sql.="))";
+		if(!empty($sql2))
+		$sql2.="))";
+		
+	/*	echo "<br> SQL TICKET".$sql;
+		echo "<br> SQL TICKET_DIARIO".$sql2;
+		*/
+		if(!empty($sql))
+		{
+		$result=mysql_query($sql);
+		while($row=mysql_fetch_array($result)){
+			$sql = "SELECT * FROM `ticket` WHERE `id_ticket` = ".$row['id_ticket'];
+			$result2=mysql_query($sql);
+			while($row2=mysql_fetch_array($result2)){
+				$total_premiado=$row2['total_premiado']-$row['total_premiado'];
+				if($total_premiado==0)
+					$premiado=0;
+				else
+					$premiado=1;
+				$sql = "UPDATE `ticket` SET `premiado`=".$premiado.", `total_premiado`=".$total_premiado." WHERE `id_ticket`=".$row['id_ticket'];
+				mysql_query($sql);
+				$sql = "UPDATE `detalle_ticket` SET `premiado`=0, `total_premiado`=0 WHERE `id_detalle_ticket`=".$row['id_detalle_ticket'];
+				mysql_query($sql);
+			}
+		}
+		}
+		
+		
+		if(!empty($sql2))
+		{
+		$result=mysql_query($sql2);
+		while($row=mysql_fetch_array($result)){
+			$sql = "SELECT * FROM `ticket_diario` WHERE `id_ticket_diario` = ".$row['id_ticket_diario'];
+			$result2=mysql_query($sql);
+			while($row2=mysql_fetch_array($result2)){
+				$total_premiado=$row2['total_premiado']-$row['total_premiado'];
+				if($total_premiado==0)
+					$premiado=0;
+				else
+					$premiado=1;
+				$sql = "UPDATE `ticket_diario` SET `premiado`=".$premiado.", `total_premiado`=".$total_premiado." WHERE `id_ticket_diario`=".$row['id_ticket_diario'];
+				mysql_query($sql);
+				$sql = "UPDATE `detalle_ticket_diario` SET `premiado`=0, `total_premiado`=0 WHERE `id_detalle_ticket_diario`=".$row['id_detalle_ticket_diario'];
+				mysql_query($sql);
+			}
+		}
+		}
 	}
 }		
 ?>
