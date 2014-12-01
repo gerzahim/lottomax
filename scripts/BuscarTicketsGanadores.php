@@ -71,10 +71,12 @@ while(strtotime($fecha_hora)<=strtotime($fecha_hasta) ){
 		$id_zodiacal[]=$row['zodiacal'];
 	}
 	$fecha_actual=date('Y-m-d');
+	$result=$obj_modelo->GetRelacionPagos($obj_conexion);
+	
 	while($row=$obj_conexion->GetArrayInfo($result)){
 		$relacion_pago[$row['id_tipo_jugada']][$row['id_agencia']]=$row['monto'];
 	}
-	echo print_r($relacion_pago);
+	//echo print_r($relacion_pago);
 	$result= $obj_modelo->GetListadosegunVariable2($fecha_hora,$obj_conexion,$fecha_actual);
     If ($obj_conexion->GetNumberRows($result)>0){
     	for($i=0;$i<count($resultados);$i++){
