@@ -132,7 +132,7 @@ if($numero_registros==0){
 if($numero_registros>0){
 	while ($row = mysql_fetch_array($result)){
 		$error=0;
-		$consulta_arriba_ticket="UPDATE ticket SET status=0, fecha_hora_anulacion='".$row['fecha_hora_anulacion']."', taquilla_anulacion=".$row['taquilla_anulacion']." WHERE id_ticket= ".$row['id_'.$insert];
+		$consulta_arriba_ticket="UPDATE ticket SET status=0, fecha_hora_anulacion='".$row['fecha_hora_anulacion']."', taquilla_anulacion=".$row['taquilla_anulacion']." WHERE id_ticket='".$row['id_'.$insert]."'";
 		//$consulta_arriba_ticket="UPDATE ticket SET status=0 WHERE id_ticket= ".$row['id_'.$insert];
 		if (mysql_query("SET AUTOCOMMIT=0;",$conexion_arriba))//desactivar el modo de autoguardado
 		{
@@ -145,7 +145,7 @@ if($numero_registros>0){
 				{
 					echo "<br>Modifico el Ticket Arriba";
 					//echo "<br> Consulta Arriba ".$consulta_arriba_ticket;
-					$consulta_abajo_ticket="UPDATE ".$insert." SET subido=1 WHERE subido=2 AND id_".$insert."=".$row['id_'.$insert];
+					$consulta_abajo_ticket="UPDATE ".$insert." SET subido=1 WHERE subido=2 AND id_".$insert."='".$row['id_'.$insert]."'";
 					if (mysql_query($consulta_abajo_ticket,$conexion_abajo)){
 /*						echo "<br>Consulta Abajo: ".$consulta_abajo_ticket;
 						echo "<br>Consulta Arriba: ".$consulta_arriba_ticket;*/
