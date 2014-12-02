@@ -936,14 +936,14 @@ class Ventas{
            	$id_agencia=self::getIdAgencia();
             $taquilla=$_SESSION["taquilla"];
             
-            $sql = "SELECT id_ticket_diario FROM ticket_diario WHERE taquilla  = ".$taquilla." ORDER BY fecha_hora DESC limit 1";
+            $sql = "SELECT id_ticket_diario FROM ticket_diario WHERE taquilla  = ".$taquilla." ORDER BY fecha_hora DESC, id_ticket_diario DESC limit 1";
             $ticket="ticket_diario";
            /* echo $sql;
             exit;*/
             $result= $this->vConexion->ExecuteQuery($sql);
             
             if ($this->vConexion->GetNumberRows($result)==0){
-            	$sql = "SELECT id_ticket FROM ticket WHERE taquilla  = ".$taquilla." ORDER BY fecha_hora DESC limit 1";
+            	$sql = "SELECT id_ticket FROM ticket WHERE taquilla  = ".$taquilla." ORDER BY fecha_hora DESC, id_ticket DESC limit 1";
             	$ticket="ticket";
             	$result= $this->vConexion->ExecuteQuery($sql);
             }
