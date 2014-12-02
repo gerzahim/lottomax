@@ -48,7 +48,9 @@ switch (ACCION){
 		$lista= $obj_modelo->GetPremiado($id_ticket);
 		$total_registros= $obj_conexion->GetNumberRows($lista);
 		if( $total_registros >0 ){
-				$row= $obj_conexion->GetArrayInfo($lista);
+			$row= $obj_conexion->GetArrayInfo($lista);
+			if($row['pagado']==0)
+			{
 				$fecha_ticket= strtotime(substr ($row['fecha_hora'],0,10));
 				$fecha_actual =strtotime(date('Y-m-d'));
 /*                //Detectando el Proximo Domingo
@@ -59,7 +61,7 @@ switch (ACCION){
                     $tiempo_vigencia=$tiempo_vigencia+1;
                     $fecha_vencido_ticket = strtotime("+$tiempo_vigencia days", strtotime($fecha_ticket));
                    }else{*/
-                		$fecha_vencido_ticket = strtotime("+$tiempo_vigencia days", strtotime($row['fecha_hora']));
+				$fecha_vencido_ticket = strtotime("+$tiempo_vigencia days", strtotime($row['fecha_hora']));
 //                   }                                
 					// Verificamos que el ticket no este vencido...
                     if ($fecha_vencido_ticket >= $fecha_actual) {
@@ -105,6 +107,12 @@ switch (ACCION){
                 	$_SESSION['mensaje']= $mensajes['ticket_vencido'];
                     header('location:'.$_SESSION['Ruta_Lista']);
 				}
+			}
+			else
+			{
+				$_SESSION['mensaje']= $mensajes['ticket_premiado'];
+				header('location:'.$_SESSION['Ruta_Lista']);
+			}
 			
 		}
 		else{

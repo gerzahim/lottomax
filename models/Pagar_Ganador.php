@@ -87,13 +87,14 @@ class Pagar_Ganador{
 		// deberiamos colocar un parametro premiado=0, verificado=0
 		// premiado cambia cuando se premia un ticket
 		// verificado cambia cuando ya se reviso y no esta premiado verificado=1
-		$sql = "SELECT * FROM ticket_diario WHERE status='1' AND pagado=0 AND id_ticket_diario=".$id_ticket." AND premiado=1" ;
-		// echo $sql;
+		$sql = "SELECT * FROM ticket_diario WHERE status='1' AND premiado=1 AND id_ticket_diario='".$id_ticket."'";
+		/* echo $sql;
+		 exit;*/
 		$result= $this->vConexion->ExecuteQuery($sql);
 		$total_registros= $this->vConexion->GetNumberRows($result);
 		if($total_registros==0)
 		{
-			$sql = "SELECT * FROM ticket WHERE status='1' AND pagado=0 AND id_ticket=".$id_ticket." AND premiado=1" ;
+			$sql = "SELECT * FROM ticket WHERE status='1' AND premiado=1 AND id_ticket='".$id_ticket."' " ;
 			$result= $this->vConexion->ExecuteQuery($sql);
 		}
 		return  $result;
