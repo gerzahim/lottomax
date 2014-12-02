@@ -155,6 +155,8 @@ if( $result= $obj_modelo->GetDetalleTicketByIdticket($id_ticket) ){
 	//Numeros jugados NoZodiacal
 	$numero_jugadas=$obj_conexion->GetNumberRows($result);
 	while($row= $obj_conexion->GetArrayInfo($result)){
+		if($row['monto']!=0)
+		{	
 		if($row['id_zodiacal']==0){
 			$combinacion=$row['numero']." x ".$row['monto'];
 			$ticket_completo[]=$row['id_sorteo']."x".$row['numero']." x ".$row['monto'];
@@ -172,6 +174,7 @@ if( $result= $obj_modelo->GetDetalleTicketByIdticket($id_ticket) ){
 		//Guardar todos las combinaciones Unicas de Numero y Monto 14-1.00
 		if(!in_array($combinacion, $combinacionunica) )
 			$combinacionunica[]=$combinacion;
+		}
 	}// fin de while
 	// Creamos un array General $combinacion_ticket
 	// donde el key es la combinacion de ['numero x monto']
@@ -275,29 +278,17 @@ $data.="</table>";
 
 // Obtenemos los datos de la taquilla
 $ida_taquilla= $obj_modelo->GetIdTaquillabyNumero($id_taquilla);
-
 //$lineas_saltar_despues= $obj_modelo->lineas_saltar_despues($ida_taquilla);
-
-
 //Determinar si va a imprimir incompletos y Agotados
 $info_impresora= $obj_modelo->GetDatosImpresora($ida_taquilla);
-
-$lineas_saltar_despues=$info_impresora["lineas_saltar_despues"];
-
-
-//Determinar si va a imprimir incompletos y Agotados
-$info_impresora= $obj_modelo->GetDatosImpresora($ida_taquilla);
-
 $lineas_saltar_despues=$info_impresora["lineas_saltar_despues"];
 $ver_numeros_incompletos=$info_impresora["ver_numeros_incompletos"];
 $ver_numeros_agotados=$info_impresora["ver_numeros_agotados"];
-
 //INCOMPLETOS Y AGOTADOS
-/*
 $sorteosenticket=array();
 $combinacionunica=array();
 $ticket_completo=array();
-$result2= $obj_modelo->GetNumerosIncompletosTransaccional($id_taquilla);
+$result2= $obj_modelo->GetNumerosIncompletoTicket($id_ticket);
 $total_incompletos=$obj_conexion->GetNumberRows($result2);
 if($total_incompletos>0){
 	$data.=" <table width='260' cellpadding='0' cellspacing='0' border='0' >";
@@ -421,7 +412,7 @@ if($total_incompletos>0){
 
 
 	
-*/
+
 
 
 
