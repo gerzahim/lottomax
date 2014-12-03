@@ -308,7 +308,7 @@ class Ventas{
 		//Preparacion del query
 		$sql = "SELECT * FROM ticket_diario TD
 				INNER JOIN detalle_ticket_diario DTD ON DTD.id_ticket_diario = TD.id_ticket_diario
-				WHERE DTD.monto=0 AND TD.id_ticket_diario= '".$id_ticket."'";
+				WHERE DTD.monto_faltante>0 AND TD.id_ticket_diario= '".$id_ticket."'";
 		//$sql.= "ORDER BY incompleto, numero, id_sorteo ASC";
 		//echo $sql;
 		return $this->vConexion->ExecuteQuery($sql);
