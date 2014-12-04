@@ -96,7 +96,7 @@ class BajadaController{
 		// premiado cambia cuando se premia un ticket
 		// verificado cambia cuando ya se reviso y no esta premiado verificado=1
 		echo "Fecha resulta".$fecha_resultado;
-		echo "Fecha actual".$fecha_resultado;
+		echo "Fecha actual".$fecha_actual;
 		
 		if($fecha_resultado==$fecha_actual)
 			$sql="	SELECT * FROM ticket_diario WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'";
