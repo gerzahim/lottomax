@@ -85,6 +85,7 @@ if($numero_registros>0)
 		$error=1;
 	//	echo "error".$error;
 	if($error==1){
+		echo "Hubo Error";
 		mysql_query("ROLLBACK;",$conexion_arriba);
 		mysql_query("ROLLBACK;",$conexion_abajo); //garantizo que se haga el retroceso de las operaciones	
 	}
@@ -139,7 +140,7 @@ if($result= mysql_query($sql,$conexion_arriba)){
 function ExisteResultado ($id_sorteo, $zodiacal, $numero, $fecha_hora,$conexion_abajo){
 	$obj_modelo= new BajadaController();
 	$result1=$obj_modelo->GetResultadosRepetidos($id_sorteo, $zodiacal, $numero, $fecha_hora,$conexion_abajo);
-	echo "<br> Hay Tantos".mysql_num_rows($result1);
+	//echo "<br> Hay Tantos".mysql_num_rows($result1);
 	if(mysql_num_rows($result1)>0)
 	return false;
 	else
