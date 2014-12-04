@@ -103,7 +103,7 @@ class BajadaController{
 		$sql="	SELECT * FROM ticket_diario WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'";
 		
 		
-		//echo $sql;
+		echo "<br>".$sql;
 		$result= mysql_query($sql,$conexion_abajo);
 		return  $result;
 	
