@@ -175,9 +175,14 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 			$ticket_premiado=0;
 			while ($roww= mysql_fetch_array($result)){
 				if($fh<$fecha_actual)
+				{echo "paso ticket";
 				$id_ticket=$roww["id_ticket"];
-				else
+				}else
+				{
+					echo "paso diario";
 				$id_ticket=$roww["id_ticket_diario"];
+				}
+				
 		//		$fecha_ticket= substr($roww["fecha_hora"],0 , -9);
 				$resultDT = $obj_modelo->GetAllDetalleTciket($id_ticket,$obj_conexion);
 				//revisamos la tabla de detalle ticket y comparamos con los resultados
