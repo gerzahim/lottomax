@@ -162,6 +162,7 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 	$relacion_pago=array();
 	$result=$obj_modelo->GetRelacionPagos($obj_conexion);
 	$fecha_actual=date('Y-m-d');
+	echo "<br> Fecha Actual".$fecha_actual."<br>";
 	while($row=mysql_fetch_array($result)){
 		$relacion_pago[$row['id_tipo_jugada']][$row['id_agencia']]=$row['monto'];
 	}
