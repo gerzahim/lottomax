@@ -165,7 +165,7 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 	while($row=mysql_fetch_array($result)){
 		$relacion_pago[$row['id_tipo_jugada']][$row['id_agencia']]=$row['monto'];
 	}
-	print_r($relacion_pago);
+	//print_r($relacion_pago);
 	echo "Comenzo a pagar";
 	foreach ($fecha_hora as $fh){
 		$result= $obj_modelo->GetListadosegunVariable($fh,$obj_conexion,$fecha_actual);
