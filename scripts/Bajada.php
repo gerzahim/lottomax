@@ -72,7 +72,7 @@ if($numero_registros>0)
 			if (mysql_query("BEGIN;",$conexion_arriba)) //dar inicio a la transacción
 				foreach ($arreglo as $id){
 					$sql="DELETE FROM resultado_bajado_agencia WHERE id_resultado=".$id." AND id_agencia=".$id_agencia;
-					echo "<br>".$sql;
+					//echo "<br>".$sql;
 					if (mysql_query($sql,$conexion_arriba)){
 						echo "<br>Elimino Arriba";
 					}
