@@ -98,11 +98,11 @@ class BajadaController{
 		echo "Fecha resulta".$fecha_resultado;
 		echo "Fecha actual".$fecha_resultado;
 		
-		if($fecha_resultado<$fecha_actual)
-		$sql = "SELECT * FROM ticket WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'
-				";
+		if($fecha_resultado==$fecha_actual)
+			$sql="	SELECT * FROM ticket_diario WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'";
 		else
-		$sql="	SELECT * FROM ticket_diario WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'";
+			$sql = "SELECT * FROM ticket WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'";
+		
 		
 		
 		echo "<br>".$sql;
