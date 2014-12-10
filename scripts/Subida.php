@@ -4,7 +4,7 @@ set_time_limit( 3600);
 $conexion_abajo = mysql_connect("localhost" , "root" , "secreta");
 mysql_select_db("lottomax",$conexion_abajo);
 $conexion_arriba = mysql_connect("lottomaxserver01.kmdns.net" , "lottomaxuser" , "voil4#2oo6",true);
-mysql_select_db("lottomax",$conexion_arriba);
+mysql_select_db("lottomax2",$conexion_arriba);
 /*$conexion_arriba = mysql_connect("www.db4free.net:3306" , "lottomaxuser" , "secreta7");
 mysql_select_db("lottomaxdb",$conexion_arriba);
 //Buscamos los tickets que no han sido subido abajo.
@@ -88,19 +88,29 @@ if($numero_registros>0){
 	$error=1;
 	if($error==0)
 	{	
-		// Busco los ticket abajo que acabo de subir.
-		if (mysql_query("SET AUTOCOMMIT=0;",$conexion_abajo))//desactivar el modo de autoguardado	
+		$sql="UPDATE ".$insert." SET subido=1 WHERE subido=0 AND (";
+		foreach ($arreglo as $id)
+			$sql.="id_".$insert." = ".$id." OR ";
+		$sql = substr($sql, 0, -3);
+		$sql.=")";
+		if (mysql_query("SET AUTOCOMMIT=0;",$conexion_abajo))//desactivar el modo de autoguardado
+		{
+			echo "<br>Desactivo el modo de autoguardado";
 			if (mysql_query("BEGIN;",$conexion_abajo)) //dar inicio a la transacción
-				foreach ($arreglo as $id)
+			{
+				echo "<br>Inicia la conexion";
+				if (mysql_query($sql,$conexion_abajo))
 				{
-					$sql="UPDATE ".$insert." SET subido=1 WHERE subido=0 AND id_".$insert."=".$id;
-					if (mysql_query($sql,$conexion_abajo)){}
-					else
-					$error=1;						
+					echo "<br>Update Ticket Abajo";
+					$error=0;
 				}
+				else
+					$error=1;
+			}
 			else
-			$error=1;
-			else
+				$error=1;
+		}
+		else
 			$error=1;
 	}
 	if($error==1)
