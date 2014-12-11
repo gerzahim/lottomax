@@ -393,6 +393,7 @@ class Pagar_Ganador{
 		else
 		$tabla="ticket_diario";
 		$sql = "UPDATE `".$tabla."` SET `premiado`=0,`total_premiado`='0' WHERE `fecha_hora` LIKE '%".$fecha_hora."%'";
+		echo "<BR>".$sql."<br>";
 		if($this->vConexion->ExecuteQuery($sql)  or die ('Hubo un error con el registro de los datos:' .mysql_error())){
 		$sql = "UPDATE `detalle_".$tabla."` SET `premiado`='0',`total_premiado`='0' WHERE `fecha_sorteo` LIKE '%".$fecha_hora."%'";
 			return $this->vConexion->ExecuteQuery($sql) or die ('Hubo un error con el registro de los datos:' .mysql_error()); 
