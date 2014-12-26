@@ -316,8 +316,12 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 	
 //	print_r($relacion_pago);
 	$result= $obj_modelo->GetListadosegunVariable($fecha_hora);
-//	$fecha_resultado= strtotime(substr ($fecha_hora,0,10));
+	$fecha_resultado= strtotime(substr ($fecha_hora,0,10));
 	$fecha_actual =strtotime(date('Y-m-d'));
+	if($fecha_resultado==$fecha_actual)
+		$ticket="ticket_diario";
+	else
+		$ticket="ticket";
 	If($obj_conexion->GetNumberRows($result)>0){
 		$i=0; $j=0;
 		$ticket_premiado=0;
@@ -376,7 +380,7 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 						/*echo "<br> Id_agencia".$roww['id_agencia'];
 						echo "<br> monto".$monto_pago;
 						echo "<br> monto total".$monto_total;*/
-						$obj_modelo->PremiarDetalleTicket($rowDT['id_detalle_ticket'], $monto_pago);
+						$obj_modelo->PremiarDetalleTicket($rowDT['id_detalle_ticket'], $monto_pago,$ticket);
 						$sw=1;
 					}
 				}
@@ -389,11 +393,11 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 					echo "<br> monto".$monto_pago;
 					echo "<br> monto total".$monto_total;*/
 					$sw=1;
-					$obj_modelo->PremiarDetalleTicket($rowDT['id_detalle_ticket'], $monto_pago);
+					$obj_modelo->PremiarDetalleTicket($rowDT['id_detalle_ticket'], $monto_pago,$ticket);
 				}
 			}
 			if($sw==1)
-				$obj_modelo->PremiarTicket($id_ticket,$monto_total);
+				$obj_modelo->PremiarTicket($id_ticket,$monto_total,$ticket);
 		}
 	}
 }
