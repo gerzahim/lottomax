@@ -130,14 +130,11 @@ class Cargar_Resultados{
 	 * Actualiza Datos del ticket en detalle ticket  a premiadoo 1.
 	 * @param string $id_detalle_ticket
 	 */
-	public function PremiarDetalleTicket($id_detalle_ticket, $total_premiado){
+	public function PremiarDetalleTicket($id_detalle_ticket, $total_premiado,$param){
 	
-		$sql = "UPDATE `detalle_ticket` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_detalle_ticket='".$id_detalle_ticket."'";
+		$sql = "UPDATE `detalle_".$param."` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_detalle_".$param."='".$id_detalle_ticket."'";
+	//	echo "<br>SQL ".$sql;
 		$result=$this->vConexion->ExecuteQuery($sql);
-		if(mysql_affected_rows()==0){
-			$sql = "UPDATE `detalle_ticket_diario` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_detalle_ticket_diario='".$id_detalle_ticket."'";
-			$result=$this->vConexion->ExecuteQuery($sql);
-		}
 		return $result;
 	}
 	/**
@@ -289,15 +286,12 @@ class Cargar_Resultados{
 	 * @param string $id_ticket
 	 * @param string $total_premiado
 	 */
-	public function PremiarTicket($id_ticket, $total_premiado){
+	public function PremiarTicket($id_ticket, $total_premiado,$param){
 	
 		//Preparacion del query
-		$sql = "UPDATE `ticket` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_ticket='".$id_ticket."'";
+		$sql = "UPDATE `".$param."` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_".$param."='".$id_ticket."'";
 		$result=$this->vConexion->ExecuteQuery($sql);
-		if(mysql_affected_rows()==0){
-			$sql = "UPDATE `ticket_diario` SET `premiado`='1', `total_premiado`='".$total_premiado."' WHERE id_ticket_diario='".$id_ticket."'";
-			$result=$this->vConexion->ExecuteQuery($sql);
-		}
+	//	echo "SQL TICKET ".$sql;
 		return $result;
 	}
 
