@@ -10,18 +10,15 @@ require_once('.'.$obj_config->GetVar('ruta_config').'mensajes.php');
 // Clase Generica
 require('.'.$obj_config->GetVar('ruta_libreria').'Generica.php');
 $obj_generico= new Generica();
-
 // Conexion a la bases de datos
 require('.'.$obj_config->GetVar('ruta_libreria').'Bd.php');
 $obj_conexion= new Bd();
 if( !$obj_conexion->ConnectDataBase($obj_config->GetVar('host'), $obj_config->GetVar('data_base'), $obj_config->GetVar('usuario_db'), $obj_config->GetVar('clave_db')) ){
 	echo "sin_conexion_bd";
 }
-
 // Modelo asignado
 require('.'.$obj_config->GetVar('ruta_modelo').'Pagar_Ganador.php');
 $obj_modelo= new Pagar_Ganador($obj_conexion);
-
 $id_detalle_ticket[]="";
 $id_tickets[]="";
 $totales[]="";
@@ -80,10 +77,7 @@ while(strtotime($fecha_hora)<=strtotime($fecha_hasta) ){
 		echo "<br>Monto ".$row['monto'];*/
 		$relacion_pago[$row['id_tipo_jugada']][$row['id_agencia']]=$row['monto'];
 	}
-	
 	/*echo "<br>";
-	
-	
 	echo print_r($relacion_pago);
 	echo "<br>";
 	exit;*/
@@ -157,7 +151,4 @@ while(strtotime($fecha_hora)<=strtotime($fecha_hasta) ){
 	$fecha_hora = strtotime ( '+1 day' , strtotime ( $fecha_hora));
 	$fecha_hora=date('Y-m-d',$fecha_hora );
 }
-    	   
-    	    	
-
 ?>
