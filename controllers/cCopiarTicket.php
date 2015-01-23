@@ -160,7 +160,9 @@ switch (ACCION){
 					}
 					// Verificamos que el sorteo este activo
 					$hora_sorteo= $obj_modelo->GetHoraSorteo($id_sorteo_new);
-					$hora_sorteo= strtotime($hora_sorteo);					
+					$hora_sorteo= strtotime($hora_sorteo);	
+					//Verificando que el sorteo este actvo para ese día.
+					if($obj_modelo->GetSorteobyDia($id_sorteo_new))
 					//Verificando si el sorteo ya esta cerrado
 					if ($hora_actualMas < $hora_sorteo){
 						// Verifica si el sorteo es Zodiacal
@@ -188,7 +190,6 @@ switch (ACCION){
 					}
 			
 				}// fin de while
-				
 				if($bandera==1){
 					echo "<script type='text/javascript'>";
 					echo "alert('Algunos de los sorteos han sido cerrados')";
@@ -216,12 +217,9 @@ switch (ACCION){
 		}// fin foreach		
 
 		break;
-		
 	case 'looking_serial':
-
 		// Ruta regreso
 		$obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Search']);
-
 		$id_ticket= $obj_generico->CleanText($_GET['id_ticket']);
 		$serial= $obj_generico->CleanText($_GET['serial']);
                 $fecha_actual=date('Y-m-d');

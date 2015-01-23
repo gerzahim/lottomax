@@ -10,52 +10,42 @@
 
 // Vista asignada
 $obj_xtpl->assign_file('contenido', $obj_config->GetVar('ruta_vista').'anular_ticket'.$obj_config->GetVar('ext_vista'));
-
 // Modelo asignado
 require($obj_config->GetVar('ruta_modelo').'AnularTicket.php');
-
 $obj_modelo= new AnularTicket($obj_conexion);
+$tipo_servidor=$obj_modelo->GetTipoServidor();
+if($tipo_servidor==1 OR $tipo_servidor==2)
+$ticket="ticket";
+else
+$ticket="ticket_diario";
+
 $obj_date= new Fecha();
-
-
 switch (ACCION){
-
         // Para la busqueda
 	case 'search':
-
 		// Ruta actual
 		$_SESSION['Ruta_Search']= $obj_generico->RutaRegreso();
-
 		// Ruta regreso
 		$obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Lista']);
-
-                
 		// Parseo del bloque
 		$obj_xtpl->parse('main.contenido.busqueda');
 		break;
-
         // Para la busqueda
 	case 'looking':
-
 		// Ruta regreso
 		$obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Search']);
-
 		$id_ticket= $obj_generico->CleanText($_GET['id_ticket']);
 		$serial= $obj_generico->CleanText($_GET['serial']);
-                
-                $where = "";
+		$where = "";
 		if(!$obj_generico->IsEmpty($id_ticket)){
-                    $where = $where. " id_ticket='".$id_ticket."' AND " ;
-                }
-
-                if(!$obj_generico->IsEmpty($serial)){
-                     $where = $where. "serial='".$serial."' AND ";
-                }
-
-                $where = substr($where, 0,strlen($where) - 5);
-                
+        	$where = $where. "id_".$ticket."='".$id_ticket."' AND " ;
+		}
+		if(!$obj_generico->IsEmpty($serial)){
+        	$where = $where. "serial='".$serial."' AND ";
+		}
+		$where = substr($where, 0,strlen($where) - 5);
 		// Busca el listado de la informacion.
-		$lista= $obj_modelo->GetListadosegunVariable($where);
+		$lista= $obj_modelo->GetListadosegunVariable($where,$tipo_servidor);
 		$total_registros= $obj_conexion->GetNumberRows($lista);
 		if( $total_registros >0 ){
 			$i=1;
@@ -66,11 +56,10 @@ switch (ACCION){
 				else{
 					$obj_xtpl->assign('estilo_fila', 'odd');
 				}
-
 				// Asignacion de los datos
-                                $obj_xtpl->assign('id_ticket', $obj_generico->CleanTextDb($row["id_ticket_diario"]));
-                                $obj_xtpl->assign('fecha_hora', $obj_date->changeFormatDateI($obj_generico->CleanTextDb($row["fecha_hora"]),1) );
-                                $obj_xtpl->assign('total_ticket', $obj_generico->CleanTextDb($row["total_ticket"]));
+				$obj_xtpl->assign('id_ticket', $obj_generico->CleanTextDb($row["id_".$ticket]));
+                $obj_xtpl->assign('fecha_hora', $obj_date->changeFormatDateI($obj_generico->CleanTextDb($row["fecha_hora"]),1) );
+                $obj_xtpl->assign('total_ticket', $obj_generico->CleanTextDb($row["total_ticket"]));
 
 				// Parseo del bloque de la fila
 				$obj_xtpl->parse('main.contenido.lista_anular_ticket.lista');
@@ -97,7 +86,7 @@ switch (ACCION){
                 
 		$id_ticket = $_GET['id'];
                 
-                $fecha_ticket= strtotime($obj_modelo->GetFechaTicket($id_ticket));
+                $fecha_ticket= strtotime($obj_modelo->GetFechaTicket($id_ticket,$tipo_servidor));
 
                 $minutos_anulacion=$obj_modelo->MinutosAnulacion();
                 $fecha_hora_actual= strtotime(date('Y-m-d H:i:s'));
@@ -108,12 +97,12 @@ switch (ACCION){
                 if (($fecha_hora_actual-$fecha_ticket)<=($minutos_anulacion*60) ){
 
                     // Verificamos que los sorteos en el ticket no esten cerrados y que el ticket a eliminar sea de hoy...
-                    if (!$obj_modelo->ValidaSorteosTicket($id_ticket) && $fecha_actual==substr($obj_modelo->GetFechaTicket($id_ticket), 0,10)){
+                    if (!$obj_modelo->ValidaSorteosTicket($id_ticket,$tipo_servidor) && $fecha_actual==substr($obj_modelo->GetFechaTicket($id_ticket,$tipo_servidor), 0,10)){
 
                         // Eliminamos el ticket
-                        if( $obj_modelo->EliminarTicket($id_ticket)){
+                        if( $obj_modelo->EliminarTicket($id_ticket,$tipo_servidor)){
                         	//Reestablecer Incompletos y Agotados
-                        	$obj_modelo->ReestablecerImcompletosyJugados($id_ticket);
+                        	$obj_modelo->ReestablecerImcompletosyJugados($id_ticket,$tipo_servidor);
                                 $_SESSION['mensaje']= $mensajes['ticket_anulado'];
                         }
                         else{
@@ -132,7 +121,7 @@ switch (ACCION){
 		break;
 		
           case 'looking_serial':
-
+          
 		// Ruta regreso
 		$obj_xtpl->assign('ruta_regreso', $_SESSION['Ruta_Search']);
 
@@ -142,7 +131,7 @@ switch (ACCION){
 
                 $where = "";
 		if(!$obj_generico->IsEmpty($id_ticket)){
-                    $where = $where. " id_ticket_diario='".$id_ticket."' AND " ;
+                    $where = $where. " id_".$ticket."='".$id_ticket."' AND " ;
                 }
 
                 if(!$obj_generico->IsEmpty($serial)){
@@ -152,18 +141,18 @@ switch (ACCION){
                 $where = substr($where, 0,strlen($where) - 5);
 
 		// Busca el listado de la informacion.
-		$lista= $obj_modelo->GetListadosegunVariable($where);
+		$lista= $obj_modelo->GetListadosegunVariable($where,$tipo_servidor);
 		$total_registros= $obj_conexion->GetNumberRows($lista);
 		if( $total_registros >0 ){
                     $row= $obj_conexion->GetArrayInfo($lista);
 
                     // Verificamos que los sorteos en el ticket no esten cerrados y que el ticket a eliminar sea de hoy...
-                    if (!$obj_modelo->ValidaSorteosTicket($id_ticket)  && $fecha_actual==substr($obj_modelo->GetFechaTicket($id_ticket), 0,10)){
+                    if (!$obj_modelo->ValidaSorteosTicket($id_ticket,$tipo_servidor)  && $fecha_actual==substr($obj_modelo->GetFechaTicket($id_ticket,$tipo_servidor), 0,10)){
 
                          // Eliminamos el ticket
-                        if( $obj_modelo->EliminarTicket($row['id_ticket_diario'])){
+                        if( $obj_modelo->EliminarTicket($row["id_".$ticket],$tipo_servidor)){
                         	//Reestablecer Incompletos y Agotados
-                        	$obj_modelo->ReestablecerImcompletosyJugados($id_ticket,$row['fecha_hora']);
+                        	$obj_modelo->ReestablecerImcompletosyJugados($id_ticket,$row['fecha_hora'],$tipo_servidor);
                             $_SESSION['mensaje']= $mensajes['info_eliminada'];
                         }
                         else{
@@ -216,10 +205,10 @@ switch (ACCION){
 		if($clave == $clave_sistema){
 
 			// Verificamos que los sorteos en el ticket no esten cerrados y que el ticket a eliminar sea de hoy...
-                    if (!$obj_modelo->ValidaSorteosTicket($id_ticket)  && $fecha_actual==substr($obj_modelo->GetFechaTicket($id_ticket), 0,10)){
+                    if (!$obj_modelo->ValidaSorteosTicket($id_ticket,$tipo_servidor)  && $fecha_actual==substr($obj_modelo->GetFechaTicket($id_ticket,$tipo_servidor), 0,10)){
 
                          // Eliminamos el ticket
-                        if( $obj_modelo->EliminarTicket($id_ticket)){
+                        if( $obj_modelo->EliminarTicket($id_ticket,$tipo_servidor)){
                             $_SESSION['mensaje']= $mensajes['info_eliminada'];
                         }
                         else{
@@ -244,10 +233,8 @@ switch (ACCION){
 				
 	// Muestra el listado		
 	default:
-		
 		// Ruta actual
 		$_SESSION['Ruta_Lista']= $obj_generico->RutaRegreso();
-				
 		// Para la paginacion
 		if(empty($_GET['pg'])){
 			$pag= 1;
@@ -255,9 +242,8 @@ switch (ACCION){
 		else{
 			$pag= $_GET['pg'];
 		}
-		
 		// Busca el listado de la informacion.
-		$lista= $obj_modelo->GetListado($obj_config->GetVar('num_registros'),$pag);
+		$lista= $obj_modelo->GetListado($obj_config->GetVar('num_registros'),$pag,$tipo_servidor);
 		if( $lista['total_registros']>0 ){
 			$i=1;
 			while($row= $obj_conexion->GetArrayInfo($lista['result'])){
@@ -269,11 +255,9 @@ switch (ACCION){
 				}
 				
 				// Asignacion de los datos
-				$obj_xtpl->assign('id_ticket', $obj_generico->CleanTextDb($row["id_ticket_diario"]));
-                               $obj_xtpl->assign('fecha_hora', $obj_date->changeFormatDateI($obj_generico->CleanTextDb($row["fecha_hora"]),1));
-                                   $obj_xtpl->assign('total_ticket', $obj_generico->CleanTextDb($row["total_ticket"]));
-                               
-						
+				$obj_xtpl->assign('id_ticket', $obj_generico->CleanTextDb($row["id_".$ticket]));
+				$obj_xtpl->assign('fecha_hora', $obj_date->changeFormatDateI($obj_generico->CleanTextDb($row["fecha_hora"]),1));
+                $obj_xtpl->assign('total_ticket', $obj_generico->CleanTextDb($row["total_ticket"]));
 				// Parseo del bloque de la fila  
 				$obj_xtpl->parse('main.contenido.lista_anular_ticket.lista');
 				
@@ -287,18 +271,12 @@ switch (ACCION){
 			// Parseo del bloque de la fila
 			$obj_xtpl->parse('main.contenido.lista_anular_ticket.no_lista');
 		}
-	
 		// Datos para la paginacion
 		$paginacion= $obj_generico->paginacion($lista['pagina'],$lista['total_paginas'],$lista['total_registros'],$obj_generico->urlPaginacion());
 		$obj_xtpl->assign('paginacion',$paginacion);
-		
 		// Parseo del bloque
 		$obj_xtpl->parse('main.contenido.lista_anular_ticket');
-		
 		break;
-	
 }
-
 $obj_xtpl->parse('main.contenido');
-
 ?>

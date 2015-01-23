@@ -1,12 +1,9 @@
 <?php
-
 // Archivo de variables de configuracion
 require_once('../config/config.php');
 $obj_config= new ConfigVars();
-
 // Archivo de mensajes
 require_once('.'.$obj_config->GetVar('ruta_config').'mensajes.php');
-
 // Clase Generica
 require('.'.$obj_config->GetVar('ruta_libreria').'Generica.php');
 $obj_generico= new Generica();
@@ -19,6 +16,7 @@ if( !$obj_conexion->ConnectDataBase($obj_config->GetVar('host'), $obj_config->Ge
 // Modelo asignado
 require('.'.$obj_config->GetVar('ruta_modelo').'Pagar_Ganador.php');
 $obj_modelo= new Pagar_Ganador($obj_conexion);
+$tipo_servidor=$obj_modelo->GetTipoServidor();
 $id_detalle_ticket[]="";
 $id_tickets[]="";
 $totales[]="";
@@ -26,7 +24,6 @@ if(isset($_GET['fecha_desde']))
 $fecha_desde=$_GET['fecha_desde'];
 else
 $fecha_desde=date('Y-m-d');
-
 if(isset($_GET['fecha_hasta']))
 $fecha_hasta=$_GET['fecha_hasta'];
 else
@@ -47,7 +44,7 @@ while($row=$obj_conexion->GetArrayInfo($result)){
 }
 while(strtotime($fecha_hora)<=strtotime($fecha_hasta) ){
 	//echo "fech.".$fecha_hora;
-	$res=$obj_modelo->DespremiarTicket($fecha_hora);
+	$res=$obj_modelo->DespremiarTicket($fecha_hora,$tipo_servidor);
 	//echo "<br>REST".$res;
 	if($res)
 	echo "<br>Despremiar Efectivo";
@@ -77,16 +74,15 @@ while(strtotime($fecha_hora)<=strtotime($fecha_hasta) ){
 		echo "<br>Monto ".$row['monto'];*/
 		$relacion_pago[$row['id_tipo_jugada']][$row['id_agencia']]=$row['monto'];
 	}
-	/*echo "<br>";
-	echo print_r($relacion_pago);
-	echo "<br>";
-	exit;*/
-	$result= $obj_modelo->GetListadosegunVariable2($fecha_hora,$obj_conexion,$fecha_actual);
+	$result= $obj_modelo->GetListadosegunVariable2($fecha_hora,$obj_conexion,$fecha_actual,$tipo_servidor);
     If ($obj_conexion->GetNumberRows($result)>0){
     	for($i=0;$i<count($resultados);$i++){
 	    	$ticket_premiado=0;
 	    	$monto_total_ticket=0;
 	    	while ($roww= $obj_conexion->GetArrayInfo($result)){
+	    		if($tipo_servidor==1 OR $tipo_servidor==2)
+	    		$id_ticket=$roww["id_ticket"];
+	    		else	
 	    		if($fecha_hora<$fecha_actual)
 				$id_ticket=$roww["id_ticket"];
 				else
@@ -119,10 +115,13 @@ while(strtotime($fecha_hora)<=strtotime($fecha_hasta) ){
 								$monto_pago=$relacion_pago[5][$roww['id_agencia']]*$rowDT['monto'];
 								echo "<br>Monto Pago: ".$monto_pago;
 			    	    		echo "Pasa";
+			    	    		if($tipo_servidor==1 OR $tipo_servidor==2)
+								$id_detalle_ticket=$rowDT['id_detalle_ticket'];
+			    	    		else 
 			    	    		if($fecha_hora<$fecha_actual)
-							$id_detalle_ticket=$rowDT['id_detalle_ticket'];
-							else
-							$id_detalle_ticket=$rowDT['id_detalle_ticket_diario'];
+								$id_detalle_ticket=$rowDT['id_detalle_ticket'];
+								else
+								$id_detalle_ticket=$rowDT['id_detalle_ticket_diario'];
 			    	    		$monto_total+=$monto_pago;
 			  					$obj_modelo->PremiarDetalleTicket2($id_detalle_ticket, $monto_pago);
 			  					$sw=1;
@@ -132,6 +131,9 @@ while(strtotime($fecha_hora)<=strtotime($fecha_hasta) ){
 							$monto_pago=$relacion_pago[$rowDT['id_tipo_jugada']][$roww['id_agencia']]*$rowDT['monto'];
 							$monto_total+=$monto_pago;
 							echo "Pasa";
+							if($tipo_servidor==1 OR $tipo_servidor==2)
+							$id_detalle_ticket=$rowDT['id_detalle_ticket'];
+							else
 							if($fecha_hora<$fecha_actual)
 							$id_detalle_ticket=$rowDT['id_detalle_ticket'];
 							else
@@ -151,4 +153,7 @@ while(strtotime($fecha_hora)<=strtotime($fecha_hasta) ){
 	$fecha_hora = strtotime ( '+1 day' , strtotime ( $fecha_hora));
 	$fecha_hora=date('Y-m-d',$fecha_hora );
 }
+    	   
+    	    	
+
 ?>
