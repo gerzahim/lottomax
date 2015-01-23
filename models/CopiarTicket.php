@@ -528,6 +528,26 @@ public function GuardarTicketTransaccional($numero,$id_sorteo,$id_zodiacal,$id_t
 	
 	}	
 	
+	/**
+	 * Retorna Si el sorteo esta disponible para jugar ese dia si o no
+	 *
+	 * @param integer $id_sorteo
+	 * @return boolean 1,0
+	 */
+	
+	function GetSorteobyDia($id_sorteo){
+		//AND id_dias_semana LIKE '%".date("w")."%'
+		$sql = "SELECT id_loteria, id_tipo_sorteo FROM sorteos WHERE id_dias_semana LIKE '%".date("w")."%' AND id_sorteo=".$id_sorteo;
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$numero=$this->vConexion->GetNumberRows($result);
+		if($numero<1)
+		return 0;
+		else
+		return 1;
+		//$id_tipo_sorteo= $row["id_tipo_sorteo"];
+			
+	}
+	
 	
 }		
 ?>

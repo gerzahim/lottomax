@@ -18,6 +18,11 @@ require($obj_config->GetVar('ruta_modelo').'Cargar_resultados.php');
 //require($obj_config->GetVar('ruta_modelo').'Pagar_Ganador.php');
 
 $obj_modelo= new Cargar_Resultados($obj_conexion);
+$tipo_servidor=$obj_modelo->GetTipoServidor();
+if($tipo_servidor==1 OR $tipo_servidor==2)
+	$ticket="ticket";
+else
+	$ticket="ticket_diario";
 $obj_date= new Fecha();
 $id_detalle_ticket[]="";
 $id_tickets[]="";
@@ -97,8 +102,8 @@ switch (ACCION){
 			$bajado=2;
 			$fecha_hora = $obj_date->changeFormatDateII($_POST['fecha']);
 			if ($obj_modelo->ActualizaDatosResultados($id_resultado, $id_sorteo, $zodiacal, $numero, $fecha_hora,$bajado)){
-				$obj_modelo->DespremiarTicket($fecha_hora,$id_sorteo);
-				PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fecha_hora); // Premiamos los tickets ganadores
+				$obj_modelo->DespremiarTicket($fecha_hora,$id_sorteo,$tipo_servidor);
+				PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fecha_hora,$tipo_servidor); // Premiamos los tickets ganadores
 				$_SESSION['mensaje']= $mensajes['info_agregada'];
 				header('location:'.$_SESSION['Ruta_Lista']);
 			}
@@ -300,7 +305,7 @@ switch (ACCION){
 $obj_xtpl->parse('main.contenido');
 
 // Funcion para premiar los tickets ganadores
-function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fecha_hora){
+function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fecha_hora,$ticket,$tipo_servidor){
 	$id_detalle_ticket[]="";
 	$id_tickets[]="";
 	$totales[]="";
@@ -318,10 +323,13 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 	$result= $obj_modelo->GetListadosegunVariable($fecha_hora);
 	$fecha_resultado= strtotime(substr ($fecha_hora,0,10));
 	$fecha_actual =strtotime(date('Y-m-d'));
-	if($fecha_resultado==$fecha_actual)
-		$ticket="ticket_diario";
+	if($tipo_servidor==1 OR $tipo_servidor==2)
+	$ticket= "ticket";
 	else
-		$ticket="ticket";
+	if($fecha_resultado==$fecha_actual)
+	$ticket="ticket_diario";
+	else
+	$ticket="ticket";
 	If($obj_conexion->GetNumberRows($result)>0){
 		$i=0; $j=0;
 		$ticket_premiado=0;

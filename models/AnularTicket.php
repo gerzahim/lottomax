@@ -36,13 +36,16 @@ class AnularTicket{
 	 * @param string $pagina
 	 * @return boolean, array
 	 */
-	public function GetListado($cantidad, $pagina){
-		
+	public function GetListado($cantidad, $pagina,$tipo_servidor){
+		if($tipo_servidor==1 OR $tipo_servidor==2)
+			$ticket= "ticket";
+		else
+			$ticket= "ticket_diario";
 		// Datos para la paginacion
 		$inicial= ($pagina-1) * $cantidad;
 		
 		//Preparacion del query
-		$sql = "SELECT * FROM ticket_diario WHERE status='1' AND taquilla='".$_SESSION['InfoLogin']->GetTaquilla()."' AND premiado=0 AND pagado=0 AND fecha_hora LIKE '%".Date('Y-m-d')."%' ORDER BY fecha_hora DESC";
+		$sql = "SELECT * FROM ".$ticket." WHERE status='1' AND taquilla='".$_SESSION['InfoLogin']->GetTaquilla()."' AND premiado=0 AND pagado=0 AND fecha_hora LIKE '%".Date('Y-m-d')."%' ORDER BY fecha_hora DESC";
 		//echo $sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
 		
@@ -71,20 +74,25 @@ class AnularTicket{
 	 * @param string $id_ticket
 	 * @return boolean, array
 	 */
-	public function EliminarTicket($id_ticket){
+	public function EliminarTicket($id_ticket,$tipo_servidor){
+		if($tipo_servidor==1 OR $tipo_servidor==2)
+			$ticket= "ticket";
+		else
+			$ticket= "ticket_diario";
+			
 		//Preparacion del query
 		//$sql = "DELETE FROM `ticket` WHERE id_ticket='".$id_ticket."'";
 		
-		$sql = "SELECT subido FROM ticket_diario WHERE id_ticket_diario='".$id_ticket."'";
+		$sql = "SELECT subido FROM ".$ticket." WHERE id_".$ticket."='".$id_ticket."'";
 		$result=$this->vConexion->ExecuteQuery($sql);
 		$row= $this->vConexion->GetArrayInfo($result);
 		if($row['subido']==0)
 		$adicional="";
 		else
 		$adicional=", subido = 2";
-        $sql = "UPDATE ticket_diario SET status='0', fecha_hora_anulacion='".Date('Y-m-d H:i:s')."', taquilla_anulacion='".$_SESSION['taquilla']."' ".$adicional." WHERE id_ticket_diario='".$id_ticket."'";
+        $sql = "UPDATE ".$ticket." SET status='0', fecha_hora_anulacion='".Date('Y-m-d H:i:s')."', taquilla_anulacion='".$_SESSION['taquilla']."' ".$adicional." WHERE id_".$ticket."='".$id_ticket."'";
         $this->vConexion->ExecuteQuery($sql);
-        $sql = "UPDATE detalle_ticket_diario SET status=0 WHERE id_ticket_diario=".$id_ticket;
+        $sql = "UPDATE detalle_".$ticket." SET status=0 WHERE id_".$ticket."=".$id_ticket;
         return $this->vConexion->ExecuteQuery($sql);
 		//return 1;
 	}
@@ -96,9 +104,13 @@ class AnularTicket{
 	 * @param string $id_ticket
 	 * @return boolean, array
 	 */
-	public function ReestablecerImcompletosyJugados($id_ticket,$fecha_hora){
+	public function ReestablecerImcompletosyJugados($id_ticket,$fecha_hora,$tipo_servidor){
+		if($tipo_servidor==1 OR $tipo_servidor==2)
+			$ticket= "ticket";
+		else
+			$ticket= "ticket_diario";
 		//Preparacion del query
-        $sql = "SELECT * FROM detalle_ticket_diario WHERE id_ticket_diario='".$id_ticket."'";
+        $sql = "SELECT * FROM detalle_".$ticket." WHERE id_".$ticket."='".$id_ticket."'";
 		$result= $this->vConexion->ExecuteQuery($sql);
 		$total_registros= $this->vConexion->GetNumberRows($result);
 		while($row= $this->vConexion->GetArrayInfo($result)){
@@ -108,11 +120,11 @@ class AnularTicket{
 			$monto=$row['monto'];
 			$id_tipo_jugada=$row['id_tipo_jugada'];
 			
-			$sql = "SELECT DT.id_detalle_ticket_diario, DT.monto_restante, TD.fecha_hora FROM detalle_ticket_diario DT 
-					INNER JOIN ticket_diario TD ON DT.id_ticket_diario = TD.id_ticket_diario
+			$sql = "SELECT DT.id_detalle_".$ticket.", DT.monto_restante, TD.fecha_hora FROM detalle_".$ticket." DT 
+					INNER JOIN ".$ticket." TD ON DT.id_".$ticket." = TD.id_".$ticket."
 					WHERE DT.numero='".$numero."' 
 					AND DT.id_sorteo='".$row['id_sorteo']."' AND  DT.id_zodiacal='".$row['id_zodiacal']."' 
-					AND DT.id_tipo_jugada ='".$row['id_tipo_jugada']."' AND DT.id_ticket_diario <> '".$id_ticket."'";
+					AND DT.id_tipo_jugada ='".$row['id_tipo_jugada']."' AND DT.id_".$ticket." <> '".$id_ticket."'";
 			//echo "<br>".$sql;
 			//exit;
 			$result2= $this->vConexion->ExecuteQuery($sql);
@@ -122,11 +134,11 @@ class AnularTicket{
 					if($roww['fecha_hora']>$fecha_hora)
 					{
 						$monto_restante=$roww['monto_restante']+$monto;
-						$sql="UPDATE detalle_ticket_diario SET monto_restante ='".$monto_restante."' WHERE id_detalle_ticket_diario='".$roww['id_detalle_ticket_diario']."'";
+						$sql="UPDATE detalle_".$ticket." SET monto_restante ='".$monto_restante."' WHERE id_detalle_".$ticket."='".$roww["id_detalle_".$ticket]."'";
 						$result3= $this->vConexion->ExecuteQuery($sql);					
 					}
 				}
-				$sql="UPDATE detalle_ticket_diario SET status =0 WHERE id_detalle_ticket_diario='".$row['id_detalle_ticket_diario']."'";
+				$sql="UPDATE detalle_".$ticket." SET status =0 WHERE id_detalle_".$ticket."='".$row["id_detalle_".$ticket]."'";
 				$result4= $this->vConexion->ExecuteQuery($sql);
 			}
 			
@@ -137,6 +149,19 @@ class AnularTicket{
 		//return $this->vConexion->ExecuteQuery($sql);
 	
 	}
+	/**
+	 * Obtiene el tipo de servidor donde esta alojado el sistema
+	 *
+	 *
+	 * @return integer
+	 */
+	public function GetTipoServidor(){
+		//Preparacion del query
+		$sql = "SELECT tipo_servidor FROM parametros";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["tipo_servidor"];
+	}
 
         /**
 	 * Busqueda de Tickets Segun parametro.
@@ -144,15 +169,15 @@ class AnularTicket{
 	 * @param string $id_ticket
          * @param string $serial
 	 */
-	public function GetListadosegunVariable($parametro_where){
-
+	public function GetListadosegunVariable($parametro_where,$tipo_servidor){
+		if($tipo_servidor==1 OR $tipo_servidor==2)
+			$ticket= "ticket";
+		else
+			$ticket= "ticket_diario";
 		//Preparacion del query
-                 $sql = "SELECT * FROM ticket_diario WHERE status='1' AND taquilla='".$_SESSION['taquilla']."' AND premiado=0 AND pagado=0 AND ".$parametro_where;
-       //        echo $sql;
-         //      exit; 
+		$sql = "SELECT * FROM ".$ticket." WHERE status='1' AND taquilla='".$_SESSION['taquilla']."' AND premiado=0 AND pagado=0 AND ".$parametro_where;
 		$result= $this->vConexion->ExecuteQuery($sql);
 		return  $result;
-
 	}
 
         /**
@@ -176,9 +201,12 @@ class AnularTicket{
 	 * @param string $id_ticket
          * @param string $serial
 	 */
-	public function GetFechaTicket($id_ticket){
-		//Preparacion del query
-        $sql = "SELECT fecha_hora FROM ticket_diario WHERE status='1' AND id_ticket_diario='".$id_ticket."'";
+	public function GetFechaTicket($id_ticket,$tipo_servidor){
+			if($tipo_servidor==1 OR $tipo_servidor==2)
+				$ticket= "ticket";
+			else
+				$ticket= "ticket_diario";
+        $sql = "SELECT fecha_hora FROM ".$ticket." WHERE status='1' AND id_".$ticket."='".$id_ticket."'";
 		$result= $this->vConexion->ExecuteQuery($sql);
 		$roww= $this->vConexion->GetArrayInfo($result);
 		return $roww["fecha_hora"];
@@ -189,10 +217,13 @@ class AnularTicket{
 	 * @param string $id_ticket
          * @param string $serial
 	 */
-	public function ValidaSorteosTicket($id_ticket){
-
+	public function ValidaSorteosTicket($id_ticket,$tipo_servidor){
+		if($tipo_servidor==1 OR $tipo_servidor==2)
+			$ticket= "ticket";
+		else
+			$ticket= "ticket_diario";
 		//Preparacion del query
-                $sql = "SELECT id_sorteo FROM detalle_ticket_diario WHERE id_ticket_diario='".$id_ticket."'";
+                $sql = "SELECT id_sorteo FROM detalle_".$ticket." WHERE id_".$ticket."='".$id_ticket."'";
                  
 				$result= $this->vConexion->ExecuteQuery($sql);
 		        $total_registros= $this->vConexion->GetNumberRows($result);

@@ -45,28 +45,25 @@ class Pagar_Ganador{
         // premiado cambia cuando se premia un ticket
         // verificado cambia cuando ya se reviso y no esta premiado verificado=1
         $sql = "SELECT * FROM ticket WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'";
-
         echo "sql".$sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
 		return  $result;
-
 	}
 // OJO CABLEADO PARA SALVAR LA PATRIA
-	public function GetListadosegunVariable2($fecha_resultado,$conexion_abajo,$fecha_actual){
+	public function GetListadosegunVariable2($fecha_resultado,$conexion_abajo,$fecha_actual,$tipo_servidor){
 		//echo $fecha_resultado;
 		//Preparacion del query
 		//$sql = "SELECT * FROM ticket WHERE status='1' AND pagado=0 AND ".$parametro_where;
 		// deberiamos colocar un parametro premiado=0, verificado=0
 		// premiado cambia cuando se premia un ticket
 		// verificado cambia cuando ya se reviso y no esta premiado verificado=1
-		
+		if($tipo_servidor==1 OR $tipo_servidor==2)
+		$sql = "SELECT * FROM ticket WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'";
+		else		
 		if($fecha_resultado<$fecha_actual)
-		$sql = "SELECT * FROM ticket WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'
-				";
+		$sql = "SELECT * FROM ticket WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'";
 		else
 		$sql="	SELECT * FROM ticket_diario WHERE status=1 AND fecha_hora LIKE '%".$fecha_resultado."%'";
-		
-		
 		echo $sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
 		return  $result;
@@ -87,14 +84,13 @@ class Pagar_Ganador{
 		// deberiamos colocar un parametro premiado=0, verificado=0
 		// premiado cambia cuando se premia un ticket
 		// verificado cambia cuando ya se reviso y no esta premiado verificado=1
-		$sql = "SELECT * FROM ticket_diario WHERE status='1' AND premiado=1 AND id_ticket_diario='".$id_ticket."'";
-		/* echo $sql;
-		 exit;*/
+		$sql = "SELECT * FROM ticket_diario WHERE status='1' AND pagado=0 AND id_ticket_diario=".$id_ticket." AND premiado=1" ;
+		// echo $sql;
 		$result= $this->vConexion->ExecuteQuery($sql);
 		$total_registros= $this->vConexion->GetNumberRows($result);
 		if($total_registros==0)
 		{
-			$sql = "SELECT * FROM ticket WHERE status='1' AND premiado=1 AND id_ticket='".$id_ticket."' " ;
+			$sql = "SELECT * FROM ticket WHERE status='1' AND pagado=0 AND id_ticket=".$id_ticket." AND premiado=1" ;
 			$result= $this->vConexion->ExecuteQuery($sql);
 		}
 		return  $result;
@@ -114,6 +110,20 @@ class Pagar_Ganador{
 		$roww= $this->vConexion->GetArrayInfo($result);
 		return $roww["hora_sorteo"];
 	
+	}
+	
+	/**
+	 * Obtiene el tipo de servidor donde esta alojado el sistema
+	 *
+	 * 
+	 * @return integer
+	 */
+	public function GetTipoServidor(){
+		//Preparacion del query
+		$sql = "SELECT tipo_servidor FROM parametros";
+		$result= $this->vConexion->ExecuteQuery($sql);
+		$roww= $this->vConexion->GetArrayInfo($result);
+		return $roww["tipo_servidor"];
 	}
 	
 	
@@ -384,16 +394,17 @@ class Pagar_Ganador{
 	 * @param string $fecha_hora
 	 * @return boolean
 	 */
-	public function DespremiarTicket($fecha_hora){
-	
+	public function DespremiarTicket($fecha_hora,$tipo_servidor){
 		//Preparacion del query
 		$fecha_actual=date('Y-m-d');
+		if($tipo_servidor==1 OR $tipo_servidor==2)
+		$tabla="ticket";
+		else		
 		if($fecha_hora<$fecha_actual)
 		$tabla="ticket";
 		else
 		$tabla="ticket_diario";
 		$sql = "UPDATE `".$tabla."` SET `premiado`=0,`total_premiado`='0' WHERE `fecha_hora` LIKE '%".$fecha_hora."%'";
-		echo "<BR>".$sql."<br>";
 		if($this->vConexion->ExecuteQuery($sql)  or die ('Hubo un error con el registro de los datos:' .mysql_error())){
 		$sql = "UPDATE `detalle_".$tabla."` SET `premiado`='0',`total_premiado`='0' WHERE `fecha_sorteo` LIKE '%".$fecha_hora."%'";
 			return $this->vConexion->ExecuteQuery($sql) or die ('Hubo un error con el registro de los datos:' .mysql_error()); 
