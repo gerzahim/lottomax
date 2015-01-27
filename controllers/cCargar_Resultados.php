@@ -110,6 +110,7 @@ switch (ACCION){
 			break;		
         case 'cargar_resultados':
         $zodiacales=array();
+        
         if ($result_z = $obj_modelo->GetZodiacales ())
         while ( $row_z = $obj_conexion->GetArrayInfo ( $result_z ) )
         $zodiacales[$row_z['Id_zodiacal']]=$row_z ['nombre_zodiacal'];
@@ -127,6 +128,8 @@ switch (ACCION){
 			$pag = $_GET ['pg'];
 		}*/
 		$fecha = $obj_date->changeFormatDateII ( $_GET ['txt_fecha'] );
+	//	echo "Fecha".$fecha;
+		
 		$obj_xtpl->assign ( 'fecha', $obj_date->changeFormatDateI ( $fecha, 0 ) );
 		$periodo = $_GET ['radio_periodo'];
 		// Listado de Sorteos
@@ -284,7 +287,7 @@ switch (ACCION){
 				$sql.=";";
 				if($obj_modelo->GuardarDatosResultadosMasivo($sql,$id_resultado,$primer_id)){
 					$mensaje=$mensajes['info_agregada'];
-					PremiarGanadores ($obj_conexion, $obj_modelo,$resultados,$zodiacales,$fecha_hora,$ticket); // Premiamos los tickets ganadores
+					PremiarGanadores ($obj_conexion, $obj_modelo,$resultados,$zodiacales,$fecha_hora,$tipo_servidor); // Premiamos los tickets ganadores
 				}
 				else
 				$mensaje= "No se ingresaron nuevos resultados";
@@ -305,7 +308,16 @@ switch (ACCION){
 $obj_xtpl->parse('main.contenido');
 
 // Funcion para premiar los tickets ganadores
-function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fecha_hora,$ticket){
+function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fecha_hora,$tipo_servidor){
+	//echo "Fecha".$fecha_hora;
+	$fecha_actual=date('Y-m-d');
+	if($tipo_servidor==1 OR $tipo_servidor==2)
+		$ticket="ticket";
+	else
+	if($fecha_hora<$fecha_actual)
+	$ticket="ticket";
+	else
+	$ticket="ticket_diario";
 	$id_detalle_ticket[]="";
 	$id_tickets[]="";
 	$totales[]="";
@@ -318,7 +330,6 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 	while($row=$obj_conexion->GetArrayInfo($result)){
 		$relacion_pago[$row['id_tipo_jugada']][$row['id_agencia']]=$row['monto'];
 	}
-	
 //	print_r($relacion_pago);
 	$result= $obj_modelo->GetListadosegunVariable($fecha_hora);
 	$fecha_resultado= strtotime(substr ($fecha_hora,0,10));
