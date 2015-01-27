@@ -284,7 +284,7 @@ switch (ACCION){
 				$sql.=";";
 				if($obj_modelo->GuardarDatosResultadosMasivo($sql,$id_resultado,$primer_id)){
 					$mensaje=$mensajes['info_agregada'];
-					PremiarGanadores ($obj_conexion, $obj_modelo,$resultados,$zodiacales,$fecha_hora); // Premiamos los tickets ganadores
+					PremiarGanadores ($obj_conexion, $obj_modelo,$resultados,$zodiacales,$fecha_hora,$ticket); // Premiamos los tickets ganadores
 				}
 				else
 				$mensaje= "No se ingresaron nuevos resultados";
@@ -305,7 +305,7 @@ switch (ACCION){
 $obj_xtpl->parse('main.contenido');
 
 // Funcion para premiar los tickets ganadores
-function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fecha_hora,$ticket,$tipo_servidor){
+function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fecha_hora,$ticket){
 	$id_detalle_ticket[]="";
 	$id_tickets[]="";
 	$totales[]="";
@@ -323,13 +323,13 @@ function PremiarGanadores($obj_conexion,$obj_modelo,$resultados,$zodiacales,$fec
 	$result= $obj_modelo->GetListadosegunVariable($fecha_hora);
 	$fecha_resultado= strtotime(substr ($fecha_hora,0,10));
 	$fecha_actual =strtotime(date('Y-m-d'));
-	if($tipo_servidor==1 OR $tipo_servidor==2)
+	/*if($tipo_servidor==1 OR $tipo_servidor==2)
 	$ticket= "ticket";
 	else
 	if($fecha_resultado==$fecha_actual)
 	$ticket="ticket_diario";
 	else
-	$ticket="ticket";
+	$ticket="ticket";*/
 	If($obj_conexion->GetNumberRows($result)>0){
 		$i=0; $j=0;
 		$ticket_premiado=0;
